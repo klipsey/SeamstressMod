@@ -11,6 +11,7 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             RefreshState();
+            this.damageType = DamageType.Stun1s;
             this.hitboxName = "SwordBig";
             this.damageCoefficient = SeamstressStaticValues.sewDamageCoefficient;
             this.procCoefficient = 1f;
@@ -40,7 +41,7 @@ namespace SeamstressMod.SkillStates
             if(empowered)
             {
                 this.moddedDamageType = DamageTypes.HealDamageEmpowered;
-                this.damageType = DamageType.BleedOnHit;
+                this.damageType |= DamageType.BleedOnHit;
             }
             else this.moddedDamageType = DamageTypes.HealDamage;
             base.OnEnter();

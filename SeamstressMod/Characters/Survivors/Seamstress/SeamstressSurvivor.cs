@@ -7,6 +7,7 @@ using RoR2.Skills;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -144,28 +145,40 @@ namespace SeamstressMod.Survivors.Seamstress
         public override void InitializeSkills()
         {
             Skills.CreateSkillFamilies(bodyPrefab);
-            AddPrmarySkills();
+            AddPassiveSkill(bodyPrefab);
+            AddPrimarySkills();
             AddSecondarySkills();
             AddUtiitySkills();
             AddSpecialSkills();
+
+        }
+
+        private void AddPassiveSkill(GameObject bodyPrefab)
+        {
+            SkillLocator skillLocator = bodyPrefab.GetComponent<SkillLocator>();
+            skillLocator.passiveSkill.enabled = true;
+            skillLocator.passiveSkill.skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME";
+            skillLocator.passiveSkill.skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_DESCRIPTION";
+            skillLocator.passiveSkill.icon = assetBundle.LoadAsset<Sprite>("texSpecialIcon");
         }
 
         //let's look at secondary before primary because it is simpler
         private void AddSecondarySkills()
         {
             //here is a basic skill def with all fields accounted for
-            SkillDef gunSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef weaveSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "SeamstressWeave",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.bleedKeyword, Tokens.butcheredKeyword, Tokens.slayerKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.WeavePrep)),
-                activationStateMachineName = "Weapon2",
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
+                activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 1f,
+                baseRechargeInterval = 5f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -181,18 +194,18 @@ namespace SeamstressMod.Survivors.Seamstress
                 isCombatSkill = true,
                 canceledFromSprinting = false,
                 cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
+                forceSprintDuringState = true,
 
             });
 
-            Skills.AddSecondarySkills(bodyPrefab, gunSkillDef);
+            Skills.AddSecondarySkills(bodyPrefab, weaveSkillDef);
         }
 
-        private void AddPrmarySkills()
+        private void AddPrimarySkills()
         {
             //the primary skill is created using a constructor for a typical primary
             //it is also a SteppedSkillDef. Custom Skilldefs are very useful for custom behaviors related to casting a skill. see ror2's different skilldefs for reference
-            SteppedSkillDef slashSkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
+            SteppedSkillDef trimSkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
                 (
                     "SeamstressSlash",
                     SEAMSTRESS_PREFIX + "PRIMARY_TRIM_NAME",
@@ -200,27 +213,28 @@ namespace SeamstressMod.Survivors.Seamstress
                     assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
                     new EntityStates.SerializableEntityStateType(typeof(SkillStates.Trim)),
                     "Weapon",
-                    true,true
+                    true,true,true
                 ));
             //custom Skilldefs can have additional fields that you can set manually
-            slashSkillDef.stepCount = 3;
-            slashSkillDef.stepGraceDuration = 0.5f;
+            trimSkillDef.stepCount = 3;
+            trimSkillDef.stepGraceDuration = 0.5f;
 
-            Skills.AddPrimarySkills(bodyPrefab, slashSkillDef);
+            Skills.AddPrimarySkills(bodyPrefab, trimSkillDef);
         }
 
         private void AddUtiitySkills()
         {
             //here's a skilldef of a typical movement skill. some fields are omitted and will just have default values
-            SkillDef rollSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef reapSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = "SeamstressButcher",
-                skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_BUTCHER_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_BUTCHER_DESCRIPTION",
+                skillName = "SeamstressReap",
+                skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_REAP_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_REAP_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.healthCostKeyword, Tokens.frenzyKeyword, Tokens.butcheredKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Butcher)),
-                activationStateMachineName = "Weapon",
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Reap)),
+                activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseRechargeInterval = 8f,
@@ -242,21 +256,22 @@ namespace SeamstressMod.Survivors.Seamstress
                 forceSprintDuringState = false,
             });
 
-            Skills.AddUtilitySkills(bodyPrefab, rollSkillDef);
+            Skills.AddUtilitySkills(bodyPrefab, reapSkillDef);
         }
 
         private void AddSpecialSkills()
         {
             //a basic skill
-            SkillDef bombSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef sewSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "SeamstressSew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_DESCRIPTION",
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                keywordTokens = new string[] { Tokens.bleedKeyword, Tokens.butcheredKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
-                activationStateMachineName = "Weapon2", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
+                activationStateMachineName = "Weapon", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
@@ -272,7 +287,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 cancelSprintingOnActivation = false,
             });
 
-            Skills.AddSpecialSkills(bodyPrefab, bombSkillDef);
+            Skills.AddSpecialSkills(bodyPrefab, sewSkillDef);
         }
         #endregion skills
         

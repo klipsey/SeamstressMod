@@ -26,22 +26,26 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private static void Hook()
         {
-            On.RoR2.SetStateOnHurt.OnTakeDamageServer += new On.RoR2.SetStateOnHurt.hook_OnTakeDamageServer(SetStateOnHurt_OnTakeDamageServer);
+            GlobalEventManager.onCharacterDeathGlobal += GlobalEventManager_onCharacterDeathGlobal;
+            GlobalEventManager.onServerDamageDealt += GlobalEventManager_onServerDamageDealt;
         }
-        private static void SetStateOnHurt_OnTakeDamageServer(On.RoR2.SetStateOnHurt.orig_OnTakeDamageServer orig, SetStateOnHurt self, DamageReport damageReport)
+        private static void GlobalEventManager_onServerDamageDealt(DamageReport damageReport)
         {
-            orig.Invoke(self, damageReport);
             DamageInfo damageInfo = damageReport.damageInfo;
-            if(damageInfo.attacker != null) 
+            if (!damageInfo.attacker)
             {
-                HealthComponent victim = damageReport.victim;
-                CharacterBody attacker = damageInfo.attacker.GetComponent<CharacterBody>();
+                return;
+            }
+            HealthComponent victim = damageReport.victim;
+            CharacterBody attacker = damageInfo.attacker.GetComponent<CharacterBody>();
+            if (NetworkServer.active)
+            {
                 if (damageInfo.HasModdedDamageType(CutDamage))
                 {
                     DamageInfo cut = new DamageInfo
                     {
                         damage = victim.health * 0.1f,
-                        damageColorIndex = DamageColorIndex.Nearby,
+                        damageColorIndex = DamageColorIndex.SuperBleed,
                         damageType = DamageType.Generic,
                         attacker = damageInfo.attacker,
                         crit = damageInfo.crit,
@@ -54,15 +58,23 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(HealDamage))
                 {
-                    float lifeSteal = damageReport.damageDealt * 0.15f;
+                    float lifeSteal = damageReport.damageDealt * 0.10f;
                     attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                 }
                 if (damageInfo.HasModdedDamageType(HealDamageEmpowered))
                 {
-                    float lifeSteal = damageReport.damageDealt * 0.3f;
+                    float lifeSteal = damageReport.damageDealt * 0.20f;
                     attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                 }
-                if(damageInfo.HasModdedDamageType(ResetWeave))
+            }
+        }
+        private static void GlobalEventManager_onCharacterDeathGlobal(DamageReport damageReport)
+        {
+            DamageInfo damageInfo = damageReport.damageInfo;
+            CharacterBody attacker = damageInfo.attacker.GetComponent<CharacterBody>();
+            if (NetworkServer.active)
+            {
+                if (damageInfo.HasModdedDamageType(ResetWeave))
                 {
                     attacker.skillLocator.secondary.Reset();
                 }

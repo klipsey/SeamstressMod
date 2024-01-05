@@ -7,7 +7,7 @@ using EntityStates;
 
 namespace SeamstressMod.SkillStates
 {
-    public class Butcher : BaseSeamstressSkillState
+    public class Reap : BaseSeamstressSkillState
     {
         public static float duration = 0.5f;
 
@@ -31,8 +31,8 @@ namespace SeamstressMod.SkillStates
                 damageInfo.procCoefficient = 0f;
                 healthComponent.TakeDamage(damageInfo);
                 healthComponent.AddBarrier(currentBarrier);
-                characterBody.AddTimedBuff(SeamstressBuffs.armorBuff, 6f);
-                characterBody.AddTimedBuff(SeamstressBuffs.bloodBath, 6f);
+                characterBody.AddTimedBuff(SeamstressBuffs.armorBuff, 8f);
+                characterBody.AddTimedBuff(SeamstressBuffs.bloodBath, 8f);
                 characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f);
             }
             base.OnEnter();

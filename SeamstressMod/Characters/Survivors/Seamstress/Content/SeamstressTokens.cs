@@ -22,14 +22,14 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Seamstress
             string prefix = SeamstressSurvivor.SEAMSTRESS_PREFIX;
 
-            string desc = "Seamstress uses her hp for damage, stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
-             + "< ! > Sword is a good all-rounder while Boxing Gloves are better for laying a beatdown on more powerful foes." + Environment.NewLine + Environment.NewLine
-             + "< ! > Pistol is a powerful anti air, with its low cooldown and high damage." + Environment.NewLine + Environment.NewLine
-             + "< ! > Roll has a lingering armor buff that helps to use it aggressively." + Environment.NewLine + Environment.NewLine
-             + "< ! > Bomb can be used to wipe crowds with ease." + Environment.NewLine + Environment.NewLine;
+            string desc = "Seamstress uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
+             + "< ! > Trim is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
+             + "< ! > Weave is a basic dash on its own but with butcher it can become devastating in groups." + Environment.NewLine + Environment.NewLine
+             + "< ! > Reap can give you incredible buffs through butcher but use it carefully, you could end your run if used poorly." + Environment.NewLine + Environment.NewLine
+             + "< ! > Reap what you.. Sew? Use Sew to regain the health lost from Reap especially during butcher." + Environment.NewLine + Environment.NewLine;
 
-            string outro = "..and so he left, searching for a new identity.";
-            string outroFailure = "..and so he vanished, forever a blank slate.";
+            string outro = "..and so she left, wanting to stitch more than just fabric.";
+            string outroFailure = "..and so she vanished, with seams unsewn.";
 
             Language.Add(prefix + "NAME", "Seamstress");
             Language.Add(prefix + "DESCRIPTION", desc);
@@ -43,28 +43,30 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Passive
-            Language.Add(prefix + "PASSIVE_NAME", "Seamstress passive");
+            Language.Add(prefix + "PASSIVE_NAME", "Tortured Heart");
             Language.Add(prefix + "PASSIVE_DESCRIPTION", "Gain .1 base damage for every 1 health missing. ");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
-            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", $"Slash 3 times for <style=cIsDamage>3x{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. The final slash deals " + Tokens.cutPrefix + " damage.");
+            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash 2 times for <style=cIsDamage>3x{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. Then snip for <style=cIsDamage>" +
+                $"{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style> and " + Tokens.cutPrefix +". While butchered, also apply " + Tokens.bleedPrefix +".");
             #endregion
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Weave");
-            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.agilePrefix + $"Fire a handgun for <style=cIsDamage>{100f * SeamstressStaticValues.gunDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.slayerPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. While " + Tokens.butcheredPrefix + ", reset the cooldown on kill and apply " + Tokens.bleedPrefix + ".");
             #endregion
 
             #region Utility
-            Language.Add(prefix + "UTILITY_BUTCHER_NAME", "Butcher");
-            Language.Add(prefix + "UTILITY_BUTCHER_DESCRIPTION", "Roll a short distance, gaining <style=cIsUtility>300 armor</style>. <style=cIsUtility>You cannot be hit during the roll.</style>");
+            Language.Add(prefix + "UTILITY_REAP_NAME", "Reap");
+            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart to gain " + Tokens.armorPrefix + ", " + Tokens.frenzyPrefix + ", and " + Tokens.butcheredPrefix + ".");
             #endregion
 
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "Sew");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Throw a bomb for <style=cIsDamage>{100f * SeamstressStaticValues.bombDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Consume enemies in front of you dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style> <style=cIsHealing>healing for 10% of the damage dealt.</style> While " + 
+                Tokens.butcheredPrefix + ", <style=cIsHealing>heal for 20% of the damage dealt</style> and apply " + Tokens.bleedPrefix + ".");
             #endregion
 
             #region Achievements

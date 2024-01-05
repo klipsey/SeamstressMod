@@ -11,9 +11,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Modules.Content.AddEntityState(typeof(Weave));
 
-            Modules.Content.AddEntityState(typeof(WeavePrep));
-
-            Modules.Content.AddEntityState(typeof(Butcher));
+            Modules.Content.AddEntityState(typeof(Reap));
 
             Modules.Content.AddEntityState(typeof(Sew));
         }

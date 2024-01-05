@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using SeamstressMod;
 using UnityEngine;
+using SeamstressMod.Survivors.Seamstress;
 
 namespace SeamstressMod.Modules
 {
@@ -42,7 +43,6 @@ namespace SeamstressMod.Modules
             }
 
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();
-
             for (int i = 0; i < slots.Length; i++)
             {
                 switch (slots[i])
@@ -235,7 +235,7 @@ namespace SeamstressMod.Modules
 
                             SerializableEntityStateType activationState,
                             string activationStateMachineName = "Weapon",
-                            bool agile = false, bool cut = false)
+                            bool agile = false, bool cut = false, bool bleed = false)
         {
             this.skillName = skillName;
             this.skillNameToken = skillNameToken;
@@ -247,8 +247,7 @@ namespace SeamstressMod.Modules
 
             this.cancelSprintingOnActivation = !agile;
 
-            if (agile) this.keywordTokens = new string[] { "KEYWORD_AGILE" };
-            if (cut) this.keywordTokens = new string[] { Tokens.cutKeyword };
+            if (agile) this.keywordTokens = new string[] { Tokens.agileKeyword, Tokens.cutKeyword, Tokens.bleedKeyword, Tokens.butcheredKeyword };
             this.interruptPriority = InterruptPriority.Any;
             this.isCombatSkill = true;
             this.baseRechargeInterval = 0;

@@ -2,11 +2,39 @@
 {
     internal static class Tokens
     {
-        public const string agilePrefix = "<style=cIsUtility>Agile.</style>";
+        public const string agilePrefix = "<style=cIsUtility>Agile</style>";
 
         public const string cutPrefix = "<style=cIsDamage>Cut</style>";
 
-        public static string cutKeyword = KeywordText("Cut", "Deal 10% of the enemies current health");
+        public const string armorPrefix = "<style=cIsUtility>20 armor</style>";
+
+        public const string frenzyPrefix = "<style=cIsUtility>Frenzy</style>";
+
+        public const string bleedPrefix = "<style=cIsDamage>Bleed</style>";
+
+        public const string halfHealthPrefix = "<style=cIsHealth>50% HP</style>";
+
+        public const string healthCostPrefix = "<style=cIsHealth>X% of your current health</style>";
+
+        public const string healingPrefix = "<style=cIsHealing>heal a % of damage dealt</style>";
+
+        public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";
+
+        public const string slayerPrefix = "<style=cIsDamage>Slayer</style>";
+
+        public static string cutKeyword = KeywordText("Cut", "Deal 10% of the enemies current health.");
+
+        public static string slayerKeyword = KeywordText("Slayer", "The skill deals <style=cIsDamage>2%</style> more damage per <style=cIsHealth>1%</style> of health the target has lost, up to 3x damage.");
+
+        public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
+
+        public static string bleedKeyword = KeywordText("Bleed", "<style=cIsDamage>Deal 240% base damage</style> over time.");
+
+        public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
+
+        public static string frenzyKeyword = KeywordText("Frenzy", "Gain attack speed and movement speed.");
+
+        public static string butcheredKeyword = KeywordText("Butchered", "Empower other abilities.");
         public static string DamageText(string text)
         {
             return $"<style=cIsDamage>{text}</style>";
