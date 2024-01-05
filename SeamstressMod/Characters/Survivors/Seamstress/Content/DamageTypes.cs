@@ -44,7 +44,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 {
                     DamageInfo cut = new DamageInfo
                     {
-                        damage = victim.health * 0.1f,
+                        damage = victim.health * 0.05f,
                         damageColorIndex = DamageColorIndex.SuperBleed,
                         damageType = DamageType.Generic,
                         attacker = damageInfo.attacker,

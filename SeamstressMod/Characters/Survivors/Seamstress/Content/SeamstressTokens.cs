@@ -43,28 +43,28 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Passive
-            Language.Add(prefix + "PASSIVE_NAME", "Tortured Heart");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", "Gain .1 base damage for every 1 health missing. ");
+            Language.Add(prefix + "PASSIVE_NAME", "<style=cIsHealth>Tortured Heart</style>");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", "Gain <style=cIsDamage>0.1</style> base damage for every <style=cIsHealth>1</style> health missing. ");
             #endregion
 
             #region Primary
-            Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
-            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash 2 times for <style=cIsDamage>3x{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. Then snip for <style=cIsDamage>" +
+            Language.Add(prefix + "PRIMARY_TRIM_NAME", "<style=cIsHealth>Trim</style>");
+            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash 2 times for <style=cIsDamage>{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. Then snip for <style=cIsDamage>" +
                 $"{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style> and " + Tokens.cutPrefix +". While butchered, also apply " + Tokens.bleedPrefix +".");
             #endregion
 
             #region Secondary
-            Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Weave");
+            Language.Add(prefix + "SECONDARY_WEAVE_NAME", "<style=cIsHealth>Weave</style>");
             Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.slayerPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. While " + Tokens.butcheredPrefix + ", reset the cooldown on kill and apply " + Tokens.bleedPrefix + ".");
             #endregion
 
             #region Utility
-            Language.Add(prefix + "UTILITY_REAP_NAME", "Reap");
+            Language.Add(prefix + "UTILITY_REAP_NAME", "<style=cIsHealth>Reap</style>");
             Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart to gain " + Tokens.armorPrefix + ", " + Tokens.frenzyPrefix + ", and " + Tokens.butcheredPrefix + ".");
             #endregion
 
             #region Special
-            Language.Add(prefix + "SPECIAL_SEW_NAME", "Sew");
+            Language.Add(prefix + "SPECIAL_SEW_NAME", "<style=cIsHealth>Sew</style>");
             Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Consume enemies in front of you dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style> <style=cIsHealing>healing for 10% of the damage dealt.</style> While " + 
                 Tokens.butcheredPrefix + ", <style=cIsHealing>heal for 20% of the damage dealt</style> and apply " + Tokens.bleedPrefix + ".");
             #endregion

@@ -12,7 +12,7 @@ namespace SeamstressMod.SkillStates
         {
             RefreshState();
             this.damageType = DamageType.Stun1s;
-            this.hitboxName = "SwordBig";
+            this.hitboxName = "SwordSew";
             this.damageCoefficient = SeamstressStaticValues.sewDamageCoefficient;
             this.procCoefficient = 1f;
             this.pushForce = 300f;

@@ -123,6 +123,8 @@ namespace SeamstressMod.Survivors.Seamstress
             Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Sword");
             hitboxTransform = childLocator.FindChild("SwordHitboxBig");
             Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "SwordBig");
+            hitboxTransform = childLocator.FindChild("SwordHitboxSew");
+            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "SwordSew");
 
         }
 

@@ -22,13 +22,13 @@
 
         public const string slayerPrefix = "<style=cIsDamage>Slayer</style>";
 
-        public static string cutKeyword = KeywordText("Cut", "Deal 10% of the enemies current health.");
+        public static string cutKeyword = KeywordText("Cut", "Deal 5% of the enemies current health.");
 
-        public static string slayerKeyword = KeywordText("Slayer", "The skill deals <style=cIsDamage>2%</style> more damage per <style=cIsHealth>1%</style> of health the target has lost, up to 3x damage.");
+        public static string slayerKeyword = KeywordText("Slayer", "Deals up to <style=cIsDamage>3x</style> damage against low health enemies.");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 
-        public static string bleedKeyword = KeywordText("Bleed", "<style=cIsDamage>Deal 240% base damage</style> over time.");
+        public static string bleedKeyword = KeywordText("Bleed", "Deal <style=cIsDamage>240% base damage</style> over time.");
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 
