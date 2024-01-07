@@ -27,6 +27,9 @@ namespace SeamstressMod.Survivors.Seamstress
         //crosshairs
         public static GameObject crosshairOverridePrefab;
 
+        internal static GameObject needlePrefab;
+
+        internal static GameObject needlePrefabEmpowered;
         public static void Init(AssetBundle assetBundle)
         {
 
@@ -98,6 +101,83 @@ namespace SeamstressMod.Survivors.Seamstress
         #region projectiles
         private static void CreateProjectiles()
         {
+            CreateNeedle ();
+            Content.AddProjectilePrefab(needlePrefab);
+            CreateNeedleEmpowered();
+            Content.AddProjectilePrefab(needlePrefabEmpowered);
+        }
+        private static void CreateNeedle()
+        {
+            needlePrefab = Assets.CloneProjectilePrefab("FMJ", "Needle");
+
+            ProjectileSimple needleSimple = needlePrefab.GetComponent<ProjectileSimple>();
+            needleSimple.desiredForwardSpeed = 100f;
+            needleSimple.lifetime = 5f;
+            needleSimple.updateAfterFiring = true;
+
+            ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
+            needleDamage.damageType = DamageType.Generic;
+
+            needlePrefab.AddComponent<ProjectileTargetComponent>();
+            ProjectileSteerTowardTarget needleSteer = needlePrefab.AddComponent<ProjectileSteerTowardTarget>();
+            needleSteer.yAxisOnly = false;
+            needleSteer.rotationSpeed = 600f;
+
+            ProjectileDirectionalTargetFinder needleFinder = needlePrefab.AddComponent<ProjectileDirectionalTargetFinder>();
+            needleFinder.lookRange = 50f;   //25f
+            needleFinder.lookCone = 120f;    //20f
+            needleFinder.targetSearchInterval = 0.2f;
+            needleFinder.onlySearchIfNoTarget = false;
+            needleFinder.allowTargetLoss = true;
+            needleFinder.testLoS = true;
+            needleFinder.ignoreAir = false;
+            needleFinder.flierAltitudeTolerance = Mathf.Infinity;
+
+            ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
+            needleHeal.fractionOfDamage = 0.1f;
+
+            ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
+            needleController.allowPrediction = false;
+
+            if (_assetBundle.LoadAsset<GameObject>("MageIceBombProjectile") != null) 
+                needleController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("MageIceBombProjectile");
+            needleController.startSound = "";
+        }
+        private static void CreateNeedleEmpowered()
+        {
+            needlePrefabEmpowered = Assets.CloneProjectilePrefab("FMJ", "Needle2");
+
+            ProjectileSimple needleSimple = needlePrefabEmpowered.GetComponent<ProjectileSimple>();
+            needleSimple.desiredForwardSpeed = 100f;
+            needleSimple.lifetime = 5f;
+            needleSimple.updateAfterFiring = true;
+
+            ProjectileDamage needleDamage = needlePrefabEmpowered.GetComponent<ProjectileDamage>();
+            needleDamage.damageType = DamageType.BleedOnHit;
+
+            needlePrefabEmpowered.AddComponent<ProjectileTargetComponent>();
+            ProjectileSteerTowardTarget needleSteer = needlePrefabEmpowered.AddComponent<ProjectileSteerTowardTarget>();
+            needleSteer.yAxisOnly = false;
+            needleSteer.rotationSpeed = 600f;
+
+            ProjectileDirectionalTargetFinder needleFinder = needlePrefabEmpowered.AddComponent<ProjectileDirectionalTargetFinder>();
+            needleFinder.lookRange = 50f;   //25f
+            needleFinder.lookCone = 120f;    //20f
+            needleFinder.targetSearchInterval = 0.1f;
+            needleFinder.onlySearchIfNoTarget = false;
+            needleFinder.allowTargetLoss = true;
+            needleFinder.testLoS = true;
+            needleFinder.ignoreAir = false;
+            needleFinder.flierAltitudeTolerance = Mathf.Infinity;
+
+            ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefabEmpowered.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
+            needleHeal.fractionOfDamage = 0.2f;
+
+            ProjectileController needleController = needlePrefabEmpowered.GetComponent<ProjectileController>();
+            needleController.allowPrediction = false;
+
+            if (_assetBundle.LoadAsset<GameObject>("MageIceBombProjectile") != null) needleController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("MageIceBombProjectile");
+            needleController.startSound = "";
         }
         #endregion projectiles
     }

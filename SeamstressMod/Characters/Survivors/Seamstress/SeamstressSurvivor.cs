@@ -50,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
             damage = 10f,
 
             damageGrowth = 0f,
-            healthGrowth = 48f,
+            healthGrowth = 36,
 
             jumpCount = 1,
         };
@@ -177,7 +177,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
-                activationStateMachineName = "Weapon",
+                activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseRechargeInterval = 5f,
@@ -269,7 +269,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "SeamstressSew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.bleedKeyword, Tokens.butcheredKeyword },
+                keywordTokens = new string[] { Tokens.bleedKeyword, Tokens.cutKeyword, Tokens.butcheredKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
@@ -285,7 +285,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 resetCooldownTimerOnUse = false,
                 fullRestockOnAssign = false,
                 isCombatSkill = true,
-                mustKeyPress = false,
+                mustKeyPress = true,
                 cancelSprintingOnActivation = false,
             });
 

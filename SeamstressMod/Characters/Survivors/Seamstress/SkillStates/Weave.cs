@@ -25,7 +25,7 @@ namespace SeamstressMod.SkillStates
 
         public static float dashDuration = 0.3f;
 
-        public static float speedCoefficient = 125f;
+        public static float speedCoefficient = 100f;
 
         private Vector3 dashVector = Vector3.zero;
 
@@ -72,6 +72,7 @@ namespace SeamstressMod.SkillStates
             else
             {
                 overlapAttack.AddModdedDamageType(DamageTypes.Empty);
+                overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_bandit2_m2_impact";
             }
 

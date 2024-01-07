@@ -43,7 +43,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Passive
-            Language.Add(prefix + "PASSIVE_NAME", "<style=cIsHealth>Tortured Heart</style>");
+            Language.Add(prefix + "PASSIVE_NAME", "<style=cIsHealth>Stitched Heart</style>");
             Language.Add(prefix + "PASSIVE_DESCRIPTION", "Gain <style=cIsDamage>0.1</style> base damage for every <style=cIsHealth>1</style> health missing. ");
             #endregion
 
@@ -60,13 +60,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Utility
             Language.Add(prefix + "UTILITY_REAP_NAME", "<style=cIsHealth>Reap</style>");
-            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart to gain " + Tokens.armorPrefix + ", " + Tokens.frenzyPrefix + ", and " + Tokens.butcheredPrefix + ".");
+            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart to gain "+ Tokens.frenzyPrefix + " and " + Tokens.butcheredPrefix + ".");
             #endregion
 
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "<style=cIsHealth>Sew</style>");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Consume enemies in front of you dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style> <style=cIsHealing>healing for 10% of the damage dealt.</style> While " + 
-                Tokens.butcheredPrefix + ", <style=cIsHealing>heal for 20% of the damage dealt</style> and apply " + Tokens.bleedPrefix + ".");
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", "Open the stitched heart to " + Tokens.cutPrefix + $" enemies from the inside dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style>. Also fire a needle that damages enemies for <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage</style> <style=cIsHealing>healing for 20% of damage dealt</style>. While " + 
+                Tokens.butcheredPrefix + ", fire three needles and also apply " + Tokens.bleedPrefix + ".");
             #endregion
 
             #region Achievements

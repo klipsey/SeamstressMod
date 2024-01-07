@@ -3,6 +3,7 @@ using UnityEngine;
 using R2API;
 using SeamstressMod.Survivors.Seamstress;
 using SeamstressMod.SkillStates.BaseStates;
+using System;
 
 
 namespace SeamstressMod.SkillStates
@@ -88,7 +89,6 @@ namespace SeamstressMod.SkillStates
                 }
             }
         }
-        
         protected override void PlaySwingEffect()
         {
             Util.PlaySound(swingSoundString, gameObject);
