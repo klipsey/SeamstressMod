@@ -8,6 +8,8 @@
 
         public const string armorPrefix = "<style=cIsUtility>20 armor</style>";
 
+        public const string needlePrefix = "<style=cIsUtility>Needle</style>";
+
         public const string frenzyPrefix = "<style=cIsUtility>Frenzy</style>";
 
         public const string bleedPrefix = "<style=cIsDamage>Bleed</style>";
@@ -22,7 +24,7 @@
 
         public const string slayerPrefix = "<style=cIsDamage>Slayer</style>";
 
-        public static string cutKeyword = KeywordText("Cut", "Deal <style=cIsDamage>5%</style> (<style=cIsDamage>2.5%</style> against bosses) of the enemies current health and <style=cIsHealing>heal</style> for 60% of that amount");
+        public static string cutKeyword = KeywordText("Cut", "Deal <style=cIsDamage>5%</style> (<style=cIsDamage>1.25%</style> against bosses) of the enemies current health and <style=cIsHealing>heal</style> for 60% of that amount");
 
         public static string slayerKeyword = KeywordText("Slayer", "Deals up to <style=cIsDamage>3x</style> damage against low health enemies.");
 

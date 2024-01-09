@@ -10,6 +10,8 @@ namespace SeamstressMod.Survivors.Seamstress
         public static BuffDef armorBuff;
 
         public static BuffDef bloodBath;
+
+        public static BuffDef needles;
         public static void Init(AssetBundle assetBundle)
         {
             armorBuff = Modules.Content.CreateAndAddBuff("SeamstressArmorBuff",
@@ -19,6 +21,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 false);
             bloodBath = Modules.Content.CreateAndAddBuff("BloodBath", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Bandit2/texBuffSuperBleedingIcon.tif").WaitForCompletion(), 
                 Color.red, false, false);
+            needles = Modules.Content.CreateAndAddBuff("Needles", Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/MoveSpeedOnKill/texBuffKillMoveSpeed.tif").WaitForCompletion(),
+                Color.white, true, false);
         }
     }
 }

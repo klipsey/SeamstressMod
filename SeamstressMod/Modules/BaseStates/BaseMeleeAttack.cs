@@ -18,6 +18,7 @@ namespace SeamstressMod.SkillStates.BaseStates
 
         protected DamageType damageType = DamageType.Generic;
         protected DamageAPI.ModdedDamageType moddedDamageType = DamageTypes.Empty;
+        protected DamageAPI.ModdedDamageType moddedDamageType2 = DamageTypes.Empty;
         protected float damageCoefficient = 3.5f;
         protected float procCoefficient = 1f;
         protected float pushForce = 300f;
@@ -64,6 +65,7 @@ namespace SeamstressMod.SkillStates.BaseStates
             this.attack = new OverlapAttack();
             this.attack.damageType = this.damageType;
             this.attack.AddModdedDamageType(this.moddedDamageType);
+            this.attack.AddModdedDamageType(this.moddedDamageType2);
             this.attack.attacker = base.gameObject;
             this.attack.inflictor = base.gameObject;
             this.attack.teamIndex = base.GetTeam();

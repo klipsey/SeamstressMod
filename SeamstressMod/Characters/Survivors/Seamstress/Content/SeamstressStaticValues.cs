@@ -8,7 +8,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float sewDamageCoefficient = 4f;
 
-        internal const float sewNeedleDamageCoefficient = 0.7f;
+        internal const float sewNeedleDamageCoefficient = 1f;
 
         public const float weaveDamageCoefficient = 2f;
     }

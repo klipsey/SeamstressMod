@@ -53,18 +53,23 @@ namespace SeamstressMod.SkillStates
                     this.muzzleString = "SwingCenter";
                     break;
             }
+            if (empowered)
+            {
+                this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
+            }
             if (isComboFinisher)
             {
                 this.moddedDamageType = DamageTypes.CutDamage;
-                if (empowered) 
-                {
-                    this.damageType = DamageType.BleedOnHit;
-                    healthComponent.AddBarrier(healthComponent.health * 0.1f);
-                }
+                this.moddedDamageType2 = DamageTypes.AddNeedlesDamage;
                 this.swingSoundString = "Play_bandit2_m2_slash";
                 this.hitboxName = "SwordBig";
                 this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                 this.baseDuration = 1.4f;
+                if (empowered)
+                {
+                    this.damageType = DamageType.BleedOnHit;
+                    this.swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
+                }
             }
 
             this.impactSound = SeamstressAssets.scissorsHitSoundEvent.index;

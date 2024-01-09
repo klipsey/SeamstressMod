@@ -11,6 +11,9 @@ namespace SeamstressMod.Survivors.Seamstress
     public class DamageTypes
     {
         public static DamageAPI.ModdedDamageType CutDamage;
+        public static DamageAPI.ModdedDamageType CutDamageNeedle;
+        public static DamageAPI.ModdedDamageType AddNeedlesKill;
+        public static DamageAPI.ModdedDamageType AddNeedlesDamage;
         //public static DamageAPI.ModdedDamageType HealDamage;
         //public static DamageAPI.ModdedDamageType HealDamageEmpowered;
         public static DamageAPI.ModdedDamageType ResetWeave;
@@ -19,6 +22,10 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             Empty = DamageAPI.ReserveDamageType();
             CutDamage = DamageAPI.ReserveDamageType();
+            CutDamageNeedle = DamageAPI.ReserveDamageType();
+            AddNeedlesKill = DamageAPI.ReserveDamageType();
+            AddNeedlesDamage = DamageAPI.ReserveDamageType();
+            ResetWeave = DamageAPI.ReserveDamageType();
             //HealDamage = DamageAPI.ReserveDamageType();
             //HealDamageEmpowered = DamageAPI.ReserveDamageType();
             Hook();
@@ -31,7 +38,7 @@ namespace SeamstressMod.Survivors.Seamstress
         private static void GlobalEventManager_onServerDamageDealt(DamageReport damageReport)
         {
             DamageInfo damageInfo = damageReport.damageInfo;
-            if (!damageInfo.attacker)
+            if (!damageInfo.attacker && !damageInfo.inflictor)
             {
                 return;
             }
@@ -39,19 +46,26 @@ namespace SeamstressMod.Survivors.Seamstress
             CharacterBody attacker = damageReport.attackerBody;
             if (NetworkServer.active)
             {
-                if (damageInfo.HasModdedDamageType(CutDamage))
+                if(damageInfo.HasModdedDamageType(AddNeedlesDamage))
+                {
+                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < 10)
+                    {
+                        attacker.AddBuff(SeamstressBuffs.needles);
+                    }
+                }
+                if (damageInfo.HasModdedDamageType(CutDamage) || damageInfo.HasModdedDamageType(CutDamageNeedle))
                 {
                     if(damageReport.victimIsBoss)
                     {
                         DamageInfo cut = new DamageInfo
                         {
-                            damage = victim.health * 0.025f,
-                            damageColorIndex = DamageColorIndex.SuperBleed,
+                            damage = victim.health * 0.0125f,
+                            damageColorIndex = DamageColorIndex.WeakPoint,
                             damageType = DamageType.Generic,
                             attacker = damageInfo.attacker,
                             crit = false,
                             force = Vector3.zero,
-                            inflictor = null,
+                            inflictor = damageInfo.inflictor,
                             position = damageInfo.position,
                             procCoefficient = 0f
                         };
@@ -64,12 +78,12 @@ namespace SeamstressMod.Survivors.Seamstress
                         DamageInfo cut = new DamageInfo
                         {
                             damage = victim.health * 0.05f,
-                            damageColorIndex = DamageColorIndex.SuperBleed,
+                            damageColorIndex = DamageColorIndex.WeakPoint,
                             damageType = DamageType.Generic,
                             attacker = damageInfo.attacker,
                             crit = false,
                             force = Vector3.zero,
-                            inflictor = null,
+                            inflictor = damageInfo.inflictor,
                             position = damageInfo.position,
                             procCoefficient = 0f
                         };
@@ -93,6 +107,13 @@ namespace SeamstressMod.Survivors.Seamstress
                 if (damageInfo.HasModdedDamageType(ResetWeave))
                 {
                     attacker.skillLocator.secondary.Reset();
+                }
+                if(damageInfo.HasModdedDamageType(AddNeedlesKill))
+                {
+                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < 10)
+                    {
+                        attacker.AddBuff(SeamstressBuffs.needles);
+                    }
                 }
             }
         }

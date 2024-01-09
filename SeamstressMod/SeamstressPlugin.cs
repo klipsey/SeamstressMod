@@ -36,7 +36,7 @@ namespace SeamstressMod
 
             Log.Init(Logger);
             Modules.Language.Init();
-            
+            DamageTypes.Init();
             // collect item display prefabs for use in our display rules
             Modules.ItemDisplays.PopulateDisplays();
 
@@ -46,7 +46,7 @@ namespace SeamstressMod
             // now make a content pack and add it this has to be last
             new Modules.ContentPacks().Initialize();
 
-            DamageTypes.Init();
+
         }
     }
 }

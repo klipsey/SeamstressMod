@@ -50,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
             damage = 10f,
 
             damageGrowth = 0f,
-            healthGrowth = 38,
+            healthGrowth = 35,
 
             jumpCount = 1,
         };
@@ -174,14 +174,14 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "SeamstressWeave",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.bleedKeyword, Tokens.butcheredKeyword, Tokens.slayerKeyword },
+                keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.slayerKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
-                activationStateMachineName = "Weapon2",
+                activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 6f,
+                baseRechargeInterval = 5f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -220,7 +220,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 ));
             //custom Skilldefs can have additional fields that you can set manually
             trimSkillDef.stepCount = 3;
-            trimSkillDef.stepGraceDuration = 0.5f;
+            trimSkillDef.stepGraceDuration = 0.6f;
 
             Skills.AddPrimarySkills(bodyPrefab, trimSkillDef);
         }
@@ -278,7 +278,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 12f,
+                baseRechargeInterval = 10f,
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,
@@ -287,7 +287,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 fullRestockOnAssign = false,
                 isCombatSkill = true,
                 mustKeyPress = true,
-                cancelSprintingOnActivation = false,
+                cancelSprintingOnActivation = true,
             });
 
             Skills.AddSpecialSkills(bodyPrefab, sewSkillDef);

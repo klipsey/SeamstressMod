@@ -63,9 +63,10 @@ namespace SeamstressMod.SkillStates
             dashVector = base.inputBank.aimDirection;
             overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
             overlapAttack.damageType = DamageType.BonusToLowHealth;
+            overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesKill);
             if (empowered)
             {
-                overlapAttack.damageType |= DamageType.BleedOnHit;
+                //overlapAttack.damageType |= DamageType.BleedOnHit;
                 overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_imp_overlord_impact";
             }

@@ -6,6 +6,8 @@ using RoR2.Projectile;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using R2API;
+using System.Runtime.CompilerServices;
+using UnityEngine.UIElements;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -13,9 +15,12 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         //effects
         internal static GameObject scissorsSwingEffect;
+        internal static GameObject scissorsButcheredSwingEffect;
         internal static GameObject sewEffect;
         internal static GameObject scissorsComboSwingEffect;
+        internal static GameObject scissorsButcheredComboSwingEffect;
         internal static GameObject scissorsHitImpactEffect;
+        internal static GameObject needleGhost;
         // particle effects
 
         // networked hit sounds
@@ -28,8 +33,6 @@ namespace SeamstressMod.Survivors.Seamstress
         public static GameObject crosshairOverridePrefab;
 
         internal static GameObject needlePrefab;
-
-        internal static GameObject needlePrefabEmpowered;
         public static void Init(AssetBundle assetBundle)
         {
 
@@ -50,17 +53,30 @@ namespace SeamstressMod.Survivors.Seamstress
             crosshairOverridePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Loader/LoaderCrosshair.prefab").WaitForCompletion().InstantiateClone("SeamstressCrosshair");
             crosshairOverridePrefab.AddComponent<NetworkIdentity>();
 
+            scissorsButcheredSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
+            scissorsButcheredSwingEffect.AddComponent<NetworkIdentity>();
+            scissorsButcheredSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
+            scissorsButcheredSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();//Assets.LoadEffect("HenrySwordSwingEffect", true);
+
             scissorsSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
             scissorsSwingEffect.AddComponent<NetworkIdentity>();
             scissorsSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
-            scissorsSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();//Assets.LoadEffect("HenrySwordSwingEffect", true);
-
-            scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
+            //final hit
+            scissorsButcheredComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
+            scissorsButcheredComboSwingEffect.AddComponent<NetworkIdentity>();
+            scissorsButcheredComboSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
+            scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
+            ParticleSystem.MainModule main = scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+            main.startLifetimeMultiplier = 0.1f;
+            scissorsButcheredComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 0.75f;
+            UnityEngine.Object.Destroy(scissorsButcheredComboSwingEffect.GetComponent<EffectComponent>());
+            //final hit
+            scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
             scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
-            scissorsComboSwingEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            ParticleSystem.MainModule main = scissorsComboSwingEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
-            main.startLifetimeMultiplier = 0.6f;
-            scissorsComboSwingEffect.transform.GetChild(0).localScale = Vector3.one * 2f;
+            scissorsComboSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
+            ParticleSystem.MainModule main2 = scissorsComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+            main2.startLifetimeMultiplier = 0.1f;
+            scissorsComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 0.75f;
             UnityEngine.Object.Destroy(scissorsComboSwingEffect.GetComponent<EffectComponent>());
 
             scissorsHitImpactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMerc.prefab").WaitForCompletion().InstantiateClone("ScissorImpact", false);
@@ -102,8 +118,6 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             CreateNeedle ();
             Content.AddProjectilePrefab(needlePrefab);
-            CreateNeedleEmpowered();
-            Content.AddProjectilePrefab(needlePrefabEmpowered);
         }
         private static void CreateNeedle()
         {
@@ -113,9 +127,11 @@ namespace SeamstressMod.Survivors.Seamstress
             needleSimple.desiredForwardSpeed = 100f;
             needleSimple.lifetime = 5f;
             needleSimple.updateAfterFiring = true;
-
+            
             ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
             needleDamage.damageType = DamageType.Generic;
+            DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needlePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
+            needleModdedDamage.Add(DamageTypes.CutDamageNeedle);
 
             needlePrefab.AddComponent<ProjectileTargetComponent>();
             ProjectileSteerTowardTarget needleSteer = needlePrefab.AddComponent<ProjectileSteerTowardTarget>();
@@ -124,7 +140,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileDirectionalTargetFinder needleFinder = needlePrefab.AddComponent<ProjectileDirectionalTargetFinder>();
             needleFinder.lookRange = 50f;   //25f
-            needleFinder.lookCone = 120f;    //20f
+            needleFinder.lookCone = 100f;    //20f
             needleFinder.targetSearchInterval = 0.2f;
             needleFinder.onlySearchIfNoTarget = false;
             needleFinder.allowTargetLoss = true;
@@ -133,49 +149,14 @@ namespace SeamstressMod.Survivors.Seamstress
             needleFinder.flierAltitudeTolerance = Mathf.Infinity;
 
             ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = 0.1f;
+            needleHeal.fractionOfDamage = 0f;
 
             ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
             needleController.allowPrediction = false;
-
-            if (_assetBundle.LoadAsset<GameObject>("MageIceBombProjectile") != null) 
-                needleController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("MageIceBombProjectile");
-            needleController.startSound = "";
-        }
-        private static void CreateNeedleEmpowered()
-        {
-            needlePrefabEmpowered = Assets.CloneProjectilePrefab("FMJ", "Needle2");
-
-            ProjectileSimple needleSimple = needlePrefabEmpowered.GetComponent<ProjectileSimple>();
-            needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 5f;
-            needleSimple.updateAfterFiring = true;
-
-            ProjectileDamage needleDamage = needlePrefabEmpowered.GetComponent<ProjectileDamage>();
-            needleDamage.damageType = DamageType.BleedOnHit;
-
-            needlePrefabEmpowered.AddComponent<ProjectileTargetComponent>();
-            ProjectileSteerTowardTarget needleSteer = needlePrefabEmpowered.AddComponent<ProjectileSteerTowardTarget>();
-            needleSteer.yAxisOnly = false;
-            needleSteer.rotationSpeed = 600f;
-
-            ProjectileDirectionalTargetFinder needleFinder = needlePrefabEmpowered.AddComponent<ProjectileDirectionalTargetFinder>();
-            needleFinder.lookRange = 50f;   //25f
-            needleFinder.lookCone = 120f;    //20f
-            needleFinder.targetSearchInterval = 0.1f;
-            needleFinder.onlySearchIfNoTarget = false;
-            needleFinder.allowTargetLoss = true;
-            needleFinder.testLoS = true;
-            needleFinder.ignoreAir = false;
-            needleFinder.flierAltitudeTolerance = Mathf.Infinity;
-
-            ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefabEmpowered.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = 0.2f;
-
-            ProjectileController needleController = needlePrefabEmpowered.GetComponent<ProjectileController>();
-            needleController.allowPrediction = false;
-
-            if (_assetBundle.LoadAsset<GameObject>("MageIceBombProjectile") != null) needleController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("MageIceBombProjectile");
+            needleGhost = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab;
+            needleGhost = PrefabAPI.InstantiateClone(needleGhost, "Needle");
+            if (_assetBundle.LoadAsset<GameObject>("HenryBombGhost") != null)
+                needleController.ghostPrefab = needleGhost;
             needleController.startSound = "";
         }
         #endregion projectiles

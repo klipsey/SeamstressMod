@@ -13,6 +13,7 @@ namespace SeamstressMod.SkillStates
         public GameObject projectilePrefab;
         public GameObject projectilePrefabEmpowered;
         public float needleDelay;
+        public float needleCompareDelay = 0.2f;
         public bool hasLaunched;
         public bool hasLaunched2;
         public bool hasLaunched3;
@@ -22,7 +23,6 @@ namespace SeamstressMod.SkillStates
             RefreshState();
             aimRay = base.GetAimRay();
             projectilePrefab = SeamstressAssets.needlePrefab;
-            projectilePrefabEmpowered = SeamstressAssets.needlePrefabEmpowered;
             this.damageType = DamageType.Stun1s;
             this.hitboxName = "Sew";
             this.damageCoefficient = SeamstressStaticValues.sewDamageCoefficient;
@@ -66,30 +66,13 @@ namespace SeamstressMod.SkillStates
         {
             base.FixedUpdate();
             needleDelay += Time.fixedDeltaTime;
-            if (empowered)
+            if (needleDelay >= needleCompareDelay)
             {
-                if (needleDelay >= 0.2f && !hasLaunched)
-                {
-                    ProjectileManager.instance.FireProjectile(projectilePrefabEmpowered, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
-                    hasLaunched = true;
-                }
-                    if (needleDelay >= 0.3f && !hasLaunched2)
-                {
-                    ProjectileManager.instance.FireProjectile(projectilePrefabEmpowered, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
-                    hasLaunched2 = true;
-                }
-                if (needleDelay >= 0.4f && !hasLaunched3)
-                {
-                    ProjectileManager.instance.FireProjectile(projectilePrefabEmpowered, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
-                    hasLaunched3 = true;
-                }
-            }
-            else
-            {
-                if (needleDelay >= 0.2f && !hasLaunched)
+                if(characterBody.HasBuff(SeamstressBuffs.needles))
                 {
                     ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
-                    hasLaunched = true;
+                    characterBody.RemoveBuff(SeamstressBuffs.needles);
+                    needleCompareDelay += 0.2f;
                 }
             }
         }
