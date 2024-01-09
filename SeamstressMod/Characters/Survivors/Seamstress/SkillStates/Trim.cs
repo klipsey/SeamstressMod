@@ -56,6 +56,7 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
+                this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             }
             if (isComboFinisher)
             {

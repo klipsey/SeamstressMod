@@ -20,6 +20,7 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject scissorsComboSwingEffect;
         internal static GameObject scissorsButcheredComboSwingEffect;
         internal static GameObject scissorsHitImpactEffect;
+        internal static GameObject scissorsButcheredHitImpactEffect;
         internal static GameObject needleGhost;
         // particle effects
 
@@ -91,9 +92,6 @@ namespace SeamstressMod.Survivors.Seamstress
             material2.SetColor("_TintColor", Color.red);
             scissorsHitImpactEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material2;
             scissorsHitImpactEffect.transform.GetChild(4).localScale = Vector3.one * 3f;
-            scissorsHitImpactEffect.transform.GetChild(4).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDust.mat").WaitForCompletion();
-            scissorsHitImpactEffect.transform.GetChild(6).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/Common/Void/matOmniHitspark1Void.mat").WaitForCompletion();
-            scissorsHitImpactEffect.transform.GetChild(6).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/Common/Void/matOmniHitspark2Void.mat").WaitForCompletion();
             scissorsHitImpactEffect.transform.GetChild(1).localScale = Vector3.one * 1.5f;
             scissorsHitImpactEffect.transform.GetChild(1).gameObject.SetActive(value: true);
             scissorsHitImpactEffect.transform.GetChild(2).gameObject.SetActive(value: true);
@@ -105,6 +103,33 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsHitImpactEffect.transform.GetChild(6).transform.localScale = new Vector3(1f, 1f, 3f);
             scissorsHitImpactEffect.transform.localScale = Vector3.one * 1.5f;
             Modules.Content.CreateAndAddEffectDef(scissorsHitImpactEffect);
+
+            scissorsButcheredHitImpactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMerc.prefab").WaitForCompletion().InstantiateClone("ScissorImpact", false);
+            scissorsButcheredHitImpactEffect.AddComponent<NetworkIdentity>();
+            scissorsButcheredHitImpactEffect.GetComponent<OmniEffect>().enabled = false;
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniHitspark3Merc.mat").WaitForCompletion());
+            material.SetColor("_TintColor", Color.red);
+            scissorsButcheredHitImpactEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            scissorsButcheredHitImpactEffect.transform.GetChild(2).localScale = Vector3.one * 1.5f;
+            scissorsButcheredHitImpactEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorBlasterFireCorrupted.mat").WaitForCompletion();
+            material2 = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniRadialSlash1Merc.mat").WaitForCompletion());
+            material2.SetColor("_TintColor", Color.red);
+            scissorsButcheredHitImpactEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material2;
+            scissorsButcheredHitImpactEffect.transform.GetChild(4).localScale = Vector3.one * 3f;
+            scissorsButcheredHitImpactEffect.transform.GetChild(4).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDust.mat").WaitForCompletion();
+            scissorsButcheredHitImpactEffect.transform.GetChild(6).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/Common/Void/matOmniHitspark1Void.mat").WaitForCompletion();
+            scissorsButcheredHitImpactEffect.transform.GetChild(6).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/Common/Void/matOmniHitspark2Void.mat").WaitForCompletion();
+            scissorsButcheredHitImpactEffect.transform.GetChild(1).localScale = Vector3.one * 1.5f;
+            scissorsButcheredHitImpactEffect.transform.GetChild(1).gameObject.SetActive(value: true);
+            scissorsButcheredHitImpactEffect.transform.GetChild(2).gameObject.SetActive(value: true);
+            scissorsButcheredHitImpactEffect.transform.GetChild(3).gameObject.SetActive(value: true);
+            scissorsButcheredHitImpactEffect.transform.GetChild(4).gameObject.SetActive(value: true);
+            scissorsButcheredHitImpactEffect.transform.GetChild(5).gameObject.SetActive(value: true);
+            scissorsButcheredHitImpactEffect.transform.GetChild(6).gameObject.SetActive(value: true);
+            scissorsButcheredHitImpactEffect.transform.GetChild(6).GetChild(0).gameObject.SetActive(value: true);
+            scissorsButcheredHitImpactEffect.transform.GetChild(6).transform.localScale = new Vector3(1f, 1f, 3f);
+            scissorsButcheredHitImpactEffect.transform.localScale = Vector3.one * 1.5f;
+            Modules.Content.CreateAndAddEffectDef(scissorsButcheredHitImpactEffect);
 
             sewEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterExplosionCorrupted.prefab").WaitForCompletion().InstantiateClone("SewSplosion");
             sewEffect.AddComponent<NetworkIdentity>();

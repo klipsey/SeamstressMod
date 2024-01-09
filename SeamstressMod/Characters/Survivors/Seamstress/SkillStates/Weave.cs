@@ -35,7 +35,7 @@ namespace SeamstressMod.SkillStates
 
         public static float procCoefficient = 1;
 
-        public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+        public static GameObject hitEffectPrefab;
 
         public static float hitPauseDuration = 0.05f;
 
@@ -61,21 +61,23 @@ namespace SeamstressMod.SkillStates
             SmallHop(base.characterMotor, smallHopVelocity);
             //PlayAnimation("FullBody, Override", "AssaulterPrep", "AssaulterPrep.playbackRate", dashPrepDuration);
             dashVector = base.inputBank.aimDirection;
-            overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
-            overlapAttack.damageType = DamageType.BonusToLowHealth;
-            overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesKill);
             if (empowered)
             {
+                hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
                 //overlapAttack.damageType |= DamageType.BleedOnHit;
                 overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_imp_overlord_impact";
             }
             else
             {
+                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 overlapAttack.AddModdedDamageType(DamageTypes.Empty);
                 overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_bandit2_m2_impact";
             }
+            overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesKill);
+            overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
+            overlapAttack.damageType = DamageType.BonusToLowHealth;
 
         }
         public override void FixedUpdate()

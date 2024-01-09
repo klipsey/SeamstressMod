@@ -53,6 +53,7 @@ namespace SeamstressMod.SkillStates
             this.moddedDamageType = DamageTypes.CutDamage;
             if (empowered)
             {
+                this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
                 this.damageType |= DamageType.BleedOnHit;
             }
             base.OnEnter();
