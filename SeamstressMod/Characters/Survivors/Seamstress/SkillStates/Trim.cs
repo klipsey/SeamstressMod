@@ -22,7 +22,7 @@ namespace SeamstressMod.SkillStates
             this.procCoefficient = 1f;
             this.pushForce = 300f;
             this.bonusForce = Vector3.zero;
-            this.baseDuration = 1f;
+            this.baseDuration = 1.2f;
 
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
@@ -32,9 +32,9 @@ namespace SeamstressMod.SkillStates
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             this.earlyExitPercentTime = 0.4f;
 
-            this.hitStopDuration = 0.1f;
+            this.hitStopDuration = 0.05f;
             this.attackRecoil = 0.75f;
-            this.hitHopVelocity = 4f;
+            this.hitHopVelocity = 5f;
 
             this.swingSoundString = "Play_imp_attack";
             this.hitSoundString = "";
@@ -60,12 +60,12 @@ namespace SeamstressMod.SkillStates
             }
             if (isComboFinisher)
             {
+                this.earlyExitPercentTime = 0.8f;
                 this.moddedDamageType = DamageTypes.CutDamage;
                 this.moddedDamageType2 = DamageTypes.AddNeedlesDamage;
                 this.swingSoundString = "Play_bandit2_m2_slash";
                 this.hitboxName = "SwordBig";
                 this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
-                this.baseDuration = 1.4f;
                 if (empowered)
                 {
                     this.damageType = DamageType.BleedOnHit;

@@ -48,7 +48,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 if(damageInfo.HasModdedDamageType(AddNeedlesDamage))
                 {
-                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < 10)
+                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
                     {
                         attacker.AddBuff(SeamstressBuffs.needles);
                     }
@@ -59,7 +59,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     {
                         DamageInfo cut = new DamageInfo
                         {
-                            damage = victim.health * 0.0125f,
+                            damage = victim.health * SeamstressStaticValues.cutBossDamageCoefficient,
                             damageColorIndex = DamageColorIndex.WeakPoint,
                             damageType = DamageType.Generic,
                             attacker = damageInfo.attacker,
@@ -70,14 +70,14 @@ namespace SeamstressMod.Survivors.Seamstress
                             procCoefficient = 0f
                         };
                         victim.TakeDamage(cut);
-                        float lifeSteal = cut.damage * 0.60f;
+                        float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                     }
                     else
                     {
                         DamageInfo cut = new DamageInfo
                         {
-                            damage = victim.health * 0.05f,
+                            damage = victim.health * SeamstressStaticValues.cutDamageCoefficient,
                             damageColorIndex = DamageColorIndex.WeakPoint,
                             damageType = DamageType.Generic,
                             attacker = damageInfo.attacker,
@@ -88,7 +88,7 @@ namespace SeamstressMod.Survivors.Seamstress
                             procCoefficient = 0f
                         };
                         victim.TakeDamage(cut);
-                        float lifeSteal = cut.damage * 0.60f;
+                        float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                     }
                 }
@@ -110,7 +110,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if(damageInfo.HasModdedDamageType(AddNeedlesKill))
                 {
-                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < 10)
+                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
                     {
                         attacker.AddBuff(SeamstressBuffs.needles);
                     }
