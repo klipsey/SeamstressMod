@@ -62,7 +62,7 @@ namespace SeamstressMod.SkillStates
                     healthComponent.TakeDamage(damageInfo);
                     healthComponent.AddBarrier(currentBarrier);
                     characterBody.AddTimedBuff(SeamstressBuffs.bloodBath, 6f, 1);
-                    characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f);
+                    characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
                     if (base.characterBody.GetBuffCount(SeamstressBuffs.needles) < 10)
                     {
                         base.characterBody.AddBuff(SeamstressBuffs.needles);
