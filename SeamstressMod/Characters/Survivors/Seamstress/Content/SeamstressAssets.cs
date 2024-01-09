@@ -150,7 +150,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileSimple needleSimple = needlePrefab.GetComponent<ProjectileSimple>();
             needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 5f;
+            needleSimple.lifetime = 3f;
             needleSimple.updateAfterFiring = true;
             
             ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
@@ -165,7 +165,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileDirectionalTargetFinder needleFinder = needlePrefab.AddComponent<ProjectileDirectionalTargetFinder>();
             needleFinder.lookRange = 50f;   //25f
-            needleFinder.lookCone = 70f;    //20f
+            needleFinder.lookCone = 120f;    //20f
             needleFinder.targetSearchInterval = 0.2f;
             needleFinder.onlySearchIfNoTarget = false;
             needleFinder.allowTargetLoss = true;
@@ -177,6 +177,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleHeal.fractionOfDamage = 0f;
 
             ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
+            needleController.procCoefficient = 0.5f;
             needleController.allowPrediction = false;
             needleGhost = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab;
             needleGhost = PrefabAPI.InstantiateClone(needleGhost, "Needle");
