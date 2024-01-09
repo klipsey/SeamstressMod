@@ -22,7 +22,7 @@
 
         public const string slayerPrefix = "<style=cIsDamage>Slayer</style>";
 
-        public static string cutKeyword = KeywordText("Cut", "Deal <style=cIsDamage>5%</style> of the enemies current health and <style=cIsHealing>heal</style> for 60% of that amount");
+        public static string cutKeyword = KeywordText("Cut", "Deal <style=cIsDamage>5%</style> (<style=cIsDamage>2.5%</style> against bosses) of the enemies current health and <style=cIsHealing>heal</style> for 60% of that amount");
 
         public static string slayerKeyword = KeywordText("Slayer", "Deals up to <style=cIsDamage>3x</style> damage against low health enemies.");
 

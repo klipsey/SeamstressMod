@@ -50,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
             damage = 10f,
 
             damageGrowth = 0f,
-            healthGrowth = 36,
+            healthGrowth = 38,
 
             jumpCount = 1,
         };
@@ -123,9 +123,10 @@ namespace SeamstressMod.Survivors.Seamstress
             Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Sword");
             hitboxTransform = childLocator.FindChild("SwordHitboxBig");
             Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "SwordBig");
-            hitboxTransform = childLocator.FindChild("SwordHitboxSew");
-            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "SwordSew");
-
+            hitboxTransform = childLocator.FindChild("HitboxSew");
+            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Sew");
+            hitboxTransform = childLocator.FindChild("HitboxWeave");
+            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Weave");
         }
 
         public override void InitializeEntityStateMachines() 
@@ -180,7 +181,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 5f,
+                baseRechargeInterval = 6f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -273,7 +274,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillIcon = assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
-                activationStateMachineName = "Weapon", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
+                activationStateMachineName = "Weapon2", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,

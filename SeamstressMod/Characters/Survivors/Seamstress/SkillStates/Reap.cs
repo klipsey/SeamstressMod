@@ -26,7 +26,7 @@ namespace SeamstressMod.SkillStates
             duration = baseDuration / attackSpeedStat;
             fireTime = firePercentTime * duration;
             Util.PlaySound("Play_item_proc_novaonheal_impact", gameObject);
-            PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", 1.8f);
+            PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration * 0.1f);
         }
         public override void FixedUpdate()
         {

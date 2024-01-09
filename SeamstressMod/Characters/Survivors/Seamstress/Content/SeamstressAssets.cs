@@ -13,7 +13,7 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         //effects
         internal static GameObject scissorsSwingEffect;
-        internal static GameObject sewSwingEffect;
+        internal static GameObject sewEffect;
         internal static GameObject scissorsComboSwingEffect;
         internal static GameObject scissorsHitImpactEffect;
         // particle effects
@@ -90,10 +90,9 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsHitImpactEffect.transform.localScale = Vector3.one * 1.5f;
             Modules.Content.CreateAndAddEffectDef(scissorsHitImpactEffect);
 
-            sewSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Croco/CrocoSlash.prefab").WaitForCompletion().InstantiateClone("SewSwing");
-            sewSwingEffect.AddComponent<NetworkIdentity>();
-            sewSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
-            sewSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();//Assets.LoadEffect("HenrySwordSwingEffect", true);
+            sewEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterExplosionCorrupted.prefab").WaitForCompletion().InstantiateClone("SewSplosion");
+            sewEffect.AddComponent<NetworkIdentity>();
+            sewEffect.transform.GetChild(0).gameObject.SetActive(value: false);
         }
 
         #endregion effects

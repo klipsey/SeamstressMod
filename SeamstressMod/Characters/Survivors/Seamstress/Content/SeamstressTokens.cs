@@ -26,7 +26,7 @@ namespace SeamstressMod.Survivors.Seamstress
              + "< ! > Trim is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
              + "< ! > Weave is a basic dash on its own but with butcher it can become devastating in groups." + Environment.NewLine + Environment.NewLine
              + "< ! > Reap can give you incredible buffs through butcher but use it carefully, you could end your run if used poorly." + Environment.NewLine + Environment.NewLine
-             + "< ! > Reap what you.. Sew? Use Sew to regain the health lost from Reap especially during butcher." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Reap what you.. Sew? Use Sew to regain the health lost and to hit enemies from afar" + Environment.NewLine + Environment.NewLine;
 
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
@@ -65,7 +65,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "<style=cIsHealth>Sew</style>");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", "Open the stitched heart to " + Tokens.cutPrefix + $" enemies from the inside dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style>. Also fire a needle that damages enemies for <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage</style> <style=cIsHealing>healing for 20% of damage dealt</style>. While " + 
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", "Pulse your stitched heart to " + Tokens.cutPrefix + $" enemies from the inside out dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style>. Also fire a needle that damages enemies for <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage</style> <style=cIsHealing>healing for 20% of damage dealt</style>. While " + 
                 Tokens.butcheredPrefix + ", fire three needles and also apply " + Tokens.bleedPrefix + ".");
             #endregion
 

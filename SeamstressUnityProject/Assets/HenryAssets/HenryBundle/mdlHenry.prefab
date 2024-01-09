@@ -90,6 +90,68 @@ Transform:
   m_Father: {fileID: 1775354496750849744}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &912220751656576745
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1275857624168202987}
+  m_Layer: 0
+  m_Name: SewCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1275857624168202987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912220751656576745}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.175, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 180329084285647612}
+  - {fileID: 8494807609358373004}
+  m_Father: {fileID: 8315140139193319990}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1577312962432028412
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8494807609358373004}
+  m_Layer: 0
+  m_Name: HitboxWeave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8494807609358373004
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577312962432028412}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 5}
+  m_Children: []
+  m_Father: {fileID: 1275857624168202987}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3949867905691892943
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 180329084285647612}
   m_Layer: 0
-  m_Name: SwordHitboxSew
+  m_Name: HitboxSew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -189,11 +251,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4531760662972013200}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0.207}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 12, y: 12, z: 12}
   m_Children: []
-  m_Father: {fileID: 1775354496750849744}
-  m_RootOrder: 5
+  m_Father: {fileID: 1275857624168202987}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4735786425572373389
 GameObject:
@@ -770,9 +832,8 @@ Transform:
   - {fileID: 1588917076}
   - {fileID: 304081779}
   - {fileID: 1085376322226066865}
-  - {fileID: 180329084285647612}
   m_Father: {fileID: 8315140139193319990}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8315140139175220323
 GameObject:
@@ -2101,6 +2162,7 @@ Transform:
   - {fileID: 7238953316064410136}
   - {fileID: 8315140139193319994}
   - {fileID: 8801724157396953430}
+  - {fileID: 1275857624168202987}
   - {fileID: 1775354496750849744}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2199,8 +2261,12 @@ MonoBehaviour:
     transform: {fileID: 1775354496750849744}
   - name: SwordHitboxBig
     transform: {fileID: 1085376322226066865}
-  - name: SwordHitboxSew
+  - name: HitboxSew
     transform: {fileID: 180329084285647612}
+  - name: HitboxWeave
+    transform: {fileID: 8494807609358373004}
+  - name: SewCenter
+    transform: {fileID: 1275857624168202987}
 --- !u!114 &7238953315125949139
 MonoBehaviour:
   m_ObjectHideFlags: 0

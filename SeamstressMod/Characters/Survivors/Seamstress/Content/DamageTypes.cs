@@ -41,21 +41,42 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 if (damageInfo.HasModdedDamageType(CutDamage))
                 {
-                    DamageInfo cut = new DamageInfo
+                    if(damageReport.victimIsBoss)
                     {
-                        damage = victim.health * 0.05f,
-                        damageColorIndex = DamageColorIndex.SuperBleed,
-                        damageType = DamageType.Generic,
-                        attacker = damageInfo.attacker,
-                        crit = damageInfo.crit,
-                        force = Vector3.zero,
-                        inflictor = null,
-                        position = damageInfo.position,
-                        procCoefficient = 1f
-                    };
-                    victim.TakeDamage(cut);
-                    float lifeSteal = cut.damage * 0.60f;
-                    attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
+                        DamageInfo cut = new DamageInfo
+                        {
+                            damage = victim.health * 0.025f,
+                            damageColorIndex = DamageColorIndex.SuperBleed,
+                            damageType = DamageType.Generic,
+                            attacker = damageInfo.attacker,
+                            crit = false,
+                            force = Vector3.zero,
+                            inflictor = null,
+                            position = damageInfo.position,
+                            procCoefficient = 0f
+                        };
+                        victim.TakeDamage(cut);
+                        float lifeSteal = cut.damage * 0.60f;
+                        attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
+                    }
+                    else
+                    {
+                        DamageInfo cut = new DamageInfo
+                        {
+                            damage = victim.health * 0.05f,
+                            damageColorIndex = DamageColorIndex.SuperBleed,
+                            damageType = DamageType.Generic,
+                            attacker = damageInfo.attacker,
+                            crit = false,
+                            force = Vector3.zero,
+                            inflictor = null,
+                            position = damageInfo.position,
+                            procCoefficient = 0f
+                        };
+                        victim.TakeDamage(cut);
+                        float lifeSteal = cut.damage * 0.60f;
+                        attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
+                    }
                 }
             }
         }

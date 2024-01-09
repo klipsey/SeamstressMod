@@ -61,7 +61,7 @@ namespace SeamstressMod.SkillStates
             SmallHop(base.characterMotor, smallHopVelocity);
             //PlayAnimation("FullBody, Override", "AssaulterPrep", "AssaulterPrep.playbackRate", dashPrepDuration);
             dashVector = base.inputBank.aimDirection;
-            overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Sword");
+            overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
             overlapAttack.damageType = DamageType.BonusToLowHealth;
             if (empowered)
             {

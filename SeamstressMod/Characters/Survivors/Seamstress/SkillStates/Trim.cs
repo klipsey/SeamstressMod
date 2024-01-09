@@ -91,7 +91,6 @@ namespace SeamstressMod.SkillStates
         }
         protected override void PlaySwingEffect()
         {
-            Util.PlaySound(swingSoundString, gameObject);
             if (!swingEffectPrefab)
             {
                 return;
