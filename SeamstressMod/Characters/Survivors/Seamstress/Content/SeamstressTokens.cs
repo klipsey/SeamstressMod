@@ -67,7 +67,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Language.Add(prefix + "SPECIAL_SEW_NAME", "<style=cIsHealth>Sew</style>");
             Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", "Pulse your heart to " + Tokens.cutPrefix + $" enemies nearby, dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style>. " +
                 $"Also fire all needles that damage enemies for <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage</style> and apply " + Tokens.cutPrefix + ". While " + 
-                Tokens.butcheredPrefix + ", your heart does " + Tokens.bleedPrefix + ".");
+                Tokens.butcheredPrefix + ", your heart applies " + Tokens.bleedPrefix + ".");
             #endregion
 
             #region Achievements
