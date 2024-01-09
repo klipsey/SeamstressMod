@@ -30,11 +30,11 @@ namespace SeamstressMod.SkillStates
             this.attackEndPercentTime = 0.4f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            this.earlyExitPercentTime = 0.6f;
+            this.earlyExitPercentTime = 0.4f;
 
-            this.hitStopDuration = 0.012f;
-            this.attackRecoil = 0.5f;
-            this.hitHopVelocity = 4f;
+            this.hitStopDuration = 0.1f;
+            this.attackRecoil = 0.75f;
+            this.hitHopVelocity = 6f;
 
             this.swingSoundString = "Play_imp_attack";
             this.hitSoundString = "";
