@@ -84,12 +84,12 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsHitImpactEffect.AddComponent<NetworkIdentity>();
             scissorsHitImpactEffect.GetComponent<OmniEffect>().enabled = false;
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniHitspark3Merc.mat").WaitForCompletion());
-            material.SetColor("_TintColor", Color.red);
+            material.SetColor("_TintColor", Color.white);
             scissorsHitImpactEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             scissorsHitImpactEffect.transform.GetChild(2).localScale = Vector3.one * 1.5f;
             scissorsHitImpactEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorBlasterFireCorrupted.mat").WaitForCompletion();
             Material material2 = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniRadialSlash1Merc.mat").WaitForCompletion());
-            material2.SetColor("_TintColor", Color.red);
+            material2.SetColor("_TintColor", Color.white);
             scissorsHitImpactEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material2;
             scissorsHitImpactEffect.transform.GetChild(4).localScale = Vector3.one * 3f;
             scissorsHitImpactEffect.transform.GetChild(1).localScale = Vector3.one * 1.5f;
@@ -165,7 +165,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileDirectionalTargetFinder needleFinder = needlePrefab.AddComponent<ProjectileDirectionalTargetFinder>();
             needleFinder.lookRange = 50f;   //25f
-            needleFinder.lookCone = 100f;    //20f
+            needleFinder.lookCone = 70f;    //20f
             needleFinder.targetSearchInterval = 0.2f;
             needleFinder.onlySearchIfNoTarget = false;
             needleFinder.allowTargetLoss = true;

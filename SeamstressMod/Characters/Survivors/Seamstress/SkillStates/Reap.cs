@@ -9,7 +9,7 @@ namespace SeamstressMod.SkillStates
 {
     public class Reap : BaseSeamstressSkillState
     {
-        public static float baseDuration = 0.6f;
+        public static float baseDuration = 1f;
 
         public static float duration;
 
