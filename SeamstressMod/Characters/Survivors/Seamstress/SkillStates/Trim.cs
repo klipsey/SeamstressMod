@@ -34,7 +34,7 @@ namespace SeamstressMod.SkillStates
 
             this.hitStopDuration = 0.1f;
             this.attackRecoil = 0.75f;
-            this.hitHopVelocity = 6f;
+            this.hitHopVelocity = 4f;
 
             this.swingSoundString = "Play_imp_attack";
             this.hitSoundString = "";
