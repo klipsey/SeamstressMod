@@ -50,7 +50,6 @@ namespace SeamstressMod.SkillStates
             this.muzzleString = "SewCenter";
 
             this.impactSound = SeamstressAssets.sewHitSoundEvent.index;
-            this.moddedDamageType = DamageTypes.CutDamage;
             if (empowered)
             {
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;

@@ -12,8 +12,6 @@ namespace SeamstressMod.Modules
 
         public const string needlePrefix = "<style=cIsUtility>Needle</style>";
 
-        public const string frenzyPrefix = "<style=cIsUtility>Frenzy</style>";
-
         public const string bleedPrefix = "<style=cIsDamage>Bleed</style>";
 
         public const string halfHealthPrefix = "<style=cIsHealth>50% HP</style>";
@@ -26,7 +24,7 @@ namespace SeamstressMod.Modules
 
         public const string slayerPrefix = "<style=cIsDamage>Slayer</style>";
 
-        public static string cutKeyword = KeywordText("Cut", $"Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current health and <style=cIsHealing>heal</style> for {100f * SeamstressStaticValues.cutHealCoefficient}%.");
+        public static string cutKeyword = KeywordText("Cut", $"Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current health and <style=cIsHealing>heal</style> for {100f * SeamstressStaticValues.cutHealCoefficient}% of that amount.");
 
         public static string slayerKeyword = KeywordText("Slayer", "Deals up to <style=cIsDamage>3x</style> damage against low health enemies.");
 
@@ -36,9 +34,7 @@ namespace SeamstressMod.Modules
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 
-        public static string frenzyKeyword = KeywordText("Frenzy", "Gain attack speed and movement speed.");
-
-        public static string butcheredKeyword = KeywordText("Butchered", "Empower other abilities.");
+        public static string butcheredKeyword = KeywordText("Butchered", "Empower other abilities. Gain attack speed and movement speed.");
         public static string DamageText(string text)
         {
             return $"<style=cIsDamage>{text}</style>";

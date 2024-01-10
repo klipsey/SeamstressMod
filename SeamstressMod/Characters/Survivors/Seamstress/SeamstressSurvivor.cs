@@ -233,7 +233,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "SeamstressReap",
                 skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_REAP_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_REAP_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.healthCostKeyword, Tokens.frenzyKeyword, Tokens.butcheredKeyword },
+                keywordTokens = new string[] { Tokens.healthCostKeyword, Tokens.butcheredKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Reap)),
