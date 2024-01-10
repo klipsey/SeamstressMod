@@ -137,7 +137,7 @@ namespace SeamstressMod.SkillStates
             Util.PlaySound("Play_imp_overlord_spawn", base.gameObject);
             if (base.isAuthority)
             {
-                base.characterMotor.velocity *= 0.1f;
+                base.characterMotor.velocity *= 0.2f;
                 SmallHop(base.characterMotor, smallHopVelocity);
             }
             aimRequest?.Dispose();

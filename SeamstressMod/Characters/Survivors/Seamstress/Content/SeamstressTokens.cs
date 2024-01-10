@@ -24,9 +24,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
             string desc = "Seamstress uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Trim is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
-             + "< ! > Weave is a basic dash on its own but with butcher it can become devastating in groups." + Environment.NewLine + Environment.NewLine
+             + "< ! > Weave is a basic dash on its own but with butcher it becomes devastating in groups." + Environment.NewLine + Environment.NewLine
              + "< ! > Reap can give you incredible buffs through butcher but use it carefully, you could end your run if used poorly." + Environment.NewLine + Environment.NewLine
-             + "< ! > Reap what you.. Sew? Use Sew to regain the health lost and to hit enemies from afar" + Environment.NewLine + Environment.NewLine;
+             + "< ! > Reap what you.. Sew? Use Sew to fire your needle stacks that can hit enemies from afar" + Environment.NewLine + Environment.NewLine;
 
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
@@ -67,7 +67,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Language.Add(prefix + "SPECIAL_SEW_NAME", "<style=cIsHealth>Sew</style>");
             Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Your heart releases energy dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style>." +
                 " Expels needles that " + Tokens.cutPrefix + $" and deal <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage each</style>. While " + 
-                Tokens.butcheredPrefix + ", your heart applies " + Tokens.bleedPrefix + ".");
+                Tokens.butcheredPrefix + ", your heart <style=cIsUtility>Cleanses</style> you.");
             #endregion
 
             #region Achievements

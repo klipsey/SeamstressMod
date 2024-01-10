@@ -23,7 +23,6 @@ namespace SeamstressMod.SkillStates
             RefreshState();
             aimRay = base.GetAimRay();
             projectilePrefab = SeamstressAssets.needlePrefab;
-            this.damageType = DamageType.Stun1s;
             this.hitboxName = "Sew";
             this.damageCoefficient = SeamstressStaticValues.sewDamageCoefficient;
             this.procCoefficient = 1f;
@@ -34,7 +33,7 @@ namespace SeamstressMod.SkillStates
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             this.attackStartPercentTime = 0.15f;
-            this.attackEndPercentTime = 0.3f;
+            this.attackEndPercentTime = 0.5f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             this.earlyExitPercentTime = 0f;
@@ -53,7 +52,7 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-                this.damageType |= DamageType.BleedOnHit;
+                Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false, removeCooldownBuffs: true, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
             }
             base.OnEnter();
 
@@ -66,13 +65,13 @@ namespace SeamstressMod.SkillStates
         {
             base.FixedUpdate();
             needleDelay += Time.fixedDeltaTime;
-            if (needleDelay >= needleCompareDelay)
+            if (needleDelay >= needleCompareDelay / attackSpeedStat)
             {
                 if(characterBody.HasBuff(SeamstressBuffs.needles))
                 {
                     ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
                     characterBody.RemoveBuff(SeamstressBuffs.needles);
-                    needleCompareDelay += 0.2f;
+                    needleCompareDelay += (0.2f / attackSpeedStat);
                 }
             }
         }
