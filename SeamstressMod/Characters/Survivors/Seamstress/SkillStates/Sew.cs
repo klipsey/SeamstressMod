@@ -95,12 +95,7 @@ namespace SeamstressMod.SkillStates
             Transform transform = FindModelChild(this.muzzleString);
             if ((bool)transform)
             {
-                GameObject gameObject = UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
-                ScaleParticleSystemDuration component = gameObject.GetComponent<ScaleParticleSystemDuration>();
-                if ((bool)component)
-                {
-                    component.newDuration = component.initialDuration;
-                }
+                UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
             }
         }
         protected override void PlayAttackAnimation()
