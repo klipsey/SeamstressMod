@@ -131,7 +131,7 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsButcheredHitImpactEffect.transform.localScale = Vector3.one * 1.5f;
             Modules.Content.CreateAndAddEffectDef(scissorsButcheredHitImpactEffect);
 
-            sewEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterExplosionCorrupted.prefab").WaitForCompletion().InstantiateClone("SewSplosion");
+            sewEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("SewSplosion");
             sewEffect.AddComponent<NetworkIdentity>();
             sewEffect.transform.GetChild(0).gameObject.SetActive(value: false);
         }

@@ -47,11 +47,12 @@ namespace SeamstressMod.SkillStates
             this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             this.swingEffectPrefab = SeamstressAssets.sewEffect;
             this.muzzleString = "SewCenter";
-
+            this.moddedDamageType = DamageTypes.Empty;
             this.impactSound = SeamstressAssets.sewHitSoundEvent.index;
             if (empowered)
             {
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
+                this.moddedDamageType = DamageTypes.ResetWeave;
                 Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false, removeCooldownBuffs: true, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
             }
             base.OnEnter();

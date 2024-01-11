@@ -9,6 +9,8 @@ namespace SeamstressMod.SkillStates
 {
     public class Reap : BaseSeamstressSkillState
     {
+        private TemporaryOverlay temporaryOverlay;
+
         public static float baseDuration = 1f;
 
         public static float duration;
@@ -26,7 +28,8 @@ namespace SeamstressMod.SkillStates
             duration = baseDuration / attackSpeedStat;
             fireTime = firePercentTime * duration;
             Util.PlaySound("Play_item_proc_novaonheal_impact", gameObject);
-            PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration * 0.1f);
+            PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
+            outer.SetNextState(new ButcheredOverlayState());
         }
         public override void FixedUpdate()
         {
