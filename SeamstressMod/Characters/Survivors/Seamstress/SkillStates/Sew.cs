@@ -26,7 +26,7 @@ namespace SeamstressMod.SkillStates
             this.hitboxName = "Sew";
             this.damageCoefficient = SeamstressStaticValues.sewDamageCoefficient;
             this.procCoefficient = 1f;
-            this.pushForce = 300f;
+            this.pushForce = 300;
             this.bonusForce = Vector3.zero;
             this.baseDuration = 1.5f;
 
@@ -38,9 +38,9 @@ namespace SeamstressMod.SkillStates
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             this.earlyExitPercentTime = 0f;
 
-            this.hitStopDuration = 0.2f;
-            this.attackRecoil = 0.5f;
-            this.hitHopVelocity = 4f;
+            this.hitStopDuration = 0f;
+            this.attackRecoil = 0f;
+            this.hitHopVelocity = 0f;
 
             this.swingSoundString = "Play_voidman_transform";
             this.hitSoundString = "";

@@ -36,7 +36,15 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 butchered = true;
             }
-            else butchered = false;
+            else
+            {
+                butchered = false;
+                TemporaryOverlay component = GetComponent<TemporaryOverlay>();
+                if ((bool)component)
+                {
+                    DestroyImmediate(component);
+                }
+            }
         }
         public void CalculateBonusDamage()
         {

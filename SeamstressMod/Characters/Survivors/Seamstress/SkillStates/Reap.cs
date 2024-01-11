@@ -9,7 +9,6 @@ namespace SeamstressMod.SkillStates
 {
     public class Reap : BaseSeamstressSkillState
     {
-        private TemporaryOverlay temporaryOverlay;
 
         public static float baseDuration = 1f;
 
@@ -29,7 +28,12 @@ namespace SeamstressMod.SkillStates
             fireTime = firePercentTime * duration;
             Util.PlaySound("Play_item_proc_novaonheal_impact", gameObject);
             PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
-            outer.SetNextState(new ButcheredOverlayState());
+            CharacterModel component = (GetModelTransform()).GetComponent<CharacterModel>();
+            TemporaryOverlay temporaryOverlay = base.gameObject.AddComponent<TemporaryOverlay>();
+            temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
+            temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+            temporaryOverlay.originalMaterial = LegacyResourcesAPI.Load<Material>("Materials/matFullCrit");
+            temporaryOverlay.AddToCharacerModel(component);
         }
         public override void FixedUpdate()
         {
@@ -64,7 +68,7 @@ namespace SeamstressMod.SkillStates
                     damageInfo.procCoefficient = 0f;
                     healthComponent.TakeDamage(damageInfo);
                     healthComponent.AddBarrier(currentBarrier);
-                    characterBody.AddTimedBuff(SeamstressBuffs.bloodBath, 6f, 1);
+                    characterBody.AddTimedBuff(SeamstressBuffs.bloodBath, SeamstressStaticValues.butcheredDuration, 1);
                     characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
                     if (base.characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
                     {

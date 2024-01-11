@@ -15,8 +15,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Modules.Content.AddEntityState(typeof(Sew));
 
-            Modules.Content.AddEntityState(typeof(ButcheredOverlayState));
-
         }
     }
 }

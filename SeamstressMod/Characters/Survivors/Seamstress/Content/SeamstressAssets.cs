@@ -22,6 +22,9 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject scissorsHitImpactEffect;
         internal static GameObject scissorsButcheredHitImpactEffect;
         internal static GameObject needleGhost;
+        internal static GameObject weaveDash;
+        internal static GameObject weaveDashButchered;
+
         // particle effects
 
         // networked hit sounds
@@ -131,9 +134,24 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsButcheredHitImpactEffect.transform.localScale = Vector3.one * 1.5f;
             Modules.Content.CreateAndAddEffectDef(scissorsButcheredHitImpactEffect);
 
-            sewEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("SewSplosion");
+            sewEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterExplosionCorrupted.prefab").WaitForCompletion().InstantiateClone("SewSplosion");
             sewEffect.AddComponent<NetworkIdentity>();
             sewEffect.transform.GetChild(0).gameObject.SetActive(value: false);
+
+            weaveDash = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercAssaulterEffect.prefab").WaitForCompletion().InstantiateClone("WeaveDash");
+            weaveDash.AddComponent<NetworkIdentity>();
+
+            weaveDashButchered = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercAssaulterEffect.prefab").WaitForCompletion().InstantiateClone("WeaveDashButchered");
+            weaveDashButchered.AddComponent<NetworkIdentity>();
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercIgnition.mat").WaitForCompletion());
+            material.SetColor("_TintColor", Color.red);
+            weaveDashButchered.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            weaveDashButchered.transform.GetChild(6).gameObject.SetActive(value: false);
+            weaveDashButchered.transform.GetChild(9).gameObject.GetComponent<TrailRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
+            weaveDashButchered.transform.GetChild(10).GetChild(0).gameObject.GetComponent<TrailRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
+            weaveDashButchered.transform.GetChild(10).GetChild(1).gameObject.GetComponent<TrailRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
+            weaveDashButchered.transform.GetChild(10).GetChild(2).gameObject.GetComponent<TrailRenderer>().material = material;
+            weaveDashButchered.transform.GetChild(10).GetChild(3).gameObject.GetComponent<TrailRenderer>().material = material;
         }
 
         #endregion effects

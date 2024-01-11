@@ -15,6 +15,8 @@ namespace SeamstressMod.SkillStates
     {
         private Transform modelTransform;
 
+        public static GameObject dashPrefab;
+
         private float stopwatch;
 
         private CameraTargetParams.AimRequest aimRequest;
@@ -37,6 +39,8 @@ namespace SeamstressMod.SkillStates
 
         public static GameObject hitEffectPrefab;
 
+        private ChildLocator childLocator;
+
         public static float hitPauseDuration = 0.05f;
 
         private bool isDashing;
@@ -54,6 +58,7 @@ namespace SeamstressMod.SkillStates
             base.OnEnter();
             Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
             modelTransform = GetModelTransform();
+            childLocator = modelTransform.GetComponent<ChildLocator>();
             if ((bool)base.cameraTargetParams)
             {
                 aimRequest = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
@@ -68,17 +73,26 @@ namespace SeamstressMod.SkillStates
             overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesKill);
             if (empowered)
             {
+                dashPrefab = SeamstressAssets.weaveDashButchered;
                 //overlapAttack.damageType |= DamageType.BleedOnHit;
                 overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_imp_overlord_impact";
             }
             else
             {
+                dashPrefab = SeamstressAssets.weaveDash;
                 overlapAttack.AddModdedDamageType(DamageTypes.Empty);
                 overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_bandit2_m2_impact";
             }
-
+        }
+        public void CreateDashEffect()
+        {
+            Transform val = childLocator.FindChild("WeaveCenter");
+            if ((bool)transform && (bool)dashPrefab)
+            {
+                Object.Instantiate<GameObject>(dashPrefab, val.position, Util.QuaternionSafeLookRotation(dashVector), val);
+            }
         }
         public override void FixedUpdate()
         {
@@ -88,7 +102,7 @@ namespace SeamstressMod.SkillStates
             {
                 isDashing = true;
                 dashVector = base.inputBank.aimDirection;
-                //CreateDashEffect();
+                CreateDashEffect();
                 //PlayCrossfade("FullBody, Override", "AssaulterLoop", 0.1f);
                 base.gameObject.layer = LayerIndex.fakeActor.intVal;
                 base.characterMotor.Motor.RebuildCollidableLayers();
