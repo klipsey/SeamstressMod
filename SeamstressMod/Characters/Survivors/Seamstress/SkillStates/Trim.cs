@@ -59,6 +59,7 @@ namespace SeamstressMod.SkillStates
             }
             if (isComboFinisher)
             {
+                this.attackEndPercentTime = 0.2f;
                 this.earlyExitPercentTime = 0.8f;
                 this.moddedDamageType = DamageTypes.CutDamage;
                 this.moddedDamageType2 = DamageTypes.AddNeedlesDamage;

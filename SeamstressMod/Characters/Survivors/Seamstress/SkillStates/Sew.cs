@@ -13,7 +13,7 @@ namespace SeamstressMod.SkillStates
         public GameObject projectilePrefab;
         public GameObject projectilePrefabEmpowered;
         public float needleDelay;
-        public float needleCompareDelay = 0.2f;
+        public float needleCompareDelay = 0.1f;
         public bool hasLaunched;
         public bool hasLaunched2;
         public bool hasLaunched3;
@@ -22,7 +22,6 @@ namespace SeamstressMod.SkillStates
         {
             RefreshState();
             aimRay = base.GetAimRay();
-            projectilePrefab = SeamstressAssets.needlePrefab;
             this.hitboxName = "Sew";
             this.damageCoefficient = SeamstressStaticValues.sewDamageCoefficient;
             this.procCoefficient = 1f;
@@ -41,19 +40,26 @@ namespace SeamstressMod.SkillStates
             this.hitStopDuration = 0f;
             this.attackRecoil = 0f;
             this.hitHopVelocity = 0f;
-
-            this.swingSoundString = "Play_voidman_transform";
+            this.swingSoundString = "Play_voidman_m2_explode";
             this.hitSoundString = "";
             this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            this.swingEffectPrefab = SeamstressAssets.sewEffect;
+
             this.muzzleString = "SewCenter";
             this.moddedDamageType = DamageTypes.Empty;
             this.impactSound = SeamstressAssets.sewHitSoundEvent.index;
             if (empowered)
             {
+                projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                this.swingEffectPrefab = SeamstressAssets.sewButcheredEffect;
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
                 this.moddedDamageType = DamageTypes.ResetWeave;
                 Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false, removeCooldownBuffs: true, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
+            }
+            else
+            {
+                projectilePrefab = SeamstressAssets.needlePrefab;
+                this.swingEffectPrefab = SeamstressAssets.sewEffect;
+                this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             }
             base.OnEnter();
 
@@ -65,6 +71,7 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            aimRay = base.GetAimRay();
             needleDelay += Time.fixedDeltaTime;
             if (needleDelay >= needleCompareDelay / attackSpeedStat)
             {
@@ -72,7 +79,7 @@ namespace SeamstressMod.SkillStates
                 {
                     ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
                     characterBody.RemoveBuff(SeamstressBuffs.needles);
-                    needleCompareDelay += (0.2f / attackSpeedStat);
+                    needleCompareDelay += (0.1f / attackSpeedStat);
                 }
             }
         }

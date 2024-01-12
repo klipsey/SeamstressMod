@@ -60,7 +60,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Utility
             Language.Add(prefix + "UTILITY_REAP_NAME", "<style=cIsHealth>Reap</style>");
-            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart to gain " + Tokens.butcheredPrefix + " and a "+ Tokens.needlePrefix + ".");
+            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart to gain " + Tokens.butcheredPrefix + " and a "+ Tokens.needlePrefix + ". Return a stock to <style=cIsHealth>Weave</style> and <style=cIsHealth>Sew</style>.");
             #endregion
 
             #region Special

@@ -9,6 +9,9 @@ namespace SeamstressMod.SkillStates
 {
     public class Reap : BaseSeamstressSkillState
     {
+        private ChildLocator childLocator;
+
+        public GameObject reapPrefab;
 
         public static float baseDuration = 1f;
 
@@ -24,16 +27,20 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+            rechargeStocks();//quality of life
+            reapPrefab = SeamstressAssets.reapBleedEffect;
+            childLocator = base.characterBody.GetComponent<ChildLocator>();
             duration = baseDuration / attackSpeedStat;
             fireTime = firePercentTime * duration;
             Util.PlaySound("Play_item_proc_novaonheal_impact", gameObject);
             PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
             CharacterModel component = (GetModelTransform()).GetComponent<CharacterModel>();
             TemporaryOverlay temporaryOverlay = base.gameObject.AddComponent<TemporaryOverlay>();
+            temporaryOverlay.originalMaterial = LegacyResourcesAPI.Load<Material>("Materials/matFullCrit");
             temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
             temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-            temporaryOverlay.originalMaterial = LegacyResourcesAPI.Load<Material>("Materials/matFullCrit");
             temporaryOverlay.AddToCharacerModel(component);
+            UnityEngine.Object.Instantiate<GameObject>(reapPrefab, base.characterBody.modelLocator.transform);
         }
         public override void FixedUpdate()
         {
@@ -46,6 +53,18 @@ namespace SeamstressMod.SkillStates
             {
                 outer.SetNextStateToMain();
                 return;
+            }
+        }
+
+        public void rechargeStocks()
+        {
+            if (characterBody.skillLocator.secondary.stock < characterBody.skillLocator.secondary.maxStock)
+            {
+                base.characterBody.skillLocator.secondary.AddOneStock();
+            }
+            if (characterBody.skillLocator.special.stock < characterBody.skillLocator.special.maxStock)
+            {
+                base.characterBody.skillLocator.special.AddOneStock();
             }
         }
         private void Fire()

@@ -50,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
             damage = 10f,
 
             damageGrowth = 0f,
-            healthGrowth = 35,
+            healthGrowth = 200f * 0.35f,
 
             jumpCount = 1,
         };
@@ -251,7 +251,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 fullRestockOnAssign = true,
                 dontAllowPastMaxStocks = false,
                 beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = false,
+                mustKeyPress = true,
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,
@@ -270,7 +270,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "SeamstressSew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.bleedKeyword, Tokens.cutKeyword, Tokens.butcheredKeyword },
+                keywordTokens = new string[] { Tokens.cutKeyword, Tokens.butcheredKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),

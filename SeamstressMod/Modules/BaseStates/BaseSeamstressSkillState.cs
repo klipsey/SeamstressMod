@@ -10,7 +10,7 @@ namespace SeamstressMod.SkillStates.BaseStates
     {
         protected SeamstressController seamCon;
 
-        protected bool empowered;
+        public bool empowered;
 
         public override void OnEnter()
         {

@@ -21,7 +21,7 @@ namespace SeamstressMod.SkillStates
 
         private CameraTargetParams.AimRequest aimRequest;
 
-        public static float smallHopVelocity = 12f;
+        public static float smallHopVelocity = 10f;
 
         public static float dashPrepDuration = 0.2f;
 
@@ -41,7 +41,7 @@ namespace SeamstressMod.SkillStates
 
         private ChildLocator childLocator;
 
-        public static float hitPauseDuration = 0.05f;
+        public static float hitPauseDuration = 0.012f;
 
         private bool isDashing;
 
@@ -56,7 +56,6 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
             modelTransform = GetModelTransform();
             childLocator = modelTransform.GetComponent<ChildLocator>();
             if ((bool)base.cameraTargetParams)
@@ -73,6 +72,7 @@ namespace SeamstressMod.SkillStates
             overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesKill);
             if (empowered)
             {
+                Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDashButchered;
                 //overlapAttack.damageType |= DamageType.BleedOnHit;
                 overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
@@ -80,6 +80,7 @@ namespace SeamstressMod.SkillStates
             }
             else
             {
+                Util.PlaySound("Play_merc_m2_uppercut", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDash;
                 overlapAttack.AddModdedDamageType(DamageTypes.Empty);
                 overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeave);
@@ -113,7 +114,6 @@ namespace SeamstressMod.SkillStates
             }
             else if (base.isAuthority)
             {
-                base.characterMotor.velocity = Vector3.zero;
                 if (!inHitPause)
                 {
                     bool num = overlapAttack.Fire();
@@ -148,10 +148,12 @@ namespace SeamstressMod.SkillStates
         {
             base.gameObject.layer = LayerIndex.defaultLayer.intVal;
             base.characterMotor.Motor.RebuildCollidableLayers();
-            Util.PlaySound("Play_imp_overlord_spawn", base.gameObject);
+            if (!empowered)Util.PlaySound("Play_item_proc_whip", base.gameObject);
             if (base.isAuthority)
             {
-                base.characterMotor.velocity *= 0.2f;
+                base.characterMotor.disableAirControlUntilCollision = false;
+                base.characterMotor.airControl = 0.25f;
+                base.characterMotor.velocity *= 0.75f;
                 SmallHop(base.characterMotor, smallHopVelocity);
             }
             aimRequest?.Dispose();

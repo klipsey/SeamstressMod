@@ -39,16 +39,19 @@ namespace SeamstressMod.Survivors.Seamstress
             else
             {
                 butchered = false;
+
                 TemporaryOverlay component = GetComponent<TemporaryOverlay>();
                 if ((bool)component)
                 {
                     DestroyImmediate(component);
+                    UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.reapEndEffect, characterBody.modelLocator.transform);
+                    Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
                 }
             }
         }
         public void CalculateBonusDamage()
         {
-            float healthMissing = healthComponent.fullHealth - healthComponent.health;
+            float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
             characterBody.baseDamage = 10f + (healthMissing * 0.1f);
         }
     }

@@ -1,10 +1,12 @@
 ﻿using R2API;
 using RoR2;
+using SeamstressMod.SkillStates.BaseStates;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UIElements;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -102,11 +104,27 @@ namespace SeamstressMod.Survivors.Seamstress
                 return;
             }
             CharacterBody attacker = damageReport.attacker.GetComponent<CharacterBody>();
+            Transform transform = attacker.modelLocator.transform;
+            GameObject attackerObject = attacker.gameObject;
             if (NetworkServer.active)
             {
                 if (damageInfo.HasModdedDamageType(ResetWeave))
                 {
                     attacker.skillLocator.secondary.Reset();
+                    if ((bool)transform && (bool)SeamstressAssets.weaveDashOnKill)
+                    {
+                        Util.PlaySound("Play_imp_overlord_teleport_end", attackerObject);
+                        UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.weaveDashOnKill, transform);
+                    }
+                }
+                if(damageInfo.dotIndex == DotController.DotIndex.Bleed && attacker.HasBuff(SeamstressBuffs.bloodBath))
+                {
+                    attacker.skillLocator.secondary.Reset();
+                    if ((bool)transform && (bool)SeamstressAssets.weaveDashOnKill)
+                    {
+                        Util.PlaySound("Play_imp_overlord_teleport_end", attackerObject);
+                        UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.weaveDashOnKill, transform);
+                    }
                 }
                 if(damageInfo.HasModdedDamageType(AddNeedlesKill))
                 {
