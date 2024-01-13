@@ -55,7 +55,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_WEAVE_NAME", "<style=cIsHealth>Weave</style>");
-            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", $"Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Return a stock to <style=cIsHealth>Weave</style> and gain a " + Tokens.needlePrefix + " on kill. While " + Tokens.butcheredPrefix +", gain " + Tokens.slayerPrefix + " and fully reset cooldown on kill.");
+            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", $"Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. On kill, return a stock to <style=cIsHealth>Weave</style> and gain a " + Tokens.needlePrefix + ". While " + Tokens.butcheredPrefix +", gain " + Tokens.slayerPrefix + " and fully reset cooldown on kill.");
             #endregion
 
             #region Utility

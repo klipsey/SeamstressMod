@@ -24,7 +24,7 @@ namespace SeamstressMod.Modules
 
         public const string slayerPrefix = "<style=cIsDamage>Slayer</style>";
 
-        public static string cutKeyword = KeywordText("Cut", $"Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current health and <style=cIsHealing>heal for {100f * SeamstressStaticValues.cutHealCoefficient}%</style> of that amount. (Max <style=cIsHealing>5%</style> of your max health)");
+        public static string cutKeyword = KeywordText("Cut", $"Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current <style=cIsHealth>health</style> and <style=cIsHealing>heal for {100f * SeamstressStaticValues.cutHealCoefficient}%</style> of that amount. (Max <style=cIsHealing>5%</style> of your max <style=cIsHealth>health</style>)");
 
         public static string slayerKeyword = KeywordText("Slayer", "Deals up to <style=cIsDamage>3x</style> damage against low health enemies.");
 
