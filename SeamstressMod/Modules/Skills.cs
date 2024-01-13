@@ -235,7 +235,7 @@ namespace SeamstressMod.Modules
 
                             SerializableEntityStateType activationState,
                             string activationStateMachineName = "Weapon",
-                            bool agile = false, bool cut = false, bool bleed = false)
+                            bool agile = false, bool cut = false)
         {
             this.skillName = skillName;
             this.skillNameToken = skillNameToken;
@@ -247,7 +247,7 @@ namespace SeamstressMod.Modules
 
             this.cancelSprintingOnActivation = !agile;
 
-            if (agile) this.keywordTokens = new string[] { Tokens.agileKeyword, Tokens.cutKeyword, Tokens.bleedKeyword, Tokens.butcheredKeyword };
+            if (agile) this.keywordTokens = new string[] { Tokens.agileKeyword, Tokens.cutKeyword, Tokens.butcheredKeyword };
             this.interruptPriority = InterruptPriority.Any;
             this.isCombatSkill = true;
             this.baseRechargeInterval = 0;

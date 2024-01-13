@@ -22,11 +22,11 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Seamstress
             string prefix = SeamstressSurvivor.SEAMSTRESS_PREFIX;
 
-            string desc = "Seamstress uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
+            string desc = "Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Trim is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
              + "< ! > Weave is a basic dash on its own but with butcher it becomes devastating in groups." + Environment.NewLine + Environment.NewLine
-             + "< ! > Reap can give you incredible buffs through butcher but use it carefully, you could end your run if used poorly." + Environment.NewLine + Environment.NewLine
-             + "< ! > Reap what you.. Sew? Use Sew to fire your needle stacks to hit enemies from afar" + Environment.NewLine + Environment.NewLine;
+             + "< ! > Reap can give you incredible buffs through butcher but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
+             + "< ! > Reap what you.. Sew? Use Sew to fire your needles to hit enemies from afar." + Environment.NewLine + Environment.NewLine;
 
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
@@ -44,18 +44,18 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "<style=cIsHealth>Stitched Heart</style>");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", "Gain <style=cIsDamage>0.1</style> base damage for every <style=cIsHealth>1</style> health missing. ");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", "Gain <style=cIsDamage>0.1</style> base damage for every <style=cIsHealth>1</style> health missing. Abilities grant <style=cIsUtility>Needles</style>.");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "<style=cIsHealth>Trim</style>");
-            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash 3 times for <style=cIsDamage>{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. On the final slash, " +
-               Tokens.cutPrefix + " and gain a " + Tokens.needlePrefix + " per enemy hit. " + "Applies " + Tokens.bleedPrefix + " while " + Tokens.butcheredPrefix + ".");
+            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. On every third hit, " +
+               Tokens.cutPrefix + " and gain a " + Tokens.needlePrefix + " for each enemy hit. " + "While " + Tokens.butcheredPrefix + $" gain <style=cIsHealing>Barrier</style> on hit and increase damage of the third hit to <style=cIsDamage>{100f * SeamstressStaticValues.scissorsBonusDamageCoefficient}% damage</style>.");
             #endregion
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_WEAVE_NAME", "<style=cIsHealth>Weave</style>");
-            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.slayerPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Gain a " + Tokens.needlePrefix + " on kill. While " + Tokens.butcheredPrefix + ", reset cooldown on <style=cIsHealth>Weave</style> or <style=cIsHealth>Sew</style> kills.");
+            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", $"Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Return a stock to <style=cIsHealth>Weave</style> and gain a " + Tokens.needlePrefix + " on kill. While " + Tokens.butcheredPrefix +", gain " + Tokens.slayerPrefix + " and fully reset cooldown on kill.");
             #endregion
 
             #region Utility
@@ -65,8 +65,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "<style=cIsHealth>Sew</style>");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Your heart releases energy dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style>." +
-                " Expels needles that " + Tokens.cutPrefix + $" and deal <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage each</style>. While " + 
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Detonate your heart dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewDamageCoefficient}% damage</style>." +
+                " Expels <style=cIsUtility>Needles</style> that " + Tokens.cutPrefix + $" and deal <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage each</style>. While " + 
                 Tokens.butcheredPrefix + ", your heart <style=cIsUtility>Cleanses</style> you.");
             #endregion
 

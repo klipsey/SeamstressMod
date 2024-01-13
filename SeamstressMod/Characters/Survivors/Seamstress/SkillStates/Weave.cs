@@ -68,13 +68,14 @@ namespace SeamstressMod.SkillStates
             if(empowered) hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             else hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
-            overlapAttack.damageType = DamageType.BonusToLowHealth;
             overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesKill);
+            overlapAttack.AddModdedDamageType(DamageTypes.ResetWeakWeave);
             if (empowered)
             {
                 Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDashButchered;
                 //overlapAttack.damageType |= DamageType.BleedOnHit;
+                overlapAttack.damageType = DamageType.BonusToLowHealth;
                 overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_imp_overlord_impact";
             }

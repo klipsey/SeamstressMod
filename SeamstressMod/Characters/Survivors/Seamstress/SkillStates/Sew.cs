@@ -52,7 +52,6 @@ namespace SeamstressMod.SkillStates
                 projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                 this.swingEffectPrefab = SeamstressAssets.sewButcheredEffect;
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-                this.moddedDamageType = DamageTypes.ResetWeave;
                 Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false, removeCooldownBuffs: true, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
             }
             else
@@ -78,6 +77,7 @@ namespace SeamstressMod.SkillStates
                 if(characterBody.HasBuff(SeamstressBuffs.needles))
                 {
                     ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
+                    Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
                     characterBody.RemoveBuff(SeamstressBuffs.needles);
                     needleCompareDelay += (0.1f / attackSpeedStat);
                 }

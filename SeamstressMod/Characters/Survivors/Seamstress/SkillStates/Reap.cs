@@ -40,6 +40,7 @@ namespace SeamstressMod.SkillStates
             temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
             temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
             temporaryOverlay.AddToCharacerModel(component);
+            Util.PlaySound("Play_bandit2_m2_alt_throw", base.characterBody.gameObject);
             UnityEngine.Object.Instantiate<GameObject>(reapPrefab, base.characterBody.modelLocator.transform);
         }
         public override void FixedUpdate()
@@ -87,7 +88,11 @@ namespace SeamstressMod.SkillStates
                     damageInfo.procCoefficient = 0f;
                     healthComponent.TakeDamage(damageInfo);
                     healthComponent.AddBarrier(currentBarrier);
-                    characterBody.AddTimedBuff(SeamstressBuffs.bloodBath, SeamstressStaticValues.butcheredDuration, 1);
+                    if(characterBody.HasBuff(SeamstressBuffs.butchered))
+                    {
+                        characterBody.RemoveBuff(SeamstressBuffs.butchered);
+                    }
+                    characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
                     characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
                     if (base.characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
                     {

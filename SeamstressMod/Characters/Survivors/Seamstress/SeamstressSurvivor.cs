@@ -1,7 +1,6 @@
 ﻿using BepInEx.Configuration;
 using SeamstressMod.Modules;
 using SeamstressMod.Modules.Characters;
-using SeamstressMod.Survivors.Seamstress.Components;
 using RoR2;
 using RoR2.Skills;
 using System;
@@ -216,7 +215,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
                     new EntityStates.SerializableEntityStateType(typeof(SkillStates.Trim)),
                     "Weapon",
-                    true,true,true
+                    true,true
                 ));
             //custom Skilldefs can have additional fields that you can set manually
             trimSkillDef.stepCount = 3;
@@ -270,8 +269,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "SeamstressSew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.cutKeyword, Tokens.butcheredKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                keywordTokens = new string[] { Tokens.cutKeyword, Tokens.butcheredKeyword, Tokens.needleKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
                 activationStateMachineName = "Weapon2", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
@@ -323,7 +322,7 @@ namespace SeamstressMod.Survivors.Seamstress
             //add new skindef to our list of skindefs. this is what we'll be passing to the SkinController
             skins.Add(defaultSkin);
             #endregion
-
+            /*
             //uncomment this when you have a mastery skin
             #region MasterySkin
             
@@ -361,7 +360,7 @@ namespace SeamstressMod.Survivors.Seamstress
             skins.Add(masterySkin);
             
             #endregion
-
+            */
             skinController.skins = skins.ToArray();
         }
         #endregion skins
@@ -391,7 +390,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 args.armorAdd += 20;
             }
-            if(sender.HasBuff(SeamstressBuffs.bloodBath))
+            if(sender.HasBuff(SeamstressBuffs.butchered))
             {
                 args.baseMoveSpeedAdd += 3;
                 args.attackSpeedMultAdd += 0.3f;

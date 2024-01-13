@@ -24,11 +24,13 @@ namespace SeamstressMod.Modules
 
         public const string slayerPrefix = "<style=cIsDamage>Slayer</style>";
 
-        public static string cutKeyword = KeywordText("Cut", $"Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current health and <style=cIsHealing>heal</style> for {100f * SeamstressStaticValues.cutHealCoefficient}% of that amount.");
+        public static string cutKeyword = KeywordText("Cut", $"Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current health and <style=cIsHealing>heal for {100f * SeamstressStaticValues.cutHealCoefficient}%</style> of that amount. (Max <style=cIsHealing>5%</style> of your max health)");
 
         public static string slayerKeyword = KeywordText("Slayer", "Deals up to <style=cIsDamage>3x</style> damage against low health enemies.");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
+
+        public static string needleKeyword = KeywordText("Needle", "Hold up to 10 <style=cIsUtility>Needles</style> before auto firing needles.");
 
         public static string bleedKeyword = KeywordText("Bleed", "Deal <style=cIsDamage>240% base damage</style> over time.");
 

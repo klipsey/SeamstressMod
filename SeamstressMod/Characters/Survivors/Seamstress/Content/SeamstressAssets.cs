@@ -81,12 +81,14 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsButcheredSwingEffect.AddComponent<NetworkIdentity>();
             scissorsButcheredSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
             scissorsButcheredSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();//Assets.LoadEffect("HenrySwordSwingEffect", true);
+            scissorsButcheredSwingEffect.transform.GetChild(1).localScale = Vector3.one * 0.75f;
 
-            scissorsSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
+            scissorsSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing2");
             scissorsSwingEffect.AddComponent<NetworkIdentity>();
             scissorsSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
+            scissorsSwingEffect.transform.GetChild(1).localScale = Vector3.one * 0.75f;
             //final hit
-            scissorsButcheredComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
+            scissorsButcheredComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing3");
             scissorsButcheredComboSwingEffect.AddComponent<NetworkIdentity>();
             scissorsButcheredComboSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
             scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
@@ -95,7 +97,7 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsButcheredComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 0.5f;
             UnityEngine.Object.Destroy(scissorsButcheredComboSwingEffect.GetComponent<EffectComponent>());
             //final hit
-            scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
+            scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing4");
             scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
             scissorsComboSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
             ParticleSystem.MainModule main2 = scissorsComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;

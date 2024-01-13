@@ -9,7 +9,7 @@ namespace SeamstressMod.Survivors.Seamstress
         // armor buff gained during butcher
         public static BuffDef armorBuff;
 
-        public static BuffDef bloodBath;
+        public static BuffDef butchered;
 
         public static BuffDef needles;
         public static void Init(AssetBundle assetBundle)
@@ -19,7 +19,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 Color.white,
                 false,
                 false);
-            bloodBath = Modules.Content.CreateAndAddBuff("BloodBath", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Bandit2/texBuffSuperBleedingIcon.tif").WaitForCompletion(), 
+            butchered = Modules.Content.CreateAndAddBuff("ButcheredBuff", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Bandit2/texBuffSuperBleedingIcon.tif").WaitForCompletion(), 
                 Color.red, false, false);
             needles = Modules.Content.CreateAndAddBuff("Needles", Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/MoveSpeedOnKill/texBuffKillMoveSpeed.tif").WaitForCompletion(),
                 Color.white, true, false);

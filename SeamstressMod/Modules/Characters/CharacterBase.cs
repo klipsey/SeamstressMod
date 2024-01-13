@@ -20,7 +20,7 @@ namespace SeamstressMod.Modules.Characters
 
         public static T instance { get; private set; }
 
-        public AssetBundle assetBundle { get; private set; }
+        public static AssetBundle assetBundle { get; private set; }
 
         public GameObject bodyPrefab;
         public CharacterBody prefabCharacterBody;

@@ -1,6 +1,6 @@
 ﻿using R2API;
 using RoR2;
-using SeamstressMod.SkillStates.BaseStates;
+using RoR2.Projectile;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,9 +16,10 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType CutDamageNeedle;
         public static DamageAPI.ModdedDamageType AddNeedlesKill;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
-        //public static DamageAPI.ModdedDamageType HealDamage;
+        public static DamageAPI.ModdedDamageType BarrierDamage;
         //public static DamageAPI.ModdedDamageType HealDamageEmpowered;
         public static DamageAPI.ModdedDamageType ResetWeave;
+        public static DamageAPI.ModdedDamageType ResetWeakWeave;
         public static DamageAPI.ModdedDamageType Empty;
         internal static void Init()
         {
@@ -28,7 +29,7 @@ namespace SeamstressMod.Survivors.Seamstress
             AddNeedlesKill = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
             ResetWeave = DamageAPI.ReserveDamageType();
-            //HealDamage = DamageAPI.ReserveDamageType();
+            BarrierDamage = DamageAPI.ReserveDamageType();
             //HealDamageEmpowered = DamageAPI.ReserveDamageType();
             Hook();
         }
@@ -46,6 +47,7 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             HealthComponent victim = damageReport.victim;
             CharacterBody attacker = damageReport.attackerBody;
+            GameObject attackerObject = damageReport.attacker.gameObject;
             if (NetworkServer.active)
             {
                 if(damageInfo.HasModdedDamageType(AddNeedlesDamage))
@@ -53,6 +55,20 @@ namespace SeamstressMod.Survivors.Seamstress
                     if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
                     {
                         attacker.AddBuff(SeamstressBuffs.needles);
+                        Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
+                    }
+                    else
+                    {
+                        GameObject projectilePrefab;
+                        Ray aimRay;
+                        aimRay = new Ray(attacker.inputBank.aimOrigin, attacker.inputBank.aimDirection);
+                        if (attacker.HasBuff(SeamstressBuffs.butchered))
+                        {
+                            projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                        }
+                        else projectilePrefab = SeamstressAssets.needlePrefab;
+                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
+                        
                     }
                 }
                 if (damageInfo.HasModdedDamageType(CutDamage) || damageInfo.HasModdedDamageType(CutDamageNeedle))
@@ -73,6 +89,10 @@ namespace SeamstressMod.Survivors.Seamstress
                         };
                         victim.TakeDamage(cut);
                         float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
+                        if(lifeSteal > attacker.maxHealth*0.05f)
+                        {
+                            lifeSteal = attacker.maxHealth * 0.05f;
+                        }
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                     }
                     else
@@ -91,8 +111,16 @@ namespace SeamstressMod.Survivors.Seamstress
                         };
                         victim.TakeDamage(cut);
                         float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
+                        if (lifeSteal > attacker.maxHealth * 0.05f)
+                        {
+                            lifeSteal = attacker.maxHealth * 0.05f;
+                        }
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                     }
+                }
+                if(damageInfo.HasModdedDamageType(DamageTypes.BarrierDamage))
+                {
+                    attacker.healthComponent.AddBarrier((attacker.maxHealth * 0.05f));
                 }
             }
         }
@@ -117,16 +145,18 @@ namespace SeamstressMod.Survivors.Seamstress
                         UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.weaveDashOnKill, transform);
                     }
                 }
-                if(damageInfo.dotIndex == DotController.DotIndex.Bleed && attacker.HasBuff(SeamstressBuffs.bloodBath))
+                if (damageInfo.HasModdedDamageType(ResetWeakWeave))
                 {
-                    attacker.skillLocator.secondary.Reset();
+                    if(attacker.skillLocator.secondary.stock < attacker.skillLocator.secondary.maxStock)
+                    {
+                        attacker.skillLocator.secondary.AddOneStock();
+                    }
                     if ((bool)transform && (bool)SeamstressAssets.weaveDashOnKill)
                     {
-                        Util.PlaySound("Play_imp_overlord_teleport_end", attackerObject);
-                        UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.weaveDashOnKill, transform);
+                        Util.PlaySound("Play_UI_cooldownRefresh", attackerObject);
                     }
                 }
-                if(damageInfo.HasModdedDamageType(AddNeedlesKill))
+                if (damageInfo.HasModdedDamageType(AddNeedlesKill))
                 {
                     if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
                     {
