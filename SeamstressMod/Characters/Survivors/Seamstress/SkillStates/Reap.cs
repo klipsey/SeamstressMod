@@ -25,7 +25,7 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            rechargeStocks();//quality of life
+            //rechargeStocks();//quality of life
             reapPrefab = SeamstressAssets.reapBleedEffect;
             duration = baseDuration / attackSpeedStat;
             fireTime = firePercentTime * duration;
@@ -39,6 +39,10 @@ namespace SeamstressMod.SkillStates
             temporaryOverlay.AddToCharacerModel(component);
             Util.PlaySound("Play_bandit2_m2_alt_throw", base.characterBody.gameObject);
             UnityEngine.Object.Instantiate<GameObject>(reapPrefab, base.characterBody.modelLocator.transform);
+            if (!base.characterMotor.isGrounded)
+            {
+                SmallHop(base.characterMotor, 10f);
+            }
         }
         public override void FixedUpdate()
         {
@@ -51,18 +55,6 @@ namespace SeamstressMod.SkillStates
             {
                 outer.SetNextStateToMain();
                 return;
-            }
-        }
-
-        public void rechargeStocks()
-        {
-            if (characterBody.skillLocator.secondary.stock < characterBody.skillLocator.secondary.maxStock)
-            {
-                base.characterBody.skillLocator.secondary.AddOneStock();
-            }
-            if (characterBody.skillLocator.special.stock < characterBody.skillLocator.special.maxStock)
-            {
-                base.characterBody.skillLocator.special.AddOneStock();
             }
         }
         private void Fire()

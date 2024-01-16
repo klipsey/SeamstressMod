@@ -60,6 +60,10 @@ namespace SeamstressMod.SkillStates
                 this.swingEffectPrefab = SeamstressAssets.sewEffect;
                 this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             }
+            if(!base.characterMotor.isGrounded)
+            {
+                SmallHop(base.characterMotor, 10f);
+            }
             base.OnEnter();
 
         }
