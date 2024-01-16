@@ -46,7 +46,7 @@ namespace SeamstressMod.Survivors.Seamstress
             maxHealth = 200f,
             healthRegen = 1f,
             armor = 0f,
-            damage = 10f,
+            damage = 12f,
 
             damageGrowth = 0f,
             healthGrowth = 200f * 0.35f,

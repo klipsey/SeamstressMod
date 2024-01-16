@@ -9,8 +9,6 @@ namespace SeamstressMod.SkillStates
 {
     public class Reap : BaseSeamstressSkillState
     {
-        private ChildLocator childLocator;
-
         public GameObject reapPrefab;
 
         public static float baseDuration = 1f;
@@ -29,7 +27,6 @@ namespace SeamstressMod.SkillStates
             base.OnEnter();
             rechargeStocks();//quality of life
             reapPrefab = SeamstressAssets.reapBleedEffect;
-            childLocator = base.characterBody.GetComponent<ChildLocator>();
             duration = baseDuration / attackSpeedStat;
             fireTime = firePercentTime * duration;
             Util.PlaySound("Play_item_proc_novaonheal_impact", gameObject);

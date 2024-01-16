@@ -89,9 +89,9 @@ namespace SeamstressMod.Survivors.Seamstress
                         };
                         victim.TakeDamage(cut);
                         float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
-                        if(lifeSteal > attacker.maxHealth*0.05f)
+                        if (lifeSteal > attacker.maxHealth * SeamstressStaticValues.maxNeedleHeal)
                         {
-                            lifeSteal = attacker.maxHealth * 0.05f;
+                            lifeSteal = attacker.maxHealth * SeamstressStaticValues.maxNeedleHeal;
                         }
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                     }
@@ -111,9 +111,9 @@ namespace SeamstressMod.Survivors.Seamstress
                         };
                         victim.TakeDamage(cut);
                         float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
-                        if (lifeSteal > attacker.maxHealth * 0.05f)
+                        if (lifeSteal > attacker.maxHealth * SeamstressStaticValues.maxNeedleHeal)
                         {
-                            lifeSteal = attacker.maxHealth * 0.05f;
+                            lifeSteal = attacker.maxHealth * SeamstressStaticValues.maxNeedleHeal;
                         }
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                     }
