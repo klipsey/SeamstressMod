@@ -219,7 +219,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 ));
             //custom Skilldefs can have additional fields that you can set manually
             trimSkillDef.stepCount = 3;
-            trimSkillDef.stepGraceDuration = 1.5f;
+            trimSkillDef.stepGraceDuration = 0.5f;
 
             Skills.AddPrimarySkills(bodyPrefab, trimSkillDef);
         }

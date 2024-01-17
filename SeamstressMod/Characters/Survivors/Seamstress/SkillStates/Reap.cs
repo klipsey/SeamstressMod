@@ -41,7 +41,7 @@ namespace SeamstressMod.SkillStates
             UnityEngine.Object.Instantiate<GameObject>(reapPrefab, base.characterBody.modelLocator.transform);
             if (!base.characterMotor.isGrounded)
             {
-                SmallHop(base.characterMotor, 10f);
+                SmallHop(base.characterMotor, 6f);
             }
         }
         public override void FixedUpdate()

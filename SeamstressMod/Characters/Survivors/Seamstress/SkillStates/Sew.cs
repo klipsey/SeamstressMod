@@ -62,7 +62,7 @@ namespace SeamstressMod.SkillStates
             }
             if(!base.characterMotor.isGrounded)
             {
-                SmallHop(base.characterMotor, 10f);
+                SmallHop(base.characterMotor, 6f);
             }
             base.OnEnter();
 

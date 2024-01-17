@@ -21,15 +21,15 @@ namespace SeamstressMod.SkillStates
             this.procCoefficient = 1f;
             this.pushForce = 300f;
             this.bonusForce = Vector3.zero;
-            this.baseDuration = 1.2f;
+            this.baseDuration = 1f;
 
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
-            this.attackStartPercentTime = 0.2f;
+            this.attackStartPercentTime = 0.25f;
             this.attackEndPercentTime = 0.4f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            this.earlyExitPercentTime = 0.4f;
+            this.earlyExitPercentTime = 0.5f;
 
             this.hitStopDuration = 0.05f;
             this.attackRecoil = 0.75f;
@@ -60,8 +60,7 @@ namespace SeamstressMod.SkillStates
             }
             if (isComboFinisher)
             {
-                this.attackEndPercentTime = 0.2f;
-                this.earlyExitPercentTime = 0.8f;
+                this.earlyExitPercentTime = 1f;
                 this.moddedDamageType = DamageTypes.CutDamage;
                 this.moddedDamageType2 = DamageTypes.AddNeedlesDamage;
                 this.swingSoundString = "Play_bandit2_m2_slash";
