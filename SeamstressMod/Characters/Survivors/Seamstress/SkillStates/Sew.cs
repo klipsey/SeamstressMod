@@ -17,7 +17,9 @@ namespace SeamstressMod.SkillStates
         public bool hasLaunched;
         public bool hasLaunched2;
         public bool hasLaunched3;
+        public int needleStock;
         Ray aimRay;
+
         public override void OnEnter()
         {
             RefreshState();
@@ -28,7 +30,7 @@ namespace SeamstressMod.SkillStates
             this.pushForce = 300;
             this.bonusForce = Vector3.zero;
             this.baseDuration = 1.5f;
-
+            
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             this.attackStartPercentTime = 0.15f;
@@ -64,6 +66,8 @@ namespace SeamstressMod.SkillStates
             {
                 SmallHop(base.characterMotor, 6f);
             }
+            needleStock = base.skillLocator.special.stock;
+            base.skillLocator.special.DeductStock(needleStock);
             base.OnEnter();
 
         }
@@ -78,10 +82,11 @@ namespace SeamstressMod.SkillStates
             needleDelay += Time.fixedDeltaTime;
             if (needleDelay >= needleCompareDelay / attackSpeedStat)
             {
-                if(characterBody.HasBuff(SeamstressBuffs.needles))
+                if(needleStock > 0)
                 {
                     ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
                     Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
+                    needleStock--;
                     characterBody.RemoveBuff(SeamstressBuffs.needles);
                     needleCompareDelay += (0.1f / attackSpeedStat);
                 }

@@ -56,7 +56,7 @@ namespace SeamstressMod.SkillStates
             {
                 this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-                this.moddedDamageType3 = DamageTypes.BarrierDamage;
+                this.damageCoefficient = SeamstressStaticValues.scissorsBonusDamageCoefficient;
             }
             if (isComboFinisher)
             {
@@ -68,7 +68,6 @@ namespace SeamstressMod.SkillStates
                 this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                 if (empowered)
                 {
-                    this.damageCoefficient = SeamstressStaticValues.scissorsBonusDamageCoefficient;
                     this.swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
                 }
             }

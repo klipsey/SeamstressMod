@@ -83,9 +83,10 @@ namespace SeamstressMod.SkillStates
                     }
                     characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
                     characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
-                    if (base.characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
+                    if (base.characterBody.GetBuffCount(SeamstressBuffs.needles) < base.skillLocator.special.maxStock)
                     {
                         base.characterBody.AddBuff(SeamstressBuffs.needles);
+                        base.skillLocator.special.AddOneStock();
                     }
                 }
             }

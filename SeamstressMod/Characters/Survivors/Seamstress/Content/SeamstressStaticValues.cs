@@ -16,8 +16,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float cutDamageCoefficient = 0.05f;
 
-        internal const int maxNeedleAmount = 10;
-
         internal const float butcheredDuration = 6f;
 
         internal const float sewNeedleDamageCoefficient = 1f;

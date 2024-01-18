@@ -16,8 +16,6 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType CutDamageNeedle;
         public static DamageAPI.ModdedDamageType AddNeedlesKill;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
-        public static DamageAPI.ModdedDamageType BarrierDamage;
-        //public static DamageAPI.ModdedDamageType HealDamageEmpowered;
         public static DamageAPI.ModdedDamageType ResetWeave;
         public static DamageAPI.ModdedDamageType ResetWeakWeave;
         public static DamageAPI.ModdedDamageType Empty;
@@ -29,8 +27,6 @@ namespace SeamstressMod.Survivors.Seamstress
             AddNeedlesKill = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
             ResetWeave = DamageAPI.ReserveDamageType();
-            BarrierDamage = DamageAPI.ReserveDamageType();
-            //HealDamageEmpowered = DamageAPI.ReserveDamageType();
             Hook();
         }
         private static void Hook()
@@ -52,9 +48,10 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 if(damageInfo.HasModdedDamageType(AddNeedlesDamage))
                 {
-                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
+                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < attacker.skillLocator.special.maxStock)
                     {
                         attacker.AddBuff(SeamstressBuffs.needles);
+                        attacker.skillLocator.special.AddOneStock();
                         Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
                     }
                     else
@@ -118,10 +115,6 @@ namespace SeamstressMod.Survivors.Seamstress
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                     }
                 }
-                if(damageInfo.HasModdedDamageType(DamageTypes.BarrierDamage))
-                {
-                    attacker.healthComponent.AddBarrier((attacker.maxHealth * 0.05f));
-                }
             }
         }
         private static void GlobalEventManager_onCharacterDeathGlobal(DamageReport damageReport)
@@ -158,9 +151,10 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(AddNeedlesKill))
                 {
-                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
+                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < attacker.skillLocator.special.maxStock)
                     {
                         attacker.AddBuff(SeamstressBuffs.needles);
+                        attacker.skillLocator.special.AddOneStock();
                     }
                 }
             }
