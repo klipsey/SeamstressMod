@@ -276,11 +276,11 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseMaxStock = 10,
-                baseRechargeInterval = 10,
-                rechargeStock = 0,
+                baseMaxStock = 1,
+                baseRechargeInterval = 10f,
+                rechargeStock = 1,
                 requiredStock = 1,
-                stockToConsume = 0,
+                stockToConsume = 1,
 
                 resetCooldownTimerOnUse = false,
                 fullRestockOnAssign = true,
