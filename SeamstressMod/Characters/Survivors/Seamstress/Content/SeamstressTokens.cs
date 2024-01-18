@@ -50,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "<style=cIsHealth>Trim</style>");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. On every third hit, " +
-               Tokens.cutPrefix + " and gain a " + Tokens.needlePrefix + " for each enemy hit. " + "While " + Tokens.butcheredPrefix + $" gain <style=cIsHealing>Barrier</style> on hit and increase damage of the third hit to <style=cIsDamage>{100f * SeamstressStaticValues.scissorsBonusDamageCoefficient}% damage</style>.");
+               Tokens.cutPrefix + " and gain a " + Tokens.needlePrefix + " for each enemy hit. " + "While " + Tokens.butcheredPrefix + $" increase damage to <style=cIsDamage>{100f * SeamstressStaticValues.scissorsBonusDamageCoefficient}% damage</style>.");
             #endregion
 
             #region Secondary

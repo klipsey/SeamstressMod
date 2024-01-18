@@ -13,6 +13,8 @@ namespace SeamstressMod.Survivors.Seamstress
     public class SeamstressController : MonoBehaviour
     {
         public CharacterBody characterBody;
+
+        public int baseNeedleAmount;
         private bool hasEffectiveAuthority => characterBody.hasEffectiveAuthority;
 
         public HealthComponent healthComponent;
@@ -36,6 +38,7 @@ namespace SeamstressMod.Survivors.Seamstress
             IsButchered();
             ButcheredSound();
             CalculateBonusDamage();
+            baseNeedleAmount = skillLocator.special.maxStock - 1;
         }
         public void ButcheredSound()
         {

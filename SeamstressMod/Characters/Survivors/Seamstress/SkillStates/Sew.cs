@@ -11,31 +11,29 @@ namespace SeamstressMod.SkillStates
     public class Sew : BaseMeleeAttack
     {
         public GameObject projectilePrefab;
-        public GameObject projectilePrefabEmpowered;
         public float needleDelay;
         public float needleCompareDelay = 0.1f;
         public bool hasLaunched;
-        public bool hasLaunched2;
-        public bool hasLaunched3;
         Ray aimRay;
         public override void OnEnter()
         {
-            RefreshState();
+            this.RefreshState();
             aimRay = base.GetAimRay();
+            hasLaunched = false;
             this.hitboxName = "Sew";
             this.damageCoefficient = SeamstressStaticValues.sewDamageCoefficient;
             this.procCoefficient = 1f;
             this.pushForce = 300;
             this.bonusForce = Vector3.zero;
-            this.baseDuration = 1.5f;
+            this.baseDuration = 1f + (this.needleCompareDelay / base.attackSpeedStat * base.characterBody.GetBuffCount(SeamstressBuffs.needles));
 
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
-            this.attackStartPercentTime = 0.15f;
-            this.attackEndPercentTime = 0.5f;
+            this.attackStartPercentTime = 0f;
+            this.attackEndPercentTime = 0.2f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            this.earlyExitPercentTime = 0f;
+            this.earlyExitPercentTime = 0.2f + (this.needleCompareDelay / base.attackSpeedStat * base.characterBody.GetBuffCount(SeamstressBuffs.needles));
 
             this.hitStopDuration = 0f;
             this.attackRecoil = 0f;
@@ -49,14 +47,14 @@ namespace SeamstressMod.SkillStates
             this.impactSound = SeamstressAssets.sewHitSoundEvent.index;
             if (empowered)
             {
-                projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                 this.swingEffectPrefab = SeamstressAssets.sewButcheredEffect;
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
                 Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false, removeCooldownBuffs: true, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
             }
             else
             {
-                projectilePrefab = SeamstressAssets.needlePrefab;
+               this.projectilePrefab = SeamstressAssets.needlePrefab;
                 this.swingEffectPrefab = SeamstressAssets.sewEffect;
                 this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             }
@@ -74,17 +72,28 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            aimRay = base.GetAimRay();
-            needleDelay += Time.fixedDeltaTime;
-            if (needleDelay >= needleCompareDelay / attackSpeedStat)
+            this.aimRay = base.GetAimRay();
+            this.needleDelay += Time.fixedDeltaTime;
+            if (!hasLaunched)
             {
-                if(characterBody.HasBuff(SeamstressBuffs.needles))
+                if (this.needleDelay >= this.needleCompareDelay / base.attackSpeedStat)
                 {
-                    ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
-                    Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
-                    characterBody.RemoveBuff(SeamstressBuffs.needles);
-                    needleCompareDelay += (0.1f / attackSpeedStat);
+                    if (base.characterBody.HasBuff(SeamstressBuffs.needles))
+                    {
+                        ProjectileManager.instance.FireProjectile(projectilePrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
+                        Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
+                        base.characterBody.RemoveBuff(SeamstressBuffs.needles);
+                        this.needleCompareDelay += (0.1f / base.attackSpeedStat);
+                    }
+                    else
+                    {
+                        hasLaunched = true;
+                    }
                 }
+            }
+            else if (base.characterBody.GetBuffCount(SeamstressBuffs.needles) < baseNeedleAmount)
+            {
+                base.characterBody.AddBuff(SeamstressBuffs.needles);
             }
         }
         protected override void FireAttack()

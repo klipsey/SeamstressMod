@@ -281,7 +281,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleHeal.fractionOfDamage = 0f;
 
             ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
-            needleController.procCoefficient = 0.5f;
+            needleController.procCoefficient = 0.3f;
             needleController.allowPrediction = false;
             needleGhost = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab;
             Material material2 = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Mage/matMageMatrixDirectionalIce.mat").WaitForCompletion());
@@ -298,6 +298,8 @@ namespace SeamstressMod.Survivors.Seamstress
             needleGhost = PrefabAPI.InstantiateClone(needleGhost, "Needle");
             if (_assetBundle.LoadAsset<GameObject>("HenryBombGhost") != null)
                 needleController.ghostPrefab = needleGhost;
+            if (!needleController.ghostPrefab.GetComponent<NetworkIdentity>()) needleController.ghostPrefab.AddComponent<NetworkIdentity>();
+            if (!needleController.ghostPrefab.GetComponent<ProjectileGhostController>()) needleController.ghostPrefab.AddComponent<ProjectileGhostController>();
             needleController.startSound = "";
         }
         private static void CreateEmpoweredNeedle()
@@ -337,7 +339,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleHeal.fractionOfDamage = 0f;
 
             ProjectileController needleController = needleButcheredPrefab.GetComponent<ProjectileController>();
-            needleController.procCoefficient = 0.5f;
+            needleController.procCoefficient = 0.3f;
             needleController.allowPrediction = false;
             needleButcheredGhost = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab;
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Mage/matMageMatrixDirectionalIce.mat").WaitForCompletion());
@@ -356,6 +358,8 @@ namespace SeamstressMod.Survivors.Seamstress
             needleButcheredGhost = PrefabAPI.InstantiateClone(needleButcheredGhost, "NeedleButchered");
             if (_assetBundle.LoadAsset<GameObject>("HenryBombGhost") != null)
                 needleController.ghostPrefab = needleButcheredGhost;
+            if(!needleController.ghostPrefab.GetComponent<NetworkIdentity>()) needleController.ghostPrefab.AddComponent<NetworkIdentity>();
+            if(!needleController.ghostPrefab.GetComponent<ProjectileGhostController>()) needleController.ghostPrefab.AddComponent<ProjectileGhostController>();
             needleController.startSound = "";
         }
         #endregion projectiles

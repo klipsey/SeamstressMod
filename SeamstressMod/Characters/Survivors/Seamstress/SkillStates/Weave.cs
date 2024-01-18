@@ -90,10 +90,10 @@ namespace SeamstressMod.SkillStates
         }
         public void CreateDashEffect()
         {
-            Transform val = childLocator.FindChild("WeaveCenter");
+            Transform transform = childLocator.FindChild("WeaveCenter");
             if ((bool)transform && (bool)dashPrefab)
             {
-                Object.Instantiate<GameObject>(dashPrefab, val.position, Util.QuaternionSafeLookRotation(dashVector), val);
+                Object.Instantiate<GameObject>(dashPrefab, transform.position, Util.QuaternionSafeLookRotation(dashVector), transform);
             }
         }
         public override void FixedUpdate()

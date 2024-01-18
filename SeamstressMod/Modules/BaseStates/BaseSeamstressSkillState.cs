@@ -10,6 +10,8 @@ namespace SeamstressMod.SkillStates.BaseStates
     {
         protected SeamstressController seamCon;
 
+        public int baseNeedleAmount;
+
         public bool empowered;
 
         public override void OnEnter()
@@ -30,6 +32,7 @@ namespace SeamstressMod.SkillStates.BaseStates
             if ((bool)seamCon)
             {
                 empowered = seamCon.butchered;
+                baseNeedleAmount = seamCon.baseNeedleAmount;
             }
         }
     }

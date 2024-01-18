@@ -6,7 +6,7 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         internal const float scissorsDamageCoefficient = 1.3f;
 
-        internal const float scissorsBonusDamageCoefficient = 2.3f;
+        internal const float scissorsBonusDamageCoefficient = 2f;
 
         internal const float sewDamageCoefficient = 6f;
 
@@ -15,6 +15,8 @@ namespace SeamstressMod.Survivors.Seamstress
         internal const float cutBossDamageCoefficient = 0.0125f;
 
         internal const float cutDamageCoefficient = 0.05f;
+
+        internal const float reapHealthCost = 0.5f;
 
         internal const int maxNeedleAmount = 10;
 

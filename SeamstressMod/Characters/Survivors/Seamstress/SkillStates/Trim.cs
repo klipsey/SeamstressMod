@@ -14,7 +14,7 @@ namespace SeamstressMod.SkillStates
 
         public override void OnEnter()
         {
-            RefreshState();
+            this.RefreshState();
             this.hitboxName = "Sword";
             this.damageType = DamageType.Generic;
             this.damageCoefficient = SeamstressStaticValues.scissorsDamageCoefficient;
@@ -54,9 +54,9 @@ namespace SeamstressMod.SkillStates
             }
             if (empowered)
             {
+                this.damageCoefficient = SeamstressStaticValues.scissorsBonusDamageCoefficient;
                 this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-                this.moddedDamageType3 = DamageTypes.BarrierDamage;
             }
             if (isComboFinisher)
             {
@@ -68,7 +68,6 @@ namespace SeamstressMod.SkillStates
                 this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                 if (empowered)
                 {
-                    this.damageCoefficient = SeamstressStaticValues.scissorsBonusDamageCoefficient;
                     this.swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
                 }
             }

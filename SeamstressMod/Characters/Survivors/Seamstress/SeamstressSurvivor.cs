@@ -17,7 +17,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public override string assetBundleName => "henryassets"; //if you do not change this, you are giving permission to deprecate the mod
 
         //the name of the prefab we will create. conventionally ending in "Body". must be unique
-        public override string bodyName => "SeamstressBody"; //if you do not change this, you get the point by now
+        public override string bodyName => "Seamstress"; //if you do not change this, you get the point by now
 
         //name of the ai master for vengeance and goobo. must be unique
         public override string masterName => "SeamstressMonsterMaster"; //if you do not
@@ -273,7 +273,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
-                activationStateMachineName = "Weapon2", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
+                activationStateMachineName = "Weapon", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
@@ -283,10 +283,15 @@ namespace SeamstressMod.Survivors.Seamstress
                 stockToConsume = 1,
 
                 resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                isCombatSkill = true,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = false,
+                beginSkillCooldownOnSkillEnd = false,
                 mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
                 cancelSprintingOnActivation = true,
+                forceSprintDuringState = false,
             });
 
             Skills.AddSpecialSkills(bodyPrefab, sewSkillDef);

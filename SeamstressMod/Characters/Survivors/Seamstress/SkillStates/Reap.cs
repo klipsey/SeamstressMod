@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using RoR2.Projectile;
 using SeamstressMod.Survivors.Seamstress;
 using SeamstressMod.SkillStates.BaseStates;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace SeamstressMod.SkillStates
 
         private bool hasFired;
 
-        public static float healthCostFraction = 0.5f;
+        public static float healthCostFraction = SeamstressStaticValues.reapHealthCost;
         public override void OnEnter()
         {
             base.OnEnter();
@@ -62,12 +63,12 @@ namespace SeamstressMod.SkillStates
             if(!hasFired)
             {
                 hasFired = true;
-                if (NetworkServer.active && (bool)healthComponent && healthCostFraction >= Mathf.Epsilon)
+                if (NetworkServer.active && (bool)base.healthComponent && healthCostFraction >= Mathf.Epsilon)
                 {
                     float currentBarrier = healthComponent.barrier;
                     DamageInfo damageInfo = new DamageInfo();
-                    damageInfo.damage = ((healthComponent.health + healthComponent.shield) * healthCostFraction) + healthComponent.barrier;
-                    damageInfo.position = characterBody.corePosition;
+                    damageInfo.damage = ((base.healthComponent.health + base.healthComponent.shield) * healthCostFraction) + base.healthComponent.barrier;
+                    damageInfo.position = base.characterBody.corePosition;
                     damageInfo.force = Vector3.zero;
                     damageInfo.damageColorIndex = DamageColorIndex.Default;
                     damageInfo.crit = false;
@@ -75,17 +76,25 @@ namespace SeamstressMod.SkillStates
                     damageInfo.inflictor = null;
                     damageInfo.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock;
                     damageInfo.procCoefficient = 0f;
-                    healthComponent.TakeDamage(damageInfo);
-                    healthComponent.AddBarrier(currentBarrier);
-                    if(characterBody.HasBuff(SeamstressBuffs.butchered))
+                    base.healthComponent.TakeDamage(damageInfo);
+                    base.healthComponent.AddBarrier(currentBarrier);
+                    if(base.characterBody.HasBuff(SeamstressBuffs.butchered))
                     {
-                        characterBody.RemoveBuff(SeamstressBuffs.butchered);
+                        base.characterBody.RemoveBuff(SeamstressBuffs.butchered);
                     }
-                    characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
-                    characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
-                    if (base.characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
+                    base.characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
+                    base.characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
+                    if (base.characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + base.skillLocator.special.maxStock - 1)
                     {
                         base.characterBody.AddBuff(SeamstressBuffs.needles);
+                    }
+                    else
+                    {
+                        GameObject projectilePrefab;
+                        Ray aimRay;
+                        aimRay = new Ray(base.characterBody.inputBank.aimOrigin, base.characterBody.inputBank.aimDirection);
+                        projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.characterBody.gameObject, base.characterBody.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.characterBody.RollCrit(), DamageColorIndex.Default, null, -1f);
                     }
                 }
             }
