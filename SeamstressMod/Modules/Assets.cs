@@ -30,11 +30,14 @@ namespace SeamstressMod.Modules
                 return loadedBundles[bundleName];
             }
 
-            AssetBundle assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(SeamstressPlugin.instance.Info.Location), "AssetBundles", bundleName));
-
-            if (assetBundle == null)
-            {                                                       //todo guide
-                Log.Error($"Could not find assetbundle, {bundleName}. Follow the guide to build and install your mod correctly!");
+            AssetBundle assetBundle = null;
+            try
+            {
+                assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(SeamstressPlugin.instance.Info.Location), "AssetBundles", bundleName));
+            }
+            catch (System.Exception e)
+            {
+                Log.Error($"Error loading asset bundle, {bundleName}. Your asset bundle must be in a folder next to your mod dll called 'AssetBundles'. Follow the guide to build and install your mod correctly!\n{e}");
             }
 
             loadedBundles[bundleName] = assetBundle;
@@ -42,8 +45,6 @@ namespace SeamstressMod.Modules
             return assetBundle;
 
         }
-        //todo joe I know I've added more shit to this over the years
-        //oh wait it's probably in projectile or whatever
         internal static GameObject CloneTracer(string originalTracerName, string newTracerName)
         {
             if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName) == null) 
@@ -69,7 +70,7 @@ namespace SeamstressMod.Modules
 
             foreach (Renderer i in objectToConvert.GetComponentsInChildren<Renderer>())
             {
-                i?.material?.ConvertDefaultShaderToHopoo();
+                i?.sharedMaterial?.ConvertDefaultShaderToHopoo();
             }
         }
 

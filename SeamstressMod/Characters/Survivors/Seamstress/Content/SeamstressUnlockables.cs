@@ -14,7 +14,7 @@ namespace SeamstressMod.Survivors.Seamstress
             masterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
                 SeamstressMasteryAchievement.unlockableIdentifier,
                 Modules.Tokens.GetAchievementNameToken(SeamstressMasteryAchievement.identifier),
-                SeamstressSurvivor.assetBundle.LoadAsset<Sprite>("texMasteryAchievement"));
+                SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texMasteryAchievement"));
         }
     }
 }

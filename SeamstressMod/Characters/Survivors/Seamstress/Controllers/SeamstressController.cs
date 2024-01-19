@@ -58,18 +58,18 @@ namespace SeamstressMod.Survivors.Seamstress
             if (characterBody.HasBuff(SeamstressBuffs.butchered))
             {
                 butchered = true;
-                characterBody.skillLocator.primary.skillDef.icon = SeamstressSurvivor.assetBundle.LoadAsset<Sprite>("texStingerIcon");
-                characterBody.skillLocator.secondary.skillDef.icon = SeamstressSurvivor.assetBundle.LoadAsset<Sprite>("texPistolIcon");
-                characterBody.skillLocator.utility.skillDef.icon = SeamstressSurvivor.assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon");
-                characterBody.skillLocator.special.skillDef.icon = SeamstressSurvivor.assetBundle.LoadAsset<Sprite>("texStingerIcon");
+                characterBody.skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
+                characterBody.skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPistolIcon");
+                characterBody.skillLocator.utility.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon");
+                characterBody.skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
             }
             else
             {
                 butchered = false;
-                characterBody.skillLocator.primary.skillDef.icon = SeamstressSurvivor.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
-                characterBody.skillLocator.secondary.skillDef.icon = SeamstressSurvivor.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
-                characterBody.skillLocator.utility.skillDef.icon = SeamstressSurvivor.assetBundle.LoadAsset<Sprite>("texUtilityIcon");
-                characterBody.skillLocator.special.skillDef.icon = SeamstressSurvivor.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
+                characterBody.skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
+                characterBody.skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
+                characterBody.skillLocator.utility.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texUtilityIcon");
+                characterBody.skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
                 TemporaryOverlay component = GetComponent<TemporaryOverlay>();
                 if ((bool)component)
                 {

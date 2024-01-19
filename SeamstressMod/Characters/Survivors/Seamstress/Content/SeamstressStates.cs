@@ -1,5 +1,4 @@
 ﻿using SeamstressMod.SkillStates;
-using SeamstressMod.SkillStates.BaseStates;
 
 namespace SeamstressMod.Survivors.Seamstress
 {

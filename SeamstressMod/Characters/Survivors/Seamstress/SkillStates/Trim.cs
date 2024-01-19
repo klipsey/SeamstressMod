@@ -2,7 +2,7 @@
 using UnityEngine;
 using R2API;
 using SeamstressMod.Survivors.Seamstress;
-using SeamstressMod.SkillStates.BaseStates;
+using SeamstressMod.Modules.BaseStates;
 using System;
 
 
@@ -15,7 +15,7 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             this.RefreshState();
-            this.hitboxName = "Sword";
+            this.hitboxGroupName = "Sword";
             this.damageType = DamageType.Generic;
             this.damageCoefficient = SeamstressStaticValues.scissorsDamageCoefficient;
             this.procCoefficient = 1f;
@@ -25,7 +25,7 @@ namespace SeamstressMod.SkillStates
 
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
-            this.attackStartPercentTime = 0.25f;
+            this.attackStartPercentTime = 0.2f;
             this.attackEndPercentTime = 0.4f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
@@ -64,7 +64,7 @@ namespace SeamstressMod.SkillStates
                 this.moddedDamageType = DamageTypes.CutDamage;
                 this.moddedDamageType2 = DamageTypes.AddNeedlesDamage;
                 this.swingSoundString = "Play_bandit2_m2_slash";
-                this.hitboxName = "SwordBig";
+                this.hitboxGroupName = "SwordBig";
                 this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                 if (empowered)
                 {
@@ -75,10 +75,6 @@ namespace SeamstressMod.SkillStates
             this.impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();
-        }
-        protected override void OnHitEnemyAuthority()
-        {
-            base.OnHitEnemyAuthority();
         }
         
         protected override void FireAttack()
@@ -92,18 +88,6 @@ namespace SeamstressMod.SkillStates
                 {
                     OnHitEnemyAuthority();
                 }
-            }
-        }
-        protected override void PlaySwingEffect()
-        {
-            if (!swingEffectPrefab)
-            {
-                return;
-            }
-            Transform transform = FindModelChild(this.muzzleString);
-            if ((bool)transform)
-            {
-                UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
             }
         }
         protected override void PlayAttackAnimation()
@@ -120,6 +104,22 @@ namespace SeamstressMod.SkillStates
                     PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", this.duration, 0.1f * duration);
                     break;
             }
+        }
+        protected override void PlaySwingEffect()
+        {
+            if (!swingEffectPrefab)
+            {
+                return;
+            }
+            Transform transform = FindModelChild(this.muzzleString);
+            if ((bool)transform)
+            {
+                UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
+            }
+        }
+        protected override void OnHitEnemyAuthority()
+        {
+            base.OnHitEnemyAuthority();
         }
         public override void OnExit()
         {

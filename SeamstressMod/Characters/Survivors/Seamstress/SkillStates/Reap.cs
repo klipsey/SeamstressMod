@@ -1,7 +1,7 @@
 ﻿using RoR2;
 using RoR2.Projectile;
 using SeamstressMod.Survivors.Seamstress;
-using SeamstressMod.SkillStates.BaseStates;
+using SeamstressMod.Modules.BaseStates;
 using UnityEngine;
 using UnityEngine.Networking;
 using EntityStates;
@@ -40,6 +40,10 @@ namespace SeamstressMod.SkillStates
             temporaryOverlay.AddToCharacerModel(component);
             Util.PlaySound("Play_bandit2_m2_alt_throw", base.characterBody.gameObject);
             UnityEngine.Object.Instantiate<GameObject>(reapPrefab, base.characterBody.modelLocator.transform);
+            if(skillLocator.secondary.stock < skillLocator.secondary.maxStock)
+            {
+                skillLocator.secondary.AddOneStock();
+            }
             if (!base.characterMotor.isGrounded)
             {
                 SmallHop(base.characterMotor, 6f);

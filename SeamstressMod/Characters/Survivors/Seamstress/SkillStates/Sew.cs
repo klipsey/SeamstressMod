@@ -3,7 +3,7 @@ using RoR2.Projectile;
 using UnityEngine;
 using R2API;
 using SeamstressMod.Survivors.Seamstress;
-using SeamstressMod.SkillStates.BaseStates;
+using SeamstressMod.Modules.BaseStates;
 using System;
 
 namespace SeamstressMod.SkillStates
@@ -20,7 +20,7 @@ namespace SeamstressMod.SkillStates
             this.RefreshState();
             aimRay = base.GetAimRay();
             hasLaunched = false;
-            this.hitboxName = "Sew";
+            this.hitboxGroupName = "Sew";
             this.damageCoefficient = SeamstressStaticValues.sewDamageCoefficient;
             this.procCoefficient = 1f;
             this.pushForce = 300;

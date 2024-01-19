@@ -12,7 +12,6 @@ using System.Security.Permissions;
 //rename this namespace
 namespace SeamstressMod
 {
-    [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
 
@@ -21,8 +20,8 @@ namespace SeamstressMod
         // if you do not change this, you are giving permission to deprecate the mod-
         //  please change the names to your own stuff, thanks
         //   this shouldn't even have to be said
-        public const string MODUID = "com.kenko.SeamstressMod";
-        public const string MODNAME = "SeamstressMod";
+        public const string MODUID = "com.kenko.Seamstress";
+        public const string MODNAME = "Seamstress";
         public const string MODVERSION = "1.0.0";
 
         // a prefix for name tokens to prevent conflicts- please capitalize all name tokens for convention
@@ -34,19 +33,17 @@ namespace SeamstressMod
         {
             instance = this;
 
+            //easy to use logger
             Log.Init(Logger);
-            Modules.Language.Init();
-            DamageTypes.Init();
-            // collect item display prefabs for use in our display rules
-            Modules.ItemDisplays.PopulateDisplays();
 
-            // character initialization. this should be after itemdisplays
+            // used when you want to properly set up language folders
+            Modules.Language.Init();
+
+            // character initialization
             new SeamstressSurvivor().Initialize();
 
-            // now make a content pack and add it this has to be last
+            // make a content pack and add it. this has to be last
             new Modules.ContentPacks().Initialize();
-
-
         }
     }
 }

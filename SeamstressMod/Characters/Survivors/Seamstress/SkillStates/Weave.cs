@@ -1,4 +1,4 @@
-﻿using SeamstressMod.SkillStates.BaseStates;
+﻿using SeamstressMod.Modules.BaseStates;
 using SeamstressMod.Survivors.Seamstress;
 using RoR2;
 using UnityEngine;
@@ -67,26 +67,27 @@ namespace SeamstressMod.SkillStates
             dashVector = base.inputBank.aimDirection;
             if(empowered) hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             else hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
-            overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesKill);
-            overlapAttack.AddModdedDamageType(DamageTypes.ResetWeakWeave);
+            this.overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
+            this.overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesKill);
             if (empowered)
             {
                 Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDashButchered;
                 //overlapAttack.damageType |= DamageType.BleedOnHit;
-                overlapAttack.damageType = DamageType.BonusToLowHealth;
-                overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
+                this.overlapAttack.damageType = DamageType.BonusToLowHealth;
+                this.overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeakWeave);
+                this.overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_imp_overlord_impact";
             }
             else
             {
                 Util.PlaySound("Play_merc_m2_uppercut", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDash;
-                overlapAttack.AddModdedDamageType(DamageTypes.Empty);
-                overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeave);
+                this.overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeave);
+                this.overlapAttack.AddModdedDamageType(DamageTypes.ResetWeakWeave);
                 hitSound = "Play_bandit2_m2_impact";
             }
+            PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration + dashPrepDuration);
         }
         public void CreateDashEffect()
         {

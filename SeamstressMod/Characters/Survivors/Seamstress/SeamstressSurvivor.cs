@@ -39,17 +39,18 @@ namespace SeamstressMod.Survivors.Seamstress
 
             characterPortrait = assetBundle.LoadAsset<Texture>("texHenryIcon"),
             bodyColor = Color.white,
+            sortPosition = 100,
 
             crosshair = Assets.LoadCrosshair("Standard"),
             podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
-            maxHealth = 200f,
+            maxHealth = 180f,
             healthRegen = 1f,
             armor = 0f,
-            damage = 12f,
+            damage = 10f,
 
             damageGrowth = 0f,
-            healthGrowth = 200f * 0.35f,
+            healthGrowth = 160f * 0.3f,
 
             jumpCount = 1,
         };
@@ -75,8 +76,17 @@ namespace SeamstressMod.Survivors.Seamstress
         
         public override ItemDisplaysBase itemDisplays => new SeamstressItemDisplays();
 
-        public override void InitializeCharacter()
-        {
+        //set in base classes
+        public override AssetBundle assetBundle { get; protected set; }
+        public override GameObject bodyPrefab { get; protected set; }
+        public override CharacterBody prefabCharacterBody { get; protected set; }
+        public override GameObject characterModelObject { get; protected set; }
+        public override CharacterModel prefabCharacterModel { get; protected set; }
+        public override GameObject displayPrefab { get; protected set; }
+
+        public override void Initialize()
+        { 
+
             //uncomment if you have multiple characters
             //ConfigEntry<bool> characterEnabled = Config.CharacterEnableConfig("Survivors", "Henry");
 
@@ -84,9 +94,17 @@ namespace SeamstressMod.Survivors.Seamstress
             //    return;
 
             //need the character unlockable before you initialize the survivordef
-            SeamstressUnlockables.Init();
+            
+            base.Initialize();
+        }
+
+        public override void InitializeCharacter()
+        {
+        SeamstressUnlockables.Init();
 
             base.InitializeCharacter();
+
+            DamageTypes.Init();
 
             SeamstressConfig.Init();
             SeamstressStates.Init();
@@ -115,17 +133,17 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public void AddHitboxes()
         {
-            ChildLocator childLocator = bodyPrefab.GetComponentInChildren<ChildLocator>();
+            ChildLocator childLocator = characterModelObject.GetComponent<ChildLocator>();
 
             //example of how to create a hitbox
-            Transform hitboxTransform = childLocator.FindChild("SwordHitbox");
-            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Sword");
-            hitboxTransform = childLocator.FindChild("SwordHitboxBig");
-            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "SwordBig");
-            hitboxTransform = childLocator.FindChild("HitboxSew");
-            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Sew");
-            hitboxTransform = childLocator.FindChild("HitboxWeave");
-            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Weave");
+            Transform hitBoxTransform = childLocator.FindChild("SwordHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Sword", hitBoxTransform);
+            hitBoxTransform = childLocator.FindChild("SwordHitboxBig");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "SwordBig", hitBoxTransform);
+            hitBoxTransform = childLocator.FindChild("SewHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Sew", hitBoxTransform);
+            hitBoxTransform = childLocator.FindChild("WeaveHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Weave", hitBoxTransform);
         }
 
         public override void InitializeEntityStateMachines() 
@@ -164,7 +182,27 @@ namespace SeamstressMod.Survivors.Seamstress
             skillLocator.passiveSkill.icon = assetBundle.LoadAsset<Sprite>("texSpecialIcon");
         }
 
-        //let's look at secondary before primary because it is simpler
+        private void AddPrimarySkills()
+        {
+            //the primary skill is created using a constructor for a typical primary
+            //it is also a SteppedSkillDef. Custom Skilldefs are very useful for custom behaviors related to casting a skill. see ror2's different skilldefs for reference
+            SteppedSkillDef trimSkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
+                (
+                    "SeamstressSlash",
+                    SEAMSTRESS_PREFIX + "PRIMARY_TRIM_NAME",
+                    SEAMSTRESS_PREFIX + "PRIMARY_TRIM_DESCRIPTION",
+                    assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.Trim)),
+                    "Weapon",
+                    true, true
+                ));
+            //custom Skilldefs can have additional fields that you can set manually
+            trimSkillDef.stepCount = 3;
+            trimSkillDef.stepGraceDuration = 0.5f;
+
+            Skills.AddPrimarySkills(bodyPrefab, trimSkillDef);
+        }
+
         private void AddSecondarySkills()
         {
             //here is a basic skill def with all fields accounted for
@@ -190,8 +228,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 resetCooldownTimerOnUse = false,
                 fullRestockOnAssign = true,
                 dontAllowPastMaxStocks = false,
-                beginSkillCooldownOnSkillEnd = false,
                 mustKeyPress = false,
+                beginSkillCooldownOnSkillEnd = false,
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,
@@ -201,27 +239,6 @@ namespace SeamstressMod.Survivors.Seamstress
             });
 
             Skills.AddSecondarySkills(bodyPrefab, weaveSkillDef);
-        }
-
-        private void AddPrimarySkills()
-        {
-            //the primary skill is created using a constructor for a typical primary
-            //it is also a SteppedSkillDef. Custom Skilldefs are very useful for custom behaviors related to casting a skill. see ror2's different skilldefs for reference
-            SteppedSkillDef trimSkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
-                (
-                    "SeamstressSlash",
-                    SEAMSTRESS_PREFIX + "PRIMARY_TRIM_NAME",
-                    SEAMSTRESS_PREFIX + "PRIMARY_TRIM_DESCRIPTION",
-                    assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
-                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.Trim)),
-                    "Weapon",
-                    true,true
-                ));
-            //custom Skilldefs can have additional fields that you can set manually
-            trimSkillDef.stepCount = 3;
-            trimSkillDef.stepGraceDuration = 0.5f;
-
-            Skills.AddPrimarySkills(bodyPrefab, trimSkillDef);
         }
 
         private void AddUtiitySkills()
@@ -273,7 +290,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
-                activationStateMachineName = "Weapon", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
+                //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
+                activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
@@ -297,7 +315,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Skills.AddSpecialSkills(bodyPrefab, sewSkillDef);
         }
         #endregion skills
-        
+
         #region skins
         public override void InitializeSkins()
         {
@@ -316,9 +334,9 @@ namespace SeamstressMod.Survivors.Seamstress
                 prefabCharacterModel.gameObject);
 
             //these are your Mesh Replacements. The order here is based on your CustomRendererInfos from earlier
-                //pass in meshes as they are named in your assetbundle
+            //pass in meshes as they are named in your assetbundle
             //currently not needed as with only 1 skin they will simply take the default meshes
-                //uncomment this when you have another skin
+            //uncomment this when you have another skin
             //defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
             //    "meshHenrySword",
             //    "meshHenryGun",
@@ -327,48 +345,49 @@ namespace SeamstressMod.Survivors.Seamstress
             //add new skindef to our list of skindefs. this is what we'll be passing to the SkinController
             skins.Add(defaultSkin);
             #endregion
-            /*
+
             //uncomment this when you have a mastery skin
             #region MasterySkin
-            
-            //creating a new skindef as we did before
-            SkinDef masterySkin = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
-                assetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
-                defaultRendererinfos,
-                prefabCharacterModel.gameObject,
-                SeamstressUnlockables.masterySkinUnlockableDef);
 
-            //adding the mesh replacements as above. 
-            //if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
-            masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
-                "meshHenrySwordAlt",
-                null,//no gun mesh replacement. use same gun mesh
-                "meshHenryAlt");
+            ////creating a new skindef as we did before
+            //SkinDef masterySkin = Modules.Skins.CreateSkinDef(HENRY_PREFIX + "MASTERY_SKIN_NAME",
+            //    assetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
+            //    defaultRendererinfos,
+            //    prefabCharacterModel.gameObject,
+            //    HenryUnlockables.masterySkinUnlockableDef);
 
-            //masterySkin has a new set of RendererInfos (based on default rendererinfos)
-            //you can simply access the RendererInfos' materials and set them to the new materials for your skin.
-            masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
-            masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
-            masterySkin.rendererInfos[2].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            ////adding the mesh replacements as above. 
+            ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
+            //masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+            //    "meshHenrySwordAlt",
+            //    null,//no gun mesh replacement. use same gun mesh
+            //    "meshHenryAlt");
 
-            //here's a barebones example of using gameobjectactivations that could probably be streamlined or rewritten entirely, truthfully, but it works
-            masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
-            {
-                new SkinDef.GameObjectActivation
-                {
-                    gameObject = childLocator.FindChildGameObject("GunModel"),
-                    shouldActivate = false,
-                }
-            };
-            //simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
+            ////masterySkin has a new set of RendererInfos (based on default rendererinfos)
+            ////you can simply access the RendererInfos' materials and set them to the new materials for your skin.
+            //masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            //masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            //masterySkin.rendererInfos[2].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
 
-            skins.Add(masterySkin);
-            
+            ////here's a barebones example of using gameobjectactivations that could probably be streamlined or rewritten entirely, truthfully, but it works
+            //masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            //{
+            //    new SkinDef.GameObjectActivation
+            //    {
+            //        gameObject = childLocator.FindChildGameObject("GunModel"),
+            //        shouldActivate = false,
+            //    }
+            //};
+            ////simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
+
+            //skins.Add(masterySkin);
+
             #endregion
-            */
+
             skinController.skins = skins.ToArray();
         }
         #endregion skins
+
 
         //Character Master is what governs the AI of your character when it is not controlled by a player (artifact of vengeance, goobo)
         public override void InitializeCharacterMaster()

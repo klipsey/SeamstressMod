@@ -17,7 +17,8 @@ namespace SeamstressMod.Modules
                 materialName.Replace(" (Instance)", "");
                 return mat.name.Contains(materialName);
             });
-            if (tempMat) {
+            if (tempMat)
+            {
                 Log.Debug($"{tempMat.name} has already been loaded. returning cached");
                 return tempMat;
             }
@@ -35,7 +36,8 @@ namespace SeamstressMod.Modules
         public static Material SetHopooMaterial(this Material tempMat) => ConvertDefaultShaderToHopoo(tempMat);
         public static Material ConvertDefaultShaderToHopoo(this Material tempMat)
         {
-            if (cachedMaterials.Contains(tempMat)) {
+            if (cachedMaterials.Contains(tempMat))
+            {
                 Log.Debug($"{tempMat.name} has already been loaded. returning cached");
                 return tempMat;
             }
@@ -59,7 +61,7 @@ namespace SeamstressMod.Modules
             //apply values after shader is set
             tempMat.SetTexture("_EmTex", tempMat.GetTexture("_EmissionMap"));
             tempMat.EnableKeyword("DITHER");
-            
+
             if (bumpScale != null)
             {
                 tempMat.SetFloat("_NormalStrength", (float)bumpScale);
@@ -126,6 +128,17 @@ namespace SeamstressMod.Modules
             material.SetInt("_Cull", cull ? 1 : 0);
             return material;
         }
-        //todo joe specular
+
+        public static Material SetSpecular(this Material material, float strength)
+        {
+            material.SetFloat("_SpecularStrength", strength);
+            return material;
+        }
+        public static Material SetSpecular(this Material material, float strength, float exponent)
+        {
+            material.SetFloat("_SpecularStrength", strength);
+            material.SetFloat("SpecularExponent", exponent);
+            return material;
+        }
     }
 }

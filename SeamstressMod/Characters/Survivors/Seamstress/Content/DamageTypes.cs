@@ -1,9 +1,6 @@
 ﻿using R2API;
 using RoR2;
 using RoR2.Projectile;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
@@ -27,6 +24,7 @@ namespace SeamstressMod.Survivors.Seamstress
             AddNeedlesKill = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
             ResetWeave = DamageAPI.ReserveDamageType();
+            ResetWeakWeave = DamageAPI.ReserveDamageType();
             Hook();
         }
         private static void Hook()

@@ -1,8 +1,5 @@
 ﻿using RoR2;
-using System;
-using UnityEngine;
-using SeamstressMod.Survivors.Seamstress;
-using SeamstressMod.Modules;
+using SeamstressMod.Modules.Achievements;
 
 namespace SeamstressMod.Survivors.Seamstress.Achievements
 {

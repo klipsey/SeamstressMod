@@ -1,13 +1,10 @@
 ﻿using RoR2;
 using UnityEngine;
 using SeamstressMod.Modules;
-using System;
 using RoR2.Projectile;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using R2API;
-using System.Runtime.CompilerServices;
-using UnityEngine.UIElements;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
