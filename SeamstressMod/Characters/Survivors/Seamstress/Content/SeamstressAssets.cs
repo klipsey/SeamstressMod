@@ -15,6 +15,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject scissorsButcheredSwingEffect;
 
+        internal static Material butcheredOverlayMat;
+
         internal static GameObject sewEffect;
 
         internal static GameObject sewButcheredEffect;
@@ -71,6 +73,8 @@ namespace SeamstressMod.Survivors.Seamstress
         #region effects
         private static void CreateEffects()
         {
+            butcheredOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
+
             crosshairOverridePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Heretic/HereticCrosshair.prefab").WaitForCompletion().InstantiateClone("SeamstressCrosshair");
             crosshairOverridePrefab.AddComponent<NetworkIdentity>();
 

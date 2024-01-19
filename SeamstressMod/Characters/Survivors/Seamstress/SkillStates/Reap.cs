@@ -34,7 +34,7 @@ namespace SeamstressMod.SkillStates
             PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
             CharacterModel component = (GetModelTransform()).GetComponent<CharacterModel>();
             TemporaryOverlay temporaryOverlay = base.gameObject.AddComponent<TemporaryOverlay>();
-            temporaryOverlay.originalMaterial = LegacyResourcesAPI.Load<Material>("Materials/matFullCrit");
+            temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
             temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
             temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
             temporaryOverlay.AddToCharacerModel(component);
