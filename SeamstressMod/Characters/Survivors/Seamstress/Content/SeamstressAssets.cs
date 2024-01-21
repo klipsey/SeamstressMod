@@ -160,11 +160,11 @@ namespace SeamstressMod.Survivors.Seamstress
             sewEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/BleedOnHitAndExplode/BleedOnHitAndExplode_Impact.prefab").WaitForCompletion().InstantiateClone("SewSplosion");
             sewEffect.AddComponent<NetworkIdentity>();
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercSwipe1.mat").WaitForCompletion());
-            sewEffect.transform.GetChild(0).localScale = Vector3.one * 3f;
+            sewEffect.transform.GetChild(0).localScale = Vector3.one * 1f;
             sewEffect.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material = material;
-            sewEffect.transform.GetChild(1).localScale = Vector3.one * 3f;
+            sewEffect.transform.GetChild(1).localScale = Vector3.one * 1f;
             sewEffect.transform.GetChild(1).GetComponent<ParticleSystemRenderer>().material = material;
-            sewEffect.transform.GetChild(2).localScale = Vector3.one * 3f;
+            sewEffect.transform.GetChild(2).localScale = Vector3.one * 1f;
             sewEffect.transform.GetChild(2).GetComponent<ParticleSystemRenderer>().material = material;
 
             sewButcheredEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/BleedOnHitAndExplode/BleedOnHitAndExplode_Impact.prefab").WaitForCompletion().InstantiateClone("SewSplosion");
@@ -252,7 +252,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileSimple needleSimple = needlePrefab.GetComponent<ProjectileSimple>();
             needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 3f;
+            needleSimple.lifetime = 2f;
             needleSimple.updateAfterFiring = true;
             
             ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
@@ -310,7 +310,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileSimple needleSimple = needleButcheredPrefab.GetComponent<ProjectileSimple>();
             needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 3f;
+            needleSimple.lifetime = 2f;
             needleSimple.updateAfterFiring = true;
 
             ProjectileDamage needleDamage = needleButcheredPrefab.GetComponent<ProjectileDamage>();

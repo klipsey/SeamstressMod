@@ -30,7 +30,6 @@ namespace SeamstressMod.SkillStates
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             this.earlyExitPercentTime = 0.5f;
-
             this.hitStopDuration = 0.05f;
             this.attackRecoil = 0.75f;
             this.hitHopVelocity = 5f;

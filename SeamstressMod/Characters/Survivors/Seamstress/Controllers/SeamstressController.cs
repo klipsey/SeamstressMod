@@ -82,7 +82,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public void CalculateBonusDamage()
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
-            characterBody.baseDamage = 10f + (healthMissing * 0.1f);
+            characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
     }
 }

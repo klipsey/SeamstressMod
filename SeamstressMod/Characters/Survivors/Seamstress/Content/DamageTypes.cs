@@ -66,7 +66,9 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(CutDamage) || damageInfo.HasModdedDamageType(CutDamageNeedle))
                 {
-                    if(damageReport.victimIsBoss)
+                    attacker.skillLocator.utility.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
+
+                    if (damageReport.victimIsBoss)
                     {
                         DamageInfo cut = new DamageInfo
                         {
@@ -82,9 +84,9 @@ namespace SeamstressMod.Survivors.Seamstress
                         };
                         victim.TakeDamage(cut);
                         float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
-                        if (lifeSteal > attacker.maxHealth * SeamstressStaticValues.maxNeedleHeal)
+                        if (lifeSteal > attacker.maxHealth * SeamstressStaticValues.maxCutHeal)
                         {
-                            lifeSteal = attacker.maxHealth * SeamstressStaticValues.maxNeedleHeal;
+                            lifeSteal = attacker.maxHealth * SeamstressStaticValues.maxCutHeal;
                         }
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                     }
@@ -104,9 +106,9 @@ namespace SeamstressMod.Survivors.Seamstress
                         };
                         victim.TakeDamage(cut);
                         float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
-                        if (lifeSteal > attacker.maxHealth * SeamstressStaticValues.maxNeedleHeal)
+                        if (lifeSteal > attacker.maxHealth * SeamstressStaticValues.maxCutHeal)
                         {
-                            lifeSteal = attacker.maxHealth * SeamstressStaticValues.maxNeedleHeal;
+                            lifeSteal = attacker.maxHealth * SeamstressStaticValues.maxCutHeal;
                         }
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
                     }
@@ -127,7 +129,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 if (damageInfo.HasModdedDamageType(ResetWeave))
                 {
-                    attacker.skillLocator.secondary.Reset();
+                    attacker.skillLocator.utility.Reset();
                     if ((bool)transform && (bool)SeamstressAssets.weaveDashOnKill)
                     {
                         Util.PlaySound("Play_imp_overlord_teleport_end", attackerObject);
@@ -136,13 +138,10 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(ResetWeakWeave))
                 {
-                    if(attacker.skillLocator.secondary.stock < attacker.skillLocator.secondary.maxStock)
-                    {
-                        attacker.skillLocator.secondary.AddOneStock();
-                    }
+                    attacker.skillLocator.utility.rechargeStopwatch = attacker.skillLocator.utility.cooldownRemaining * 0.75f;
                     if ((bool)transform && (bool)SeamstressAssets.weaveDashOnKill)
                     {
-                        Util.PlaySound("Play_UI_cooldownRefresh", attackerObject);
+                        Util.PlaySound("Play_merc_shift_end", attackerObject);
                     }
                 }
                 if (damageInfo.HasModdedDamageType(AddNeedlesKill))

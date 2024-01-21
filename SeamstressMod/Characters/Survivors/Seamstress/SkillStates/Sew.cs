@@ -8,66 +8,39 @@ using System;
 
 namespace SeamstressMod.SkillStates
 {
-    public class Sew : BaseMeleeAttack
+    public class Sew : BaseSeamstressSkillState
     {
         public GameObject projectilePrefab;
         public float needleDelay;
         public float needleCompareDelay = 0.1f;
         public bool hasLaunched;
         Ray aimRay;
+        public float duration;
         public override void OnEnter()
         {
             this.RefreshState();
+            duration = 1f + (this.needleCompareDelay / base.attackSpeedStat * base.characterBody.GetBuffCount(SeamstressBuffs.needles));
             aimRay = base.GetAimRay();
             hasLaunched = false;
-            this.hitboxGroupName = "Sew";
-            this.damageCoefficient = SeamstressStaticValues.sewDamageCoefficient;
-            this.procCoefficient = 1f;
-            this.pushForce = 300;
-            this.bonusForce = Vector3.zero;
-            this.baseDuration = 1f + (this.needleCompareDelay / base.attackSpeedStat * base.characterBody.GetBuffCount(SeamstressBuffs.needles));
-
-            //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
-            //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
-            this.attackStartPercentTime = 0f;
-            this.attackEndPercentTime = 0.2f;
-
-            //this is the point at which an attack can be interrupted by itself, continuing a combo
-            this.earlyExitPercentTime = 0.2f + (this.needleCompareDelay / base.attackSpeedStat * base.characterBody.GetBuffCount(SeamstressBuffs.needles));
-
-            this.hitStopDuration = 0f;
-            this.attackRecoil = 0f;
-            this.hitHopVelocity = 0f;
-            this.swingSoundString = "Play_voidman_m2_explode";
-            this.hitSoundString = "";
-            this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-
-            this.muzzleString = "SewCenter";
-            this.moddedDamageType = DamageTypes.Empty;
-            this.impactSound = SeamstressAssets.sewHitSoundEvent.index;
             if (empowered)
             {
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
-                this.swingEffectPrefab = SeamstressAssets.sewButcheredEffect;
-                this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
+                Util.PlaySound("Play_imp_overlord_teleport_end", base.gameObject);
+                UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.weaveDashOnKill, transform);
                 Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false, removeCooldownBuffs: true, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
             }
             else
             {
                this.projectilePrefab = SeamstressAssets.needlePrefab;
-                this.swingEffectPrefab = SeamstressAssets.sewEffect;
-                this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             }
             if(!base.characterMotor.isGrounded)
             {
                 SmallHop(base.characterMotor, 6f);
             }
+            PlayAttackAnimation();
             base.OnEnter();
-
-        }
-        protected override void OnHitEnemyAuthority()
-        {
-            base.OnHitEnemyAuthority();
+            ProjectileManager.instance.FireProjectile(projectilePrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
+            Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
         }
         public override void FixedUpdate()
         {
@@ -96,29 +69,7 @@ namespace SeamstressMod.SkillStates
                 base.characterBody.AddBuff(SeamstressBuffs.needles);
             }
         }
-        protected override void FireAttack()
-        {
-            if (isAuthority)
-            {
-                if (attack.Fire())
-                {
-                    OnHitEnemyAuthority();
-                }
-            }
-        }
-        protected override void PlaySwingEffect()
-        {
-            if (!swingEffectPrefab)
-            {
-                return;
-            }
-            Transform transform = FindModelChild(this.muzzleString);
-            if ((bool)transform)
-            {
-                UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
-            }
-        }
-        protected override void PlayAttackAnimation()
+        protected void PlayAttackAnimation()
         {
             PlayCrossfade("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", this.duration, 0.1f * duration);
         }

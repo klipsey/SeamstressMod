@@ -68,30 +68,32 @@ namespace SeamstressMod.SkillStates
             if(empowered) hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             else hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             this.overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
-            this.overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesKill);
+            this.overlapAttack.AddModdedDamageType(DamageTypes.CutDamage);
             if (empowered)
             {
                 Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDashButchered;
+                this.overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesDamage);
                 //overlapAttack.damageType |= DamageType.BleedOnHit;
-                this.overlapAttack.damageType = DamageType.BonusToLowHealth;
-                this.overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeakWeave);
-                this.overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
+                //this.overlapAttack.damageType = DamageType.BonusToLowHealth;
+                //this.overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeakWeave);
+                //this.overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_imp_overlord_impact";
             }
             else
             {
                 Util.PlaySound("Play_merc_m2_uppercut", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDash;
-                this.overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeave);
-                this.overlapAttack.AddModdedDamageType(DamageTypes.ResetWeakWeave);
+                this.overlapAttack.RemoveModdedDamageType(DamageTypes.AddNeedlesDamage);
+                //this.overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeave);
+                //this.overlapAttack.AddModdedDamageType(DamageTypes.ResetWeakWeave);
                 hitSound = "Play_bandit2_m2_impact";
             }
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration + dashPrepDuration);
         }
         public void CreateDashEffect()
         {
-            Transform transform = childLocator.FindChild("WeaveCenter");
+            Transform transform = childLocator.FindChild("CharacterCenter");
             if ((bool)transform && (bool)dashPrefab)
             {
                 Object.Instantiate<GameObject>(dashPrefab, transform.position, Util.QuaternionSafeLookRotation(dashVector), transform);
@@ -155,7 +157,7 @@ namespace SeamstressMod.SkillStates
             {
                 base.characterMotor.disableAirControlUntilCollision = false;
                 base.characterMotor.airControl = 0.25f;
-                base.characterMotor.velocity *= 0.75f;
+                base.characterMotor.velocity *= 0.1f;
                 SmallHop(base.characterMotor, smallHopVelocity);
             }
             aimRequest?.Dispose();
