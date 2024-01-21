@@ -4,9 +4,9 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     public static class SeamstressStaticValues
     {
-        internal const float scissorsDamageCoefficient = 1.5f;
+        internal const float scissorsDamageCoefficient = 1.6f;
 
-        internal const float scissorsBonusDamageCoefficient = 1.8f;
+        internal const float scissorsBonusDamageCoefficient = 2f;
 
         internal const float sewDamageCoefficient = 4f;
 
