@@ -20,13 +20,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float cutCooldownReduction = 0.5f;
 
-        internal const float needleHealAmount = 0.5f;
+        internal const float needleHealAmount = 0.25f;
 
         internal const float healConversion = 0.5f;
 
         internal const int maxNeedleAmount = 10;
 
-        internal const float butcheredDuration = 5f;
+        internal const float butcheredDuration = 6f;
 
         internal const float passiveScaling = 0.05f;
 

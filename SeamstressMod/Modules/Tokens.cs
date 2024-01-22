@@ -22,7 +22,7 @@ namespace SeamstressMod.Modules
 
         public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";
 
-        public static string cutKeyword = KeywordText("Cut", $"Lower cooldowns by {SeamstressStaticValues.cutCooldownReduction} seconds. Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current <style=cIsHealth>health</style>");
+        public static string cutKeyword = KeywordText("Cut", $"Lower cooldowns by {SeamstressStaticValues.cutCooldownReduction} seconds. Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current <style=cIsHealth>health</style>.");
 
         public static string slayerKeyword = KeywordText("Slayer", "Deals up to <style=cIsDamage>3x</style> damage against low health enemies.");
 
@@ -34,7 +34,7 @@ namespace SeamstressMod.Modules
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 
-        public static string butcheredKeyword = KeywordText("Butchered", "Empower other abilities. Gain attack speed and movement speed. During " + Tokens.butcheredPrefix +  $" convert <style=cIsHealth>{100f * (1 - SeamstressStaticValues.healConversion)}%</style> into damage for " + Tokens.butcheredPrefix + " <style=cIsHealth>Sew</style>");
+        public static string butcheredKeyword = KeywordText("Butchered", "Empower other abilities. Gain attack speed and movement speed. During " + Tokens.butcheredPrefix +  $" convert <style=cIsHealing>{100f * (1 - SeamstressStaticValues.healConversion)}% of healing</style> into damage for <style=cIsHealth>Expunge</style>.");
         public static string DamageText(string text)
         {
             return $"<style=cIsDamage>{text}</style>";

@@ -101,6 +101,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     {
                         skillLocator.utility.ExecuteIfReady();
                     }
+                    skillLocator.utility.AddOneStock();
                     skillLocator.utility = skillLocator.FindSkill("Utility");
                 }
                 butcheredConversion = 0f;

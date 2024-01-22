@@ -1,23 +1,38 @@
 # Seamstress
 - BETA
-
+- Currently working on texturing, modeling, and animations
 ## Model Preview
 [![](https://media.discordapp.net/attachments/1119077461783748652/1198195533337067610/image.png?ex=65be058c&is=65ab908c&hm=57c4f3666bf793cd28c0e14c9224ac68294b078be3f71d5d14c14558f466d483&=&format=webp&quality=lossless&width=470&height=670)]()
 
 ## Overview
 Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. 
 
-Primary: swing scissor, cut damage 5% enemy current health and gain needle on third hit, more damage during utility buff (butchered) blah blah
-Trim is a consistent way to deal damage while full hp.
+- Passive: Stitched Heart
+Gain base damage for every 1 health missing. Certain ability conditions grant Needles.
 
-Secondary: dash forward regaining stock on kill and gain a needle on kill. butchered gives slayer and fully resets
-Weave is a basic dash on its own but with butcher it becomes devastating in groups.
+- Primary: Trim
+Agile. Slash in front for damage. Every 3rd hit grants you Needles and applies Cut. While Butchered, Trim deals increased damage.   
 
-Utility: 50% current health for some speedy buffs and butchered also gain needle
-Reap can give you incredible buffs through butcher but use it carefully, you could preemptively end your run.
+- Secondary: Weave 
+Cut. Dash forward, dealing damage. Reduce cooldown on kill. While Butchered, gain Needles on hit.
 
-Special: aoe damage and shoot all your needles and stuff
-Reap what you.. Sew? Use Sew to fire your needles to hit enemies from afar.
+- Utility: Reap
+50% hp. Stab your heart gaining Butchered and a Needle. Additionally Cleanse yourself. During Butchered, Reap becomes Expunge.
+
+- Special: Sew
+Cut. Expels Needles that each deal damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
+
+- Cut:
+Lower cooldowns by 0.5 seconds. Deal 5% (1.25% for bosses) of the enemies current health.
+
+- Needles:
+Hold up to 10 needles before autofiring them.
+
+- Butchered:
+Empower other abilites. Gain attack speed and movement speed. During Butchered, convert 50% of healing into damage for Sew.
+
+- Expunge:
+Expunge stored healing during Butchered as damage. (50% of healing)
 
 Please play my mod. I need to find bugs.
-Contact at discord: @tsuyoikenko
+Contact me on the modding discord server: https://discord.gg/A9wNKWE9Ww https://discord.com/channels/562704639141740588/1195084430876872866 @tsuyoikenko

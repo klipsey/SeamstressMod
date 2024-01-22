@@ -214,7 +214,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Weave",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
+                keywordTokens = new string[] { Tokens.cutKeyword, Tokens.butcheredKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
@@ -332,7 +332,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 20f,
+                baseRechargeInterval = 16f,
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,
