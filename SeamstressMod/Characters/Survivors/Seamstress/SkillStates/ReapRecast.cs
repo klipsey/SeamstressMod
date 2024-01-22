@@ -14,7 +14,6 @@ namespace SeamstressMod.SkillStates
         {
             this.RefreshState();
             this.hitboxGroupName = "Sew";
-            this.damageTotal = SeamstressStaticValues.sewDamageCoefficient;
             this.procCoefficient = 1f;
             this.pushForce = 300;
             this.bonusForce = Vector3.zero;
@@ -28,7 +27,7 @@ namespace SeamstressMod.SkillStates
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             this.earlyExitPercentTime = 0.2f;
 
-            this.hitStopDuration = 0f;
+            this.hitStopDuration = 0.25f;
             this.attackRecoil = 0f;
             this.hitHopVelocity = 0f;
             this.swingSoundString = "Play_voidman_m2_explode";
@@ -38,18 +37,11 @@ namespace SeamstressMod.SkillStates
             this.muzzleString = "SewCenter";
             this.moddedDamageType = DamageTypes.Empty;
             this.impactSound = SeamstressAssets.sewHitSoundEvent.index;
-            if (empowered)
-            {
-                this.swingEffectPrefab = SeamstressAssets.sewButcheredEffect;
-                this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-                this.isFlatDamage = true;
-                this.damageTotal = characterBody.GetComponent<SeamstressController>().butcheredConversion;
-            }
-            else
-            {
-                this.swingEffectPrefab = SeamstressAssets.sewEffect;
-                this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            }
+            this.swingEffectPrefab = SeamstressAssets.expungeEffect;
+            this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
+            this.isFlatDamage = true;
+            this.damageTotal = characterBody.GetComponent<SeamstressController>().butcheredConversion;
+            
             if (!base.characterMotor.isGrounded)
             {
                 SmallHop(base.characterMotor, 6f);

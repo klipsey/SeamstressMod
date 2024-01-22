@@ -50,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
             maxHealth = 180f,
             healthRegen = 1f,
             armor = 0f,
-            damage = 10f,
+            damage = 12f,
 
             damageGrowth = 0f,
             healthGrowth = 160f * 0.3f,
@@ -328,7 +328,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
                 //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
-                activationStateMachineName = "Weapon",
+                activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,

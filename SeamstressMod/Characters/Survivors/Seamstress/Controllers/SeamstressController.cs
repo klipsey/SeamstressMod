@@ -104,7 +104,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     skillLocator.utility.AddOneStock();
                     skillLocator.utility = skillLocator.FindSkill("Utility");
                 }
-                butcheredConversion = 0f;
+                butcheredConversion = characterBody.damage * 0.2f;
                 butchered = false;
                 skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
                 skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
@@ -121,7 +121,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public void CalculateBonusDamage()
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
-            characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
+            characterBody.baseDamage = 12f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
         public void Unhook()
         {

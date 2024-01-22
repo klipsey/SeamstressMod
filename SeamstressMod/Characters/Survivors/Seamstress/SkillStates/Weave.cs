@@ -74,9 +74,7 @@ namespace SeamstressMod.SkillStates
                 Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDashButchered;
                 this.overlapAttack.AddModdedDamageType(DamageTypes.AddNeedlesDamage);
-                //overlapAttack.damageType |= DamageType.BleedOnHit;
-                //this.overlapAttack.damageType = DamageType.BonusToLowHealth;
-                //this.overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeakWeave);
+                this.overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeakWeave);
                 //this.overlapAttack.AddModdedDamageType(DamageTypes.ResetWeave);
                 hitSound = "Play_imp_overlord_impact";
             }
@@ -86,7 +84,7 @@ namespace SeamstressMod.SkillStates
                 dashPrefab = SeamstressAssets.weaveDash;
                 this.overlapAttack.RemoveModdedDamageType(DamageTypes.AddNeedlesDamage);
                 //this.overlapAttack.RemoveModdedDamageType(DamageTypes.ResetWeave);
-                //this.overlapAttack.AddModdedDamageType(DamageTypes.ResetWeakWeave);
+                this.overlapAttack.AddModdedDamageType(DamageTypes.ResetWeakWeave);
                 hitSound = "Play_bandit2_m2_impact";
             }
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration + dashPrepDuration);

@@ -34,7 +34,7 @@ namespace SeamstressMod.Modules
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 
-        public static string butcheredKeyword = KeywordText("Butchered", "Empower other abilities. Gain attack speed and movement speed. During " + Tokens.butcheredPrefix +  $" convert <style=cIsHealing>{100f * (1 - SeamstressStaticValues.healConversion)}% of healing</style> into damage for <style=cIsHealth>Expunge</style>.");
+        public static string butcheredKeyword = KeywordText("Butchered", "Empower other abilities. Gain attack speed and movement speed. During " + Tokens.butcheredPrefix +  $" convert <style=cIsHealing>{100f * (1 - SeamstressStaticValues.healConversion)}% of healing</style> into damage for <style=cDeath>Expunge</style>.");
         public static string DamageText(string text)
         {
             return $"<style=cIsDamage>{text}</style>";

@@ -10,20 +10,16 @@ namespace SeamstressMod.Survivors.Seamstress
     public class DamageTypes
     {
         public static DamageAPI.ModdedDamageType CutDamage;
-        public static DamageAPI.ModdedDamageType CutDamageNeedle;
         public static DamageAPI.ModdedDamageType AddNeedlesKill;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
-        public static DamageAPI.ModdedDamageType ResetWeave;
         public static DamageAPI.ModdedDamageType ResetWeakWeave;
         public static DamageAPI.ModdedDamageType Empty;
         internal static void Init()
         {
             Empty = DamageAPI.ReserveDamageType();
             CutDamage = DamageAPI.ReserveDamageType();
-            CutDamageNeedle = DamageAPI.ReserveDamageType();
             AddNeedlesKill = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
-            ResetWeave = DamageAPI.ReserveDamageType();
             ResetWeakWeave = DamageAPI.ReserveDamageType();
             Hook();
         }
@@ -64,12 +60,20 @@ namespace SeamstressMod.Survivors.Seamstress
                         ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
                     }
                 }
-                if (damageInfo.HasModdedDamageType(CutDamage) || damageInfo.HasModdedDamageType(CutDamageNeedle))
+                if (damageInfo.HasModdedDamageType(CutDamage))
                 {
-                    attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
-                    attacker.skillLocator.utility.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
-                    attacker.skillLocator.special.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
-
+                    if (attacker.skillLocator.secondary.stock != attacker.skillLocator.secondary.maxStock && attacker.skillLocator.secondary.rechargeStock != 0)
+                    {
+                        attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
+                    }
+                    if (attacker.skillLocator.utility.stock != attacker.skillLocator.utility.maxStock && attacker.skillLocator.utility.rechargeStock != 0)
+                    {
+                        attacker.skillLocator.utility.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
+                    }
+                    if (attacker.skillLocator.special.stock != attacker.skillLocator.special.maxStock && attacker.skillLocator.special.rechargeStock != 0)
+                    {
+                        attacker.skillLocator.special.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
+                    }
                     if (damageReport.victimIsBoss)
                     {
                         DamageInfo cut = new DamageInfo
@@ -135,7 +139,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 /*
                 if (damageInfo.HasModdedDamageType(ResetWeave))
-                {
+                {2
                     attacker.skillLocator.secondary.Reset();
                     if ((bool)transform && (bool)SeamstressAssets.weaveDashOnKill)
                     {
@@ -146,8 +150,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 */
                 if (damageInfo.HasModdedDamageType(ResetWeakWeave))
                 {
-                    attacker.skillLocator.secondary.rechargeStopwatch = attacker.skillLocator.secondary.cooldownRemaining * 0.75f;
-                    if ((bool)transform && (bool)SeamstressAssets.weaveDashOnKill)
+                    attacker.skillLocator.secondary.rechargeStopwatch += attacker.skillLocator.secondary.cooldownRemaining * SeamstressStaticValues.killRefund;
+                    if ((bool)transform && (bool)SeamstressAssets.expungeEffect)
                     {
                         Util.PlaySound("Play_merc_shift_end", attackerObject);
                     }

@@ -26,12 +26,13 @@ namespace SeamstressMod.SkillStates
             {
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                 Util.PlaySound("Play_imp_overlord_teleport_end", base.gameObject);
-                UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.weaveDashOnKill, transform);
+                UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.sewButcheredEffect, transform);
                 Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false, removeCooldownBuffs: true, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
             }
             else
             {
-               this.projectilePrefab = SeamstressAssets.needlePrefab;
+                UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.sewEffect, transform);
+                this.projectilePrefab = SeamstressAssets.needlePrefab;
             }
             if(!base.characterMotor.isGrounded)
             {
