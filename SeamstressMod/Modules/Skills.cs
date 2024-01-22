@@ -2,10 +2,12 @@
 using RoR2;
 using RoR2.Skills;
 using System;
+using R2API;
 using System.Collections.Generic;
 using SeamstressMod;
 using UnityEngine;
 using SeamstressMod.Survivors.Seamstress;
+using SeamstressMod.SkillStates;
 
 namespace SeamstressMod.Modules
 {
@@ -18,19 +20,6 @@ namespace SeamstressMod.Modules
         /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
         /// <param name="destroyExisting">Destroy any existing GenericSkills on the body prefab so you can replace them?</param>
         public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting = true) => CreateSkillFamilies(targetPrefab, destroyExisting, SkillSlot.Primary, SkillSlot.Secondary, SkillSlot.Utility, SkillSlot.Special);
-        /// <summary>
-        /// Destroy existing GenericSkills, create in order the GenericSkills for the skillslots desired, and create skillfamilies for them.
-        /// </summary>
-        /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
-        /// <param name="slots">Order of slots to add to the body prefab. Input SkillSlot.None to create a GenericSkill on the prefab outside of usual 4. For example, mul-t's selectable second primary, a selectable passive like acrid, etc</param>
-        public static void CreateSkillFamilies(GameObject targetPrefab, params SkillSlot[] slots) => CreateSkillFamilies(targetPrefab, true, slots);
-
-        /// <summary>
-        /// Create in order the GenericSkills for the skillslots desired, and create skillfamilies for them.
-        /// </summary>
-        /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
-        /// <param name="destroyExisting">Destroy any existing GenericSkills on the body prefab so you can replace them?</param>
-        /// <param name="slots">Order of slots to add to the body prefab. <para>Input SkillSlot.None to create a GenericSkill on the prefab outside of usual 4. These will be called GenericSkill1, with the number being its order on the loadout screen</para><para>For example, mul-t's selectable second primary, a selectable passive like acrid, etc</para></param>
         public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting, params SkillSlot[] slots)
         {
             //should this even be a thing here
@@ -59,12 +48,8 @@ namespace SeamstressMod.Modules
                     case SkillSlot.Special:
                         skillLocator.special = CreateGenericSkillWithSkillFamily(targetPrefab, "Special");
                         break;
-                    case SkillSlot.None:
-                        CreateGenericSkillWithSkillFamily(targetPrefab, "GenericSkill" + i+1);
-                        break;
                 }
             }
-
         }
 
         public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, string familyName, bool hidden = false)

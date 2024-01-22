@@ -12,8 +12,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Modules.Content.AddEntityState(typeof(Reap));
 
-            Modules.Content.AddEntityState(typeof(Sew));
+            Modules.Content.AddEntityState(typeof(ReapRecast));
 
+            Modules.Content.AddEntityState(typeof(Sew));
         }
     }
 }

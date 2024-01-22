@@ -279,7 +279,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleFinder.flierAltitudeTolerance = Mathf.Infinity;
 
             ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = 0f;
+            needleHeal.fractionOfDamage = SeamstressStaticValues.needleHealAmount;
 
             ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
             needleController.procCoefficient = 0.3f;
@@ -337,7 +337,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleFinder.flierAltitudeTolerance = Mathf.Infinity;
 
             ProjectileHealOwnerOnDamageInflicted needleHeal = needleButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = 0f;
+            needleHeal.fractionOfDamage = SeamstressStaticValues.needleHealAmount;
 
             ProjectileController needleController = needleButcheredPrefab.GetComponent<ProjectileController>();
             needleController.procCoefficient = 0.3f;

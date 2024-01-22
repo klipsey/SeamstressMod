@@ -18,7 +18,8 @@ namespace SeamstressMod.Modules.BaseStates
         protected DamageAPI.ModdedDamageType moddedDamageType = DamageTypes.Empty;
         protected DamageAPI.ModdedDamageType moddedDamageType2 = DamageTypes.Empty;
         protected DamageAPI.ModdedDamageType moddedDamageType3 = DamageTypes.Empty;
-        protected float damageCoefficient = 3.5f;
+        protected bool isFlatDamage = false;
+        protected float damageTotal = 3.5f;
         protected float procCoefficient = 1f;
         protected float pushForce = 300f;
         protected Vector3 bonusForce = Vector3.zero;
@@ -68,7 +69,8 @@ namespace SeamstressMod.Modules.BaseStates
             attack.attacker = gameObject;
             attack.inflictor = gameObject;
             attack.teamIndex = GetTeam();
-            attack.damage = damageCoefficient * damageStat;
+            if (!isFlatDamage) attack.damage = damageTotal * base.damageStat;
+            else attack.damage = damageTotal;
             attack.procCoefficient = procCoefficient;
             attack.hitEffectPrefab = hitEffectPrefab;
             attack.forceVector = bonusForce;

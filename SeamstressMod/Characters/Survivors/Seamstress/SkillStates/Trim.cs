@@ -17,7 +17,7 @@ namespace SeamstressMod.SkillStates
             this.RefreshState();
             this.hitboxGroupName = "Sword";
             this.damageType = DamageType.Generic;
-            this.damageCoefficient = SeamstressStaticValues.scissorsDamageCoefficient;
+            this.damageTotal = SeamstressStaticValues.scissorsDamageCoefficient;
             this.procCoefficient = 1f;
             this.pushForce = 300f;
             this.bonusForce = Vector3.zero;
@@ -53,7 +53,7 @@ namespace SeamstressMod.SkillStates
             }
             if (empowered)
             {
-                this.damageCoefficient = SeamstressStaticValues.scissorsBonusDamageCoefficient;
+                this.damageTotal = SeamstressStaticValues.scissorsBonusDamageCoefficient;
                 this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             }

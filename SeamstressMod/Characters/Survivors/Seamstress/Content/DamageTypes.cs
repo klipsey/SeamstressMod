@@ -35,7 +35,7 @@ namespace SeamstressMod.Survivors.Seamstress
         private static void GlobalEventManager_onServerDamageDealt(DamageReport damageReport)
         {
             DamageInfo damageInfo = damageReport.damageInfo;
-            if (!damageInfo.attacker && !damageInfo.inflictor)
+            if (!damageReport.attacker)
             {
                 return;
             }
@@ -66,7 +66,9 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(CutDamage) || damageInfo.HasModdedDamageType(CutDamageNeedle))
                 {
+                    attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
                     attacker.skillLocator.utility.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
+                    attacker.skillLocator.special.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
 
                     if (damageReport.victimIsBoss)
                     {
@@ -83,12 +85,14 @@ namespace SeamstressMod.Survivors.Seamstress
                             procCoefficient = 0f
                         };
                         victim.TakeDamage(cut);
+                        /*
                         float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
                         if (lifeSteal > attacker.maxHealth * SeamstressStaticValues.maxCutHeal)
                         {
                             lifeSteal = attacker.maxHealth * SeamstressStaticValues.maxCutHeal;
                         }
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
+                        */
                     }
                     else
                     {
@@ -105,40 +109,44 @@ namespace SeamstressMod.Survivors.Seamstress
                             procCoefficient = 0f
                         };
                         victim.TakeDamage(cut);
+                        /*
                         float lifeSteal = cut.damage * SeamstressStaticValues.cutHealCoefficient;
                         if (lifeSteal > attacker.maxHealth * SeamstressStaticValues.maxCutHeal)
                         {
                             lifeSteal = attacker.maxHealth * SeamstressStaticValues.maxCutHeal;
                         }
                         attacker.healthComponent.Heal(lifeSteal, default(ProcChainMask));
+                        */
                     }
                 }
             }
         }
         private static void GlobalEventManager_onCharacterDeathGlobal(DamageReport damageReport)
         {
-            DamageInfo damageInfo = damageReport.damageInfo;
-            if (!damageInfo.attacker)
+            if (!damageReport.attackerBody)
             {
                 return;
             }
+            DamageInfo damageInfo = damageReport.damageInfo;
             CharacterBody attacker = damageReport.attacker.GetComponent<CharacterBody>();
             Transform transform = attacker.modelLocator.transform;
             GameObject attackerObject = attacker.gameObject;
             if (NetworkServer.active)
             {
+                /*
                 if (damageInfo.HasModdedDamageType(ResetWeave))
                 {
-                    attacker.skillLocator.utility.Reset();
+                    attacker.skillLocator.secondary.Reset();
                     if ((bool)transform && (bool)SeamstressAssets.weaveDashOnKill)
                     {
                         Util.PlaySound("Play_imp_overlord_teleport_end", attackerObject);
                         UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.weaveDashOnKill, transform);
                     }
                 }
+                */
                 if (damageInfo.HasModdedDamageType(ResetWeakWeave))
                 {
-                    attacker.skillLocator.utility.rechargeStopwatch = attacker.skillLocator.utility.cooldownRemaining * 0.75f;
+                    attacker.skillLocator.secondary.rechargeStopwatch = attacker.skillLocator.secondary.cooldownRemaining * 0.75f;
                     if ((bool)transform && (bool)SeamstressAssets.weaveDashOnKill)
                     {
                         Util.PlaySound("Play_merc_shift_end", attackerObject);

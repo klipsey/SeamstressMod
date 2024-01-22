@@ -22,9 +22,7 @@ namespace SeamstressMod.Modules
 
         public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";
 
-        public const string slayerPrefix = "<style=cIsDamage>Slayer</style>";
-
-        public static string cutKeyword = KeywordText("Cut", $"Lower cooldown of <style=cIsHealth>Weave</style> by {SeamstressStaticValues.cutCooldownReduction} seconds. Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current <style=cIsHealth>health</style> and <style=cIsHealing>heal for {100f * SeamstressStaticValues.cutHealCoefficient}%</style> of that amount. (Max <style=cIsHealing>5%</style> of your max <style=cIsHealth>health</style>)");
+        public static string cutKeyword = KeywordText("Cut", $"Lower cooldowns by {SeamstressStaticValues.cutCooldownReduction} seconds. Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current <style=cIsHealth>health</style>");
 
         public static string slayerKeyword = KeywordText("Slayer", "Deals up to <style=cIsDamage>3x</style> damage against low health enemies.");
 
@@ -36,7 +34,7 @@ namespace SeamstressMod.Modules
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 
-        public static string butcheredKeyword = KeywordText("Butchered", "Empower other abilities. Gain attack speed and movement speed.");
+        public static string butcheredKeyword = KeywordText("Butchered", "Empower other abilities. Gain attack speed and movement speed. During " + Tokens.butcheredPrefix +  $" convert <style=cIsHealth>{100f * (1 - SeamstressStaticValues.healConversion)}%</style> into damage for " + Tokens.butcheredPrefix + " <style=cIsHealth>Sew</style>");
         public static string DamageText(string text)
         {
             return $"<style=cIsDamage>{text}</style>";
