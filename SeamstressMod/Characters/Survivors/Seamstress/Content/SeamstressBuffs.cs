@@ -18,10 +18,10 @@ namespace SeamstressMod.Survivors.Seamstress
                 LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
                 Color.white,
                 false,
-                false);
+                false); 
             butchered = Modules.Content.CreateAndAddBuff("ButcheredBuff", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Bandit2/texBuffSuperBleedingIcon.tif").WaitForCompletion(), 
                 Color.red, false, false);
-            needles = Modules.Content.CreateAndAddBuff("Needles", Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/MoveSpeedOnKill/texBuffKillMoveSpeed.tif").WaitForCompletion(),
+            needles = Modules.Content.CreateAndAddBuff("Needles", assetBundle.LoadAsset<Sprite>("texNeedleBuffIcon"),
                 Color.white, true, false);
         }
     }

@@ -66,9 +66,9 @@ namespace SeamstressMod.Survivors.Seamstress
                     {
                         attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
                     }
-                    if (attacker.skillLocator.utility.stock != attacker.skillLocator.utility.maxStock && attacker.skillLocator.utility.rechargeStock != 0)
+                    if (attacker.skillLocator.FindSkill("Utility").stock != attacker.skillLocator.FindSkill("Utility").maxStock && attacker.skillLocator.FindSkill("Utility").rechargeStock != 0)
                     {
-                        attacker.skillLocator.utility.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
+                        attacker.skillLocator.FindSkill("Utility").rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction;
                     }
                     if (attacker.skillLocator.special.stock != attacker.skillLocator.special.maxStock && attacker.skillLocator.special.rechargeStock != 0)
                     {

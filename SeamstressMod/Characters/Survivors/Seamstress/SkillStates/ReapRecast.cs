@@ -37,11 +37,11 @@ namespace SeamstressMod.SkillStates
             this.muzzleString = "SewCenter";
             this.moddedDamageType = DamageTypes.Empty;
             this.impactSound = SeamstressAssets.sewHitSoundEvent.index;
-            this.swingEffectPrefab = SeamstressAssets.expungeEffect;
             this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             this.isFlatDamage = true;
             this.damageTotal = characterBody.GetComponent<SeamstressController>().butcheredConversion;
-            
+            UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeEffect, transform);
+
             if (!base.characterMotor.isGrounded)
             {
                 SmallHop(base.characterMotor, 6f);

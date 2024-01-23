@@ -41,7 +41,7 @@ namespace SeamstressMod.SkillStates
 
         private ChildLocator childLocator;
 
-        public static float hitPauseDuration = 0.012f;
+        public static float hitPauseDuration = 0.075f;
 
         private bool isDashing;
 
