@@ -5,6 +5,7 @@ using RoR2.Projectile;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using R2API;
+using RoR2.UI;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -69,6 +70,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             CreateProjectiles();
         }
+
 
         #region effects
         private static void CreateEffects()

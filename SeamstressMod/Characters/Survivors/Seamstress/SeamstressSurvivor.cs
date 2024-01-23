@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static RoR2.MasterSpawnSlotController;
+using RoR2.UI;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -18,7 +19,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public override string assetBundleName => "henryassets"; //if you do not change this, you are giving permission to deprecate the mod
 
         //the name of the prefab we will create. conventionally ending in "Body". must be unique
-        public override string bodyName => "Seamstress"; //if you do not change this, you get the point by now
+        public override string bodyName => "SeamstressBody"; //if you do not change this, you get the point by now
 
         //name of the ai master for vengeance and goobo. must be unique
         public override string masterName => "SeamstressMonsterMaster"; //if you do not
@@ -41,7 +42,7 @@ namespace SeamstressMod.Survivors.Seamstress
             subtitleNameToken = SEAMSTRESS_PREFIX + "SUBTITLE",
 
             characterPortrait = assetBundle.LoadAsset<Texture>("texHenryIcon"),
-            bodyColor = Color.white,
+            bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
             crosshair = Assets.LoadCrosshair("Standard"),
@@ -121,8 +122,11 @@ namespace SeamstressMod.Survivors.Seamstress
             InitializeSkins();
             InitializeCharacterMaster();
 
+            NeedleHUD.Init();
+
             AdditionalBodySetup();
 
+            
             AddHooks();
         }
 
@@ -133,7 +137,6 @@ namespace SeamstressMod.Survivors.Seamstress
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
         }
-
         public void AddHitboxes()
         {
             ChildLocator childLocator = characterModelObject.GetComponent<ChildLocator>();
