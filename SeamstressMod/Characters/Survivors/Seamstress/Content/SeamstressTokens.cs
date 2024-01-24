@@ -44,7 +44,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "Stitched Heart");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", "Gain <style=cIsDamage>0.05</style> base damage for every <style=cIsHealth>1</style> health missing. Certain ability conditions grant <style=cIsUtility>Needles</style>.");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{100f * SeamstressStaticValues.passiveScaling}% damage</style> base damage for every <style=cIsHealth>1</style> health missing. Certain ability conditions grant <style=cIsUtility>Needles</style>.");
             #endregion
 
             #region Primary
