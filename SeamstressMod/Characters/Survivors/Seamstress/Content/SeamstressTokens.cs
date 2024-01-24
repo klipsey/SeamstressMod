@@ -26,7 +26,7 @@ namespace SeamstressMod.Survivors.Seamstress
              + "< ! > Trim is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
              + "< ! > Weave is a basic dash on its own but with butcher it becomes devastating in groups." + Environment.NewLine + Environment.NewLine
              + "< ! > Threads Of Fate can give you incredible buffs through butcher but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
-             + "< ! > Threads Of Fate what you.. Sew? Use Sew to fire your needles to hit enemies from afar." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Use Sew to fire your needles to hit enemies from afar." + Environment.NewLine + Environment.NewLine;
 
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
@@ -44,34 +44,35 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "Stitched Heart");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", "Gain <style=cIsDamage>0.1</style> base damage for every <style=cIsHealth>1</style> health missing. Certain ability conditions grant <style=cIsUtility>Needles</style>.");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", "Gain <style=cIsDamage>0.05</style> base damage for every <style=cIsHealth>1</style> health missing. Certain ability conditions grant <style=cIsUtility>Needles</style>.");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. " +
-              "Every 3rd hit grants you <style=cIsUtility>Needles</style> and applies " + Tokens.cutPrefix + ". " + "While " + Tokens.butcheredPrefix + $", <color=#9B3737>Trim</color> deals <style=cIsDamage>{100f * SeamstressStaticValues.scissorsBonusDamageCoefficient}% damage</style>.");
+              "Every 3rd hit gain a <style=cIsUtility>Needles</style> and apply <color=#9B3737>Stitch</color>. " + "While " + Tokens.butcheredPrefix + $", <color=#9B3737>Trim</color> always applies " + Tokens.cutPrefix + ".");
             #endregion
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Weave");
-            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.cutPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style> reducing the cooldown on kill. " +
-                "While " + Tokens.butcheredPrefix + " gain <style=cIsUtility>Needles</style> on hit.");
+            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.cutPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>." +
+                " While " + Tokens.butcheredPrefix + ", <style=cIsHealing>heal for 20% of damage dealt</style>.");
             #endregion
 
             #region Utility
             Language.Add(prefix + "UTILITY_REAP_NAME", "Threads Of Fate");
-            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart gaining " + Tokens.butcheredPrefix + " and a " + Tokens.needlePrefix + 
-                ". Additionally, <style=cIsUtility>Cleanse</style> yourself. During " + 
-                Tokens.butcheredPrefix + ", <color=#9B3737>Threads Of Fate</color> becomes <color=#9B3737>Expunge</color>.");
+            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart gaining " + Tokens.butcheredPrefix + 
+                ". During " + Tokens.butcheredPrefix + ", <color=#9B3737>Threads Of Fate</color> becomes <color=#9B3737>Expunge</color>.");
+
             Language.Add(prefix + "UTILITY_EXPUNGE_NAME", "Expunge");
-            Language.Add(prefix + "UTILITY_EXPUNGE_DESCRIPTION", "Release stored <style=cIsHealing>healing</style> during " + Tokens.butcheredPrefix + " as <style=cIsDamage>damage</style>.");
+            Language.Add(prefix + "UTILITY_EXPUNGE_DESCRIPTION", "Release stored <style=cIsHealing>healing</style> that you converted " + Tokens.butcheredPrefix + " as <style=cIsDamage>damage</style>.");
             #endregion
 
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "Sew");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", Tokens.cutPrefix + $". Expels <style=cIsUtility>Needles</style> that deal <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage each</style> and <style=cIsHealing>heal for 50% of damage dealt</style>. While " + 
-                Tokens.butcheredPrefix + ", <style=cIsUtility>Needles</style> <color=#9B3737>Stitch</style> enemies.");
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"<color=#9B3737>Stitch</color>. Expels <style=cIsUtility>Needles</style> that deal <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage each</style> " +
+                $"and <style=cIsHealing>heal for 50% of damage dealt</style>. While " + 
+                Tokens.butcheredPrefix + ", <style=cIsUtility>Needles</style> <style=cIsUtility>Slow</style> enemies.");
             #endregion
 
             #region Achievements

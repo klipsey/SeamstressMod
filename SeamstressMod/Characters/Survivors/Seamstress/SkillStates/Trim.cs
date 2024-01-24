@@ -51,16 +51,11 @@ namespace SeamstressMod.SkillStates
                     this.muzzleString = "SwingCenter";
                     break;
             }
-            if (empowered)
-            {
-                this.damageTotal = SeamstressStaticValues.scissorsBonusDamageCoefficient;
-                this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
-                this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-            }
+
             if (isComboFinisher)
             {
                 this.earlyExitPercentTime = 1f;
-                this.moddedDamageType = DamageTypes.CutDamage;
+                this.moddedDamageType = DamageTypes.Stitched;
                 this.moddedDamageType2 = DamageTypes.AddNeedlesDamage;
                 this.swingSoundString = "Play_bandit2_m2_slash";
                 this.hitboxGroupName = "SwordBig";
@@ -69,6 +64,15 @@ namespace SeamstressMod.SkillStates
                 {
                     this.hitStopDuration = 0.15f;
                     this.swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
+                }
+            }
+            else
+            {
+                if (empowered)
+                {
+                    this.moddedDamageType = DamageTypes.CutDamage;
+                    this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
+                    this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
                 }
             }
 

@@ -10,6 +10,7 @@ namespace SeamstressMod.SkillStates
 {
     public class ReapRecast: BaseMeleeAttack
     {
+        SeamstressController controller;
         public override void OnEnter()
         {
             this.RefreshState();
@@ -46,7 +47,9 @@ namespace SeamstressMod.SkillStates
             {
                 SmallHop(base.characterMotor, 6f);
             }
+            controller = characterBody.GetComponent<SeamstressController>();
             base.OnEnter();
+            skillLocator.utility = skillLocator.FindSkill("Utility");
         }
         protected override void OnHitEnemyAuthority()
         {

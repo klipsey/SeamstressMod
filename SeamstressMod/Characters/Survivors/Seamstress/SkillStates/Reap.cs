@@ -26,7 +26,6 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false, removeCooldownBuffs: true, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
             reapPrefab = SeamstressAssets.reapBleedEffect;
             duration = baseDuration / attackSpeedStat;
             fireTime = firePercentTime * duration;
@@ -43,6 +42,11 @@ namespace SeamstressMod.SkillStates
             if (!base.characterMotor.isGrounded)
             {
                 SmallHop(base.characterMotor, 6f);
+            }
+            skillLocator.utility = skillLocator.FindSkill("reapRecast");
+            if (skillLocator.utility.stock == 0)
+            {
+                skillLocator.utility.AddOneStock();
             }
         }
         public override void FixedUpdate()
@@ -84,18 +88,6 @@ namespace SeamstressMod.SkillStates
                     }
                     base.characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
                     base.characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
-                    if (base.characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + base.skillLocator.special.maxStock - 1)
-                    {
-                        base.characterBody.AddBuff(SeamstressBuffs.needles);
-                    }
-                    else
-                    {
-                        GameObject projectilePrefab;
-                        Ray aimRay;
-                        aimRay = new Ray(base.characterBody.inputBank.aimOrigin, base.characterBody.inputBank.aimDirection);
-                        projectilePrefab = SeamstressAssets.needleButcheredPrefab;
-                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.characterBody.gameObject, base.characterBody.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.characterBody.RollCrit(), DamageColorIndex.Default, null, -1f);
-                    }
                 }
             }
         }
