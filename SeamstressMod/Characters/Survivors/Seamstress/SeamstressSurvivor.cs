@@ -117,6 +117,8 @@ namespace SeamstressMod.Survivors.Seamstress
             SeamstressAssets.Init(assetBundle);
             SeamstressBuffs.Init(assetBundle);
 
+            Dots.Init();
+
             InitializeEntityStateMachines();
             InitializeSkills();
             InitializeSkins();
@@ -186,6 +188,7 @@ namespace SeamstressMod.Survivors.Seamstress
             skillLocator.passiveSkill.skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME";
             skillLocator.passiveSkill.skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_DESCRIPTION";
             skillLocator.passiveSkill.icon = assetBundle.LoadAsset<Sprite>("texSpecialIcon");
+            skillLocator.passiveSkill.keywordToken = Tokens.needleKeyword;
         }
 
         private void AddPrimarySkills()
@@ -326,7 +329,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Sew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.cutKeyword, Tokens.butcheredKeyword, Tokens.needleKeyword },
+                keywordTokens = new string[] { Tokens.cutKeyword, Tokens.butcheredKeyword, Tokens.stitchKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),

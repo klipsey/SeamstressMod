@@ -24,6 +24,8 @@ namespace SeamstressMod.Modules
 
         public static string cutKeyword = KeywordText("Cut", $"Lower cooldowns by {SeamstressStaticValues.cutCooldownReduction} seconds. Deal <style=cIsDamage>{100f * SeamstressStaticValues.cutDamageCoefficient}%</style> (<style=cIsDamage>{100f * SeamstressStaticValues.cutBossDamageCoefficient}%</style> against bosses) of the enemies current <style=cIsHealth>health</style>.");
 
+        public static string stitchKeyword = KeywordText("Stitch", $"Slow enemies by <style=cIsUtility>50%</style>. Deals <style=cIsDamage>{100f * (2 * SeamstressStaticValues.stitchedDamage)}%</style> of the enemies current <style=cIsHealth>health</style> over 3 seconds.");
+        
         public static string slayerKeyword = KeywordText("Slayer", "Deals up to <style=cIsDamage>3x</style> damage against low health enemies.");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");

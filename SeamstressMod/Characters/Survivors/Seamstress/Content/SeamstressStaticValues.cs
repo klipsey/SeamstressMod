@@ -12,6 +12,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         //internal const float cutHealCoefficient = 1f;
 
+        internal const float stitchedDamage = 0.005f;
+
         internal const float cutBossDamageCoefficient = 0.0125f;
 
         internal const float cutDamageCoefficient = 0.05f;

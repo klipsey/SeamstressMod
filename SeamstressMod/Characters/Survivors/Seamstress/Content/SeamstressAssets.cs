@@ -316,9 +316,10 @@ namespace SeamstressMod.Survivors.Seamstress
             needleSimple.updateAfterFiring = true;
 
             ProjectileDamage needleDamage = needleButcheredPrefab.GetComponent<ProjectileDamage>();
-            needleDamage.damageType = DamageType.SlowOnHit;
+            needleDamage.damageType = DamageType.Generic;
             DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
             needleModdedDamage.Add(DamageTypes.CutDamage);
+            needleModdedDamage.Add(DamageTypes.Stitched);
 
             needleButcheredPrefab.AddComponent<ProjectileTargetComponent>();
             ProjectileSteerTowardTarget needleSteer = needleButcheredPrefab.AddComponent<ProjectileSteerTowardTarget>();

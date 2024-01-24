@@ -25,8 +25,8 @@ namespace SeamstressMod.Survivors.Seamstress
             string desc = "Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Trim is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
              + "< ! > Weave is a basic dash on its own but with butcher it becomes devastating in groups." + Environment.NewLine + Environment.NewLine
-             + "< ! > Reap can give you incredible buffs through butcher but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
-             + "< ! > Reap what you.. Sew? Use Sew to fire your needles to hit enemies from afar." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Threads Of Fate can give you incredible buffs through butcher but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
+             + "< ! > Threads Of Fate what you.. Sew? Use Sew to fire your needles to hit enemies from afar." + Environment.NewLine + Environment.NewLine;
 
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
@@ -60,9 +60,10 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Utility
-            Language.Add(prefix + "UTILITY_REAP_NAME", "Reap");
-            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart gaining " + Tokens.butcheredPrefix + " and a " + Tokens.needlePrefix + ". Additionally, <style=cIsUtility>Cleanse</style> yourself. During " + 
-                Tokens.butcheredPrefix + " <color=#9B3737>Reap</color> becomes <color=#9B3737>Expunge</color>.");
+            Language.Add(prefix + "UTILITY_REAP_NAME", "Threads Of Fate");
+            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart gaining " + Tokens.butcheredPrefix + " and a " + Tokens.needlePrefix + 
+                ". Additionally, <style=cIsUtility>Cleanse</style> yourself. During " + 
+                Tokens.butcheredPrefix + ", <color=#9B3737>Threads Of Fate</color> becomes <color=#9B3737>Expunge</color>.");
             Language.Add(prefix + "UTILITY_EXPUNGE_NAME", "Expunge");
             Language.Add(prefix + "UTILITY_EXPUNGE_DESCRIPTION", "Release stored <style=cIsHealing>healing</style> during " + Tokens.butcheredPrefix + " as <style=cIsDamage>damage</style>.");
             #endregion
@@ -70,7 +71,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "Sew");
             Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", Tokens.cutPrefix + $". Expels <style=cIsUtility>Needles</style> that deal <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage each</style> and <style=cIsHealing>heal for 50% of damage dealt</style>. While " + 
-                Tokens.butcheredPrefix + ", <style=cIsUtility>Needles</style> slow enemies.");
+                Tokens.butcheredPrefix + ", <style=cIsUtility>Needles</style> <color=#9B3737>Stitch</style> enemies.");
             #endregion
 
             #region Achievements

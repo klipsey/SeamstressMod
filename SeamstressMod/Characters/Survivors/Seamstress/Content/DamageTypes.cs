@@ -7,16 +7,18 @@ using UnityEngine.UIElements;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
-    public class DamageTypes
+    public static class DamageTypes
     {
         public static DamageAPI.ModdedDamageType CutDamage;
         public static DamageAPI.ModdedDamageType AddNeedlesKill;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
         public static DamageAPI.ModdedDamageType ResetWeakWeave;
+        public static DamageAPI.ModdedDamageType Stitched;
         public static DamageAPI.ModdedDamageType Empty;
         internal static void Init()
         {
             Empty = DamageAPI.ReserveDamageType();
+            Stitched = DamageAPI.ReserveDamageType();
             CutDamage = DamageAPI.ReserveDamageType();
             AddNeedlesKill = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
@@ -36,10 +38,16 @@ namespace SeamstressMod.Survivors.Seamstress
                 return;
             }
             HealthComponent victim = damageReport.victim;
+            CharacterBody victimBody = damageReport.victimBody;
             CharacterBody attacker = damageReport.attackerBody;
             GameObject attackerObject = damageReport.attacker.gameObject;
             if (NetworkServer.active)
             {
+                if(damageInfo.HasModdedDamageType(Stitched))
+                {
+                    victimBody.AddTimedBuff(RoR2Content.Buffs.Slow50, 3f);
+                    DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, 3f, 1f);
+                }
                 if(damageInfo.HasModdedDamageType(AddNeedlesDamage))
                 {
                     if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + attacker.skillLocator.special.maxStock - 1)
