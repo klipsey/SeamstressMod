@@ -43,6 +43,7 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject reapBleedEffect;
 
         internal static GameObject reapEndEffect;
+        //Colors?
         // particle effects
 
         // networked hit sounds
@@ -254,13 +255,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileSimple needleSimple = needlePrefab.GetComponent<ProjectileSimple>();
             needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 2f;
+            needleSimple.lifetime = 3f;
             needleSimple.updateAfterFiring = true;
             
             ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
             needleDamage.damageType = DamageType.Generic;
             DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needlePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
-            needleModdedDamage.Add(DamageTypes.CutDamage);
+            needleModdedDamage.Add(DamageTypes.Stitched);
 
             needlePrefab.AddComponent<ProjectileTargetComponent>();
             ProjectileSteerTowardTarget needleSteer = needlePrefab.AddComponent<ProjectileSteerTowardTarget>();
@@ -312,13 +313,12 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileSimple needleSimple = needleButcheredPrefab.GetComponent<ProjectileSimple>();
             needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 2f;
+            needleSimple.lifetime = 3f;
             needleSimple.updateAfterFiring = true;
 
             ProjectileDamage needleDamage = needleButcheredPrefab.GetComponent<ProjectileDamage>();
-            needleDamage.damageType = DamageType.Generic;
+            needleDamage.damageType = DamageType.SlowOnHit;
             DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
-            needleModdedDamage.Add(DamageTypes.CutDamage);
             needleModdedDamage.Add(DamageTypes.Stitched);
 
             needleButcheredPrefab.AddComponent<ProjectileTargetComponent>();

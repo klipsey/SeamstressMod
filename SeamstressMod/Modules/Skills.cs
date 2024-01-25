@@ -232,7 +232,7 @@ namespace SeamstressMod.Modules
 
             this.cancelSprintingOnActivation = !agile;
 
-            if (agile) this.keywordTokens = new string[] { Tokens.agileKeyword, Tokens.cutKeyword, Tokens.butcheredKeyword };
+            if (agile) this.keywordTokens = new string[] { Tokens.agileKeyword, Tokens.cutKeyword, Tokens.butcheredKeyword, Tokens.stitchKeyword };
             this.interruptPriority = InterruptPriority.Any;
             this.isCombatSkill = true;
             this.baseRechargeInterval = 0;
