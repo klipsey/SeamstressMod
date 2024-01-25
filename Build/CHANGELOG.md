@@ -2,4 +2,10 @@
 - Added Stitch. Stitch deals missing hp damage over time and lower cooldowns by 0.5 seconds on hit.
     - Changed Needle damage to Stitch damage.
     - Changed Trim final hit to Stitch damage.
+- Changed Cut to additionally give Needles on hit
 - Changed Trim butchered effect to gain Cut on the first and second strike
+- Changed Weave butchered effect to 20% life steal
+- Expunge works now...
+- Nerfed Needle damage to 50% and buffed healing to 50%
+- Added Needle count to crosshair as a new UI
+- idk probably some other stuff I forgot
