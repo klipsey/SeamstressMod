@@ -1,6 +1,8 @@
+# 0.0.9
+- missed crucial changes in text
 # 0.0.8
-- Stitch changed to "Deal 100% damage. Apply Stitched which deals 0.5% (0.25% against bosses) of the enemies missing health over 4 seconds.
-- Cut changed to "Consume Stitch dealing 2% of the enemies missing health per Stitched. Lower cooldowns by 1 seconds per Stitched consumed.
+- Stitch changed to "Deal 100% damage. Apply Stitched which deals 0.5% (0.25% against bosses) of the enemies missing health over 4 seconds".
+- Cut changed to "Consume Stitch dealing 2% of the enemies missing health per Stitched. Lower cooldowns by 1 seconds per Stitched consumed".
     - Note: Enemies killed with stitched will give you the cooldown you should have gotten.
 - Added gain a needle on cut to passive.
 - Changed Trim butchered effect to gain Stitch on the first and second strike. Third strike additionally Cuts.

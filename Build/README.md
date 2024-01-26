@@ -10,37 +10,38 @@
 Seamstress is a mobile survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. 
 
 # Skills
-Passive: **Stitched Heart**
+Passive: **Corrupted Heart**
 ---
 - Gain base damage for every 1 health missing. Certain ability conditions grant Needles.
 
 Primary: **Trim**
 ---
-- Agile. Slash in front for damage. Every 3rd hit grants you Needles and applies Cut. While Butchered, Trim deals increased damage.   
+- Agile. Slash in front for damage. Every 3rd hit grants you Needles and applies Stitch. While Butchered, Trim deals Stitched and the 3rd hit Cuts   
 
 Secondary: **Weave** 
 ---
-- Cut. Dash forward, dealing damage. Reduce cooldown on kill. While Butchered, gain Needles on hit.
+- Cut. Dash forward, dealing damage. While Butchered, gain 20% lifesteal.
 
-Utility: **Reap**
+Utility: **Threads of Fate**
 ---
-- 50% hp. Stab your heart gaining Butchered and a Needle. Additionally, Cleanse yourself. During Butchered, Reap becomes Expunge.
+- 50% hp. Stab your heart gaining Butchered. During Butchered, Reap becomes Expunge.
 
 Special: **Sew**
 ---
-- Cut. Expels Needles that each deal damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
-
-- Cut
-Lower cooldowns by 0.5 seconds. Deal 5% (1.25% for bosses) of the enemy's current health.
+- Cut. Expels Needles. Hold up to ten before autofiring
 
 - Needles:
-Hold up to 10 needles before autofiring them.
+ Stitch. Firing piercing Needles that each deal damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
+
+- Stitch. Deal 100% damage. Apply Stitched which deals 0.5% (0.25% against bosses) of the enemies missing health over 4 seconds.
+
+- Cut: Consume Stitch dealing 2% of the enemies missing health per Stitched. Lower cooldowns by 1 seconds per Stitched consumed.
 
 - Butchered:
-Empower other abilities. Gain attack speed and movement speed. During Butchered, convert 50% of healing into damage for Sew.
+Empower other abilities. Gain attack speed and movement speed. During Butchered, convert 50% of healing into damage for Expunge.
 
 - Expunge:
-Expunge stored healing during Butchered as damage in an area. (50% of healing)
+Cut. Expunge stored healing during Butchered as damage in an area. (50% of healing)
 
 Please play my mod. I need to find bugs.
 Contact me on the modding discord server: https://discord.gg/A9wNKWE9Ww https://discord.com/channels/562704639141740588/1195084430876872866 @tsuyoikenko
