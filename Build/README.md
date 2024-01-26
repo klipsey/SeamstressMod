@@ -56,4 +56,4 @@ Gemo - Eclipse/Monsoon skin model (Raven) and all the rigging.
 
 Feilong - Seamstress skin designer (Raven) and permission to use the assets.
 
-Starcounter, PartyManiac - Valuable testing that helped cleanup the gameplay.
+Tino, PartyManiac, shitter, KoalaWells - Valuable feedback that helped cleanup the gameplay and model.

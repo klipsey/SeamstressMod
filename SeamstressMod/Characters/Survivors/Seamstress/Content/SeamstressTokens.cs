@@ -44,20 +44,20 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "Corrupted Heart");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{100f * SeamstressStaticValues.passiveScaling}% damage</style> base damage for every <style=cIsHealth>1</style> health missing. Certain ability conditions grant <style=cIsUtility>Needles</style>.");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{100f * SeamstressStaticValues.passiveScaling}% damage</style> base damage for every <style=cIsHealth>1</style> health missing. Gain <style=cIsUtility>Needles</style> on " + Tokens.cutPrefix + ".");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. " +
               "Every 3rd hit applies " + Tokens.stitchPrefix + ". While " + Tokens.butcheredPrefix + 
-              $", the first two slashes apply " + Tokens.stitchPrefix + " and the third hit applies " + Tokens.cutPrefix);
+              $", the first two slashes apply " + Tokens.stitchPrefix + ".");
             #endregion
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Weave");
             Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.cutPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>." +
-                " While " + Tokens.butcheredPrefix + ", applying <style=cIsHealing>heal for 20% of damage dealt</style>.");
+                " While " + Tokens.butcheredPrefix + ", <style=cIsHealing>heal for 20% of damage dealt</style>.");
             #endregion
 
             #region Utility
@@ -71,9 +71,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "Sew");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", Tokens.stitchPrefix + $". Expel <style=cIsUtility>Needles</style> that pierce for <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage</style>  each. " +
-                $"<style=cIsHealing>Heal you for {100f * SeamstressStaticValues.needleHealAmount} of the damage dealt</style>. While " + 
-                Tokens.butcheredPrefix + ", <style=cIsUtility>Needles</style> <style=cIsUtility>Slow</style> enemies.");
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <style=cIsUtility>Needles</style>. Hold up to 10 <style=cIsUtility>Needles</style> before auto firing needles.");
             #endregion
 
             #region Achievements

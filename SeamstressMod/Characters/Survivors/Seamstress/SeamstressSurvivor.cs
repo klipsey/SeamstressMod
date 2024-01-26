@@ -51,7 +51,7 @@ namespace SeamstressMod.Survivors.Seamstress
             maxHealth = 180f,
             healthRegen = 1f,
             armor = 0f,
-            damage = 12f,
+            damage = 8f,
 
             damageGrowth = 0f,
             healthGrowth = 160f * 0.3f,
@@ -202,8 +202,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     SEAMSTRESS_PREFIX + "PRIMARY_TRIM_DESCRIPTION",
                     assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
                     new EntityStates.SerializableEntityStateType(typeof(SkillStates.Trim)),
-                    "Weapon",
-                    true, true
+                    "Weapon"
                 ));
             //custom Skilldefs can have additional fields that you can set manually
             trimSkillDef.stepCount = 3;
@@ -220,14 +219,14 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Weave",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.cutKeyword, Tokens.butcheredKeyword },
+                keywordTokens = new string[] { Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 4f,
+                baseRechargeInterval = 5f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -264,7 +263,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 8f,
+                baseRechargeInterval = 14f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -292,12 +291,12 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Expunge",
                 skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.butcheredKeyword },
+                keywordTokens = new string[] { Tokens.stitchKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
                 activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                interruptPriority = EntityStates.InterruptPriority.Vehicle,
 
                 baseRechargeInterval = 0f,
                 baseMaxStock = 1,
@@ -314,7 +313,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,
-                cancelSprintingOnActivation = true,
+                cancelSprintingOnActivation = false,
                 forceSprintDuringState = false,
             });
 
@@ -329,7 +328,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Sew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.butcheredKeyword, Tokens.sewHelp },
+                keywordTokens = new string[] { Tokens.sewHelp, Tokens.needleKeyword, Tokens.stitchKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
@@ -338,7 +337,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 12f,
+                baseRechargeInterval = 18f,
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,

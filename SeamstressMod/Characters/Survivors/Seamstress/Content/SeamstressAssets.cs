@@ -76,7 +76,9 @@ namespace SeamstressMod.Survivors.Seamstress
         #region effects
         private static void CreateEffects()
         {
-            stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/SuperBleedEffect.prefab").WaitForCompletion();
+            stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion();
+            ParticleSystem.MainModule derp = stitchEffect.transform.GetChild(0).GetComponent<ParticleSystem>().main;
+            derp.startColor = new Color(155f / 255f, 55f / 255f, 55f / 255f);
 
             butcheredOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
 
@@ -98,16 +100,16 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsButcheredComboSwingEffect.AddComponent<NetworkIdentity>();
             scissorsButcheredComboSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
             scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            ParticleSystem.MainModule main = scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
-            main.startLifetimeMultiplier = 0.1f;
+            //ParticleSystem.MainModule main = scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+            //main.startLifetimeMultiplier = 0.1f;
             scissorsButcheredComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 1f;
             UnityEngine.Object.Destroy(scissorsButcheredComboSwingEffect.GetComponent<EffectComponent>());
             //final hit
             scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing4");
             scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
             scissorsComboSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
-            ParticleSystem.MainModule main2 = scissorsComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
-            main2.startLifetimeMultiplier = 0.1f;
+            //ParticleSystem.MainModule main2 = scissorsComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+            //main2.startLifetimeMultiplier = 0.1f;
             scissorsComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 1f;
             UnityEngine.Object.Destroy(scissorsComboSwingEffect.GetComponent<EffectComponent>());
 
@@ -256,7 +258,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileSimple needleSimple = needlePrefab.GetComponent<ProjectileSimple>();
             needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 3f;
+            needleSimple.lifetime = 2f;
             needleSimple.updateAfterFiring = true;
             
             ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
@@ -274,7 +276,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileDirectionalTargetFinder needleFinder = needlePrefab.AddComponent<ProjectileDirectionalTargetFinder>();
             needleFinder.lookRange = 35f;   
-            needleFinder.lookCone = 110f;   
+            needleFinder.lookCone = 90f;   
             needleFinder.targetSearchInterval = 0.2f;
             needleFinder.onlySearchIfNoTarget = false;
             needleFinder.allowTargetLoss = true;
@@ -315,14 +317,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileSimple needleSimple = needleButcheredPrefab.GetComponent<ProjectileSimple>();
             needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 3f;
+            needleSimple.lifetime = 2f;
             needleSimple.updateAfterFiring = true;
 
             ProjectileDamage needleDamage = needleButcheredPrefab.GetComponent<ProjectileDamage>();
             needleDamage.damageType = DamageType.SlowOnHit;
             DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
             needleModdedDamage.Add(DamageTypes.StitchDamage);
-            needleModdedDamage.Add(DamageTypes.CutDamage);
 
             needleButcheredPrefab.AddComponent<ProjectileTargetComponent>();
             ProjectileSteerTowardTarget needleSteer = needleButcheredPrefab.AddComponent<ProjectileSteerTowardTarget>();
@@ -331,10 +332,11 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileOverlapAttack needleLap = needleButcheredPrefab.GetComponent<ProjectileOverlapAttack>();
             needleLap.resetInterval = 0.5f;
+            needleLap.overlapProcCoefficient = 0.3f;
 
             ProjectileDirectionalTargetFinder needleFinder = needleButcheredPrefab.AddComponent<ProjectileDirectionalTargetFinder>();
             needleFinder.lookRange = 35f;   
-            needleFinder.lookCone = 110f;    
+            needleFinder.lookCone = 90f;    
             needleFinder.targetSearchInterval = 0.2f;
             needleFinder.onlySearchIfNoTarget = false;
             needleFinder.allowTargetLoss = true;

@@ -61,7 +61,7 @@ namespace SeamstressMod.SkillStates
                 this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                 if (empowered)
                 {
-                    this.moddedDamageType = DamageTypes.CutDamage;
+                    this.moddedDamageType2 = DamageTypes.CutDamage;
                     this.hitStopDuration = 0.15f;
                     this.swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
                 }

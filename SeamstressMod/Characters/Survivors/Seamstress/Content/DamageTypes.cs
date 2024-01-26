@@ -58,7 +58,7 @@ namespace SeamstressMod.Survivors.Seamstress
                         attacker = damageInfo.attacker,
                         crit = false,
                         force = Vector3.zero,
-                        inflictor = damageInfo.inflictor,
+                        inflictor = null,
                         position = damageInfo.position,
                         procCoefficient = 0f
                     };
@@ -93,6 +93,18 @@ namespace SeamstressMod.Survivors.Seamstress
                         for (int i = 0; i < victimBody.GetBuffCount(SeamstressBuffs.stitched); i++)
                         {
                             victim.TakeDamage(cutsume);
+                            if (attacker.skillLocator.secondary.stock != attacker.skillLocator.secondary.maxStock && attacker.skillLocator.secondary.rechargeStock != 0)
+                            {
+                                attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
+                            }
+                            if (attacker.skillLocator.FindSkill("Utility").stock != attacker.skillLocator.FindSkill("Utility").maxStock && attacker.skillLocator.FindSkill("Utility").rechargeStock != 0)
+                            {
+                                attacker.skillLocator.FindSkill("Utility").rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
+                            }
+                            if (attacker.skillLocator.special.stock != attacker.skillLocator.special.maxStock && attacker.skillLocator.special.rechargeStock != 0)
+                            {
+                                attacker.skillLocator.special.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
+                            }
                         }
                         DotController hi = DotController.FindDotController(victimBody.gameObject);
                         List<PendingDamage> list = CollectionPool<PendingDamage, List<PendingDamage>>.RentCollection();
@@ -115,19 +127,6 @@ namespace SeamstressMod.Survivors.Seamstress
                                     }
                                 }
                             }
-                        }
-                        
-                        if (attacker.skillLocator.secondary.stock != attacker.skillLocator.secondary.maxStock && attacker.skillLocator.secondary.rechargeStock != 0)
-                        {
-                            attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
-                        }
-                        if (attacker.skillLocator.FindSkill("Utility").stock != attacker.skillLocator.FindSkill("Utility").maxStock && attacker.skillLocator.FindSkill("Utility").rechargeStock != 0)
-                        {
-                            attacker.skillLocator.FindSkill("Utility").rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
-                        }
-                        if (attacker.skillLocator.special.stock != attacker.skillLocator.special.maxStock && attacker.skillLocator.special.rechargeStock != 0)
-                        {
-                            attacker.skillLocator.special.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
                         }
                     }
 
@@ -183,25 +182,28 @@ namespace SeamstressMod.Survivors.Seamstress
                 return;
             }
             DamageInfo damageInfo = damageReport.damageInfo;
-            CharacterBody victim = damageReport.victimBody;
+            CharacterBody victimBody = damageReport.victimBody;
             CharacterBody attacker = damageReport.attacker.GetComponent<CharacterBody>();
-            Transform transform = attacker.modelLocator.transform;
+            Transform attackerTransform = attacker.modelLocator.transform;
             GameObject attackerObject = attacker.gameObject;
             if (NetworkServer.active)
             {
-                if (victim.HasBuff(SeamstressBuffs.stitched))
+                if (victimBody.HasBuff(SeamstressBuffs.stitched))
                 {
-                    if (attacker.skillLocator.secondary.stock != attacker.skillLocator.secondary.maxStock && attacker.skillLocator.secondary.rechargeStock != 0)
+                    for (int i = 0; i < victimBody.GetBuffCount(SeamstressBuffs.stitched); i++)
                     {
-                        attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
-                    }
-                    if (attacker.skillLocator.FindSkill("Utility").stock != attacker.skillLocator.FindSkill("Utility").maxStock && attacker.skillLocator.FindSkill("Utility").rechargeStock != 0)
-                    {
-                        attacker.skillLocator.FindSkill("Utility").rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
-                    }
-                    if (attacker.skillLocator.special.stock != attacker.skillLocator.special.maxStock && attacker.skillLocator.special.rechargeStock != 0)
-                    {
-                        attacker.skillLocator.special.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
+                        if (attacker.skillLocator.secondary.stock != attacker.skillLocator.secondary.maxStock && attacker.skillLocator.secondary.rechargeStock != 0)
+                        {
+                            attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
+                        }
+                        if (attacker.skillLocator.FindSkill("Utility").stock != attacker.skillLocator.FindSkill("Utility").maxStock && attacker.skillLocator.FindSkill("Utility").rechargeStock != 0)
+                        {
+                            attacker.skillLocator.FindSkill("Utility").rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
+                        }
+                        if (attacker.skillLocator.special.stock != attacker.skillLocator.special.maxStock && attacker.skillLocator.special.rechargeStock != 0)
+                        {
+                            attacker.skillLocator.special.rechargeStopwatch += SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient;
+                        }
                     }
                 }
             }

@@ -5,6 +5,7 @@ using R2API;
 using SeamstressMod.Survivors.Seamstress;
 using SeamstressMod.Modules.BaseStates;
 using System;
+using EntityStates;
 
 namespace SeamstressMod.SkillStates
 {
@@ -81,6 +82,16 @@ namespace SeamstressMod.SkillStates
                 UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
             }
         }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            if (stopwatch >= duration * earlyExitPercentTime)
+            {
+                return InterruptPriority.Vehicle;
+            }
+            return InterruptPriority.Vehicle;
+        }
+
         protected override void PlayAttackAnimation()
         {
             PlayCrossfade("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", this.duration, 0.1f * duration);

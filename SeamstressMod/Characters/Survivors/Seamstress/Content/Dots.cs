@@ -15,6 +15,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public static DotController.DotIndex SeamstressDotWeak;
 
+        public static bool visualTracker = false;
+
         public static GameObject stitchDot;
 
         public static CustomDotBehaviour behave1;
@@ -51,11 +53,12 @@ namespace SeamstressMod.Survivors.Seamstress
                 return;
             }
             self.transform.position = self.victimBody.corePosition;
-            if ((self.HasDotActive(SeamstressDot)))
+            if (self.victimBody.HasBuff(SeamstressBuffs.stitched) && !visualTracker)
             {
+                visualTracker = true;
                 stitchDot = UnityEngine.Object.Instantiate(SeamstressAssets.stitchEffect, self.transform);
             }
-            else
+            else if(!self.victimBody.HasBuff(SeamstressBuffs.stitched) && visualTracker)
             {
                 UnityEngine.Object.Destroy(stitchDot);
                 stitchDot = null;
@@ -65,7 +68,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             SeamstressDot = DotAPI.RegisterDotDef(new DotController.DotDef
             {
-                interval = 0.1f,
+                interval = 0.25f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.stitched,
@@ -74,7 +77,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             SeamstressDotWeak = DotAPI.RegisterDotDef(new DotController.DotDef
             {
-                interval = 0.1f,
+                interval = 0.25f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.stitched,

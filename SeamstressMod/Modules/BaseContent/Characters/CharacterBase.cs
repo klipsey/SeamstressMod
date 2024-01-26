@@ -113,7 +113,7 @@ namespace SeamstressMod.Modules.Characters
         public int jumpCount = 1;
 
         //conventional base stats, consistent for all survivors
-        public float damage = 12f;
+        public float damage = 8f;
         public float attackSpeed = 1f;
         public float crit = 1f;
 

@@ -82,11 +82,7 @@ namespace SeamstressMod.SkillStates
                     damageInfo.procCoefficient = 0f;
                     base.healthComponent.TakeDamage(damageInfo);
                     base.healthComponent.AddBarrier(currentBarrier);
-                    if (base.characterBody.HasBuff(SeamstressBuffs.butchered))
-                    {
-                        base.characterBody.RemoveBuff(SeamstressBuffs.butchered);
-                    }
-                    base.characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
+                    base.characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration);
                     base.characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
                 }
             }

@@ -25,7 +25,7 @@ namespace SeamstressMod.SkillStates
 
         public static float dashPrepDuration = 0.2f;
 
-        public static float dashDuration = 0.3f;
+        public static float dashDuration;
 
         public static float speedCoefficient = 100f;
 
@@ -55,6 +55,7 @@ namespace SeamstressMod.SkillStates
         private string hitSound;
         public override void OnEnter()
         {
+            dashDuration = 0.3f;
             base.OnEnter();
             modelTransform = GetModelTransform();
             childLocator = modelTransform.GetComponent<ChildLocator>();
@@ -93,6 +94,7 @@ namespace SeamstressMod.SkillStates
                 Object.Instantiate<GameObject>(dashPrefab, transform.position, Util.QuaternionSafeLookRotation(dashVector), transform);
             }
         }
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();
@@ -122,6 +124,7 @@ namespace SeamstressMod.SkillStates
                         {
                             Util.PlaySound(hitSound, base.gameObject);
                             hasHit = true;
+                            dashDuration *= 0.5f;
                         }
                         inHitPause = true;
                         hitPauseTimer = hitPauseDuration / attackSpeedStat;

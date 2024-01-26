@@ -1,15 +1,8 @@
 ﻿using RoR2;
-using RoR2.UI;
-using RoR2.Projectile;
-using System;
 using System.Collections.Generic;
-using System.Text;
-using UnityEngine.Networking;
+using SeamstressMod.Survivors.Seamstress;
 using UnityEngine;
-using SeamstressMod.Modules.Characters;
 using System.Linq;
-using SeamstressMod.SkillStates;
-using SeamstressMod.Modules.BaseStates;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -38,6 +31,7 @@ namespace SeamstressMod.Survivors.Seamstress
             healthComponent = GetComponent<HealthComponent>();
             characterBody = GetComponent<CharacterBody>();
             skillLocator = GetComponent<SkillLocator>();
+            butchered = false;
             Hook();
         }
         public void FixedUpdate()
@@ -232,21 +226,21 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
                 skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPistolIcon");
                 skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
-                skillLocator.secondary.cooldownScale = 1 - (SeamstressStaticValues.cutCooldownReduction / 4f);
+                //skillLocator.secondary.cooldownScale = 1 - (SeamstressStaticValues.cutCooldownReduction / 4f);
             }
-            else if(characterBody.HasBuff(SeamstressBuffs.butchered) && !butchered)
+            else if(!characterBody.HasBuff(SeamstressBuffs.butchered) && butchered)
             {
-                if(skillLocator.utility == skillLocator.FindSkill("reapRecast"))
+                butchered = false;
+                if (skillLocator.utility == skillLocator.FindSkill("reapRecast"))
                 { 
                     skillLocator.utility.ExecuteIfReady();
                 }
                 butcheredConversion = characterBody.damage * 0.2f;
-                butchered = false;
                 skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
                 skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
                 skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
-                skillLocator.secondary.cooldownScale *= 1 - (SeamstressStaticValues.cutCooldownReduction / 4f);
-                TemporaryOverlay component = GetComponent<TemporaryOverlay>();
+                //skillLocator.secondary.cooldownScale *= 1 - (SeamstressStaticValues.cutCooldownReduction / 4f);
+                TemporaryOverlay component = characterBody.GetComponent<TemporaryOverlay>();
                 if ((bool)component)
                 {
                     DestroyImmediate(component);
@@ -258,7 +252,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public void CalculateBonusDamage()
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
-            characterBody.baseDamage = 12f + (healthMissing * SeamstressStaticValues.passiveScaling);
+            characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
         public void Unhook()
         {
@@ -268,6 +262,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public void OnDestroy()
         {
             Unhook();
+            NeedleHUD.DestroyHUD();
         }
 
     }
