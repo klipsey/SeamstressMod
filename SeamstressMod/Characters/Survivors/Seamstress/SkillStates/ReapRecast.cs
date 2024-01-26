@@ -15,6 +15,7 @@ namespace SeamstressMod.SkillStates
         {
             this.RefreshState();
             this.hitboxGroupName = "Sew";
+            this.moddedDamageType = DamageTypes.CutDamage;
             this.procCoefficient = 1f;
             this.pushForce = 300;
             this.bonusForce = Vector3.zero;
@@ -36,7 +37,6 @@ namespace SeamstressMod.SkillStates
             this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
 
             this.muzzleString = "SewCenter";
-            this.moddedDamageType = DamageTypes.Empty;
             this.impactSound = SeamstressAssets.sewHitSoundEvent.index;
             this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             this.isFlatDamage = true;

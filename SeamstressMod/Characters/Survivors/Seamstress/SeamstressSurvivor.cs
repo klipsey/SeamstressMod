@@ -227,7 +227,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 7f,
+                baseRechargeInterval = 4f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -264,7 +264,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 14f,
+                baseRechargeInterval = 8f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -329,7 +329,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Sew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.butcheredKeyword },
+                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.butcheredKeyword, Tokens.sewHelp },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
@@ -338,7 +338,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 18f,
+                baseRechargeInterval = 12f,
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,

@@ -65,13 +65,11 @@ namespace SeamstressMod.SkillStates
             //PlayAnimation("FullBody, Override", "AssaulterPrep", "AssaulterPrep.playbackRate", dashPrepDuration);
             dashVector = base.inputBank.aimDirection;
 
-            if(empowered) hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-            else hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-
             this.overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
             this.overlapAttack.AddModdedDamageType(DamageTypes.CutDamage);
             if (empowered)
             {
+                hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
                 Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDashButchered;
                 this.overlapAttack.AddModdedDamageType(DamageTypes.WeaveLifeSteal);
@@ -79,6 +77,7 @@ namespace SeamstressMod.SkillStates
             }
             else
             {
+                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 Util.PlaySound("Play_merc_m2_uppercut", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDash;
                 hitSound = "Play_bandit2_m2_impact";

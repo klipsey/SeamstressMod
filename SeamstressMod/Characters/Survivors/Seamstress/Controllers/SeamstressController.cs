@@ -226,14 +226,15 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         public void IsButchered()
         {
-            if (characterBody.HasBuff(SeamstressBuffs.butchered))
+            if (characterBody.HasBuff(SeamstressBuffs.butchered) && !butchered)
             {
                 butchered = true;
                 skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
                 skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPistolIcon");
                 skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
+                skillLocator.secondary.cooldownScale = 1 - (SeamstressStaticValues.cutCooldownReduction / 4f);
             }
-            else
+            else if(characterBody.HasBuff(SeamstressBuffs.butchered) && !butchered)
             {
                 if(skillLocator.utility == skillLocator.FindSkill("reapRecast"))
                 { 
@@ -244,6 +245,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
                 skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
                 skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
+                skillLocator.secondary.cooldownScale *= 1 - (SeamstressStaticValues.cutCooldownReduction / 4f);
                 TemporaryOverlay component = GetComponent<TemporaryOverlay>();
                 if ((bool)component)
                 {

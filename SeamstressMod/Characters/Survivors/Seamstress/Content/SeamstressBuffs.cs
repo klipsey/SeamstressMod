@@ -25,7 +25,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 Color.red, false, false);
             needles = Modules.Content.CreateAndAddBuff("NeedlesBuff", assetBundle.LoadAsset<Sprite>("texNeedleBuffIcon"),
                 Color.white, true, false);
-            stitched = Modules.Content.CreateAndAddBuff("Stitched", Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/PermanentDebuffOnHit/texBuffPermanentDebuffIcon.tif").WaitForCompletion(),
+            stitched = Modules.Content.CreateAndAddBuff("Stitched", Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/VoidSurvivor/texBuffVoidSurvivorCorruptionIcon.tif").WaitForCompletion(),
                 new Color(155f / 255f, 55f / 255f, 55f / 255f), true, true);
         }
     }

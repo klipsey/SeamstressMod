@@ -170,8 +170,18 @@ namespace SeamstressMod.Survivors.Seamstress
             needleNine.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
             // Utilize the ResourcesAPI from R2API to load your image!
         }
-        private static void OnDestroy()
+        public static void OnDestroyHUD()
         {
+            UnityEngine.Object.Destroy(needleOne);
+            UnityEngine.Object.Destroy(needleTwo);
+            UnityEngine.Object.Destroy(needleThree);
+            UnityEngine.Object.Destroy(needleFour);
+            UnityEngine.Object.Destroy(needleFive);
+            UnityEngine.Object.Destroy(needleSix);
+            UnityEngine.Object.Destroy(needleSeven);
+            UnityEngine.Object.Destroy(needleEight);
+            UnityEngine.Object.Destroy(needleNine);
+            UnityEngine.Object.Destroy(needleZero);
             On.RoR2.UI.HUD.Awake -= MyFunc;
         }
     }
