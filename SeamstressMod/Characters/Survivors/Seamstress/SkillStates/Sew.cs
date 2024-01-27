@@ -27,7 +27,6 @@ namespace SeamstressMod.SkillStates
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                 Util.PlaySound("Play_imp_overlord_teleport_end", base.gameObject);
                 UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.sewButcheredEffect, transform);
-                Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false, removeCooldownBuffs: true, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
             }
             else
             {
@@ -40,7 +39,7 @@ namespace SeamstressMod.SkillStates
             }
             PlayAttackAnimation();
             base.OnEnter();
-            ProjectileManager.instance.FireProjectile(projectilePrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
+            ProjectileManager.instance.FireProjectile(projectilePrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
             Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
         }
         public override void FixedUpdate()
@@ -54,7 +53,7 @@ namespace SeamstressMod.SkillStates
                 {
                     if (base.characterBody.HasBuff(SeamstressBuffs.needles))
                     {
-                        ProjectileManager.instance.FireProjectile(projectilePrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
+                        ProjectileManager.instance.FireProjectile(projectilePrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, this.damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, base.RollCrit(), DamageColorIndex.Default, null, -1f);
                         Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
                         base.characterBody.RemoveBuff(SeamstressBuffs.needles);
                         this.needleCompareDelay += (0.1f / base.attackSpeedStat);

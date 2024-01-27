@@ -20,7 +20,9 @@ namespace SeamstressMod.SkillStates
             this.pushForce = 300f;
             this.bonusForce = Vector3.zero;
             this.baseDuration = 1f;
-
+            this.moddedDamageType = DamageTypes.Empty;
+            this.moddedDamageType2 = DamageTypes.Empty;
+            this.moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             this.attackStartPercentTime = 0.2f;
@@ -48,15 +50,14 @@ namespace SeamstressMod.SkillStates
                     this.muzzleString = "SwingLeft";
                     break;
                 case 1:
-                    moddedDamageType = DamageTypes.StitchDamage;
+                    this.moddedDamageType = DamageTypes.StitchDamage;
                     this.swingEffectPrefab = SeamstressAssets.scissorsSwingEffect2;
                     this.muzzleString = "SwingRight";
                     break;
                 case 2:
                     this.earlyExitPercentTime = 1f;
-                    this.moddedDamageType = DamageTypes.StitchDamage;
                     this.moddedDamageType2 = DamageTypes.CutDamage;
-                    this.hitStopDuration = 0.15f;
+                    this.hitStopDuration = 0.1f;
                     this.swingSoundString = "Play_bandit2_m2_slash";
                     this.hitboxGroupName = "SwordBig";
                     this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;

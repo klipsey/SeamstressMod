@@ -136,7 +136,7 @@ namespace SeamstressMod.Survivors.Seamstress
             AddHitboxes();
             bodyPrefab.AddComponent<SeamstressController>();
             bodyPrefab.AddComponent<NeedleHUD>();
-            bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.stitched);
+            bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.stitchSetup);
             TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
@@ -208,7 +208,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 ));
             //custom Skilldefs can have additional fields that you can set manually
             trimSkillDef.stepCount = 3;
-            trimSkillDef.stepGraceDuration = 0.5f;
+            trimSkillDef.stepGraceDuration = 1f;
 
             Skills.AddPrimarySkills(bodyPrefab, trimSkillDef);
         }
@@ -225,11 +225,11 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
-                activationStateMachineName = "Weapon2",
+                activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 5f,
-                baseMaxStock = 2,
+                baseRechargeInterval = 4f,
+                baseMaxStock = 1,
 
                 rechargeStock = 1,
                 requiredStock = 1,
@@ -259,13 +259,13 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_REAP_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_REAP_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.healthCostKeyword, Tokens.butcheredKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texStingerIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Reap)),
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 14f,
+                baseRechargeInterval = 16f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -280,7 +280,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,
-                cancelSprintingOnActivation = true,
+                cancelSprintingOnActivation = false,
                 forceSprintDuringState = false,
             });
 
@@ -297,7 +297,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
-                activationStateMachineName = "Weapon2",
+                activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Vehicle,
 
                 baseRechargeInterval = 0f,
@@ -339,7 +339,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 16f,
+                baseRechargeInterval = 18f,
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,

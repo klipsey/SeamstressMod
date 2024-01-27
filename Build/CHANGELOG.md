@@ -1,3 +1,10 @@
+# 0.1.0
+- Hopefully, the final base kit.
+- Regenerate Needles overtime. Gain additiojnalo Needles when Sttiches are torn by Cut or when enemies with Cuts die.
+- Stitch changed to Apply Stitches. Applying Stitches and tearing open Stitches reduce cooldowns by 0.25 seconds.
+- Cut changed to Tear open Stitches dealing damage based on enemies missing health and apply Cuts. Cuts deal a percentage of enemies missing health per second for 5 seconds
+- Changed all ability names to be more interesting
+- Trim changed to 2nd hit applies stitch. 3rd hit applies Cut. while Butchered all hits apply Stitch
 # 0.0.9
 - missed crucial changes in text
 # 0.0.8

@@ -81,13 +81,16 @@ namespace SeamstressMod.Survivors.Seamstress
         private static void CreateEffects()
         {
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion();
-            ParticleSystem.MainModule derp = stitchEffect.transform.GetChild(0).GetComponent<ParticleSystem>().main;
-            derp.startColor = new Color(155f / 255f, 55f / 255f, 55f / 255f);
+            ParticleSystem.MainModule derp = stitchEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            derp.startColor = new Color(155f / 255f, 55f / 255f, 55f / 255f, 1);
 
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercExposed.mat").WaitForCompletion());
-            material.SetColor("_TintColor", new Color(155f / 255f, 55f / 255f, 55f / 255f));
+            material.SetColor("_TintColor", Color.red);
             stitchTempEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercExposeEffect.prefab").WaitForCompletion();
             stitchTempEffectPrefab.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            derp = stitchTempEffectPrefab.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            derp.startColor = new Color(155f / 255f, 55f / 255f, 55f / 255f, 1);
+            stitchTempEffectPrefab.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
 
             butcheredOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
 
@@ -309,7 +312,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleHeal.fractionOfDamage = SeamstressStaticValues.needleHealAmount;
 
             ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
-            needleController.procCoefficient = 0.3f;
+            needleController.procCoefficient = 0.5f;
             needleController.allowPrediction = false;
             needleGhost = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab;
             Material material2 = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Mage/matMageMatrixDirectionalIce.mat").WaitForCompletion());
@@ -353,7 +356,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileOverlapAttack needleLap = needleButcheredPrefab.GetComponent<ProjectileOverlapAttack>();
             needleLap.resetInterval = 0.5f;
-            needleLap.overlapProcCoefficient = 0.3f;
+            needleLap.overlapProcCoefficient = 0.5f;
 
             ProjectileDirectionalTargetFinder needleFinder = needleButcheredPrefab.AddComponent<ProjectileDirectionalTargetFinder>();
             needleFinder.lookRange = 35f;   
@@ -369,7 +372,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleHeal.fractionOfDamage = SeamstressStaticValues.needleHealAmount;
 
             ProjectileController needleController = needleButcheredPrefab.GetComponent<ProjectileController>();
-            needleController.procCoefficient = 0.3f;
+            needleController.procCoefficient = 0.5f;
             needleController.allowPrediction = false;
             needleButcheredGhost = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab;
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Mage/matMageMatrixDirectionalIce.mat").WaitForCompletion());

@@ -20,19 +20,20 @@ namespace SeamstressMod.Modules
 
         public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";
 
-        public static string cutKeyword = KeywordText("Cut", $"Consume <color=#9B3737>Stitches</color> dealing <style=cIsDamage>{100 * SeamstressStaticValues.cutsumeMissingHpDamage}%</style> of the enemies missing <style=cIsHealth>health</style> per stack." +
-            $" Lower cooldowns by {SeamstressStaticValues.cutCooldownReduction} seconds per consumed stack.");
+        public static string stitchKeyword = KeywordText("Stitch", $"Apply <color=#9B3737>Stitches</color>. Applying <color=#9B3737>Stitches</color> or " +
+            $"tearing open <color=#9B3737>Stitches</color> reduce cooldowns by {SeamstressStaticValues.stitchCooldownReduction}.");
 
-        public static string stitchKeyword = KeywordText("Stitch", $"Apply <color=#9B3737>Stitches</color> " +
-            $"dealing <style=cIsDamage>0.5%</style> (<style=cIsDamage>0.25%</style> against bosses) of the enemies missing <style=cIsHealth>health</style> per second for {SeamstressStaticValues.stitchDuration} seconds. " +
-            $"Additionally Deal <style=cIsDamage>{100f * SeamstressStaticValues.stitchDamageCoefficient}%</style> damage on hit. ");
-
-        public static string passiveKeywords = KeywordText("Keywords", needleKeyword + "\n" + stitchKeyword + "\n " + cutKeyword);
+        public static string cutKeyword = KeywordText("Cut", $"Tear open <color=#9B3737>Stitches</color> " +
+            $"dealing <style=cIsDamage>2.5%</style> (<style=cIsDamage>1.25%</style> against bosses) of the enemies missing health and apply <color=#9B3737>Cuts</color>. " +
+            $"<color=#9B3737>Cuts</color> deal <style=cIsDamage>0.5%</style> (<style=cIsDamage>0.25%</style> against bosses) of the " +
+            $"enemies missing <style=cIsHealth>health</style> per second for {SeamstressStaticValues.cutDuration} seconds. ");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 
         public static string needleKeyword = KeywordText("Needle", Tokens.stitchPrefix + $". <color=#9B3737>Needles</color> pierce for <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage</style> each. " +
             $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. While " + Tokens.butcheredPrefix + ", <color=#9B3737>Needles</color> <style=cIsUtility>slow</style> enemies. ");
+        
+        public static string passiveKeywords = needleKeyword + "\n\n" + stitchKeyword + "\n\n" + cutKeyword;
 
         public static string sewHelp = KeywordText("Sew", "Always fire 1 " + needlePrefix + ".");
 

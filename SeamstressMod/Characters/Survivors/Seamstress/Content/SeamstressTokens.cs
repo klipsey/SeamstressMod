@@ -44,19 +44,19 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "Stitched Heart");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{100f * SeamstressStaticValues.passiveScaling}% damage</style> base damage for every <style=cIsHealth>1</style> health missing. " +
-                $"Regenerate <color=#9B3737>Needles</color> overtime. Gain additional <color=#9B3737>Needles</color> when " + Tokens.stitchPrefix + " is consumed by " + Tokens.cutPrefix + " or when enemies with " + Tokens.stitchPrefix + " die." );
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health missing. " +
+                $"Regenerate <color=#9B3737>Needles</color> overtime. Gain additional <color=#9B3737>Needles</color> when <color=#9B3737>Stitches</color> are torn by " + Tokens.cutPrefix + " or when enemies with <color=#9B3737>Cuts</color> die.");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trimming Slashes");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. " +
-              "Every 2nd hit applies " + Tokens.stitchPrefix + ". Every 3rd hit applies " + Tokens.stitchPrefix + " and " + Tokens.cutPrefix + ". While " + Tokens.butcheredPrefix + 
-              $", every slash also applies " + Tokens.stitchPrefix + ".");
+              "Every 2nd hit applies " + Tokens.stitchPrefix + ". Every 3rd hit applies " + Tokens.cutPrefix + ". While " + Tokens.butcheredPrefix + 
+              $", every slash additionally applies " + Tokens.stitchPrefix + ".");
             #endregion
 
             #region Secondary
-            Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Woven Judgement");
+            Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Woven Fate");
             Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.cutPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>." +
                 " While " + Tokens.butcheredPrefix + $", <style=cIsHealing>heal for {100 * SeamstressStaticValues.weaveLifeSteal}% of damage dealt</style>.");
             #endregion
@@ -64,7 +64,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Utility
             Language.Add(prefix + "UTILITY_REAP_NAME", "Bloodsoaked Path");
             Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart gaining " + Tokens.butcheredPrefix + 
-                ". During " + Tokens.butcheredPrefix + ", <color=#9B3737>Threads Of Fate</color> becomes <color=#9B3737>Expunge</color>.");
+                ". During " + Tokens.butcheredPrefix + ", <color=#9B3737>Bloodsoaked Path</color> becomes <color=#9B3737>Expunge</color>.");
 
             Language.Add(prefix + "UTILITY_EXPUNGE_NAME", "Expunge");
             Language.Add(prefix + "UTILITY_EXPUNGE_DESCRIPTION", Tokens.cutPrefix + ". Release stored <style=cIsHealing>healing</style> that you converted during " + Tokens.butcheredPrefix + " as a razor sharp blast of <style=cIsDamage>damage</style>.");

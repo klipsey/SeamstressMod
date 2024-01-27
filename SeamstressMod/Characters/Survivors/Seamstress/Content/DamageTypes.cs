@@ -38,7 +38,7 @@ namespace SeamstressMod.Survivors.Seamstress
         private static void GlobalEventManager_onServerDamageDealt(DamageReport damageReport)
         {
             DamageInfo damageInfo = damageReport.damageInfo;
-            if (!damageReport.attacker)
+            if (!damageReport.attacker || !damageReport.victimBody)
             {
                 return;
             }
@@ -50,52 +50,20 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 if(damageInfo.HasModdedDamageType(StitchDamage))
                 {
-                    if(damageInfo.HasModdedDamageType(CutDamage))
+                    attacker.skillLocator.DeductCooldownFromAllSkillsServer(SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient);
+                    if (!damageInfo.HasModdedDamageType(CutDamage))
                     {
-                        return;
-                    }
-                    else
-                    {
-                        DamageInfo stitch = new DamageInfo
-                        {
-                            damage = attacker.damage * (SeamstressStaticValues.stitchDamageCoefficient * damageInfo.procCoefficient),
-                            damageColorIndex = DamageColorIndex.DeathMark,
-                            damageType = DamageType.Generic,
-                            attacker = damageInfo.attacker,
-                            crit = false,
-                            force = Vector3.zero,
-                            inflictor = null,
-                            position = damageInfo.position,
-                            procCoefficient = 0f
-                        };
-                        victim.TakeDamage(stitch);
-                        if (damageReport.victimIsBoss)
-                        {
-                            DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDotWeak, SeamstressStaticValues.stitchDuration, 1f);
-                        }
-                        else
-                        {
-                            DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.stitchDuration, 1f);
-                        }
+                        victimBody.AddBuff(SeamstressBuffs.stitchSetup);
                     }
 
                 }
 
                 if (damageInfo.HasModdedDamageType(CutDamage))
                 {
-                    int placeboBuff;
-                    if (damageInfo.HasModdedDamageType(StitchDamage))
-                    {
-                        placeboBuff = 1;
-                        victimBody.AddBuff(SeamstressBuffs.stitched);
-                    }
-                    else
-                    {
-                        placeboBuff = 0;
-                    }
+                    #region cut initial damage
                     DamageInfo cutsume = new DamageInfo
                     {
-                        damage = attacker.damage * (SeamstressStaticValues.cutsumeMissingHpDamage * damageInfo.procCoefficient),
+                        damage = 0f,
                         damageColorIndex = DamageColorIndex.DeathMark,
                         damageType = DamageType.Generic,
                         attacker = damageInfo.attacker,
@@ -105,30 +73,47 @@ namespace SeamstressMod.Survivors.Seamstress
                         position = damageInfo.position,
                         procCoefficient = 0f
                     };
-
-                    if (victimBody.HasBuff(SeamstressBuffs.stitched))
+                    #endregion
+                    //check for overlapping damagetypes
+                    if (damageInfo.HasModdedDamageType(StitchDamage))
                     {
-                        for (int i = 0; i < victimBody.GetBuffCount(SeamstressBuffs.stitched) - placeboBuff; i++)
+                        victimBody.AddBuff(SeamstressBuffs.stitchSetup);
+                    }
+                    //begin damage process
+                    if (victimBody.HasBuff(SeamstressBuffs.stitchSetup))
+                    {
+                        Util.PlaySound("Play_imp_overlord_teleport_end", victimBody.gameObject);
+                        for (int i = victimBody.GetBuffCount(SeamstressBuffs.stitchSetup); i > 0; i--)
                         {
+                            if (damageReport.victimIsBoss)
+                            {
+                                cutsume.damage = ((SeamstressStaticValues.cutDotDamage * 25) * damageInfo.procCoefficient);
+                                DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, 1f);
+                            }
+                            else
+                            {
+                                cutsume.damage = ((SeamstressStaticValues.cutDotBossDamage * 25) * damageInfo.procCoefficient);
+                                DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, 1f);
+                            }
                             victim.TakeDamage(cutsume);
-                            attacker.skillLocator.DeductCooldownFromAllSkillsServer(SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient);
+                            attacker.skillLocator.DeductCooldownFromAllSkillsServer(SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient);
+                            victimBody.RemoveBuff(SeamstressBuffs.stitchSetup);
                         }
-                        if(placeboBuff == 1)
-                        {
-                            victimBody.RemoveBuff(SeamstressBuffs.stitched);
-                        }
+                        //useless
+                        #region dotController
+                        /*
                         DotController hi = DotController.FindDotController(victimBody.gameObject);
                         List<PendingDamage> list = CollectionPool<PendingDamage, List<PendingDamage>>.RentCollection();
                         if (!NetworkServer.active)
                         {
                             Debug.LogWarning("[Server] function 'System.Void RoR2.DotController::RemoveAllDots(UnityEngine.GameObject)' called on client");
                         }
-                        else if (hi.HasDotActive(Dots.SeamstressDot) || hi.HasDotActive(Dots.SeamstressDotWeak))
+                        else if (hi.HasDotActive(Dots.SeamstressDot) || hi.HasDotActive(Dots.SeamstressBossDot))
                         {
                             for (int num = hi.dotStackList.Count - 1; num >= 0; num--)
                             {
                                 DotStack dotStack = hi.dotStackList[num];
-                                if (dotStack.dotIndex == Dots.SeamstressDot || dotStack.dotIndex == Dots.SeamstressDotWeak)
+                                if (dotStack.dotIndex == Dots.SeamstressDot || dotStack.dotIndex == Dots.SeamstressBossDot)
                                 {
                                     dotStack.timer = 0f;
                                     AddPendingDamageEntry(list, dotStack.attackerObject, dotStack.damage, dotStack.damageType);
@@ -139,6 +124,8 @@ namespace SeamstressMod.Survivors.Seamstress
                                 }
                             }
                         }
+                        */
+                        #endregion
                     }
 
                     if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + attacker.skillLocator.special.maxStock - 1)
@@ -156,9 +143,10 @@ namespace SeamstressMod.Survivors.Seamstress
                             projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                         }
                         else projectilePrefab = SeamstressAssets.needlePrefab;
-                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
+                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
                     }
                 }
+                #region NeedleDamage incase of emergency
                 if (damageInfo.HasModdedDamageType(AddNeedlesDamage))
                 {
                     if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + attacker.skillLocator.special.maxStock - 1)
@@ -176,9 +164,10 @@ namespace SeamstressMod.Survivors.Seamstress
                             projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                         }
                         else projectilePrefab = SeamstressAssets.needlePrefab;
-                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
+                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
                     }
                 }
+                #endregion
                 if (damageInfo.HasModdedDamageType(WeaveLifeSteal))
                 {
                     attacker.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.weaveLifeSteal, default(ProcChainMask), true);
@@ -200,10 +189,6 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 if (victimBody.HasBuff(SeamstressBuffs.stitched))
                 {
-                    for (int i = 0; i < victimBody.GetBuffCount(SeamstressBuffs.stitched); i++)
-                    {
-                        attacker.skillLocator.DeductCooldownFromAllSkillsServer(SeamstressStaticValues.cutCooldownReduction * damageInfo.procCoefficient);
-                    }
                     if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + attacker.skillLocator.special.maxStock - 1)
                     {
                         attacker.AddBuff(SeamstressBuffs.needles);
@@ -219,9 +204,18 @@ namespace SeamstressMod.Survivors.Seamstress
                             projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                         }
                         else projectilePrefab = SeamstressAssets.needlePrefab;
-                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 600f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
+                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
                     }
-
+                }
+                if (victimBody.HasBuff(SeamstressBuffs.stitchSetup))
+                {
+                    if(!damageInfo.HasModdedDamageType(CutDamage))
+                    {
+                        for (int i = victimBody.GetBuffCount(SeamstressBuffs.stitchSetup); i > 0; i--)
+                        {
+                            attacker.skillLocator.DeductCooldownFromAllSkillsServer(SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient);
+                        }
+                    }
                 }
             }
         }

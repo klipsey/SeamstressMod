@@ -81,6 +81,7 @@ namespace SeamstressMod.SkillStates
                 hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 Util.PlaySound("Play_merc_m2_uppercut", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDash;
+                this.overlapAttack.RemoveModdedDamageType(DamageTypes.WeaveLifeSteal);
                 hitSound = "Play_bandit2_m2_impact";
             }
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration + dashPrepDuration);

@@ -30,7 +30,7 @@ namespace SeamstressMod.SkillStates
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             this.earlyExitPercentTime = 0.2f;
 
-            this.hitStopDuration = 0.15f;
+            this.hitStopDuration = 0.1f;
             this.attackRecoil = 0f;
             this.hitHopVelocity = 0f;
             this.swingSoundString = "Play_voidman_m2_explode";
@@ -42,6 +42,7 @@ namespace SeamstressMod.SkillStates
             this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             this.isFlatDamage = true;
             this.damageTotal = characterBody.GetComponent<SeamstressController>().butcheredConversion;
+            characterBody.GetComponent<SeamstressController>().butcheredConversion = characterBody.damage * 1f;
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeEffect, transform);
 
             if (!base.characterMotor.isGrounded)
@@ -85,10 +86,6 @@ namespace SeamstressMod.SkillStates
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            if (stopwatch >= duration * earlyExitPercentTime)
-            {
-                return InterruptPriority.Vehicle;
-            }
             return InterruptPriority.Vehicle;
         }
 

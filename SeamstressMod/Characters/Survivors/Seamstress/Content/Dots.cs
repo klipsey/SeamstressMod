@@ -13,7 +13,7 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         public static DotController.DotIndex SeamstressDot;
 
-        public static DotController.DotIndex SeamstressDotWeak;
+        public static DotController.DotIndex SeamstressBossDot;
 
         public static bool visualTracker = false;
 
@@ -27,6 +27,7 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static void Init()
         {
             behave1 = DelegateBehave;
+            behave2 = DelegateBehave2;
             visual = stitchVisual;
             RegisterDots();
         }
@@ -34,11 +35,14 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             if (dotStack.dotIndex == SeamstressDot) 
             {
-                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * SeamstressStaticValues.stitchedDotDamage);
+                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * SeamstressStaticValues.cutDotDamage);
             }
-            if (dotStack.dotIndex == SeamstressDotWeak)
+        }
+        public static void DelegateBehave2(RoR2.DotController self, RoR2.DotController.DotStack dotStack) 
+        {
+            if (dotStack.dotIndex == SeamstressBossDot)
             {
-                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * SeamstressStaticValues.stitchedDotBossDamage);
+                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * SeamstressStaticValues.cutDotBossDamage);
             }
         }
 
@@ -52,7 +56,6 @@ namespace SeamstressMod.Survivors.Seamstress
             if (self.victimBody.HasBuff(SeamstressBuffs.stitched) && !visualTracker)
             {
                 visualTracker = true;
-                UnityEngine.Object.Instantiate(SeamstressAssets.stitchTempEffectPrefab, self.transform);
                 stitchDot = UnityEngine.Object.Instantiate(SeamstressAssets.stitchEffect, self.transform);
             }
             else if(!self.victimBody.HasBuff(SeamstressBuffs.stitched) && visualTracker)
@@ -71,6 +74,15 @@ namespace SeamstressMod.Survivors.Seamstress
                 associatedBuff = SeamstressBuffs.stitched,
                 resetTimerOnAdd = false,
             }, (CustomDotBehaviour)behave1, (CustomDotVisual)visual);
+
+            SeamstressBossDot = DotAPI.RegisterDotDef(new DotController.DotDef
+            {
+                interval = 0.25f,
+                damageCoefficient = 0f,
+                damageColorIndex = DamageColorIndex.SuperBleed,
+                associatedBuff = SeamstressBuffs.stitched,
+                resetTimerOnAdd = false,
+            }, (CustomDotBehaviour)behave2, (CustomDotVisual)visual);
         }
     }
 }

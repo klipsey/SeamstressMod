@@ -246,7 +246,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 butchered = true;
                 skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
                 skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPistolIcon");
-                skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
+                skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon");
                 //skillLocator.secondary.cooldownScale = 1 - (SeamstressStaticValues.cutCooldownReduction / 4f);
             }
             else if(!characterBody.HasBuff(SeamstressBuffs.butchered) && butchered)
@@ -256,7 +256,6 @@ namespace SeamstressMod.Survivors.Seamstress
                 { 
                     skillLocator.utility.ExecuteIfReady();
                 }
-                butcheredConversion = characterBody.damage * 0.2f;
                 skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
                 skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
                 skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
@@ -273,7 +272,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public void CalculateBonusDamage()
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
-            characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
+            characterBody.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
         private static void Unhook()
         {

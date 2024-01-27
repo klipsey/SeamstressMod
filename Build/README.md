@@ -12,36 +12,44 @@ Seamstress is a mobile survivor who uses her health for damage. She doesn't gain
 # Skills
 Passive: **Corrupted Heart**
 ---
-- Gain base damage for every 1 health missing. Certain ability conditions grant Needles.
+- Gain base damage for every 1 health missing. Regenerate Needles overtime. Gain additional Needles when Stitches are torn by Cut or when enemies with Cuts die.
 
-Primary: **Trim**
+Primary: **Trimming Slashes**
 ---
-- Agile. Slash in front for damage. Every 3rd hit grants you Needles and applies Stitch. While Butchered, Trim deals Stitched and the 3rd hit Cuts   
+- Agile. Slash in front for damage. Every 2nd hit applies Stitch. Every 3rd hit applies Cut. While Butchered, Trim always Stitches.   
 
-Secondary: **Weave** 
+Secondary: **Woven Fate** 
 ---
-- Cut. Dash forward, dealing damage. While Butchered, gain 20% lifesteal.
+- Cut. Dash forward, dealing damage. While Butchered, lifesteal.
 
-Utility: **Threads of Fate**
+Utility: **Bloodsoaked Path**
 ---
-- 50% hp. Stab your heart gaining Butchered. During Butchered, Reap becomes Expunge.
+- 50% hp. Stab your heart gaining Butchered. During Butchered, Bloodsoaked Path becomes Expunge.
 
-Special: **Sew**
+**Expunge**
 ---
-- Cut. Expels Needles. Hold up to ten before autofiring
+- Cut. Expunge stored healing during Butchered as damage in an area. 
+
+Special: **Threaded Volley**
+---
+- Expels Needles. Hold up to ten before autofiring.
 
 - Needles:
- Stitch. Firing piercing Needles that each deal damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
+- Stitch. Firing piercing Needles that each deal damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
 
-- Stitch. Deal 100% damage. Apply Stitched which deals 0.5% (0.25% against bosses) of the enemies missing health over 4 seconds.
+**Stitch** 
+---
+- Apply Stitches. Applying Stitches or tearing open Stitches reduce cooldowns.
 
-- Cut: Consume Stitch dealing 2% of the enemies missing health per Stitched. Lower cooldowns by 1 seconds per Stitched consumed.
+**Cut** 
+---
+- Tear open Stitches dealing a percentage of the enemies missing health and applys Cuts. Cuts deal a percentage of the enemies missing health over time.
 
-- Butchered:
-Empower other abilities. Gain attack speed and movement speed. During Butchered, convert 50% of healing into damage for Expunge.
+**Butchered**
+---
+- Empower other abilities. Gain attack speed and movement speed. During Butchered, convert 50% of healing into damage for Expunge.
 
-- Expunge:
-Cut. Expunge stored healing during Butchered as damage in an area. (50% of healing)
+
 
 Please play my mod. I need to find bugs.
 Contact me on the modding discord server: https://discord.gg/A9wNKWE9Ww https://discord.com/channels/562704639141740588/1195084430876872866 @tsuyoikenko
