@@ -35,6 +35,7 @@
 		<PackageReference Include="R2API.Language" Version="1.*" />
 		<PackageReference Include="R2API.Unlockable" Version="1.*" />
 		<PackageReference Include="R2API.DamageType" Version="1.*" />
+		<PackageReference Include="R2API.TempVisualEffect" Version="1.*" />
 		<PackageReference Include="R2API.Dot" Version="1.*" />
 		<PackageReference Include="R2API.Orb" Version="1.*" />
 		<PackageReference Include="R2API.Deployable" Version="1.*" />

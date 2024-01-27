@@ -9,13 +9,17 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float stitchedDotDamage = 0.001f;
 
+        internal const float needleGainInterval = 5f;
+
         internal const float stitchedDotBossDamage = 0.0005f;
 
         internal const float stitchDamageCoefficient = 1f;
 
-        internal const float cutsumeMissingHpDamage = 0.02f;
+        internal const float cutsumeMissingHpDamage = 0.025f;
 
         internal const float weaveLifeSteal = 0.25f;
+
+        internal const float stitchDuration = 5f;
 
         internal const float reapHealthCost = 0.5f;
 

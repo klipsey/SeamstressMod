@@ -12,6 +12,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public float butcheredConversion = 0;
 
+        public float needleRegen;
+
         public int baseNeedleAmount;
         private bool hasEffectiveAuthority => characterBody.hasEffectiveAuthority;
 
@@ -26,16 +28,21 @@ namespace SeamstressMod.Survivors.Seamstress
         public bool butchered;
 
         public int needleCount;
-        public void Start()
+        public void Awake()
         {
             healthComponent = GetComponent<HealthComponent>();
             characterBody = GetComponent<CharacterBody>();
             skillLocator = GetComponent<SkillLocator>();
-            butchered = false;
             Hook();
+        }
+        public void Start()
+        {
+            needleRegen = SeamstressStaticValues.needleGainInterval;
+            butchered = false;
         }
         public void FixedUpdate()
         {
+            passiveNeedleRegen();
             IsButchered();
             ButcheredSound();
             CalculateBonusDamage();
@@ -45,6 +52,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
         }
+        #region needlehud
         public void NeedleDisplayCount()
         {
             baseNeedleAmount = skillLocator.special.maxStock - 1;
@@ -187,6 +195,7 @@ namespace SeamstressMod.Survivors.Seamstress
             }
                 
         }
+        #endregion
         private static float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen = true)
         {
             if (self.body.HasBuff(SeamstressBuffs.butchered))
@@ -200,6 +209,18 @@ namespace SeamstressMod.Survivors.Seamstress
                 s.GetButcheredConversion((res/SeamstressStaticValues.healConversion)* 1 - SeamstressStaticValues.healConversion);
             }
             return res;
+        }
+        private void passiveNeedleRegen()
+        {
+            if (characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + skillLocator.special.maxStock - 1)
+            {
+                if (!characterBody.HasBuff(SeamstressBuffs.needleCountDownBuff))
+                {
+                    characterBody.AddTimedBuff(SeamstressBuffs.needleCountDownBuff, SeamstressStaticValues.needleGainInterval);
+                    characterBody.AddBuff(SeamstressBuffs.needles);
+                    Util.PlaySound("Play_treeBot_m1_hit_heal", characterBody.gameObject);
+                }
+            }
         }
         public void GetButcheredConversion(float healDamage)
         {
@@ -218,7 +239,7 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             hasPlayed = false;
         }
-        public void IsButchered()
+        private void IsButchered()
         {
             if (characterBody.HasBuff(SeamstressBuffs.butchered) && !butchered)
             {
@@ -254,15 +275,13 @@ namespace SeamstressMod.Survivors.Seamstress
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
             characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
-        public void Unhook()
+        private static void Unhook()
         {
             On.RoR2.HealthComponent.Heal -= new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
-
         }
         public void OnDestroy()
         {
             Unhook();
-            NeedleHUD.DestroyHUD();
         }
 
     }

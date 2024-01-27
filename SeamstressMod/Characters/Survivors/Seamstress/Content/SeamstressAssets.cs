@@ -14,9 +14,13 @@ namespace SeamstressMod.Survivors.Seamstress
         //effects
         internal static GameObject scissorsSwingEffect;
 
+        internal static GameObject scissorsSwingEffect2;
+
         internal static GameObject scissorsButcheredSwingEffect;
 
         internal static Material butcheredOverlayMat;
+
+        internal static GameObject stitchTempEffectPrefab;
 
         internal static GameObject sewEffect;
 
@@ -80,6 +84,11 @@ namespace SeamstressMod.Survivors.Seamstress
             ParticleSystem.MainModule derp = stitchEffect.transform.GetChild(0).GetComponent<ParticleSystem>().main;
             derp.startColor = new Color(155f / 255f, 55f / 255f, 55f / 255f);
 
+            Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercExposed.mat").WaitForCompletion());
+            material.SetColor("_TintColor", new Color(155f / 255f, 55f / 255f, 55f / 255f));
+            stitchTempEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercExposeEffect.prefab").WaitForCompletion();
+            stitchTempEffectPrefab.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+
             butcheredOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
 
             crosshairOverridePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Heretic/HereticCrosshair.prefab").WaitForCompletion().InstantiateClone("SeamstressCrosshair");
@@ -95,28 +104,40 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsSwingEffect.AddComponent<NetworkIdentity>();
             scissorsSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
             scissorsSwingEffect.transform.GetChild(1).localScale = Vector3.one * 0.75f;
+            //second swing
+            scissorsSwingEffect2 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing2");
+            scissorsSwingEffect2.AddComponent<NetworkIdentity>();
+            scissorsSwingEffect2.transform.GetChild(0).gameObject.SetActive(value: false);
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniRadialSlash1Merc.mat").WaitForCompletion());
+            material.SetColor("_TintColor", Color.red);
+            scissorsSwingEffect2.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            scissorsSwingEffect2.transform.GetChild(1).localScale = Vector3.one * 0.75f;
+
             //final hit
+            /*
+            scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing4");
+            scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
+            scissorsComboSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
+            //ParticleSystem.MainModule main2 = scissorsComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+            //main2.startLifetimeMultiplier = 0.1f;
+            scissorsComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 1.0f;
+            UnityEngine.Object.Destroy(scissorsComboSwingEffect.GetComponent<EffectComponent>());
+            */
+
+            //final hit butchered
             scissorsButcheredComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing3");
             scissorsButcheredComboSwingEffect.AddComponent<NetworkIdentity>();
             scissorsButcheredComboSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
             scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
             //ParticleSystem.MainModule main = scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
             //main.startLifetimeMultiplier = 0.1f;
-            scissorsButcheredComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 1f;
+            scissorsButcheredComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 1.5f;
             UnityEngine.Object.Destroy(scissorsButcheredComboSwingEffect.GetComponent<EffectComponent>());
-            //final hit
-            scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing4");
-            scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
-            scissorsComboSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
-            //ParticleSystem.MainModule main2 = scissorsComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
-            //main2.startLifetimeMultiplier = 0.1f;
-            scissorsComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 1f;
-            UnityEngine.Object.Destroy(scissorsComboSwingEffect.GetComponent<EffectComponent>());
 
             scissorsHitImpactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMerc.prefab").WaitForCompletion().InstantiateClone("ScissorImpact", false);
             scissorsHitImpactEffect.AddComponent<NetworkIdentity>();
             scissorsHitImpactEffect.GetComponent<OmniEffect>().enabled = false;
-            Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniHitspark3Merc.mat").WaitForCompletion());
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniHitspark3Merc.mat").WaitForCompletion());
             material.SetColor("_TintColor", Color.white);
             scissorsHitImpactEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             scissorsHitImpactEffect.transform.GetChild(2).localScale = Vector3.one * 1.5f;

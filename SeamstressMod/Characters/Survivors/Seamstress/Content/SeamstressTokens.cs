@@ -43,25 +43,26 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Passive
-            Language.Add(prefix + "PASSIVE_NAME", "Corrupted Heart");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{100f * SeamstressStaticValues.passiveScaling}% damage</style> base damage for every <style=cIsHealth>1</style> health missing. Gain <style=cIsUtility>Needles</style> on " + Tokens.cutPrefix + ".");
+            Language.Add(prefix + "PASSIVE_NAME", "Stitched Heart");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{100f * SeamstressStaticValues.passiveScaling}% damage</style> base damage for every <style=cIsHealth>1</style> health missing. " +
+                $"Regenerate <color=#9B3737>Needles</color> overtime. Gain additional <color=#9B3737>Needles</color> when " + Tokens.stitchPrefix + " is consumed by " + Tokens.cutPrefix + " or when enemies with " + Tokens.stitchPrefix + " die." );
             #endregion
 
             #region Primary
-            Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
+            Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trimming Slashes");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.scissorsDamageCoefficient}% damage</style>. " +
-              "Every 3rd hit applies " + Tokens.stitchPrefix + ". While " + Tokens.butcheredPrefix + 
-              $", the first two slashes apply " + Tokens.stitchPrefix + ".");
+              "Every 2nd hit applies " + Tokens.stitchPrefix + ". Every 3rd hit applies " + Tokens.stitchPrefix + " and " + Tokens.cutPrefix + ". While " + Tokens.butcheredPrefix + 
+              $", every slash also applies " + Tokens.stitchPrefix + ".");
             #endregion
 
             #region Secondary
-            Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Weave");
+            Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Woven Judgement");
             Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.cutPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>." +
-                " While " + Tokens.butcheredPrefix + ", <style=cIsHealing>heal for 20% of damage dealt</style>.");
+                " While " + Tokens.butcheredPrefix + $", <style=cIsHealing>heal for {100 * SeamstressStaticValues.weaveLifeSteal}% of damage dealt</style>.");
             #endregion
 
             #region Utility
-            Language.Add(prefix + "UTILITY_REAP_NAME", "Threads Of Fate");
+            Language.Add(prefix + "UTILITY_REAP_NAME", "Bloodsoaked Path");
             Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart gaining " + Tokens.butcheredPrefix + 
                 ". During " + Tokens.butcheredPrefix + ", <color=#9B3737>Threads Of Fate</color> becomes <color=#9B3737>Expunge</color>.");
 
@@ -70,8 +71,10 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Special
-            Language.Add(prefix + "SPECIAL_SEW_NAME", "Sew");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <style=cIsUtility>Needles</style>. Hold up to 10 <style=cIsUtility>Needles</style> before auto firing needles.");
+            Language.Add(prefix + "SPECIAL_SEW_NAME", "Threaded Volley");
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. Hold up to 10 <color=#9B3737>Needles</color> before auto firing needles. " +
+                Tokens.stitchPrefix + $". <color=#9B3737>Needles</color> pierce for <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage</style> each. " +
+                $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. While " + Tokens.butcheredPrefix + ", <color=#9B3737>Needles</color> <style=cIsUtility>slow</style> enemies.");
             #endregion
 
             #region Achievements

@@ -9,7 +9,7 @@ using SeamstressMod.Survivors.Seamstress;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
-    public class NeedleHUD
+    public class NeedleHUD : MonoBehaviour
     {
         private static HUD hud;
         public static GameObject needleZero;
@@ -22,7 +22,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public static GameObject needleSeven;
         public static GameObject needleEight;
         public static GameObject needleNine;
-        public static void Init()
+        public void Awake()
         {
             On.RoR2.UI.HUD.Awake += MyFunc;
         }
@@ -170,7 +170,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleNine.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
             // Utilize the ResourcesAPI from R2API to load your image!
         }
-        public static void DestroyHUD()
+        public void OnDestroy()
         {
             UnityEngine.Object.Destroy(needleZero);
             UnityEngine.Object.Destroy(needleOne);

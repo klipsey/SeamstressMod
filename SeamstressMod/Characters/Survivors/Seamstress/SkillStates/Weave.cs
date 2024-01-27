@@ -124,7 +124,7 @@ namespace SeamstressMod.SkillStates
                         {
                             Util.PlaySound(hitSound, base.gameObject);
                             hasHit = true;
-                            dashDuration *= 0.5f;
+                            dashDuration *= 0.75f;
                         }
                         inHitPause = true;
                         hitPauseTimer = hitPauseDuration / attackSpeedStat;

@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using static RoR2.MasterSpawnSlotController;
 using RoR2.UI;
+using R2API;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -104,7 +105,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public override void InitializeCharacter()
         {
-        SeamstressUnlockables.Init();
+            SeamstressUnlockables.Init();
 
             base.InitializeCharacter();
 
@@ -124,8 +125,6 @@ namespace SeamstressMod.Survivors.Seamstress
             InitializeSkins();
             InitializeCharacterMaster();
 
-            NeedleHUD.Init();
-
             AdditionalBodySetup();
 
             
@@ -136,6 +135,9 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             AddHitboxes();
             bodyPrefab.AddComponent<SeamstressController>();
+            bodyPrefab.AddComponent<NeedleHUD>();
+            bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.stitched);
+            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
         }
@@ -188,7 +190,7 @@ namespace SeamstressMod.Survivors.Seamstress
             skillLocator.passiveSkill.skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME";
             skillLocator.passiveSkill.skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_DESCRIPTION";
             skillLocator.passiveSkill.icon = assetBundle.LoadAsset<Sprite>("texSpecialIcon");
-            skillLocator.passiveSkill.keywordToken = Tokens.needleKeyword;
+            skillLocator.passiveSkill.keywordToken = Tokens.passiveKeywords;
         }
 
         private void AddPrimarySkills()
@@ -227,7 +229,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseRechargeInterval = 5f,
-                baseMaxStock = 1,
+                baseMaxStock = 2,
 
                 rechargeStock = 1,
                 requiredStock = 1,
@@ -337,7 +339,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 18f,
+                baseRechargeInterval = 16f,
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,
@@ -451,11 +453,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
         {
-
-            if (sender.HasBuff(SeamstressBuffs.armorBuff))
-            {
-                args.armorAdd += 20;
-            }
             if(sender.HasBuff(SeamstressBuffs.butchered))
             {
                 args.baseMoveSpeedAdd += 3;

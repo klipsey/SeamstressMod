@@ -10,8 +10,6 @@ namespace SeamstressMod.SkillStates
 {
     public class Trim : BaseMeleeAttack
     {
-        private bool isComboFinisher => swingIndex == 2;
-
         public override void OnEnter()
         {
             this.RefreshState();
@@ -30,7 +28,7 @@ namespace SeamstressMod.SkillStates
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             this.earlyExitPercentTime = 0.5f;
-            this.hitStopDuration = 0.075f;
+            this.hitStopDuration = 0.05f;
             this.attackRecoil = 0.75f;
             this.hitHopVelocity = 5f;
 
@@ -38,44 +36,34 @@ namespace SeamstressMod.SkillStates
             this.hitSoundString = "";
             this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             this.swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
-
+            if (empowered)
+            {
+                this.moddedDamageType = DamageTypes.StitchDamage;
+                this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
+                this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
+            }
             switch (swingIndex)
             {
                 case 0:
                     this.muzzleString = "SwingLeft";
                     break;
                 case 1:
+                    moddedDamageType = DamageTypes.StitchDamage;
+                    this.swingEffectPrefab = SeamstressAssets.scissorsSwingEffect2;
                     this.muzzleString = "SwingRight";
                     break;
                 case 2:
+                    this.earlyExitPercentTime = 1f;
+                    this.moddedDamageType = DamageTypes.StitchDamage;
+                    this.moddedDamageType2 = DamageTypes.CutDamage;
+                    this.hitStopDuration = 0.15f;
+                    this.swingSoundString = "Play_bandit2_m2_slash";
+                    this.hitboxGroupName = "SwordBig";
+                    this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
+                    this.swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
                     this.muzzleString = "SwingCenter";
                     break;
             }
-
-            if (isComboFinisher)
-            {
-                this.earlyExitPercentTime = 1f;
-                this.moddedDamageType = DamageTypes.StitchDamage;
-                this.swingSoundString = "Play_bandit2_m2_slash";
-                this.hitboxGroupName = "SwordBig";
-                this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
-                if (empowered)
-                {
-                    this.moddedDamageType2 = DamageTypes.CutDamage;
-                    this.hitStopDuration = 0.15f;
-                    this.swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
-                }
-            }
-            else
-            {
-                if (empowered)
-                {
-                    this.moddedDamageType = DamageTypes.StitchDamage;
-                    this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
-                    this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-                }
-            }
-
             this.impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();

@@ -27,7 +27,6 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static void Init()
         {
             behave1 = DelegateBehave;
-            behave2 = DelegateBehave2;
             visual = stitchVisual;
             RegisterDots();
         }
@@ -37,10 +36,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * SeamstressStaticValues.stitchedDotDamage);
             }
-        }
-        public static void DelegateBehave2(RoR2.DotController self, RoR2.DotController.DotStack dotStack)
-        {
-            if (dotStack.dotIndex == SeamstressDot)
+            if (dotStack.dotIndex == SeamstressDotWeak)
             {
                 dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * SeamstressStaticValues.stitchedDotBossDamage);
             }
@@ -56,6 +52,7 @@ namespace SeamstressMod.Survivors.Seamstress
             if (self.victimBody.HasBuff(SeamstressBuffs.stitched) && !visualTracker)
             {
                 visualTracker = true;
+                UnityEngine.Object.Instantiate(SeamstressAssets.stitchTempEffectPrefab, self.transform);
                 stitchDot = UnityEngine.Object.Instantiate(SeamstressAssets.stitchEffect, self.transform);
             }
             else if(!self.victimBody.HasBuff(SeamstressBuffs.stitched) && visualTracker)
@@ -67,15 +64,6 @@ namespace SeamstressMod.Survivors.Seamstress
         public static void RegisterDots()
         {
             SeamstressDot = DotAPI.RegisterDotDef(new DotController.DotDef
-            {
-                interval = 0.25f,
-                damageCoefficient = 0f,
-                damageColorIndex = DamageColorIndex.SuperBleed,
-                associatedBuff = SeamstressBuffs.stitched,
-                resetTimerOnAdd = false,
-            }, (CustomDotBehaviour)behave1, (CustomDotVisual)visual);
-
-            SeamstressDotWeak = DotAPI.RegisterDotDef(new DotController.DotDef
             {
                 interval = 0.25f,
                 damageCoefficient = 0f,
