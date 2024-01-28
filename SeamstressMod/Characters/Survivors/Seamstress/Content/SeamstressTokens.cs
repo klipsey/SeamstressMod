@@ -23,10 +23,11 @@ namespace SeamstressMod.Survivors.Seamstress
             string prefix = SeamstressSurvivor.SEAMSTRESS_PREFIX;
 
             string desc = "Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
-             + "< ! > Trim is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
-             + "< ! > Weave is a basic dash on its own but with butcher it becomes devastating in groups." + Environment.NewLine + Environment.NewLine
-             + "< ! > Threads Of Fate can give you incredible buffs through butcher but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
-             + "< ! > Use Sew to fire your needles to hit enemies from afar." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Trimming Slashes is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
+             + "< ! > Woven Fate is your main mobility. Build up stitches on enemies to keep the cooldown low." + Environment.NewLine + Environment.NewLine
+             + "< ! > Bloodsoaked Path can give you incredible buffs through butcher but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
+             + "< ! > Don't forget to heal during butchered, it can give you incredible burst damage with Expunge." + Environment.NewLine + Environment.NewLine
+             + "< ! > Use Threaded Volley to fire your well needles for devestating group damage." + Environment.NewLine + Environment.NewLine;
 
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
@@ -45,7 +46,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "Stitched Heart");
             Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health missing. " +
-                $"Regenerate <color=#9B3737>Needles</color> overtime. Gain additional <color=#9B3737>Needles</color> when <color=#9B3737>Stitches</color> are torn by " + Tokens.cutPrefix + " or when enemies with <color=#9B3737>Cuts</color> die.");
+                $"Regenerate <color=#9B3737>Needles</color> overtime. Gain additional <color=#9B3737>Needles</color> when <color=#9B3737>Stitch</color> is torn.");
             #endregion
 
             #region Primary
@@ -72,9 +73,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "Threaded Volley");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. Hold up to 10 <color=#9B3737>Needles</color> before auto firing needles. " +
-                Tokens.stitchPrefix + $". <color=#9B3737>Needles</color> pierce for <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage</style> each. " +
-                $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. While " + Tokens.butcheredPrefix + ", <color=#9B3737>Needles</color> <style=cIsUtility>slow</style> enemies.");
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. Hold up to 10 <color=#9B3737>Needles</color> before auto firing. " );
             #endregion
 
             #region Achievements

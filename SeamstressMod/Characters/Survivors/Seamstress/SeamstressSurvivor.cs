@@ -49,10 +49,10 @@ namespace SeamstressMod.Survivors.Seamstress
             crosshair = Assets.LoadCrosshair("Standard"),
             podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
-            maxHealth = 180f,
+            maxHealth = 160f,
             healthRegen = 1f,
             armor = 0f,
-            damage = 8f,
+            damage = 10f,
 
             damageGrowth = 0f,
             healthGrowth = 160f * 0.3f,
@@ -228,7 +228,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 4f,
+                baseRechargeInterval = 6f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,

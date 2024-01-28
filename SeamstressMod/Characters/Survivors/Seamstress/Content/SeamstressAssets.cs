@@ -80,13 +80,13 @@ namespace SeamstressMod.Survivors.Seamstress
         #region effects
         private static void CreateEffects()
         {
-            stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion();
+            stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             ParticleSystem.MainModule derp = stitchEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             derp.startColor = new Color(155f / 255f, 55f / 255f, 55f / 255f, 1);
 
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercExposed.mat").WaitForCompletion());
             material.SetColor("_TintColor", Color.red);
-            stitchTempEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercExposeEffect.prefab").WaitForCompletion();
+            stitchTempEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercExposeEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffectPrefab");
             stitchTempEffectPrefab.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             derp = stitchTempEffectPrefab.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             derp.startColor = new Color(155f / 255f, 55f / 255f, 55f / 255f, 1);
@@ -281,14 +281,15 @@ namespace SeamstressMod.Survivors.Seamstress
             needlePrefab = Assets.CloneProjectilePrefab("FMJ", "Needle");
 
             ProjectileSimple needleSimple = needlePrefab.GetComponent<ProjectileSimple>();
-            needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 2f;
+            needleSimple.desiredForwardSpeed = 150f;
+            needleSimple.lifetime = 5f;
             needleSimple.updateAfterFiring = true;
             
             ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
             needleDamage.damageType = DamageType.Generic;
             DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needlePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
             needleModdedDamage.Add(DamageTypes.StitchDamage);
+            needleModdedDamage.Add(DamageTypes.BeginHoming);
 
             needlePrefab.AddComponent<ProjectileTargetComponent>();
             ProjectileSteerTowardTarget needleSteer = needlePrefab.AddComponent<ProjectileSteerTowardTarget>();
@@ -297,16 +298,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileOverlapAttack needleLap = needlePrefab.GetComponent<ProjectileOverlapAttack>();
             needleLap.resetInterval = 0.5f;
-
-            ProjectileDirectionalTargetFinder needleFinder = needlePrefab.AddComponent<ProjectileDirectionalTargetFinder>();
-            needleFinder.lookRange = 35f;   
-            needleFinder.lookCone = 90f;   
-            needleFinder.targetSearchInterval = 0.2f;
-            needleFinder.onlySearchIfNoTarget = false;
-            needleFinder.allowTargetLoss = true;
-            needleFinder.testLoS = true;
-            needleFinder.ignoreAir = false;
-            needleFinder.flierAltitudeTolerance = Mathf.Infinity;
 
             ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
             needleHeal.fractionOfDamage = SeamstressStaticValues.needleHealAmount;
@@ -340,14 +331,15 @@ namespace SeamstressMod.Survivors.Seamstress
             needleButcheredPrefab = Assets.CloneProjectilePrefab("FMJ", "NeedleButchered");
 
             ProjectileSimple needleSimple = needleButcheredPrefab.GetComponent<ProjectileSimple>();
-            needleSimple.desiredForwardSpeed = 100f;
-            needleSimple.lifetime = 2f;
+            needleSimple.desiredForwardSpeed = 150f;
+            needleSimple.lifetime = 5f;
             needleSimple.updateAfterFiring = true;
 
             ProjectileDamage needleDamage = needleButcheredPrefab.GetComponent<ProjectileDamage>();
             needleDamage.damageType = DamageType.SlowOnHit;
             DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
             needleModdedDamage.Add(DamageTypes.StitchDamage);
+            needleModdedDamage.Add(DamageTypes.BeginHoming);
 
             needleButcheredPrefab.AddComponent<ProjectileTargetComponent>();
             ProjectileSteerTowardTarget needleSteer = needleButcheredPrefab.AddComponent<ProjectileSteerTowardTarget>();
@@ -357,16 +349,6 @@ namespace SeamstressMod.Survivors.Seamstress
             ProjectileOverlapAttack needleLap = needleButcheredPrefab.GetComponent<ProjectileOverlapAttack>();
             needleLap.resetInterval = 0.5f;
             needleLap.overlapProcCoefficient = 0.5f;
-
-            ProjectileDirectionalTargetFinder needleFinder = needleButcheredPrefab.AddComponent<ProjectileDirectionalTargetFinder>();
-            needleFinder.lookRange = 35f;   
-            needleFinder.lookCone = 90f;    
-            needleFinder.targetSearchInterval = 0.2f;
-            needleFinder.onlySearchIfNoTarget = false;
-            needleFinder.allowTargetLoss = true;
-            needleFinder.testLoS = true;
-            needleFinder.ignoreAir = false;
-            needleFinder.flierAltitudeTolerance = Mathf.Infinity;
 
             ProjectileHealOwnerOnDamageInflicted needleHeal = needleButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
             needleHeal.fractionOfDamage = SeamstressStaticValues.needleHealAmount;

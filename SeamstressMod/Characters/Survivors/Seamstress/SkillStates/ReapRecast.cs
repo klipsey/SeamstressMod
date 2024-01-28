@@ -25,10 +25,10 @@ namespace SeamstressMod.SkillStates
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             this.attackStartPercentTime = 0f;
-            this.attackEndPercentTime = 0.2f;
+            this.attackEndPercentTime = 0.01f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            this.earlyExitPercentTime = 0.2f;
+            this.earlyExitPercentTime = 0.01f;
 
             this.hitStopDuration = 0.1f;
             this.attackRecoil = 0f;
@@ -42,7 +42,7 @@ namespace SeamstressMod.SkillStates
             this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             this.isFlatDamage = true;
             this.damageTotal = characterBody.GetComponent<SeamstressController>().butcheredConversion;
-            characterBody.GetComponent<SeamstressController>().butcheredConversion = characterBody.damage * 1f;
+            characterBody.GetComponent<SeamstressController>().butcheredConversion = characterBody.damage;
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeEffect, transform);
 
             if (!base.characterMotor.isGrounded)

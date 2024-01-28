@@ -19,6 +19,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType StitchDamage;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
         public static DamageAPI.ModdedDamageType WeaveLifeSteal;
+        public static DamageAPI.ModdedDamageType BeginHoming;
 
         internal static void Init()
         {
@@ -27,7 +28,7 @@ namespace SeamstressMod.Survivors.Seamstress
             StitchDamage = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
             WeaveLifeSteal = DamageAPI.ReserveDamageType();
-
+            BeginHoming = DamageAPI.ReserveDamageType();
             Hook();
         }
         private static void Hook()
@@ -43,11 +44,33 @@ namespace SeamstressMod.Survivors.Seamstress
                 return;
             }
             HealthComponent victim = damageReport.victim;
+            GameObject inflictorObject = damageInfo.inflictor;
             CharacterBody victimBody = damageReport.victimBody;
             CharacterBody attacker = damageReport.attackerBody;
             GameObject attackerObject = damageReport.attacker.gameObject;
             if (NetworkServer.active)
             {
+                if(damageInfo.HasModdedDamageType(BeginHoming))
+                {
+                    ProjectileDirectionalTargetFinder s = inflictorObject.GetComponent<ProjectileDirectionalTargetFinder>();
+                    if(!inflictorObject.TryGetComponent<ProjectileDirectionalTargetFinder>(out s))
+                    {
+                        ProjectileDirectionalTargetFinder needleFinder = inflictorObject.AddComponent<ProjectileDirectionalTargetFinder>();
+                        needleFinder.lookRange = 35f;
+                        needleFinder.lookCone = 180f;
+                        needleFinder.targetSearchInterval = 0.2f;
+                        needleFinder.onlySearchIfNoTarget = false;
+                        needleFinder.allowTargetLoss = true;
+                        needleFinder.testLoS = true;
+                        needleFinder.ignoreAir = false;
+                        needleFinder.flierAltitudeTolerance = Mathf.Infinity;
+
+                        ProjectileSimple needleSimple = inflictorObject.GetComponent<ProjectileSimple>();
+                        needleSimple.desiredForwardSpeed = 150f;
+                        needleSimple.lifetime = 1.25f;
+                        needleSimple.updateAfterFiring = true;
+                    }
+                }
                 if(damageInfo.HasModdedDamageType(StitchDamage))
                 {
                     attacker.skillLocator.DeductCooldownFromAllSkillsServer(SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient);
@@ -87,13 +110,13 @@ namespace SeamstressMod.Survivors.Seamstress
                         {
                             if (damageReport.victimIsBoss)
                             {
-                                cutsume.damage = ((SeamstressStaticValues.cutDotDamage * 25) * damageInfo.procCoefficient);
-                                DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, 1f);
+                                cutsume.damage = (attacker.damage* SeamstressStaticValues.cutBaseDamage * damageInfo.procCoefficient);
+                                DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                             }
                             else
                             {
-                                cutsume.damage = ((SeamstressStaticValues.cutDotBossDamage * 25) * damageInfo.procCoefficient);
-                                DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, 1f);
+                                cutsume.damage = (attacker.damage * SeamstressStaticValues.cutBaseDamage * damageInfo.procCoefficient);
+                                DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                             }
                             victim.TakeDamage(cutsume);
                             attacker.skillLocator.DeductCooldownFromAllSkillsServer(SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient);

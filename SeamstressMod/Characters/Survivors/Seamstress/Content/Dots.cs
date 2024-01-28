@@ -68,7 +68,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             SeamstressDot = DotAPI.RegisterDotDef(new DotController.DotDef
             {
-                interval = 0.25f,
+                interval = 1f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.stitched,
@@ -77,7 +77,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             SeamstressBossDot = DotAPI.RegisterDotDef(new DotController.DotDef
             {
-                interval = 0.25f,
+                interval = 1f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.stitched,

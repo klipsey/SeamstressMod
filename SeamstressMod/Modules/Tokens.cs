@@ -20,13 +20,14 @@ namespace SeamstressMod.Modules
 
         public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";
 
-        public static string stitchKeyword = KeywordText("Stitch", $"Apply <color=#9B3737>Stitches</color>. Applying <color=#9B3737>Stitches</color> or " +
-            $"tearing open <color=#9B3737>Stitches</color> reduce cooldowns by {SeamstressStaticValues.stitchCooldownReduction}.");
+        public static string stitchKeyword = KeywordText("Stitch", $"Applying <color=#9B3737>Stitch</color> or " +
+            $"tearing open <color=#9B3737>Stitches</color> reduce cooldowns by {SeamstressStaticValues.stitchCooldownReduction}. " +
+            $"Tear <color=#9B3737>Stitches</color> by killing enemies or applying <color=#9B3737>Cut</color>.");
 
         public static string cutKeyword = KeywordText("Cut", $"Tear open <color=#9B3737>Stitches</color> " +
-            $"dealing <style=cIsDamage>2.5%</style> (<style=cIsDamage>1.25%</style> against bosses) of the enemies missing health and apply <color=#9B3737>Cuts</color>. " +
-            $"<color=#9B3737>Cuts</color> deal <style=cIsDamage>0.5%</style> (<style=cIsDamage>0.25%</style> against bosses) of the " +
-            $"enemies missing <style=cIsHealth>health</style> per second for {SeamstressStaticValues.cutDuration} seconds. ");
+            $"dealing <style=cIsDamage>{100 * SeamstressStaticValues.cutBaseDamage}% damage</style>. " +
+            $"Aftwerward, deal <style=cIsDamage>0.5%</style> (<style=cIsDamage>0.25%</style> against bosses) of the " +
+            $"enemies missing <style=cIsHealth>health</style> per second for {SeamstressStaticValues.cutDuration} seconds.");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 

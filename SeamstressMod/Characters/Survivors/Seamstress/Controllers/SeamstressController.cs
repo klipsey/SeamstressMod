@@ -10,7 +10,7 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         public CharacterBody characterBody;
 
-        public float butcheredConversion = 0;
+        public float butcheredConversion;
 
         public float needleRegen;
 
@@ -33,6 +33,7 @@ namespace SeamstressMod.Survivors.Seamstress
             healthComponent = GetComponent<HealthComponent>();
             characterBody = GetComponent<CharacterBody>();
             skillLocator = GetComponent<SkillLocator>();
+            butcheredConversion = characterBody.damage;
             Hook();
         }
         public void Start()
@@ -272,7 +273,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public void CalculateBonusDamage()
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
-            characterBody.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
+            characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
         private static void Unhook()
         {
