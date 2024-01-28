@@ -16,19 +16,20 @@ namespace SeamstressMod.SkillStates
         {
             this.RefreshState();
             this.hitboxGroupName = "Sew";
+            this.damageType = DamageType.Stun1s;
             this.moddedDamageType = DamageTypes.CutDamage;
             this.procCoefficient = 1f;
             this.pushForce = 300;
             this.bonusForce = Vector3.zero;
-            this.baseDuration = 1f;
+            this.baseDuration = 0f;
 
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             this.attackStartPercentTime = 0f;
-            this.attackEndPercentTime = 0.01f;
+            this.attackEndPercentTime = 0f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            this.earlyExitPercentTime = 0.01f;
+            this.earlyExitPercentTime = 0f;
 
             this.hitStopDuration = 0.1f;
             this.attackRecoil = 0f;
@@ -44,7 +45,9 @@ namespace SeamstressMod.SkillStates
             this.damageTotal = characterBody.GetComponent<SeamstressController>().butcheredConversion;
             characterBody.GetComponent<SeamstressController>().butcheredConversion = characterBody.damage;
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeEffect, transform);
-
+            UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect, transform);
+            UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect2, transform);
+            UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect3, transform);
             if (!base.characterMotor.isGrounded)
             {
                 SmallHop(base.characterMotor, 6f);
