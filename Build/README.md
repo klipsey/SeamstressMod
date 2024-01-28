@@ -2,7 +2,7 @@
 - BETA
 - Currently working on texturing, modeling, and animations
 ## Model Previews
-[![](https://media.discordapp.net/attachments/1119077461783748652/1198195533337067610/image.png?ex=65be058c&is=65ab908c&hm=57c4f3666bf793cd28c0e14c9224ac68294b078be3f71d5d14c14558f466d483&=&format=webp&quality=lossless&width=470&height=670)]()
+[![](https://media.discordapp.net/attachments/1195084430876872866/1200725776811692062/image.png?ex=65c73a05&is=65b4c505&hm=5f73e8af69699ce7e7c818a6aec7090cf8577f1f4f4b8f284b33a14789c459d3&=&format=webp&quality=lossless&width=550&height=671)]()
 [![](https://media.discordapp.net/attachments/1119077461783748652/1199057179555147867/image.png?ex=65c12805&is=65aeb305&hm=16dd05509565282af7206b459201067aba79c29c71e97357cae699ad6e791e08&=&format=webp&quality=lossless&width=402&height=676)]()
 
 (Base model will have floating scissors blades)

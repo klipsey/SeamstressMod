@@ -1,3 +1,8 @@
+# 0.1.1
+- Bugfixes and text cleanup
+- Needles only home after the first hit
+- Expunge damage has a flat base of 100%
+- Expunge can potentially proc bands at higher healing values
 # 0.1.0
 - Hopefully, the final base kit.
 - Regenerate Needles overtime. Gain additiojnalo Needles when Sttiches are torn by Cut or when enemies with Cuts die.
