@@ -10,6 +10,8 @@ using UnityEngine.Rendering;
 using static RoR2.MasterSpawnSlotController;
 using RoR2.UI;
 using R2API;
+using UnityEngine.AddressableAssets;
+using UnityEngine.Networking;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -46,7 +48,7 @@ namespace SeamstressMod.Survivors.Seamstress
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
-            crosshair = Assets.LoadCrosshair("Standard"),
+            crosshair = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/UI/SimpleDotCrosshair.prefab").WaitForCompletion().InstantiateClone("SeamstressCrosshair"),
             podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
             maxHealth = 160f,
@@ -298,7 +300,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
                 activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Vehicle,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
                 baseRechargeInterval = 0f,
                 baseMaxStock = 1,

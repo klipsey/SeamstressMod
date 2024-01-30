@@ -31,12 +31,6 @@ namespace SeamstressMod.SkillStates
             fireTime = firePercentTime * duration;
             Util.PlaySound("Play_item_proc_novaonheal_impact", gameObject);
             PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
-            CharacterModel component = (GetModelTransform()).GetComponent<CharacterModel>();
-            TemporaryOverlay temporaryOverlay = base.gameObject.AddComponent<TemporaryOverlay>();
-            temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
-            temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
-            temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-            temporaryOverlay.AddToCharacerModel(component);
             Util.PlaySound("Play_bandit2_m2_alt_throw", base.characterBody.gameObject);
             UnityEngine.Object.Instantiate<GameObject>(reapPrefab, base.characterBody.modelLocator.transform);
             if (!base.characterMotor.isGrounded)

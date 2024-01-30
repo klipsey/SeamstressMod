@@ -63,7 +63,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private static AssetBundle _assetBundle;
         //crosshairs
-        public static GameObject crosshairOverridePrefab;
 
         internal static GameObject needlePrefab;
 
@@ -87,16 +86,15 @@ namespace SeamstressMod.Survivors.Seamstress
         private static void CreateEffects()
         {
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
+            stitchEffect.AddComponent<NetworkIdentity>();
 
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercExposed.mat").WaitForCompletion());
             material.SetColor("_TintColor", Color.red);
             stitchTempEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercExposeEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffectPrefab");
             stitchTempEffectPrefab.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            stitchTempEffectPrefab.AddComponent<NetworkIdentity>();
 
             butcheredOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
-
-            crosshairOverridePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Heretic/HereticCrosshair.prefab").WaitForCompletion().InstantiateClone("SeamstressCrosshair");
-            crosshairOverridePrefab.AddComponent<NetworkIdentity>();
 
             scissorsButcheredSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
             scissorsButcheredSwingEffect.AddComponent<NetworkIdentity>();

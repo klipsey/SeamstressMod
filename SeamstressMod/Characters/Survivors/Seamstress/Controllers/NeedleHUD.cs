@@ -6,6 +6,7 @@ using RoR2.UI;
 using UnityEngine.UI;
 using RoR2;
 using SeamstressMod.Survivors.Seamstress;
+using UnityEngine.AddressableAssets;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -22,12 +23,14 @@ namespace SeamstressMod.Survivors.Seamstress
         public static GameObject needleSeven;
         public static GameObject needleEight;
         public static GameObject needleNine;
+        public static GameObject expungeHealing;
         public void Awake()
         {
             On.RoR2.UI.HUD.Awake += MyFunc;
         }
         private static void MyFunc(On.RoR2.UI.HUD.orig_Awake orig, RoR2.UI.HUD self)
         {
+            //WARNING ALL THE LOCAL POSITION SCALE ROTATION IS FUCKED FOR THE NEEDLES. TO FIX SET SCALE TO 1 AND THEN MANUALLY MOVE TO MIDDLE
             orig(self); // Don't forget to call this, or the vanilla / other mods' codes will not execute!
             hud = self;
             needleZero = new GameObject("Needle0");
@@ -37,7 +40,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.anchoredPosition = new Vector2(0.5f, 0.5f);
-            rectTransform.localPosition = new Vector3(12f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(12f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
             needleZero.AddComponent<Image>();
@@ -49,8 +52,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.localPosition = new Vector3(-12f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(-12f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
 
@@ -63,8 +65,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.localPosition = new Vector3(24f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(24f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
 
@@ -77,8 +78,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.localPosition = new Vector3(-24f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(-24f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
 
@@ -91,8 +91,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.localPosition = new Vector3(36f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(36f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
 
@@ -105,8 +104,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.localPosition = new Vector3(-36f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(-36f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
 
@@ -119,8 +117,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.localPosition = new Vector3(48f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(48f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
 
@@ -133,8 +130,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.localPosition = new Vector3(-48f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(-48f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
 
@@ -147,8 +143,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.localPosition = new Vector3(60f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(60f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
 
@@ -161,14 +156,39 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.localPosition = new Vector3(-60f, -70f, rectTransform.localPosition.z);
+            rectTransform.localPosition = new Vector3(-60f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
             rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
 
             needleNine.AddComponent<Image>();
             needleNine.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
-            // Utilize the ResourcesAPI from R2API to load your image!
+
+            expungeHealing = new GameObject("ExpungeHealing");
+            expungeHealing.transform.SetParent(hud.mainContainer.transform);
+            rectTransform = expungeHealing.AddComponent<RectTransform>();
+            rectTransform.anchorMin = Vector2.zero; 
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.sizeDelta = Vector2.zero;
+            rectTransform.anchoredPosition = Vector2.zero;
+            rectTransform.localPosition = new Vector3(0, 30, rectTransform.localPosition.z);
+            rectTransform.localScale = new Vector3(1f, 1f, rectTransform.localScale.z);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
+
+            expungeHealing.AddComponent<Text>();
+            expungeHealing.AddComponent<Outline>();
+            expungeHealing.GetComponent<Outline>().effectColor = Color.black;
+            expungeHealing.GetComponent<Outline>().effectDistance = Vector2.one;
+            expungeHealing.GetComponent<Text>().font = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Font>("RoR2/Base/Common/Fonts/Bombardier/BOMBARD_.ttf").WaitForCompletion());
+            expungeHealing.GetComponent<Text>().fontSize = 20;
+            expungeHealing.GetComponent<Text>().fontStyle = FontStyle.Normal;
+            expungeHealing.GetComponent<Text>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/Fonts/Bombardier/BOMBARD_.ttf").WaitForCompletion());           
+            expungeHealing.GetComponent<Text>().color = new Color(155f / 255f, 55f / 255f, 55f / 255f, 1f);
+            expungeHealing.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+            expungeHealing.GetComponent<Text>().text = 0.ToString();
+            expungeHealing.GetComponent<Text>().enabled = false;
+            expungeHealing.GetComponent<Outline>().enabled = true;
+
+
         }
         public void OnDestroy()
         {
@@ -182,6 +202,7 @@ namespace SeamstressMod.Survivors.Seamstress
             UnityEngine.Object.Destroy(needleSeven);
             UnityEngine.Object.Destroy(needleEight);
             UnityEngine.Object.Destroy(needleNine);
+            UnityEngine.Object.Destroy(expungeHealing);
             On.RoR2.UI.HUD.Awake -= MyFunc;
         }
     }

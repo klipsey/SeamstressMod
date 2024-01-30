@@ -6,6 +6,7 @@ using SeamstressMod.Survivors.Seamstress;
 using SeamstressMod.Modules.BaseStates;
 using System;
 using EntityStates;
+using UnityEngine.UI;
 
 namespace SeamstressMod.SkillStates
 {
@@ -48,10 +49,7 @@ namespace SeamstressMod.SkillStates
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect, transform);
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect2, transform);
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect3, transform);
-            if (!base.characterMotor.isGrounded)
-            {
-                SmallHop(base.characterMotor, 6f);
-            }
+            Util.CleanseBody(characterBody, true, false, false, true, true, true);
             controller = characterBody.GetComponent<SeamstressController>();
             base.OnEnter();
             skillLocator.utility = skillLocator.FindSkill("Utility");
@@ -89,7 +87,7 @@ namespace SeamstressMod.SkillStates
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.Vehicle;
+            return InterruptPriority.PrioritySkill;
         }
 
         protected override void PlayAttackAnimation()
@@ -98,6 +96,8 @@ namespace SeamstressMod.SkillStates
         }
         public override void OnExit()
         {
+            NeedleHUD.expungeHealing.GetComponent<Text>().enabled = false;
+            NeedleHUD.expungeHealing.GetComponent<Outline>().enabled = false;
             base.OnExit();
         }
 
