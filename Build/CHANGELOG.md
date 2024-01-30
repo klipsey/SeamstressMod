@@ -1,3 +1,8 @@
+# 0.1.2
+- Expunge visuals reworked
+- Expunge damage amount above crosshair
+- Mods that affect buff duration should not effect needle recharge speed
+- Butchered SFX is a bit more clear on when it ends
 # 0.1.1
 - Bugfixes and text cleanup
 - Needles only home after the first hit

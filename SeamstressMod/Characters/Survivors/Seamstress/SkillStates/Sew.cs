@@ -5,6 +5,7 @@ using R2API;
 using SeamstressMod.Survivors.Seamstress;
 using SeamstressMod.Modules.BaseStates;
 using System;
+using EntityStates;
 
 namespace SeamstressMod.SkillStates
 {
@@ -19,7 +20,7 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             this.RefreshState();
-            duration = 1f + (this.needleCompareDelay / base.attackSpeedStat * base.characterBody.GetBuffCount(SeamstressBuffs.needles));
+            duration = (this.needleCompareDelay / base.attackSpeedStat * base.characterBody.GetBuffCount(SeamstressBuffs.needles));
             aimRay = base.GetAimRay();
             hasLaunched = false;
             if (empowered)
@@ -68,6 +69,14 @@ namespace SeamstressMod.SkillStates
             {
                 base.characterBody.AddBuff(SeamstressBuffs.needles);
             }
+        }
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            if (this.needleDelay >= duration)
+            {
+                return InterruptPriority.Any;
+            }
+            return InterruptPriority.PrioritySkill;
         }
         protected void PlayAttackAnimation()
         {

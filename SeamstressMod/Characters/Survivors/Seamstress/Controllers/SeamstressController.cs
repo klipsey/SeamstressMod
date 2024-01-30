@@ -77,7 +77,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
                 temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
-                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.5f);
+                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
                 temporaryOverlay.animateShaderAlpha = true;
                 temporaryOverlay.destroyComponentOnEnd = true;
                 temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
@@ -152,20 +152,20 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon");
                 //skillLocator.secondary.cooldownScale = 1 - (SeamstressStaticValues.cutCooldownReduction / 4f);
             }
-            else if(!characterBody.HasBuff(SeamstressBuffs.butchered) && butchered)
+            if(!characterBody.HasBuff(SeamstressBuffs.butchered) && butchered)
             {
                 butchered = false;
                 UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.reapEndEffect, characterBody.modelLocator.transform);
                 Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
-                if (skillLocator.utility == skillLocator.FindSkill("reapRecast"))
-                {
-                    skillLocator.utility.ExecuteIfReady();
-                }
                 fuckYou = false;
                 skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
                 skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
                 skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
                 //skillLocator.secondary.cooldownScale *= 1 - (SeamstressStaticValues.cutCooldownReduction / 4f);
+            }
+            if (!characterBody.HasBuff(SeamstressBuffs.butchered) && skillLocator.utility == skillLocator.FindSkill("reapRecast"))
+            {
+                skillLocator.utility.ExecuteIfReady();
             }
         }
         public void CalculateBonusDamage()

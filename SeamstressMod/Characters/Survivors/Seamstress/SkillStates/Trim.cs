@@ -38,12 +38,6 @@ namespace SeamstressMod.SkillStates
             this.hitSoundString = "";
             this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             this.swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
-            if (empowered)
-            {
-                this.moddedDamageType = DamageTypes.StitchDamage;
-                this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
-                this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-            }
             switch (swingIndex)
             {
                 case 0:
@@ -64,6 +58,12 @@ namespace SeamstressMod.SkillStates
                     this.swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
                     this.muzzleString = "SwingCenter";
                     break;
+            }
+            if (empowered)
+            {
+                this.moddedDamageType = DamageTypes.StitchDamage;
+                this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
+                this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             }
             this.impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 

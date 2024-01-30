@@ -28,13 +28,14 @@ Utility: **Bloodsoaked Path**
 
 **Expunge**
 ---
-- Cut. Expunge stored healing during Butchered as damage in an area. 
+- Cut. Expunge stored healing during Butchered as damage in an area.
 
 Special: **Threaded Volley**
 ---
 - Expels Needles. Hold up to ten before autofiring.
 
-- Needles:
+**Needles**:
+---
 - Stitch. Firing piercing Needles that each deal damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
 
 **Stitch** 

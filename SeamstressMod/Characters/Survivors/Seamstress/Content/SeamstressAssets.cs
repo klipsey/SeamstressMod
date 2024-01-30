@@ -223,13 +223,22 @@ namespace SeamstressMod.Survivors.Seamstress
 
             weaveDash = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercAssaulterEffect.prefab").WaitForCompletion().InstantiateClone("WeaveDash");
             weaveDash.AddComponent<NetworkIdentity>();
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
+            material.SetColor("_TintColor", Color.white);
             weaveDash.transform.GetChild(5).gameObject.SetActive(value: false);
             weaveDash.transform.GetChild(6).gameObject.SetActive(value: false);
+            weaveDash.transform.GetChild(9).gameObject.GetComponent<TrailRenderer>().material = material;
+            weaveDash.transform.GetChild(10).GetChild(0).gameObject.GetComponent<TrailRenderer>().material = material;
+            weaveDash.transform.GetChild(10).GetChild(1).gameObject.GetComponent<TrailRenderer>().material = material;
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercIgnition.mat").WaitForCompletion());
+            material.SetColor("_TintColor", Color.red);
+            weaveDash.transform.GetChild(10).GetChild(2).gameObject.GetComponent<TrailRenderer>().material = material;
+            weaveDash.transform.GetChild(10).GetChild(3).gameObject.GetComponent<TrailRenderer>().material = material;
 
             weaveDashButchered = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercAssaulterEffect.prefab").WaitForCompletion().InstantiateClone("WeaveDashButchered");
             weaveDashButchered.AddComponent<NetworkIdentity>();
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercIgnition.mat").WaitForCompletion());
-            material.SetColor("_TintColor", Color.red);
+            material.SetColor("_TintColor", new Color(155f / 255f, 55f / 255f, 55f / 255f));
             weaveDashButchered.transform.GetChild(5).gameObject.SetActive(value: false);
             weaveDashButchered.transform.GetChild(6).gameObject.SetActive(value: false);
             weaveDashButchered.transform.GetChild(9).gameObject.GetComponent<TrailRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
