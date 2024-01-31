@@ -71,9 +71,9 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-                Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
                 dashPrefab = SeamstressAssets.weaveDashButchered;
                 this.overlapAttack.AddModdedDamageType(DamageTypes.WeaveLifeSteal);
+                Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
                 hitSound = "Play_imp_overlord_impact";
             }
             else

@@ -48,7 +48,7 @@ namespace SeamstressMod.Survivors.Seamstress
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
-            crosshair = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/UI/SimpleDotCrosshair.prefab").WaitForCompletion().InstantiateClone("SeamstressCrosshair"),
+            crosshair = LegacyResourcesAPI.Load<GameObject>("RoR2/Base/UI/SimpleDotCrosshair.prefab"),
             podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
             maxHealth = 160f,
@@ -213,6 +213,21 @@ namespace SeamstressMod.Survivors.Seamstress
             trimSkillDef.stepGraceDuration = 1f;
 
             Skills.AddPrimarySkills(bodyPrefab, trimSkillDef);
+
+            SteppedSkillDef flurrySkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
+                (
+                    "Flurry",
+                    SEAMSTRESS_PREFIX + "PRIMARY_FLURRY_NAME",
+                    SEAMSTRESS_PREFIX + "PRIMARY_FLURRY_DESCRIPTION",
+                    assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.Flurry)),
+                    "Weapon"
+                ));
+            //custom Skilldefs can have additional fields that you can set manually
+            trimSkillDef.stepCount = 2;
+            trimSkillDef.stepGraceDuration = 1f;
+
+            Skills.AddPrimarySkills(bodyPrefab, flurrySkillDef);
         }
 
         private void AddSecondarySkills()
@@ -251,6 +266,40 @@ namespace SeamstressMod.Survivors.Seamstress
             });
 
             Skills.AddSecondarySkills(bodyPrefab, weaveSkillDef);
+
+            SkillDef blinkSeamstressSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "BlinkSeamstress",
+                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_BLINK_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_BLINK_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.cutKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.BlinkSeamstress)),
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseRechargeInterval = 6f,
+                baseMaxStock = 1,
+
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = false,
+                mustKeyPress = true,
+                beginSkillCooldownOnSkillEnd = false,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+
+            });
+
+            Skills.AddSecondarySkills(bodyPrefab, blinkSeamstressSkillDef);
         }
 
         private void AddUtiitySkills()

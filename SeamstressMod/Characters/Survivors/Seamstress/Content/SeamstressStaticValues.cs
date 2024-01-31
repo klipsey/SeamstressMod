@@ -5,7 +5,9 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     public static class SeamstressStaticValues
     {
-        internal const float scissorsDamageCoefficient = 1.6f;
+        internal const float trimDamageCoefficient = 1.8f;
+
+        internal const float flurryDamageCoefficient = 1.4f;
 
         internal const float cutDotDamage = 0.005f;
 
@@ -15,13 +17,15 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float weaveDamageCoefficient = 3;
 
+        internal const float blinkDamageCoefficient = 4;
+
         internal const float weaveLifeSteal = 0.25f;
 
         internal const float cutDuration = 4f;
 
         internal const float reapHealthCost = 0.5f;
 
-        internal const float stitchCooldownReduction = 0.25f;
+        internal const float stitchCooldownReduction = 0.5f;
 
         internal const float needleHealAmount = 0.25f;
 
@@ -35,7 +39,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float passiveScaling = 0.05f;
 
-        internal const float sewNeedleDamageCoefficient = 0.5f;
+        internal const float sewNeedleDamageCoefficient = 0.3f;
 
     }
 }

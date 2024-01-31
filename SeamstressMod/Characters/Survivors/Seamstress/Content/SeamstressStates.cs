@@ -8,7 +8,11 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             Modules.Content.AddEntityState(typeof(Trim));
 
+            Modules.Content.AddEntityState(typeof(Flurry));
+
             Modules.Content.AddEntityState(typeof(Weave));
+
+            Modules.Content.AddEntityState(typeof(BlinkSeamstress));
 
             Modules.Content.AddEntityState(typeof(Reap));
 

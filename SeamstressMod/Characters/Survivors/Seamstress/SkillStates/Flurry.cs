@@ -7,20 +7,20 @@ using System;
 
 
 namespace SeamstressMod.SkillStates
-{
-    public class Trim : BaseMeleeAttack
+{   
+    public class Flurry : BaseMeleeAttack
     {
         public override void OnEnter()
         {
             this.RefreshState();
             this.hitboxGroupName = "Sword";
             this.damageType = DamageType.Generic;
-            this.damageTotal = SeamstressStaticValues.trimDamageCoefficient;
+            this.damageTotal = SeamstressStaticValues.flurryDamageCoefficient;
             this.procCoefficient = 1f;
             this.pushForce = 300f;
             this.bonusForce = Vector3.zero;
             this.baseDuration = 1f;
-            this.moddedDamageType = DamageTypes.Empty;
+            this.moddedDamageType = DamageTypes.StitchDamage;
             this.moddedDamageType2 = DamageTypes.Empty;
             this.moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
@@ -32,36 +32,16 @@ namespace SeamstressMod.SkillStates
             this.earlyExitPercentTime = 0.5f;
             this.hitStopDuration = 0.05f;
             this.attackRecoil = 0.75f;
-            this.hitHopVelocity = 5f;
+            this.hitHopVelocity = 3.5f;
 
             this.swingSoundString = "Play_imp_attack";
             this.hitSoundString = "";
             this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             this.swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
-            switch (swingIndex)
-            {
-                case 0:
-                    this.muzzleString = "SwingLeft";
-                    break;
-                case 1:
-                    this.moddedDamageType = DamageTypes.StitchDamage;
-                    this.swingEffectPrefab = SeamstressAssets.scissorsSwingEffect2;
-                    this.muzzleString = "SwingRight";
-                    break;
-                case 2:
-                    this.earlyExitPercentTime = 1f;
-                    this.moddedDamageType2 = DamageTypes.CutDamage;
-                    this.hitStopDuration = 0.1f;
-                    this.swingSoundString = "Play_bandit2_m2_slash";
-                    this.hitboxGroupName = "SwordBig";
-                    this.swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
-                    this.swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
-                    this.muzzleString = "SwingCenter";
-                    break;
-            }
+            muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
             if (empowered)
             {
-                this.moddedDamageType = DamageTypes.StitchDamage;
+                this.moddedDamageType = DamageTypes.StitchDamageFlurry;
                 this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
                 this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             }
@@ -69,7 +49,7 @@ namespace SeamstressMod.SkillStates
 
             base.OnEnter();
         }
-        
+
         protected override void FireAttack()
         {
             if (isAuthority)
@@ -85,18 +65,8 @@ namespace SeamstressMod.SkillStates
         }
         protected override void PlayAttackAnimation()
         {
-            switch (swingIndex)
-            {
-                case 0:
-                    PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", this.duration, 0.1f * duration);
-                    break;
-                case 1:
-                    PlayCrossfade("Gesture, Override", "Slash2", "Slash.playbackRate", this.duration, 0.1f * duration);
-                    break;
-                case 2:
-                    PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", this.duration, 0.1f * duration);
-                    break;
-            }
+
+            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", this.duration, 0.1f * duration);
         }
         protected override void PlaySwingEffect()
         {
