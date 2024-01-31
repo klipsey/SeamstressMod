@@ -59,7 +59,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Secondary
             Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Woven Fate");
             Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.cutPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>." +
-                " While " + Tokens.butcheredPrefix + $", <style=cIsHealing>heal for {100 * SeamstressStaticValues.weaveLifeSteal}% of damage dealt</style>.");
+                " While " + Tokens.butcheredPrefix + $", the <style=cIsUtility>cooldown</style> is halved and <style=cIsHealing>heal for {100 * SeamstressStaticValues.weaveLifeSteal}% of damage dealt</style>.");
             #endregion
 
             #region Utility

@@ -10,8 +10,6 @@ namespace SeamstressMod.Modules
 
         public const string stitchPrefix = "<color=#9B3737>Stitch</color>";
 
-        public const string armorPrefix = "<style=cIsUtility>20 armor</style>";
-
         public const string needlePrefix = "<color=#9B3737>Needle</color>";
 
         public const string halfHealthPrefix = "<style=cIsHealth>50% HP</style>";
@@ -21,7 +19,7 @@ namespace SeamstressMod.Modules
         public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";
 
         public static string stitchKeyword = KeywordText("Stitch", $"Applying <color=#9B3737>Stitch</color> or " +
-            $"tearing open <color=#9B3737>Stitches</color> reduce cooldowns by {SeamstressStaticValues.stitchCooldownReduction}. " +
+            $"tearing open <color=#9B3737>Stitches</color> reduce <style=cIsUtility>cooldowns</style> by <style=cIsUtility>{SeamstressStaticValues.stitchCooldownReduction}</style>. " +
             $"Tear <color=#9B3737>Stitches</color> by killing enemies or applying <color=#9B3737>Cut</color>.");
 
         public static string cutKeyword = KeywordText("Cut", $"Tear open <color=#9B3737>Stitches</color> " +

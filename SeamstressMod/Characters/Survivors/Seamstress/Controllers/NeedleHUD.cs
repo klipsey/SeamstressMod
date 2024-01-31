@@ -23,6 +23,16 @@ namespace SeamstressMod.Survivors.Seamstress
         public static GameObject needleSeven;
         public static GameObject needleEight;
         public static GameObject needleNine;
+        public static Image needleImgZero;
+        public static Image needleImgOne;
+        public static Image needleImgTwo;
+        public static Image needleImgThree;
+        public static Image needleImgFour;
+        public static Image needleImgFive;
+        public static Image needleImgSix;
+        public static Image needleImgSeven;
+        public static Image needleImgEight;
+        public static Image needleImgNine;
         public static GameObject expungeHealing;
         public void Awake()
         {
@@ -188,7 +198,16 @@ namespace SeamstressMod.Survivors.Seamstress
             expungeHealing.GetComponent<Text>().enabled = false;
             expungeHealing.GetComponent<Outline>().enabled = true;
 
-
+            needleImgZero = NeedleHUD.needleZero.gameObject.GetComponent<Image>();
+            needleImgOne = NeedleHUD.needleOne.gameObject.GetComponent<Image>();
+            needleImgTwo = NeedleHUD.needleTwo.gameObject.GetComponent<Image>();
+            needleImgThree = NeedleHUD.needleThree.gameObject.GetComponent<Image>();
+            needleImgFour = NeedleHUD.needleFour.gameObject.GetComponent<Image>();
+            needleImgFive = NeedleHUD.needleFive.gameObject.GetComponent<Image>();
+            needleImgSix = NeedleHUD.needleSix.gameObject.GetComponent<Image>();
+            needleImgSeven = NeedleHUD.needleSeven.gameObject.GetComponent<Image>();
+            needleImgEight = NeedleHUD.needleEight.gameObject.GetComponent<Image>();
+            needleImgNine = NeedleHUD.needleNine.gameObject.GetComponent<Image>();
         }
         public void OnDestroy()
         {
@@ -202,6 +221,16 @@ namespace SeamstressMod.Survivors.Seamstress
             UnityEngine.Object.Destroy(needleSeven);
             UnityEngine.Object.Destroy(needleEight);
             UnityEngine.Object.Destroy(needleNine);
+            UnityEngine.Object.Destroy(needleImgZero);
+            UnityEngine.Object.Destroy(needleImgOne);
+            UnityEngine.Object.Destroy(needleImgTwo);
+            UnityEngine.Object.Destroy(needleImgThree);
+            UnityEngine.Object.Destroy(needleImgFour);
+            UnityEngine.Object.Destroy(needleImgFive);
+            UnityEngine.Object.Destroy(needleImgSix);
+            UnityEngine.Object.Destroy(needleImgSeven);
+            UnityEngine.Object.Destroy(needleImgEight);
+            UnityEngine.Object.Destroy(needleImgNine);
             UnityEngine.Object.Destroy(expungeHealing);
             On.RoR2.UI.HUD.Awake -= MyFunc;
         }
