@@ -31,9 +31,9 @@ namespace SeamstressMod.SkillStates
         public string endSoundString = "Play_imp_overlord_teleport_end";
 
         //test sphere collider changing with scale
-        public float blastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius;
+        public float blastAttackRadius = 12.5f;
 
-        public float empoweredBlastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius * 2;
+        public float empoweredBlastAttackRadius = 25f;
 
         public float blastAttackDamageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
 
@@ -99,16 +99,26 @@ namespace SeamstressMod.SkillStates
             blinkDestination = position;
             blinkDestination += base.transform.position - base.characterBody.footPosition;
             blinkStart = base.transform.position;
-            base.characterDirection.forward = position;
+            base.characterMotor.rootMotion += position;
         }
         private void CreateBlinkEffect(Vector3 origin)
         {
             if ((bool)SeamstressAssets.blinkPrefab)
             {
-                EffectData effectData = new EffectData();
-                effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination - blinkStart);
-                effectData.origin = origin;
-                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: false);
+                if(empowered)
+                {
+                    EffectData effectData = new EffectData();
+                    effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination - blinkStart);
+                    effectData.origin = origin;
+                    EffectManager.SpawnEffect(SeamstressAssets.blinkPrefabBig, effectData, transmit: false);
+                }
+                else
+                {
+                    EffectData effectData = new EffectData();
+                    effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination - blinkStart);
+                    effectData.origin = origin;
+                    EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: false);
+                }
             }
         }
 
@@ -136,8 +146,16 @@ namespace SeamstressMod.SkillStates
                 hasBlinked = true;
                 if ((bool)SeamstressAssets.blinkDestinationPrefab)
                 {
-                    blinkDestinationInstance = Object.Instantiate(SeamstressAssets.blinkDestinationPrefab, blinkDestination, Quaternion.identity);
-                    blinkDestinationInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = destinationAlertDuration;
+                    if (empowered)
+                    {
+                        blinkDestinationInstance = Object.Instantiate(SeamstressAssets.blinkDestinationPrefabBig, blinkDestination, Quaternion.identity);
+                        blinkDestinationInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = destinationAlertDuration;
+                    }
+                    else
+                    {
+                        blinkDestinationInstance = Object.Instantiate(SeamstressAssets.blinkDestinationPrefab, blinkDestination, Quaternion.identity);
+                        blinkDestinationInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = destinationAlertDuration;
+                    }
                 }
                 SetPosition(blinkDestination);
             }

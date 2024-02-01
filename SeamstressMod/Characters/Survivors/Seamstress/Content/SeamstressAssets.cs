@@ -26,7 +26,11 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject blinkPrefab;
 
+        internal static GameObject blinkPrefabBig;
+
         internal static GameObject blinkDestinationPrefab;
+
+        internal static GameObject blinkDestinationPrefabBig;
 
         internal static GameObject stitchTempEffectPrefab;
 
@@ -105,11 +109,19 @@ namespace SeamstressMod.Survivors.Seamstress
 
             blinkPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("BlinkStart");
             blinkPrefab.AddComponent<NetworkIdentity>();
-            blinkPrefab.transform.localScale = Vector3.one * 0.2f;
+            blinkPrefab.transform.GetChild(0).localScale = Vector3.one * 0.5f;
+            blinkPrefab.transform.GetChild(1).localScale = Vector3.one * 0.5f;
+
+            blinkPrefabBig = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("BlinkStartBig");
+            blinkPrefabBig.AddComponent<NetworkIdentity>();
 
             blinkDestinationPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/ImpBossBlinkDestination.prefab").WaitForCompletion().InstantiateClone("BlinkEnd");
             blinkDestinationPrefab.AddComponent<NetworkIdentity>();
-            blinkDestinationPrefab.transform.localScale = Vector3.one * 0.2f;
+            blinkDestinationPrefab.transform.GetChild(0).localScale = Vector3.one * 0.5f;
+            blinkDestinationPrefab.transform.GetChild(1).localScale = Vector3.one * 0.5f;
+
+            blinkDestinationPrefabBig = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/ImpBossBlinkDestination.prefab").WaitForCompletion().InstantiateClone("BlinkEndEmpowered");
+            blinkDestinationPrefabBig.AddComponent<NetworkIdentity>();
 
             scissorsButcheredSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
             scissorsButcheredSwingEffect.AddComponent<NetworkIdentity>();

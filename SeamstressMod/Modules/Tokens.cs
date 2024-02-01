@@ -24,7 +24,7 @@ namespace SeamstressMod.Modules
 
         public static string cutKeyword = KeywordText("Cut", $"Tear open <color=#9B3737>Stitches</color> " +
             $"dealing <style=cIsDamage>{100 * SeamstressStaticValues.cutBaseDamage}% damage</style>. " +
-            $"Aftwerward, deal <style=cIsDamage>0.5%</style> (<style=cIsDamage>0.25%</style> against bosses) of the " +
+            $"Afterward, deal <style=cIsDamage>0.5%</style> (<style=cIsDamage>0.25%</style> against bosses) of the " +
             $"enemies missing <style=cIsHealth>health</style> per second for {SeamstressStaticValues.cutDuration} seconds.");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
