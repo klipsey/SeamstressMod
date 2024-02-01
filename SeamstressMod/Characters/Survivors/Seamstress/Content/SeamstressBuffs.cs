@@ -6,8 +6,6 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     public static class SeamstressBuffs
     {
-        // armor buff gained during butcher
-
         public static BuffDef butchered;
 
         public static BuffDef needles;

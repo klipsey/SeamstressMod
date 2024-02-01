@@ -12,40 +12,40 @@ namespace SeamstressMod.SkillStates
     {
         public override void OnEnter()
         {
-            this.RefreshState();
-            this.hitboxGroupName = "Sword";
-            this.damageType = DamageType.Generic;
-            this.damageTotal = SeamstressStaticValues.flurryDamageCoefficient;
-            this.procCoefficient = 1f;
-            this.pushForce = 300f;
-            this.bonusForce = Vector3.zero;
-            this.baseDuration = 1f;
-            this.moddedDamageType = DamageTypes.StitchDamage;
-            this.moddedDamageType2 = DamageTypes.Empty;
-            this.moddedDamageType3 = DamageTypes.Empty;
+            RefreshState();
+            hitboxGroupName = "Sword";
+            damageType = DamageType.Generic;
+            damageTotal = SeamstressStaticValues.flurryDamageCoefficient;
+            procCoefficient = 1f;
+            pushForce = 300f;
+            bonusForce = Vector3.zero;
+            baseDuration = 1f;
+            moddedDamageType = DamageTypes.StitchDamage;
+            moddedDamageType2 = DamageTypes.Empty;
+            moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
-            this.attackStartPercentTime = 0.2f;
-            this.attackEndPercentTime = 0.4f;
+            attackStartPercentTime = 0.2f;
+            attackEndPercentTime = 0.4f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            this.earlyExitPercentTime = 0.5f;
-            this.hitStopDuration = 0.05f;
-            this.attackRecoil = 0.75f;
-            this.hitHopVelocity = 3.5f;
+            earlyExitPercentTime = 0.5f;
+            hitStopDuration = 0.05f;
+            attackRecoil = 0.75f;
+            hitHopVelocity = 3.5f;
 
-            this.swingSoundString = "Play_imp_attack";
-            this.hitSoundString = "";
-            this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            this.swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
+            swingSoundString = "Play_imp_attack";
+            hitSoundString = "";
+            hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+            swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
             if (empowered)
             {
-                this.moddedDamageType = DamageTypes.StitchDamageFlurry;
-                this.swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
-                this.hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
+                moddedDamageType = DamageTypes.StitchDamageFlurry;
+                swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
+                hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             }
-            this.impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
+            impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();
         }
@@ -65,8 +65,7 @@ namespace SeamstressMod.SkillStates
         }
         protected override void PlayAttackAnimation()
         {
-
-            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", this.duration, 0.1f * duration);
+            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
         }
         protected override void PlaySwingEffect()
         {
@@ -74,7 +73,7 @@ namespace SeamstressMod.SkillStates
             {
                 return;
             }
-            Transform transform = FindModelChild(this.muzzleString);
+            Transform transform = FindModelChild(muzzleString);
             if ((bool)transform)
             {
                 UnityEngine.Object.Instantiate(swingEffectPrefab, transform);

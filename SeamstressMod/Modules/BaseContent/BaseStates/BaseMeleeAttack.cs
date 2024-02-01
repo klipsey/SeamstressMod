@@ -105,9 +105,9 @@ namespace SeamstressMod.Modules.BaseStates
 
             if (!hasHopped)
             {
-                if (characterMotor && !characterMotor.isGrounded && hitHopVelocity > 0f)
+                if (base.characterMotor && !base.characterMotor.isGrounded && hitHopVelocity > 0f)
                 {
-                    SmallHop(characterMotor, hitHopVelocity);
+                    SmallHop(base.characterMotor, hitHopVelocity);
                 }
 
                 hasHopped = true;
@@ -120,8 +120,8 @@ namespace SeamstressMod.Modules.BaseStates
         {
             if (!inHitPause && hitStopDuration > 0f)
             {
-                storedVelocity = characterMotor.velocity;
-                hitStopCachedState = CreateHitStopCachedState(characterMotor, animator, playbackRateParam);
+                storedVelocity = base.characterMotor.velocity;
+                hitStopCachedState = CreateHitStopCachedState(base.characterMotor, animator, playbackRateParam);
                 hitPauseTimer = hitStopDuration / attackSpeedStat;
                 inHitPause = true;
             }
@@ -129,7 +129,7 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected virtual void FireAttack()
         {
-            if (isAuthority)
+            if (base.isAuthority)
             {
                 if (attack.Fire())
                 {
@@ -145,7 +145,7 @@ namespace SeamstressMod.Modules.BaseStates
 
             PlaySwingEffect();
 
-            if (isAuthority)
+            if (base.isAuthority)
             {
                 AddRecoil(-1f * attackRecoil, -2f * attackRecoil, -0.5f * attackRecoil, 0.5f * attackRecoil);
             }
@@ -168,7 +168,7 @@ namespace SeamstressMod.Modules.BaseStates
             }
             else
             {
-                if (characterMotor) characterMotor.velocity = Vector3.zero;
+                if (base.characterMotor) base.characterMotor.velocity = Vector3.zero;
                 if (animator) animator.SetFloat(playbackRateParam, 0f);
             }
 
@@ -185,7 +185,7 @@ namespace SeamstressMod.Modules.BaseStates
                 FireAttack();
             }
 
-            if (stopwatch >= duration && isAuthority)
+            if (stopwatch >= duration && base.isAuthority)
             {
                 outer.SetNextStateToMain();
                 return;
@@ -194,9 +194,9 @@ namespace SeamstressMod.Modules.BaseStates
 
         private void RemoveHitstop()
         {
-            ConsumeHitStopCachedState(hitStopCachedState, characterMotor, animator);
+            ConsumeHitStopCachedState(hitStopCachedState, base.characterMotor, animator);
             inHitPause = false;
-            characterMotor.velocity = storedVelocity;
+            base.characterMotor.velocity = storedVelocity;
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

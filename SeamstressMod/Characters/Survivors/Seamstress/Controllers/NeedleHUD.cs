@@ -208,6 +208,17 @@ namespace SeamstressMod.Survivors.Seamstress
             needleImgSeven = NeedleHUD.needleSeven.gameObject.GetComponent<Image>();
             needleImgEight = NeedleHUD.needleEight.gameObject.GetComponent<Image>();
             needleImgNine = NeedleHUD.needleNine.gameObject.GetComponent<Image>();
+
+            NeedleHUD.needleZero.SetActive(false);
+            NeedleHUD.needleOne.SetActive(false);
+            NeedleHUD.needleTwo.SetActive(false);
+            NeedleHUD.needleThree.SetActive(false);
+            NeedleHUD.needleFour.SetActive(false);
+            NeedleHUD.needleFive.SetActive(false);
+            NeedleHUD.needleSix.SetActive(false);
+            NeedleHUD.needleSeven.SetActive(false);
+            NeedleHUD.needleEight.SetActive(false);
+            NeedleHUD.needleNine.SetActive(false);
         }
         public void OnDestroy()
         {

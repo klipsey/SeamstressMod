@@ -29,7 +29,7 @@ namespace SeamstressMod.SkillStates
 
         public static float speedCoefficient = 100f;
 
-        private Vector3 dashVector = Vector3.zero;
+        private Vector3 dashVector;
 
         private OverlapAttack overlapAttack;
 
@@ -50,13 +50,12 @@ namespace SeamstressMod.SkillStates
         private float hitPauseTimer;
         public bool hasHit { get; private set; }
 
-        public int dashIndex { private get; set; }
-
         private string hitSound;
         public override void OnEnter()
         {
             dashDuration = 0.3f;
             base.OnEnter();
+            RefreshState();
             modelTransform = GetModelTransform();
             childLocator = modelTransform.GetComponent<ChildLocator>();
             if ((bool)base.cameraTargetParams)
@@ -64,24 +63,24 @@ namespace SeamstressMod.SkillStates
                 aimRequest = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
             //PlayAnimation("FullBody, Override", "AssaulterPrep", "AssaulterPrep.playbackRate", dashPrepDuration);
-            dashVector = base.inputBank.aimDirection;
+            dashVector = inputBank.aimDirection;
 
-            this.overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
-            this.overlapAttack.AddModdedDamageType(DamageTypes.CutDamage);
+            overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
+            overlapAttack.AddModdedDamageType(DamageTypes.CutDamage);
             if (empowered)
             {
                 hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
                 dashPrefab = SeamstressAssets.weaveDashButchered;
-                this.overlapAttack.AddModdedDamageType(DamageTypes.WeaveLifeSteal);
-                Util.PlaySound("Play_imp_overlord_attack2_tell", base.gameObject);
+                overlapAttack.AddModdedDamageType(DamageTypes.WeaveLifeSteal);
+                Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
                 hitSound = "Play_imp_overlord_impact";
             }
             else
             {
                 hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-                Util.PlaySound("Play_merc_m2_uppercut", base.gameObject);
+                Util.PlaySound("Play_merc_m2_uppercut", gameObject);
                 dashPrefab = SeamstressAssets.weaveDash;
-                this.overlapAttack.RemoveModdedDamageType(DamageTypes.WeaveLifeSteal);
+                overlapAttack.RemoveModdedDamageType(DamageTypes.WeaveLifeSteal);
                 hitSound = "Play_bandit2_m2_impact";
             }
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration + dashPrepDuration);
@@ -99,14 +98,14 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            base.characterDirection.forward = dashVector;
+            characterDirection.forward = dashVector;
             if (stopwatch > dashPrepDuration / attackSpeedStat && !isDashing)
             {
                 isDashing = true;
-                dashVector = base.inputBank.aimDirection;
+                dashVector = inputBank.aimDirection;
                 CreateDashEffect();
                 //PlayCrossfade("FullBody, Override", "AssaulterLoop", 0.1f);
-                base.gameObject.layer = LayerIndex.fakeActor.intVal;
+                gameObject.layer = LayerIndex.fakeActor.intVal;
                 base.characterMotor.Motor.RebuildCollidableLayers();
             }
             if (!isDashing)
@@ -123,7 +122,7 @@ namespace SeamstressMod.SkillStates
                     {
                         if (!hasHit)
                         {
-                            Util.PlaySound(hitSound, base.gameObject);
+                            Util.PlaySound(hitSound, gameObject);
                             hasHit = true;
                             dashDuration *= 0.75f;
                         }
@@ -148,9 +147,9 @@ namespace SeamstressMod.SkillStates
         }
         public override void OnExit()
         {
-            base.gameObject.layer = LayerIndex.defaultLayer.intVal;
+            gameObject.layer = LayerIndex.defaultLayer.intVal;
             base.characterMotor.Motor.RebuildCollidableLayers();
-            if (!empowered)Util.PlaySound("Play_item_proc_whip", base.gameObject);
+            if (!empowered)Util.PlaySound("Play_item_proc_whip", gameObject);
             if (base.isAuthority)
             {
                 base.characterMotor.disableAirControlUntilCollision = false;
@@ -166,13 +165,13 @@ namespace SeamstressMod.SkillStates
         public override void OnSerialize(NetworkWriter writer)
         {
             base.OnSerialize(writer);
-            writer.Write((byte)dashIndex);
+            writer.Write(dashVector);
         }
 
         public override void OnDeserialize(NetworkReader reader)
         {
             base.OnDeserialize(reader);
-            dashIndex = reader.ReadByte();
+            dashVector = reader.ReadVector3();
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {

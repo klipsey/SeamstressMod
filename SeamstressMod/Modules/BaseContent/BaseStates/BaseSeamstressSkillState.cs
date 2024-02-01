@@ -1,8 +1,10 @@
 ﻿using EntityStates;
+using RoR2;
 using SeamstressMod.Survivors.Seamstress;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine.Networking;
 
 namespace SeamstressMod.Modules.BaseStates
 {
@@ -25,15 +27,25 @@ namespace SeamstressMod.Modules.BaseStates
         }
         protected void RefreshState()
         {
-            if (!seamCon)
+            if (!this.seamCon)
             {
-                seamCon = base.gameObject.GetComponent<SeamstressController>();
+                this.seamCon = this.GetComponent<SeamstressController>();
             }
-            if ((bool)seamCon)
+            if ((bool)this.seamCon)
             {
-                empowered = seamCon.butchered;
-                baseNeedleAmount = seamCon.baseNeedleAmount;
+                this.empowered = this.seamCon.butchered;
+                this.baseNeedleAmount = this.seamCon.baseNeedleAmount;
             }
+        }
+        public override void OnSerialize(NetworkWriter writer)
+        {
+            base.OnSerialize(writer);
+            writer.Write(this.empowered);
+        }
+        public override void OnDeserialize(NetworkReader reader)
+        {
+            base.OnDeserialize(reader);
+            this.empowered = reader.ReadBoolean();
         }
     }
 }

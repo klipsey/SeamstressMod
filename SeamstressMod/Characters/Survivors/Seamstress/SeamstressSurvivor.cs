@@ -167,7 +167,7 @@ namespace SeamstressMod.Survivors.Seamstress
             //if you set up a custom main characterstate, set it up here
                 //don't forget to register custom entitystates in your HenryStates.cs
             //the main "body" state machine has some special properties
-            Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.SpawnTeleporterState));
+            Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(SkillStates.SeamstressMainState), typeof(EntityStates.SpawnTeleporterState));
             
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
@@ -180,7 +180,7 @@ namespace SeamstressMod.Survivors.Seamstress
             AddPassiveSkill(bodyPrefab);
             AddPrimarySkills();
             AddSecondarySkills();
-            AddUtiitySkills();
+            AddUtilitySkills();
             AddSpecialSkills();
 
         }
@@ -243,7 +243,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
                 activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
                 baseRechargeInterval = 6f,
                 baseMaxStock = 1,
@@ -277,7 +277,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.BlinkSeamstress)),
                 activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
                 baseRechargeInterval = 6f,
                 baseMaxStock = 1,
@@ -302,7 +302,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Skills.AddSecondarySkills(bodyPrefab, blinkSeamstressSkillDef);
         }
 
-        private void AddUtiitySkills()
+        private void AddUtilitySkills()
         {
             SkillDef reapSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {

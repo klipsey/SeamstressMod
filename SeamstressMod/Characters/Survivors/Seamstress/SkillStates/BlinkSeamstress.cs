@@ -24,7 +24,7 @@ namespace SeamstressMod.SkillStates
 
         public float destinationAlertDuration = 0.15f;
 
-        public float blinkDistance = 20f;
+        public float blinkDistance = 25f;
 
         public string beginSoundString = "Play_imp_overlord_teleport_start";
 
@@ -86,47 +86,32 @@ namespace SeamstressMod.SkillStates
                 }
                 */
             }
-            base.gameObject.layer = LayerIndex.fakeActor.intVal;
-            base.characterMotor.Motor.RebuildCollidableLayers();
             CalculateBlinkDestination();
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
         }
 
         private void CalculateBlinkDestination()
         {
+            if(base.isAuthority) 
+            {
             RaycastHit hitInfo;
-            Vector3 position = ((!base.inputBank.GetAimRaycast(blinkDistance, out hitInfo)) ? base.inputBank.GetAimRay().GetPoint(blinkDistance) : hitInfo.point);
+            Vector3 position = ((!this.inputBank.GetAimRaycast(blinkDistance, out hitInfo)) ? this.inputBank.GetAimRay().GetPoint(blinkDistance) : hitInfo.point);
+            
             blinkDestination = position;
             blinkDestination += base.transform.position - base.characterBody.footPosition;
             blinkStart = base.transform.position;
-            base.characterMotor.rootMotion += position;
+            base.characterMotor.velocity = Vector3.zero;
+            base.characterDirection.forward += position;
+            }
         }
         private void CreateBlinkEffect(Vector3 origin)
         {
             if ((bool)SeamstressAssets.blinkPrefab)
             {
-                if(empowered)
-                {
-                    EffectData effectData = new EffectData();
-                    effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination - blinkStart);
-                    effectData.origin = origin;
-                    EffectManager.SpawnEffect(SeamstressAssets.blinkPrefabBig, effectData, transmit: false);
-                }
-                else
-                {
-                    EffectData effectData = new EffectData();
-                    effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination - blinkStart);
-                    effectData.origin = origin;
-                    EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: false);
-                }
-            }
-        }
-
-        private void SetPosition(Vector3 newPosition)
-        {
-            if ((bool)base.characterMotor)
-            {
-                base.characterMotor.Motor.SetPositionAndRotation(newPosition, Quaternion.identity);
+                EffectData effectData = new EffectData();
+                effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination);
+                effectData.origin = origin;
+                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: false);
             }
         }
 
@@ -137,27 +122,15 @@ namespace SeamstressMod.SkillStates
             {
                 base.characterMotor.velocity = Vector3.zero;
             }
-            if (!hasBlinked)
-            {
-                SetPosition(Vector3.Lerp(blinkStart, blinkDestination, base.fixedAge / duration));
-            }
             if (base.fixedAge >= duration - destinationAlertDuration && !hasBlinked)
             {
                 hasBlinked = true;
                 if ((bool)SeamstressAssets.blinkDestinationPrefab)
                 {
-                    if (empowered)
-                    {
-                        blinkDestinationInstance = Object.Instantiate(SeamstressAssets.blinkDestinationPrefabBig, blinkDestination, Quaternion.identity);
-                        blinkDestinationInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = destinationAlertDuration;
-                    }
-                    else
-                    {
-                        blinkDestinationInstance = Object.Instantiate(SeamstressAssets.blinkDestinationPrefab, blinkDestination, Quaternion.identity);
-                        blinkDestinationInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = destinationAlertDuration;
-                    }
+
+                    blinkDestinationInstance = Object.Instantiate(SeamstressAssets.blinkDestinationPrefab, blinkDestination, Quaternion.identity);
+                    blinkDestinationInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = destinationAlertDuration;
                 }
-                SetPosition(blinkDestination);
             }
             if (base.fixedAge >= duration)
             {
@@ -176,8 +149,6 @@ namespace SeamstressMod.SkillStates
                 return;
             }
             isExiting = true;
-            base.gameObject.layer = LayerIndex.defaultLayer.intVal;
-            base.characterMotor.Motor.RebuildCollidableLayers();
             Util.PlaySound(endSoundString, base.gameObject);
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
             modelTransform = GetModelTransform();
@@ -220,7 +191,7 @@ namespace SeamstressMod.SkillStates
                 }
                 if ((bool)this.characterModel)
                 {
-                    characterModel.invisibilityCount--;
+                    this.characterModel.invisibilityCount--;
                 }
                 if ((bool)this.hurtboxGroup)
                 {
