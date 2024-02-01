@@ -96,7 +96,7 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected virtual void PlaySwingEffect()
         {
-            EffectManager.SimpleMuzzleFlash(swingEffectPrefab, gameObject, muzzleString, true);
+            EffectManager.SimpleMuzzleFlash(swingEffectPrefab, gameObject, muzzleString, false);
         }
 
         protected virtual void OnHitEnemyAuthority()
@@ -211,18 +211,18 @@ namespace SeamstressMod.Modules.BaseStates
         public override void OnSerialize(NetworkWriter writer)
         {
             base.OnSerialize(writer);
-            writer.Write(swingIndex);
+            writer.Write(this.swingIndex);
         }
 
         public override void OnDeserialize(NetworkReader reader)
         {
             base.OnDeserialize(reader);
-            swingIndex = reader.ReadInt32();
+            this.swingIndex = reader.ReadInt32();
         }
 
         public void SetStep(int i)
         {
-            swingIndex = i;
+            this.swingIndex = i;
         }
     }
 }

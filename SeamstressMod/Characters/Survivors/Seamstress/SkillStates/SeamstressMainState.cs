@@ -5,6 +5,8 @@ using EntityStates;
 using SeamstressMod.Survivors.Seamstress;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace SeamstressMod.SkillStates
 {
@@ -12,20 +14,22 @@ namespace SeamstressMod.SkillStates
     {
         private SeamstressController fard;
 
+        private static IEnumerable<CharacterBody.TimedBuff> butcheredDuration;
+
         private bool shittingMyself;
+
+        private float bd = 0f;
         public override void OnEnter()
         {
             base.OnEnter();
-            this.shittingMyself = true;
             this.fard = this.GetComponent<SeamstressController>();
         }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-
-
             if (NetworkServer.active)
             {
+                butcheredDuration = this.characterBody.timedBuffs.Where((CharacterBody.TimedBuff b) => b.buffIndex == SeamstressBuffs.butchered.buffIndex);
                 if (this.characterBody.HasBuff(SeamstressBuffs.butchered))
                 {
                     this.shittingMyself = true;
@@ -36,15 +40,28 @@ namespace SeamstressMod.SkillStates
                 }
             }
             IsButchered();
+            if (bd > 0f)
+            {
+                bd -= Time.fixedDeltaTime;
+            }
             if (base.isAuthority) 
             {
-                if (base.skillLocator.utility == base.skillLocator.FindSkill("reapRecast") && shittingMyself == false)
-                {
-                    base.skillLocator.utility.ExecuteIfReady();
-                }
                 CalculateBonusDamage();
                 NeedleDisplayCount();
             }
+            ButcheredSound();
+        }
+        public void ButcheredSound()
+        {
+            if (shittingMyself)
+            {
+                if (bd < 2f && !fard.hasPlayed)
+                {
+                    Util.PlaySound("Play_nullifier_impact", characterBody.gameObject);
+                    fard.hasPlayed = true;
+                }
+            }
+            fard.hasPlayed = false;
         }
         public void IsButchered()
         {
@@ -52,9 +69,18 @@ namespace SeamstressMod.SkillStates
             if (this.shittingMyself)
             {
                 //run when butchered starts
-                if (!this.fard.butchered && this.fard.butcheredDuration > 0)
+                if (!this.fard.butchered)
                 {
-                    this.fard.butcheredDurationPercent = this.fard.butcheredDuration / 10f;
+                    //set bd for timer max
+                    if (SeamstressPlugin.networktimedbuffsInstalled)
+                    {
+                        bd = butcheredDuration.FirstOrDefault().timer;
+                    }
+                    else
+                    {
+                        bd = SeamstressStaticValues.butcheredDuration;
+                    }
+                    this.fard.butcheredDurationPercent = bd / 10f;
                     if (base.isAuthority)
                     {
                         NeedleHUD.expungeHealing.GetComponent<Text>().enabled = true;
@@ -91,9 +117,14 @@ namespace SeamstressMod.SkillStates
                 this.fard.fuckYou = false;
                 if (base.isAuthority)
                 {
+                    if (base.skillLocator.utility == base.skillLocator.FindSkill("reapRecast"))
+                    {
+                        base.skillLocator.utility.ExecuteIfReady();
+                    }
                     this.skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
                     this.skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
                     this.skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
+
                 }
             }
             if(base.isAuthority)
@@ -102,7 +133,7 @@ namespace SeamstressMod.SkillStates
                 {
                     NeedleHUD.expungeHealing.GetComponent<Text>().text = Mathf.Round(this.fard.butcheredConversion).ToString();
                 }
-                if (this.fard.butcheredDuration > 0)
+                if (butcheredDuration.Any())
                 {
                     HudColor();
                 }
@@ -133,7 +164,7 @@ namespace SeamstressMod.SkillStates
         public void HudColor()
         {
             #region hudColorTracking
-            if (this.fard.butcheredDuration > 9f * this.fard.butcheredDurationPercent)
+            if (bd > 9f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = Color.white;
                 NeedleHUD.needleImgZero.color = newColor;
@@ -147,7 +178,7 @@ namespace SeamstressMod.SkillStates
                 NeedleHUD.needleImgEight.color = newColor;
                 NeedleHUD.needleImgNine.color = newColor;
             }
-            if (this.fard.butcheredDuration <= 9f * this.fard.butcheredDurationPercent && this.fard.butcheredDuration > 8f * this.fard.butcheredDurationPercent)
+            if (bd <= 9f * this.fard.butcheredDurationPercent && bd > 8f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = new Color(245f / 255f, 232 / 255f, 231 / 255f);
                 newColor.a = 1;
@@ -162,7 +193,7 @@ namespace SeamstressMod.SkillStates
                 NeedleHUD.needleImgEight.color = newColor;
                 NeedleHUD.needleImgNine.color = newColor;
             }
-            if (this.fard.butcheredDuration <= 8f * this.fard.butcheredDurationPercent && this.fard.butcheredDuration > 7f * this.fard.butcheredDurationPercent)
+            if (bd <= 8f * this.fard.butcheredDurationPercent && bd > 7f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = new Color(237f / 255f, 209f / 255f, 207f / 255f);
                 newColor.a = 1;
@@ -177,7 +208,7 @@ namespace SeamstressMod.SkillStates
                 NeedleHUD.needleImgEight.color = newColor;
                 NeedleHUD.needleImgNine.color = newColor;
             }
-            if (this.fard.butcheredDuration <= 7f * this.fard.butcheredDurationPercent && this.fard.butcheredDuration > 6f * this.fard.butcheredDurationPercent)
+            if (bd <= 7f * this.fard.butcheredDurationPercent && bd > 6f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = new Color(227f / 255f, 187f / 255f, 183f / 255f);
                 newColor.a = 1;
@@ -192,7 +223,7 @@ namespace SeamstressMod.SkillStates
                 NeedleHUD.needleImgEight.color = newColor;
                 NeedleHUD.needleImgNine.color = newColor;
             }
-            if (this.fard.butcheredDuration <= 6f * this.fard.butcheredDurationPercent && this.fard.butcheredDuration > 5f * this.fard.butcheredDurationPercent)
+            if (bd <= 6f * this.fard.butcheredDurationPercent && bd > 5f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = new Color(217f / 255f, 165f / 255f, 160f / 255f);
                 newColor.a = 1;
@@ -207,7 +238,7 @@ namespace SeamstressMod.SkillStates
                 NeedleHUD.needleImgEight.color = newColor;
                 NeedleHUD.needleImgNine.color = newColor;
             }
-            if (this.fard.butcheredDuration <= 5f * this.fard.butcheredDurationPercent && this.fard.butcheredDuration > 4f * this.fard.butcheredDurationPercent)
+            if (bd <= 5f * this.fard.butcheredDurationPercent && bd > 4f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = new Color(205f / 255f, 143f / 255f, 138f / 255f);
                 newColor.a = 1;
@@ -222,7 +253,7 @@ namespace SeamstressMod.SkillStates
                 NeedleHUD.needleImgEight.color = newColor;
                 NeedleHUD.needleImgNine.color = newColor;
             }
-            if (this.fard.butcheredDuration <= 4f * this.fard.butcheredDurationPercent && this.fard.butcheredDuration > 3f * this.fard.butcheredDurationPercent)
+            if (bd <= 4f * this.fard.butcheredDurationPercent && bd > 3f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = new Color(193f / 255f, 121f / 255f, 116f / 255f);
                 newColor.a = 1;
@@ -237,7 +268,7 @@ namespace SeamstressMod.SkillStates
                 NeedleHUD.needleImgEight.color = newColor;
                 NeedleHUD.needleImgNine.color = newColor;
             }
-            if (this.fard.butcheredDuration <= 3f * this.fard.butcheredDurationPercent && this.fard.butcheredDuration > 2f * this.fard.butcheredDurationPercent)
+            if (bd <= 3f * this.fard.butcheredDurationPercent && bd > 2f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = new Color(181f / 255f, 100f / 255f, 95f / 255f);
                 newColor.a = 1;
@@ -252,7 +283,7 @@ namespace SeamstressMod.SkillStates
                 NeedleHUD.needleImgEight.color = newColor;
                 NeedleHUD.needleImgNine.color = newColor;
             }
-            if (this.fard.butcheredDuration <= 2f * this.fard.butcheredDurationPercent && this.fard.butcheredDuration > 1f * this.fard.butcheredDurationPercent)
+            if (bd <= 2f * this.fard.butcheredDurationPercent && bd > 1f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = new Color(168f / 255f, 78f / 255f, 74f / 255f);
                 newColor.a = 1;
@@ -267,7 +298,7 @@ namespace SeamstressMod.SkillStates
                 NeedleHUD.needleImgEight.color = newColor;
                 NeedleHUD.needleImgNine.color = newColor;
             }
-            if (this.fard.butcheredDuration <= 1f * this.fard.butcheredDurationPercent && this.fard.butcheredDuration > 0f * this.fard.butcheredDurationPercent)
+            if (bd <= 1f * this.fard.butcheredDurationPercent && bd > 0f * this.fard.butcheredDurationPercent)
             {
                 Color newColor = new Color(154f / 255f, 55f / 255f, 55f / 255f);
                 newColor.a = 1;

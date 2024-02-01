@@ -38,7 +38,7 @@ namespace SeamstressMod.SkillStates
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
-            switch (swingIndex)
+            switch (base.swingIndex)
             {
                 case 0:
                     muzzleString = "SwingLeft";
@@ -85,16 +85,16 @@ namespace SeamstressMod.SkillStates
         }
         protected override void PlayAttackAnimation()
         {
-            switch (swingIndex)
+            switch (base.swingIndex)
             {
                 case 0:
-                    PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", duration, 0.1f * duration);
+                    PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", this.duration, 0.1f * this.duration);
                     break;
                 case 1:
-                    PlayCrossfade("Gesture, Override", "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
+                    PlayCrossfade("Gesture, Override", "Slash2", "Slash.playbackRate", this.duration, 0.1f * this.duration);
                     break;
                 case 2:
-                    PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", duration, 0.1f * duration);
+                    PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", this.duration, 0.1f * this.duration);
                     break;
             }
         }

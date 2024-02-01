@@ -15,30 +15,31 @@ namespace SeamstressMod.SkillStates
         public GameObject projectilePrefab;
         public float needleDelay;
         public float needleCompareDelay = 0.1f;
-        public bool hasLaunched = false;
+        public bool hasLaunched;
         Ray aimRay;
         public float duration;
         public override void OnEnter()
         {
+            this.hasLaunched = false;
             base.OnEnter();
             RefreshState();
-            duration = (needleCompareDelay / attackSpeedStat * characterBody.GetBuffCount(SeamstressBuffs.needles));
+            this.duration = (this.needleCompareDelay / attackSpeedStat * characterBody.GetBuffCount(SeamstressBuffs.needles));
             if (empowered)
             {
-                projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                 Util.PlaySound("Play_imp_overlord_teleport_end", gameObject);
                 UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.sewButcheredEffect, transform);
             }
             else
             {
                 UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.sewEffect, transform);
-                projectilePrefab = SeamstressAssets.needlePrefab;
+                this.projectilePrefab = SeamstressAssets.needlePrefab;
             }
             PlayAttackAnimation();
             if(base.isAuthority) 
             {
                 aimRay = base.GetAimRay();
-                ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
+                ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
             }
             if (!base.characterMotor.isGrounded)
             {
@@ -59,7 +60,7 @@ namespace SeamstressMod.SkillStates
                         if(base.isAuthority) 
                         {
                             aimRay = base.GetAimRay();
-                            ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
+                            ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
                         }
                         if (NetworkServer.active)
                         {
@@ -74,7 +75,7 @@ namespace SeamstressMod.SkillStates
                     }
                 }
             }
-            else if (characterBody.GetBuffCount(SeamstressBuffs.needles) < baseNeedleAmount)
+            else if (characterBody.GetBuffCount(SeamstressBuffs.needles) < this.baseNeedleAmount)
             {
                 if(NetworkServer.active)
                 {
@@ -88,7 +89,7 @@ namespace SeamstressMod.SkillStates
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            if (needleDelay >= duration)
+            if (needleDelay >= this.duration)
             {
                 return InterruptPriority.Any;
             }
@@ -96,7 +97,7 @@ namespace SeamstressMod.SkillStates
         }
         protected void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration, 0.1f * duration);
+            PlayCrossfade("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", this.duration, 0.1f * this.duration);
         }
         public override void OnExit()
         {

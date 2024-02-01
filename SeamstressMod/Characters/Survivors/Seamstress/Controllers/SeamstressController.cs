@@ -5,8 +5,6 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using System.Linq;
-using UnityEngine.AddressableAssets;
-using RoR2.EntityLogic;
 using UnityEngine.Networking;
 
 namespace SeamstressMod.Survivors.Seamstress
@@ -26,8 +24,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public SkillLocator skillLocator;
 
-        public float butcheredDuration;
-
         public bool hasPlayed;
 
         public bool fuckYou;
@@ -45,7 +41,6 @@ namespace SeamstressMod.Survivors.Seamstress
             characterBody = GetComponent<CharacterBody>();
             skillLocator = GetComponent<SkillLocator>();
             butcheredConversion = 0f;
-            butcheredDuration = 0f;
             Hook();
         }
         public void Start()
@@ -58,34 +53,14 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         public void FixedUpdate()
         {
-            if(butcheredDuration > 0f) 
-            {
-                butcheredDuration -= Time.deltaTime;
-            }
             passiveNeedleRegen();
-            ButcheredSound();
         }
         private static void Hook()
         {
             On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
             On.RoR2.CharacterModel.UpdateOverlays += new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
-            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float_int += CharacterBody_AddTimedBuff_BuffDef_float_int;
         }
-        private static void CharacterBody_AddTimedBuff_BuffDef_float_int(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffDef_float_int orig, CharacterBody self, BuffDef buffDef, float duration, int maxStacks)
-        {
-            orig.Invoke(self, buffDef, duration, maxStacks);
-            if(NetworkServer.active)
-            {
-                foreach (var timedBuff in self.timedBuffs.Where(b => b.buffIndex == SeamstressBuffs.butchered.buffIndex && b.timer == duration))
-                {
-                    SeamstressController s = self.GetComponent<SeamstressController>();
-                    if (self.TryGetComponent<SeamstressController>(out s))
-                    {
-                        s.GetButcheredDuration(timedBuff.timer);
-                    }
-                }
-            }
-        }
+
         //butchered overlay
         private static void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
         {
@@ -141,29 +116,10 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             butcheredConversion += healDamage;
         }
-        public void GetButcheredDuration(float butcherTheseNuts)
-        {
-            butcheredDuration = butcherTheseNuts;
-        }
-        //butchered controller
-        //butchered end sound
-        public void ButcheredSound()
-        {
-            if (butcheredDuration > 0)
-            {
-                if (butcheredDuration < 2f && !hasPlayed)
-                {
-                    Util.PlaySound("Play_nullifier_impact", characterBody.gameObject);
-                    hasPlayed = true;
-                }
-            }
-            hasPlayed = false;
-        }
         private static void Unhook()
         {
             On.RoR2.HealthComponent.Heal -= new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
             On.RoR2.CharacterModel.UpdateOverlays -= new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
-            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float_int -= CharacterBody_AddTimedBuff_BuffDef_float_int;
         }
         public void OnDestroy()
         {

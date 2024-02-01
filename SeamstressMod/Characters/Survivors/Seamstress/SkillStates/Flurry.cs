@@ -52,7 +52,7 @@ namespace SeamstressMod.SkillStates
 
         protected override void FireAttack()
         {
-            if (isAuthority)
+            if (base.isAuthority)
             {
                 Vector3 direction = GetAimRay().direction;
                 direction.y = Mathf.Max(direction.y, direction.y * 0.5f);
@@ -65,18 +65,18 @@ namespace SeamstressMod.SkillStates
         }
         protected override void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
+            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", this.duration, 0.1f * this.duration);
         }
         protected override void PlaySwingEffect()
         {
-            if (!swingEffectPrefab)
+            if (!this.swingEffectPrefab)
             {
                 return;
             }
-            Transform transform = FindModelChild(muzzleString);
+            Transform transform = FindModelChild(this.muzzleString);
             if ((bool)transform)
             {
-                UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
+                UnityEngine.Object.Instantiate(this.swingEffectPrefab, transform);
             }
         }
         protected override void OnHitEnemyAuthority()
