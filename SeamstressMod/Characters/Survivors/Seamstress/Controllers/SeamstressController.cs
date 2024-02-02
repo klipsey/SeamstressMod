@@ -8,6 +8,7 @@ using System.Linq;
 using UnityEngine.AddressableAssets;
 using RoR2.EntityLogic;
 using Rewired.HID;
+using UnityEngine.Networking;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -15,6 +16,7 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         private CharacterBody characterBody;
 
+        public int baseNeedleAmount = SeamstressStaticValues.maxNeedleAmount;
         private float butcheredConversion;
 
         private float needleRegen;
@@ -41,33 +43,42 @@ namespace SeamstressMod.Survivors.Seamstress
         private TemporaryOverlay component;
         private void Awake()
         {
-            this.healthComponent = GetComponent<HealthComponent>();
-            this.characterBody = GetComponent<CharacterBody>();
-            this.skillLocator = GetComponent<SkillLocator>();
-            this.needleHUD = GetComponent<NeedleHUD>();
-            butcheredConversion = 0f;
+            this.characterBody = this.GetComponent<CharacterBody>();
+            this.healthComponent = this.GetComponent<HealthComponent>();
+            this.skillLocator = this.GetComponent<SkillLocator>();
+            this.needleHUD = this.GetComponent<NeedleHUD>();
             Hook();
-        }
-        private void Start()
-        {
-            needleRegen = SeamstressStaticValues.needleGainInterval;
+            baseNeedleAmount = SeamstressStaticValues.maxNeedleAmount + lysateDiff;
             hasPlayed = false;
             fuckYou = false;
             butchered = false;
-            bd = 0f;
             butcheredDurationPercent = bd / 10f;
         }
         private void FixedUpdate()
         {
+            //stopwatch
             if (bd > 0f)
             {
+                Log.Debug(bd + "I need TO PEEE!");
                 bd -= Time.fixedDeltaTime;
+                Log.Debug(bd + "I PEED!0");
             }
-            PassiveNeedleRegen();
-            IsButchered();
-            ButcheredSound();
-            CalculateBonusDamage();
-            NeedleDisplayCount();
+            if (bd <= 0f && butchered)
+            {
+                ButcheredEnd();
+            }
+            if(characterBody && characterBody.master)
+            {
+                NeedleTracking();
+                SpecialTracker();
+                NeedleDisplayCount();
+                CalculateBonusDamage();
+                //Failed network on EVERYTHING BECAUSE NONE OF IT IS TIED TO THENCAHRACTER?????? OK USE R2API NETWORKING
+                IsButchered();
+                HudColor();
+                ButcheredSound();
+                PassiveNeedleRegen();
+            }
         }
         #region hooks
         private static void Hook()
@@ -111,114 +122,100 @@ namespace SeamstressMod.Survivors.Seamstress
             return res;
         }
         #endregion
-
+        public void NeedleTracking()
+        {
+            baseNeedleAmount = SeamstressStaticValues.maxNeedleAmount + lysateDiff;
+            needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles) - lysateDiff;
+        }
+        public void SpecialTracker()
+        {
+            lysateDiff = this.skillLocator.special.maxStock - 1;
+        }
         //needle regen
         private void PassiveNeedleRegen()
         {
-            if (this.characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + skillLocator.special.maxStock - 1)
+            if (this.characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + lysateDiff)
             {
                 if (!this.characterBody.HasBuff(SeamstressBuffs.needleCountDownBuff))
                 {
-                    if(this.hasEffectiveAuthority)
+                    if(NetworkServer.active)
                     {
                         this.characterBody.AddTimedBuff(SeamstressBuffs.needleCountDownBuff, SeamstressStaticValues.needleGainInterval);
                         this.characterBody.AddBuff(SeamstressBuffs.needles);
-                        Util.PlaySound("Play_treeBot_m1_hit_heal", this.characterBody.gameObject);
                     }
+                    Util.PlaySound("Play_treeBot_m1_hit_heal", this.characterBody.gameObject);
                 }
             }
+            else if(this.characterBody.HasBuff(SeamstressBuffs.needleCountDownBuff))
+            {
+                this.characterBody.RemoveBuff(SeamstressBuffs.needleCountDownBuff);
+            }
         }
-        private void GetButcheredConversion(float healDamage)
+        public void GetButcheredConversion(float healDamage)
         {
             butcheredConversion += healDamage;
         }
-        //butchered controller
-        private void IsButchered()
+        public void ButcheredEnd()
         {
-            //run during butchered
-            if (this.characterBody.HasBuff(SeamstressBuffs.butchered))
+            if(characterBody && characterBody.master)
             {
-                bd = SeamstressStaticValues.butcheredDuration;
-                //run when butchered starts
-                if (!butchered && bd > 0f)
+                if (!this.characterBody.HasBuff(SeamstressBuffs.butchered) && butchered)
                 {
-                    butcheredDurationPercent = bd / 10f;
-                    if(this.hasEffectiveAuthority)
-                    {
-                        needleHUD.ActivateExpunge(true);
-                        butchered = true;
-                        #region IconUpdate
-                        this.skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
-                        this.skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPistolIcon");
-                        this.skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon");
-                        #endregion
-                    }
-                    Transform modelTransform = this.characterBody.modelLocator.modelTransform;
-                    if (modelTransform)
-                    {
-                        #region overlay
-                        TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
-                        temporaryOverlay.duration = 1f;
-                        temporaryOverlay.destroyComponentOnEnd = true;
-                        temporaryOverlay.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/matOnFire.mat").WaitForCompletion();
-                        temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
-                        temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                        temporaryOverlay.animateShaderAlpha = true;
-                        #endregion
-                    }
-                }
-            }
-            if (!this.characterBody.HasBuff(SeamstressBuffs.butchered) && butchered)
-            {
-                butchered = false;
-                fuckYou = false;
-                if(this.hasEffectiveAuthority)
-                {
+                    butchered = false;
+                    fuckYou = false;
                     UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.reapEndEffect, this.characterBody.modelLocator.transform);
                     Util.PlaySound("Play_voidman_transform_return", this.characterBody.gameObject);
-                    #region IconUpdate
+                    #region iconUpdate
                     this.skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
                     this.skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
                     this.skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
-                    #endregion
-                }
-            }
-            //fire expunge at end of butchered
-            if(this.hasEffectiveAuthority)
-            {
-                if (!this.characterBody.HasBuff(SeamstressBuffs.butchered) && this.skillLocator.utility == this.skillLocator.FindSkill("reapRecast"))
-                {
-                    this.skillLocator.utility.ExecuteIfReady();
-                }
-                if (needleHUD.expungeHealing.GetComponent<Text>())
-                {
-                    needleHUD.expungeHealing.GetComponent<Text>().text = Mathf.Round(butcheredConversion).ToString();
-                }
-                if (this.characterBody.HasBuff(SeamstressBuffs.butchered))
-                {
-                    HudColor();
-                }
-                else
-                {
-                    #region fuck you
-                    Color newColor = Color.white;
-                    newColor.a = 1;
-                    needleHUD.needleImgZero.color = newColor;
-                    needleHUD.needleImgOne.color = newColor;
-                    needleHUD.needleImgTwo.color = newColor;
-                    needleHUD.needleImgThree.color = newColor;
-                    needleHUD.needleImgFour.color = newColor;
-                    needleHUD.needleImgFive.color = newColor;
-                    needleHUD.needleImgSix.color = newColor;
-                    needleHUD.needleImgSeven.color = newColor;
-                    needleHUD.needleImgEight.color = newColor;
-                    needleHUD.needleImgNine.color = newColor;
+                    //fire expunge at end of butchered
+                    if (this.skillLocator.utility == this.skillLocator.FindSkill("reapRecast") && NetworkServer.active)
+                    {
+                        this.skillLocator.utility.ExecuteIfReady();
+                    }
                     #endregion
                 }
             }
         }
+        public void IsButchered()
+        {
+            //run during butchered
+                //run when butchered starts
+            if (this.characterBody.HasBuff(SeamstressBuffs.butchered) && !butchered)
+            {
+                bd = SeamstressStaticValues.butcheredDuration;
+                butcheredDurationPercent = bd / 10f;
+                needleHUD.expungeHealing.GetComponent<Text>().enabled = true;
+                needleHUD.expungeHealing.GetComponent<Outline>().enabled = true;
+                butchered = true;
+                #region IconUpdate
+                this.skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
+                this.skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPistolIcon");
+                this.skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon");
+                #endregion
+                Transform modelTransform = this.characterBody.modelLocator.modelTransform;
+                if (modelTransform)
+                {
+                    #region overlay
+                    TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
+                    temporaryOverlay.duration = 1f;
+                    temporaryOverlay.destroyComponentOnEnd = true;
+                    temporaryOverlay.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/matOnFire.mat").WaitForCompletion();
+                    temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
+                    temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                    temporaryOverlay.animateShaderAlpha = true;
+                    #endregion
+                }
+            }
+            if (needleHUD.expungeHealing.GetComponent<Text>())
+            {
+                needleHUD.expungeHealing.GetComponent<Text>().text = Mathf.Round(butcheredConversion).ToString();
+            }
+           
+        }
         //butchered end sound
-        private void ButcheredSound()
+        public void ButcheredSound()
         {
             if (this.characterBody.HasBuff(SeamstressBuffs.butchered))
             {
@@ -231,157 +228,13 @@ namespace SeamstressMod.Survivors.Seamstress
             hasPlayed = false;
         }
         //passive damage
-        private void CalculateBonusDamage()
+        public void CalculateBonusDamage()
         {
             float healthMissing = (this.healthComponent.fullHealth + this.healthComponent.fullShield) - (this.healthComponent.health + this.healthComponent.shield);
             this.characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
-        //needle controller
-        private void NeedleDisplayCount()
-        {
-            #region needle
-            baseNeedleAmount = skillLocator.special.maxStock - 1;
-            needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles) - baseNeedleAmount;
-            switch (needleCount)
-            {
-                case 0:
-                    needleHUD.needleZero.SetActive(false);
-                    needleHUD.needleOne.SetActive(false);
-                    needleHUD.needleTwo.SetActive(false);
-                    needleHUD.needleThree.SetActive(false);
-                    needleHUD.needleFour.SetActive(false);
-                    needleHUD.needleFive.SetActive(false);
-                    needleHUD.needleSix.SetActive(false);
-                    needleHUD.needleSeven.SetActive(false);
-                    needleHUD.needleEight.SetActive(false);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 1:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(false);
-                    needleHUD.needleTwo.SetActive(false);
-                    needleHUD.needleThree.SetActive(false);
-                    needleHUD.needleFour.SetActive(false);
-                    needleHUD.needleFive.SetActive(false);
-                    needleHUD.needleSix.SetActive(false);
-                    needleHUD.needleSeven.SetActive(false);
-                    needleHUD.needleEight.SetActive(false);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 2:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(true);
-                    needleHUD.needleTwo.SetActive(false);
-                    needleHUD.needleThree.SetActive(false);
-                    needleHUD.needleFour.SetActive(false);
-                    needleHUD.needleFive.SetActive(false);
-                    needleHUD.needleSix.SetActive(false);
-                    needleHUD.needleSeven.SetActive(false);
-                    needleHUD.needleEight.SetActive(false);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 3:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(true);
-                    needleHUD.needleTwo.SetActive(true);
-                    needleHUD.needleThree.SetActive(false);
-                    needleHUD.needleFour.SetActive(false);
-                    needleHUD.needleFive.SetActive(false);
-                    needleHUD.needleSix.SetActive(false);
-                    needleHUD.needleSeven.SetActive(false);
-                    needleHUD.needleEight.SetActive(false);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 4:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(true);
-                    needleHUD.needleTwo.SetActive(true);
-                    needleHUD.needleThree.SetActive(true);
-                    needleHUD.needleFour.SetActive(false);
-                    needleHUD.needleFive.SetActive(false);
-                    needleHUD.needleSix.SetActive(false);
-                    needleHUD.needleSeven.SetActive(false);
-                    needleHUD.needleEight.SetActive(false);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 5:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(true);
-                    needleHUD.needleTwo.SetActive(true);
-                    needleHUD.needleThree.SetActive(true);
-                    needleHUD.needleFour.SetActive(true);
-                    needleHUD.needleFive.SetActive(false);
-                    needleHUD.needleSix.SetActive(false);
-                    needleHUD.needleSeven.SetActive(false);
-                    needleHUD.needleEight.SetActive(false);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 6:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(true);
-                    needleHUD.needleTwo.SetActive(true);
-                    needleHUD.needleThree.SetActive(true);
-                    needleHUD.needleFour.SetActive(true);
-                    needleHUD.needleFive.SetActive(true);
-                    needleHUD.needleSix.SetActive(false);
-                    needleHUD.needleSeven.SetActive(false);
-                    needleHUD.needleEight.SetActive(false);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 7:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(true);
-                    needleHUD.needleTwo.SetActive(true);
-                    needleHUD.needleThree.SetActive(true);
-                    needleHUD.needleFour.SetActive(true);
-                    needleHUD.needleFive.SetActive(true);
-                    needleHUD.needleSix.SetActive(true);
-                    needleHUD.needleSeven.SetActive(false);
-                    needleHUD.needleEight.SetActive(false);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 8:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(true);
-                    needleHUD.needleTwo.SetActive(true);
-                    needleHUD.needleThree.SetActive(true);
-                    needleHUD.needleFour.SetActive(true);
-                    needleHUD.needleFive.SetActive(true);
-                    needleHUD.needleSix.SetActive(true);
-                    needleHUD.needleSeven.SetActive(true);
-                    needleHUD.needleEight.SetActive(false);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 9:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(true);
-                    needleHUD.needleTwo.SetActive(true);
-                    needleHUD.needleThree.SetActive(true);
-                    needleHUD.needleFour.SetActive(true);
-                    needleHUD.needleFive.SetActive(true);
-                    needleHUD.needleSix.SetActive(true);
-                    needleHUD.needleSeven.SetActive(true);
-                    needleHUD.needleEight.SetActive(true);
-                    needleHUD.needleNine.SetActive(false);
-                    break;
-                case 10:
-                    needleHUD.needleZero.SetActive(true);
-                    needleHUD.needleOne.SetActive(true);
-                    needleHUD.needleTwo.SetActive(true);
-                    needleHUD.needleThree.SetActive(true);
-                    needleHUD.needleFour.SetActive(true);
-                    needleHUD.needleFive.SetActive(true);
-                    needleHUD.needleSix.SetActive(true);
-                    needleHUD.needleSeven.SetActive(true);
-                    needleHUD.needleEight.SetActive(true);
-                    needleHUD.needleNine.SetActive(true);
-                    break;
-
-            }
-            #endregion
-        }
-        //needle color controller
-        private void HudColor()
+        //nweedle controller
+        public void HudColor()
         {
             #region hudColorTracking
             if (bd > 9f * butcheredDurationPercent)
@@ -532,6 +385,151 @@ namespace SeamstressMod.Survivors.Seamstress
                 needleHUD.needleImgSeven.color = newColor;
                 needleHUD.needleImgEight.color = newColor;
                 needleHUD.needleImgNine.color = newColor;
+            }
+            #endregion
+        }
+        public void NeedleDisplayCount()
+        {
+            #region needlehud
+            if(!needleHUD.needleZero)
+            {
+                return;
+            }
+            switch (needleCount)
+            {
+                case 0:
+                    needleHUD.needleZero.SetActive(false);
+                    needleHUD.needleOne.SetActive(false);
+                    needleHUD.needleTwo.SetActive(false);
+                    needleHUD.needleThree.SetActive(false);
+                    needleHUD.needleFour.SetActive(false);
+                    needleHUD.needleFive.SetActive(false);
+                    needleHUD.needleSix.SetActive(false);
+                    needleHUD.needleSeven.SetActive(false);
+                    needleHUD.needleEight.SetActive(false);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 1:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(false);
+                    needleHUD.needleTwo.SetActive(false);
+                    needleHUD.needleThree.SetActive(false);
+                    needleHUD.needleFour.SetActive(false);
+                    needleHUD.needleFive.SetActive(false);
+                    needleHUD.needleSix.SetActive(false);
+                    needleHUD.needleSeven.SetActive(false);
+                    needleHUD.needleEight.SetActive(false);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 2:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(true);
+                    needleHUD.needleTwo.SetActive(false);
+                    needleHUD.needleThree.SetActive(false);
+                    needleHUD.needleFour.SetActive(false);
+                    needleHUD.needleFive.SetActive(false);
+                    needleHUD.needleSix.SetActive(false);
+                    needleHUD.needleSeven.SetActive(false);
+                    needleHUD.needleEight.SetActive(false);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 3:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(true);
+                    needleHUD.needleTwo.SetActive(true);
+                    needleHUD.needleThree.SetActive(false);
+                    needleHUD.needleFour.SetActive(false);
+                    needleHUD.needleFive.SetActive(false);
+                    needleHUD.needleSix.SetActive(false);
+                    needleHUD.needleSeven.SetActive(false);
+                    needleHUD.needleEight.SetActive(false);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 4:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(true);
+                    needleHUD.needleTwo.SetActive(true);
+                    needleHUD.needleThree.SetActive(true);
+                    needleHUD.needleFour.SetActive(false);
+                    needleHUD.needleFive.SetActive(false);
+                    needleHUD.needleSix.SetActive(false);
+                    needleHUD.needleSeven.SetActive(false);
+                    needleHUD.needleEight.SetActive(false);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 5:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(true);
+                    needleHUD.needleTwo.SetActive(true);
+                    needleHUD.needleThree.SetActive(true);
+                    needleHUD.needleFour.SetActive(true);
+                    needleHUD.needleFive.SetActive(false);
+                    needleHUD.needleSix.SetActive(false);
+                    needleHUD.needleSeven.SetActive(false);
+                    needleHUD.needleEight.SetActive(false);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 6:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(true);
+                    needleHUD.needleTwo.SetActive(true);
+                    needleHUD.needleThree.SetActive(true);
+                    needleHUD.needleFour.SetActive(true);
+                    needleHUD.needleFive.SetActive(true);
+                    needleHUD.needleSix.SetActive(false);
+                    needleHUD.needleSeven.SetActive(false);
+                    needleHUD.needleEight.SetActive(false);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 7:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(true);
+                    needleHUD.needleTwo.SetActive(true);
+                    needleHUD.needleThree.SetActive(true);
+                    needleHUD.needleFour.SetActive(true);
+                    needleHUD.needleFive.SetActive(true);
+                    needleHUD.needleSix.SetActive(true);
+                    needleHUD.needleSeven.SetActive(false);
+                    needleHUD.needleEight.SetActive(false);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 8:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(true);
+                    needleHUD.needleTwo.SetActive(true);
+                    needleHUD.needleThree.SetActive(true);
+                    needleHUD.needleFour.SetActive(true);
+                    needleHUD.needleFive.SetActive(true);
+                    needleHUD.needleSix.SetActive(true);
+                    needleHUD.needleSeven.SetActive(true);
+                    needleHUD.needleEight.SetActive(false);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 9:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(true);
+                    needleHUD.needleTwo.SetActive(true);
+                    needleHUD.needleThree.SetActive(true);
+                    needleHUD.needleFour.SetActive(true);
+                    needleHUD.needleFive.SetActive(true);
+                    needleHUD.needleSix.SetActive(true);
+                    needleHUD.needleSeven.SetActive(true);
+                    needleHUD.needleEight.SetActive(true);
+                    needleHUD.needleNine.SetActive(false);
+                    break;
+                case 10:
+                    needleHUD.needleZero.SetActive(true);
+                    needleHUD.needleOne.SetActive(true);
+                    needleHUD.needleTwo.SetActive(true);
+                    needleHUD.needleThree.SetActive(true);
+                    needleHUD.needleFour.SetActive(true);
+                    needleHUD.needleFive.SetActive(true);
+                    needleHUD.needleSix.SetActive(true);
+                    needleHUD.needleSeven.SetActive(true);
+                    needleHUD.needleEight.SetActive(true);
+                    needleHUD.needleNine.SetActive(true);
+                    break;
+
             }
             #endregion
         }

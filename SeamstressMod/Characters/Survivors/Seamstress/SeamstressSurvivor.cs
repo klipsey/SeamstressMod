@@ -136,8 +136,8 @@ namespace SeamstressMod.Survivors.Seamstress
         private void AdditionalBodySetup()
         {
             AddHitboxes();
-            bodyPrefab.AddComponent<SeamstressController>();
             bodyPrefab.AddComponent<NeedleHUD>();
+            bodyPrefab.AddComponent<SeamstressController>();
             bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.stitchSetup);
             TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
@@ -224,8 +224,8 @@ namespace SeamstressMod.Survivors.Seamstress
                     "Weapon"
                 ));
             //custom Skilldefs can have additional fields that you can set manually
-            trimSkillDef.stepCount = 2;
-            trimSkillDef.stepGraceDuration = 1f;
+            flurrySkillDef.stepCount = 2;
+            flurrySkillDef.stepGraceDuration = 1f;
 
             Skills.AddPrimarySkills(bodyPrefab, flurrySkillDef);
         }
@@ -243,7 +243,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
                 activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseRechargeInterval = 6f,
                 baseMaxStock = 1,
@@ -277,7 +277,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.BlinkSeamstress)),
                 activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseRechargeInterval = 6f,
                 baseMaxStock = 1,
@@ -349,7 +349,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
                 activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseRechargeInterval = 0f,
                 baseMaxStock = 1,
@@ -386,7 +386,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
                 //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
-                activationStateMachineName = "Weapon",
+                activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,

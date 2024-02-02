@@ -71,7 +71,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                         ProjectileSimple needleSimple = inflictorObject.GetComponent<ProjectileSimple>();
                         needleSimple.desiredForwardSpeed = 150f;
-                        needleSimple.lifetime = 1.25f;
+                        needleSimple.lifetime = 1f;
                         needleSimple.updateAfterFiring = true;
                     }
                 }

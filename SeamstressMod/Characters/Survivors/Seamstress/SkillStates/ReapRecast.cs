@@ -88,11 +88,6 @@ namespace SeamstressMod.SkillStates
             }
         }
 
-        public override InterruptPriority GetMinimumInterruptPriority()
-        {
-            return InterruptPriority.PrioritySkill;
-        }
-
         protected override void PlayAttackAnimation()
         {
             PlayCrossfade("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration, 0.1f * duration);
