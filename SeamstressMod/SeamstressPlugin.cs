@@ -12,7 +12,6 @@ using System.Security.Permissions;
 //rename this namespace
 namespace SeamstressMod
 {
-    [BepInDependency("bubbet.networkedtimedbuffs", BepInDependency.DependencyFlags.SoftDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
 
@@ -29,8 +28,6 @@ namespace SeamstressMod
         public const string DEVELOPER_PREFIX = "KENKO";
 
         public static SeamstressPlugin instance;
-        
-        public static bool networktimedbuffsInstalled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("bubbet.networkedtimedbuffs");
 
         void Awake()
         {

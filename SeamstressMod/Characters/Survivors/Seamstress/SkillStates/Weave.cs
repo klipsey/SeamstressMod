@@ -15,7 +15,7 @@ namespace SeamstressMod.SkillStates
     {
         private Transform modelTransform;
 
-        public static GameObject dashPrefab;
+        public GameObject dashPrefab;
 
         private float stopwatch;
 
@@ -25,7 +25,7 @@ namespace SeamstressMod.SkillStates
 
         public static float dashPrepDuration = 0.2f;
 
-        public static float dashDuration;
+        public float dashDuration;
 
         public static float speedCoefficient = 100f;
 

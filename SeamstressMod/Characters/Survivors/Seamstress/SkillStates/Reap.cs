@@ -12,9 +12,9 @@ namespace SeamstressMod.SkillStates
     {
         public static float baseDuration = 1f;
 
-        public static float duration;
-
         public static float firePercentTime = 0f;
+
+        public float duration;
 
         private float fireTime;
 

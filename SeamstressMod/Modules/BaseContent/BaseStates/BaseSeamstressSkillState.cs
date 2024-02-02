@@ -37,15 +37,5 @@ namespace SeamstressMod.Modules.BaseStates
                 this.baseNeedleAmount = this.seamCon.baseNeedleAmount;
             }
         }
-        public override void OnSerialize(NetworkWriter writer)
-        {
-            base.OnSerialize(writer);
-            writer.Write(this.empowered);
-        }
-        public override void OnDeserialize(NetworkReader reader)
-        {
-            base.OnDeserialize(reader);
-            this.empowered = reader.ReadBoolean();
-        }
     }
 }

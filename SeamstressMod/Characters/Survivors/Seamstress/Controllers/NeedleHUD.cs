@@ -13,32 +13,32 @@ namespace SeamstressMod.Survivors.Seamstress
     public class NeedleHUD : MonoBehaviour
     {
         private static HUD hud;
-        public static GameObject needleZero;
-        public static GameObject needleOne;
-        public static GameObject needleTwo;
-        public static GameObject needleThree;
-        public static GameObject needleFour;
-        public static GameObject needleFive;
-        public static GameObject needleSix;
-        public static GameObject needleSeven;
-        public static GameObject needleEight;
-        public static GameObject needleNine;
-        public static Image needleImgZero;
-        public static Image needleImgOne;
-        public static Image needleImgTwo;
-        public static Image needleImgThree;
-        public static Image needleImgFour;
-        public static Image needleImgFive;
-        public static Image needleImgSix;
-        public static Image needleImgSeven;
-        public static Image needleImgEight;
-        public static Image needleImgNine;
-        public static GameObject expungeHealing;
+        public GameObject needleZero;
+        public GameObject needleOne;
+        public GameObject needleTwo;
+        public GameObject needleThree;
+        public GameObject needleFour;
+        public GameObject needleFive;
+        public GameObject needleSix;
+        public GameObject needleSeven;
+        public GameObject needleEight;
+        public GameObject needleNine;
+        public Image needleImgZero;
+        public Image needleImgOne;
+        public Image needleImgTwo;
+        public Image needleImgThree;
+        public Image needleImgFour;
+        public Image needleImgFive;
+        public Image needleImgSix;
+        public Image needleImgSeven;
+        public Image needleImgEight;
+        public Image needleImgNine;
+        public GameObject expungeHealing;
         public void Awake()
         {
             On.RoR2.UI.HUD.Awake += MyFunc;
         }
-        private static void MyFunc(On.RoR2.UI.HUD.orig_Awake orig, RoR2.UI.HUD self)
+        private void MyFunc(On.RoR2.UI.HUD.orig_Awake orig, RoR2.UI.HUD self)
         {
             //WARNING ALL THE LOCAL POSITION SCALE ROTATION IS FUCKED FOR THE NEEDLES. TO FIX SET SCALE TO 1 AND THEN MANUALLY MOVE TO MIDDLE
             orig(self); // Don't forget to call this, or the vanilla / other mods' codes will not execute!
@@ -198,27 +198,27 @@ namespace SeamstressMod.Survivors.Seamstress
             expungeHealing.GetComponent<Text>().enabled = false;
             expungeHealing.GetComponent<Outline>().enabled = true;
 
-            needleImgZero = NeedleHUD.needleZero.gameObject.GetComponent<Image>();
-            needleImgOne = NeedleHUD.needleOne.gameObject.GetComponent<Image>();
-            needleImgTwo = NeedleHUD.needleTwo.gameObject.GetComponent<Image>();
-            needleImgThree = NeedleHUD.needleThree.gameObject.GetComponent<Image>();
-            needleImgFour = NeedleHUD.needleFour.gameObject.GetComponent<Image>();
-            needleImgFive = NeedleHUD.needleFive.gameObject.GetComponent<Image>();
-            needleImgSix = NeedleHUD.needleSix.gameObject.GetComponent<Image>();
-            needleImgSeven = NeedleHUD.needleSeven.gameObject.GetComponent<Image>();
-            needleImgEight = NeedleHUD.needleEight.gameObject.GetComponent<Image>();
-            needleImgNine = NeedleHUD.needleNine.gameObject.GetComponent<Image>();
+            needleImgZero = needleZero.gameObject.GetComponent<Image>();
+            needleImgOne = needleOne.gameObject.GetComponent<Image>();
+            needleImgTwo = needleTwo.gameObject.GetComponent<Image>();
+            needleImgThree = needleThree.gameObject.GetComponent<Image>();
+            needleImgFour = needleFour.gameObject.GetComponent<Image>();
+            needleImgFive = needleFive.gameObject.GetComponent<Image>();
+            needleImgSix = needleSix.gameObject.GetComponent<Image>();
+            needleImgSeven = needleSeven.gameObject.GetComponent<Image>();
+            needleImgEight = needleEight.gameObject.GetComponent<Image>();
+            needleImgNine = needleNine.gameObject.GetComponent<Image>();
 
-            NeedleHUD.needleZero.SetActive(false);
-            NeedleHUD.needleOne.SetActive(false);
-            NeedleHUD.needleTwo.SetActive(false);
-            NeedleHUD.needleThree.SetActive(false);
-            NeedleHUD.needleFour.SetActive(false);
-            NeedleHUD.needleFive.SetActive(false);
-            NeedleHUD.needleSix.SetActive(false);
-            NeedleHUD.needleSeven.SetActive(false);
-            NeedleHUD.needleEight.SetActive(false);
-            NeedleHUD.needleNine.SetActive(false);
+            needleZero.SetActive(false);
+            needleOne.SetActive(false);
+            needleTwo.SetActive(false);
+            needleThree.SetActive(false);
+            needleFour.SetActive(false);
+            needleFive.SetActive(false);
+            needleSix.SetActive(false);
+            needleSeven.SetActive(false);
+            needleEight.SetActive(false);
+            needleNine.SetActive(false);
         }
         public void OnDestroy()
         {

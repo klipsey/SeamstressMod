@@ -12,6 +12,7 @@ namespace SeamstressMod.SkillStates
 {
     public class ReapRecast: BaseMeleeAttack
     {
+        SeamstressController seam;
         public override void OnEnter()
         {
             RefreshState();
@@ -44,6 +45,7 @@ namespace SeamstressMod.SkillStates
             isFlatDamage = true;
             damageTotal = characterBody.GetComponent<SeamstressController>().butcheredConversion;
             base.OnEnter();
+            this.seam = characterBody.GetComponent<SeamstressController>();
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeEffect, transform);
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect, transform);
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect2, transform);
@@ -97,8 +99,8 @@ namespace SeamstressMod.SkillStates
         }
         public override void OnExit()
         {
-            NeedleHUD.expungeHealing.GetComponent<Text>().enabled = false;
-            NeedleHUD.expungeHealing.GetComponent<Outline>().enabled = false;
+            seam.needleHUD.expungeHealing.GetComponent<Text>().enabled = false;
+            seam.needleHUD.expungeHealing.GetComponent<Outline>().enabled = false;
             base.OnExit();
         }
 

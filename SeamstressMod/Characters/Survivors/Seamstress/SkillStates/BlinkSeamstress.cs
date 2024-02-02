@@ -12,34 +12,38 @@ namespace SeamstressMod.SkillStates
     {
         private Transform modelTransform;
 
-        public bool disappearWhileBlinking = true;
+        public static bool disappearWhileBlinking = true;
 
-        private Vector3 blinkDestination = Vector3.zero;
+        private Vector3 blinkDestination;
 
-        private Vector3 blinkStart = Vector3.zero;
+        private Vector3 blinkStart;
 
-        public float duration = 0.3f;
+        public static GameObject blinkPrefab = SeamstressAssets.blinkPrefab;
 
-        public float exitDuration = 0.15f;
+        public static GameObject blinkDestinationPrefab = SeamstressAssets.blinkDestinationPrefab;
 
-        public float destinationAlertDuration = 0.15f;
+        public static float duration = 0.3f;
 
-        public float blinkDistance = 25f;
+        public static float exitDuration = 0.15f;
+
+        public static float destinationAlertDuration = 0.15f;
+
+        public static float blinkDistance = 25f;
 
         public string beginSoundString = "Play_imp_overlord_teleport_start";
 
         public string endSoundString = "Play_imp_overlord_teleport_end";
 
         //test sphere collider changing with scale
-        public float blastAttackRadius = 12.5f;
+        public static float blastAttackRadius = 12.5f;
 
-        public float empoweredBlastAttackRadius = 25f;
+        public static float empoweredBlastAttackRadius = 25f;
 
-        public float blastAttackDamageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
+        public static float blastAttackDamageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
 
-        public float blastAttackForce = 50f;
+        public static float blastAttackForce = 50f;
 
-        public float blastAttackProcCoefficient = 1f;
+        public static float blastAttackProcCoefficient = 1f;
 
         private Animator animator;
 
@@ -58,6 +62,8 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+            blinkDestination = Vector3.zero;
+            blinkStart = Vector3.zero;
             Util.PlaySound(beginSoundString, base.gameObject);
             this.modelTransform = GetModelTransform();
             if ((bool)this.modelTransform)
@@ -92,26 +98,26 @@ namespace SeamstressMod.SkillStates
 
         private void CalculateBlinkDestination()
         {
-            if(base.isAuthority) 
-            {
             RaycastHit hitInfo;
-            Vector3 position = ((!this.inputBank.GetAimRaycast(blinkDistance, out hitInfo)) ? this.inputBank.GetAimRay().GetPoint(blinkDistance) : hitInfo.point);
-            
+            Vector3 position = Vector3.zero;
+            if (base.isAuthority)
+            {
+                position = ((!this.inputBank.GetAimRaycast(blinkDistance, out hitInfo)) ? this.inputBank.GetAimRay().GetPoint(blinkDistance) : hitInfo.point);
+            }
             blinkDestination = position;
             blinkDestination += base.transform.position - base.characterBody.footPosition;
             blinkStart = base.transform.position;
             base.characterMotor.velocity = Vector3.zero;
-            base.characterDirection.forward += position;
-            }
+            base.characterMotor.rootMotion += position;
         }
         private void CreateBlinkEffect(Vector3 origin)
         {
-            if ((bool)SeamstressAssets.blinkPrefab)
+            if ((bool)blinkPrefab)
             {
                 EffectData effectData = new EffectData();
-                effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination);
+                effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination - blinkStart);
                 effectData.origin = origin;
-                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: false);
+                EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: false);
             }
         }
 
@@ -125,10 +131,9 @@ namespace SeamstressMod.SkillStates
             if (base.fixedAge >= duration - destinationAlertDuration && !hasBlinked)
             {
                 hasBlinked = true;
-                if ((bool)SeamstressAssets.blinkDestinationPrefab)
+                if ((bool)blinkDestinationPrefab)
                 {
-
-                    blinkDestinationInstance = Object.Instantiate(SeamstressAssets.blinkDestinationPrefab, blinkDestination, Quaternion.identity);
+                    blinkDestinationInstance = Object.Instantiate(blinkDestinationPrefab, blinkDestination, Quaternion.identity);
                     blinkDestinationInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = destinationAlertDuration;
                 }
             }
