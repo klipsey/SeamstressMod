@@ -13,35 +13,33 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     public class SeamstressController : MonoBehaviour
     {
-        public CharacterBody characterBody;
+        private CharacterBody characterBody;
 
-        public float butcheredConversion;
+        private float butcheredConversion;
 
-        public float needleRegen;
+        private float needleRegen;
 
-        public int baseNeedleAmount;
+        private int baseNeedleAmount;
         private bool hasEffectiveAuthority => characterBody.hasEffectiveAuthority;
 
-        public HealthComponent healthComponent;
+        private HealthComponent healthComponent;
 
-        public SkillLocator skillLocator;
+        private SkillLocator skillLocator;
 
-        public NeedleHUD needleHUD;
+        private bool hasPlayed;
 
-        public bool hasPlayed;
+        private bool fuckYou;
 
-        public bool fuckYou;
+        private bool butchered;
 
-        public bool butchered;
+        private float bd;
 
-        public float bd;
+        private float butcheredDurationPercent;
 
-        public float butcheredDurationPercent;
+        private int needleCount;
 
-        public int needleCount;
-
-        public TemporaryOverlay component;
-        public void Awake()
+        private TemporaryOverlay component;
+        private void Awake()
         {
             this.healthComponent = GetComponent<HealthComponent>();
             this.characterBody = GetComponent<CharacterBody>();
@@ -50,7 +48,7 @@ namespace SeamstressMod.Survivors.Seamstress
             butcheredConversion = 0f;
             Hook();
         }
-        public void Start()
+        private void Start()
         {
             needleRegen = SeamstressStaticValues.needleGainInterval;
             hasPlayed = false;
@@ -59,18 +57,19 @@ namespace SeamstressMod.Survivors.Seamstress
             bd = 0f;
             butcheredDurationPercent = bd / 10f;
         }
-        public void FixedUpdate()
+        private void FixedUpdate()
         {
             if (bd > 0f)
             {
                 bd -= Time.fixedDeltaTime;
             }
-            passiveNeedleRegen();
+            PassiveNeedleRegen();
             IsButchered();
             ButcheredSound();
             CalculateBonusDamage();
             NeedleDisplayCount();
         }
+        #region hooks
         private static void Hook()
         {
             On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
@@ -111,8 +110,10 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             return res;
         }
+        #endregion
+
         //needle regen
-        private void passiveNeedleRegen()
+        private void PassiveNeedleRegen()
         {
             if (this.characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + skillLocator.special.maxStock - 1)
             {
@@ -144,8 +145,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     butcheredDurationPercent = bd / 10f;
                     if(this.hasEffectiveAuthority)
                     {
-                        needleHUD.expungeHealing.GetComponent<Text>().enabled = true;
-                        needleHUD.expungeHealing.GetComponent<Outline>().enabled = true;
+                        needleHUD.ActivateExpunge(true);
                         butchered = true;
                         #region IconUpdate
                         this.skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
@@ -540,7 +540,7 @@ namespace SeamstressMod.Survivors.Seamstress
             On.RoR2.HealthComponent.Heal -= new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
             On.RoR2.CharacterModel.UpdateOverlays -= new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
         }
-        public void OnDestroy()
+        private void OnDestroy()
         {
             Unhook();
         }

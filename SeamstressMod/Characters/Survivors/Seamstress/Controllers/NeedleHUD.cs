@@ -10,35 +10,40 @@ using UnityEngine.AddressableAssets;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
-    public class NeedleHUD : MonoBehaviour
+    public static class NeedleHud
     {
-        private static HUD hud;
-        public GameObject needleZero;
-        public GameObject needleOne;
-        public GameObject needleTwo;
-        public GameObject needleThree;
-        public GameObject needleFour;
-        public GameObject needleFive;
-        public GameObject needleSix;
-        public GameObject needleSeven;
-        public GameObject needleEight;
-        public GameObject needleNine;
-        public Image needleImgZero;
-        public Image needleImgOne;
-        public Image needleImgTwo;
-        public Image needleImgThree;
-        public Image needleImgFour;
-        public Image needleImgFive;
-        public Image needleImgSix;
-        public Image needleImgSeven;
-        public Image needleImgEight;
-        public Image needleImgNine;
-        public GameObject expungeHealing;
-        public void Awake()
+        internal static HUD hud;
+        internal static GameObject needleZero;
+        internal static GameObject needleOne;
+        internal static GameObject needleTwo;
+        internal static GameObject needleThree;
+        internal static GameObject needleFour;
+        internal static GameObject needleFive;
+        internal static GameObject needleSix;
+        internal static GameObject needleSeven;
+        internal static GameObject needleEight;
+        internal static GameObject needleNine;
+        internal static Image needleImgZero;
+        internal static Image needleImgOne;
+        internal static Image needleImgTwo;
+        internal static Image needleImgThree;
+        internal static Image needleImgFour;
+        internal static Image needleImgFive;
+        internal static Image needleImgSix;
+        internal static Image needleImgSeven;
+        internal static Image needleImgEight;
+        internal static Image needleImgNine;
+        internal static GameObject expungeHealing;
+
+        public static void Init()
+        {
+
+        }
+        public static void Awake()
         {
             On.RoR2.UI.HUD.Awake += MyFunc;
         }
-        private void MyFunc(On.RoR2.UI.HUD.orig_Awake orig, RoR2.UI.HUD self)
+        private static void MyFunc(On.RoR2.UI.HUD.orig_Awake orig, RoR2.UI.HUD self)
         {
             //WARNING ALL THE LOCAL POSITION SCALE ROTATION IS FUCKED FOR THE NEEDLES. TO FIX SET SCALE TO 1 AND THEN MANUALLY MOVE TO MIDDLE
             orig(self); // Don't forget to call this, or the vanilla / other mods' codes will not execute!
@@ -220,29 +225,8 @@ namespace SeamstressMod.Survivors.Seamstress
             needleEight.SetActive(false);
             needleNine.SetActive(false);
         }
-        public void OnDestroy()
+        public static void OnDestroy()
         {
-            UnityEngine.Object.Destroy(needleZero);
-            UnityEngine.Object.Destroy(needleOne);
-            UnityEngine.Object.Destroy(needleTwo);
-            UnityEngine.Object.Destroy(needleThree);
-            UnityEngine.Object.Destroy(needleFour);
-            UnityEngine.Object.Destroy(needleFive);
-            UnityEngine.Object.Destroy(needleSix);
-            UnityEngine.Object.Destroy(needleSeven);
-            UnityEngine.Object.Destroy(needleEight);
-            UnityEngine.Object.Destroy(needleNine);
-            UnityEngine.Object.Destroy(needleImgZero);
-            UnityEngine.Object.Destroy(needleImgOne);
-            UnityEngine.Object.Destroy(needleImgTwo);
-            UnityEngine.Object.Destroy(needleImgThree);
-            UnityEngine.Object.Destroy(needleImgFour);
-            UnityEngine.Object.Destroy(needleImgFive);
-            UnityEngine.Object.Destroy(needleImgSix);
-            UnityEngine.Object.Destroy(needleImgSeven);
-            UnityEngine.Object.Destroy(needleImgEight);
-            UnityEngine.Object.Destroy(needleImgNine);
-            UnityEngine.Object.Destroy(expungeHealing);
             On.RoR2.UI.HUD.Awake -= MyFunc;
         }
     }
