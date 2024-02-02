@@ -11,37 +11,37 @@ using static R2API.DamageAPI;
 
 namespace SeamstressMod.SkillStates
 {
-    public class Weave : BaseSeamstressSkillState//WeavePrep
+    public class Weave : BaseSeamstressSkillState
     {
         private Transform modelTransform;
 
-        public GameObject dashPrefab;
+        private GameObject dashPrefab;
+
+        private static GameObject hitEffectPrefab;
 
         private float stopwatch;
 
         private CameraTargetParams.AimRequest aimRequest;
 
-        public static float smallHopVelocity = 10f;
+        private static float smallHopVelocity = 10f;
 
-        public static float dashPrepDuration = 0.2f;
+        private static float dashPrepDuration = 0.2f;
 
-        public float dashDuration;
+        private float dashDuration;
 
-        public static float speedCoefficient = 100f;
+        private static float speedCoefficient = 100f;
 
         private Vector3 dashVector;
 
         private OverlapAttack overlapAttack;
 
-        public static float damageCoefficient = SeamstressStaticValues.weaveDamageCoefficient;
+        private static float damageCoefficient = SeamstressStaticValues.weaveDamageCoefficient;
 
-        public static float procCoefficient = 1;
-
-        public static GameObject hitEffectPrefab;
+        private static float procCoefficient = 1;
 
         private ChildLocator childLocator;
 
-        public static float hitPauseDuration = 0.075f;
+        private static float hitPauseDuration = 0.075f;
 
         private bool isDashing;
 

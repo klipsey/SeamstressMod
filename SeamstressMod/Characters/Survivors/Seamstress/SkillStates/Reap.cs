@@ -27,7 +27,7 @@ namespace SeamstressMod.SkillStates
             duration = baseDuration / attackSpeedStat;
             fireTime = firePercentTime * duration;
             Util.PlaySound("Play_item_proc_novaonheal_impact", gameObject);
-            UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.reapBleedEffect, characterBody.modelLocator.transform);
+            Object.Instantiate<GameObject>(SeamstressAssets.reapBleedEffect, characterBody.modelLocator.transform);
             PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
             if (!base.characterMotor.isGrounded)
             {

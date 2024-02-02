@@ -52,7 +52,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.anchoredPosition = new Vector2(0.5f, 0.5f);
             rectTransform.localPosition = new Vector3(12f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
             needleZero.AddComponent<Image>();
             needleZero.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
 
@@ -64,7 +64,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = new Vector3(-12f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
 
             needleOne.AddComponent<Image>();
             needleOne.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
@@ -77,7 +77,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = new Vector3(24f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
 
             needleTwo.AddComponent<Image>();
             needleTwo.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
@@ -90,7 +90,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = new Vector3(-24f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
 
             needleThree.AddComponent<Image>();
             needleThree.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
@@ -103,7 +103,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = new Vector3(36f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
 
             needleFour.AddComponent<Image>();
             needleFour.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
@@ -116,7 +116,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = new Vector3(-36f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
 
             needleFive.AddComponent<Image>();
             needleFive.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
@@ -129,7 +129,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = new Vector3(48f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
 
             needleSix.AddComponent<Image>();
             needleSix.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
@@ -142,7 +142,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = new Vector3(-48f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
 
             needleSeven.AddComponent<Image>();
             needleSeven.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
@@ -155,7 +155,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = new Vector3(60f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
 
             needleEight.AddComponent<Image>();
             needleEight.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
@@ -168,7 +168,7 @@ namespace SeamstressMod.Survivors.Seamstress
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = new Vector3(-60f, -60f, rectTransform.localPosition.z);
             rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
-            rectTransform.rotation = Quaternion.Euler(0f,0f,270f);
+            rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
 
             needleNine.AddComponent<Image>();
             needleNine.GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
@@ -176,7 +176,7 @@ namespace SeamstressMod.Survivors.Seamstress
             expungeHealing = new GameObject("ExpungeHealing");
             expungeHealing.transform.SetParent(hud.mainContainer.transform);
             rectTransform = expungeHealing.AddComponent<RectTransform>();
-            rectTransform.anchorMin = Vector2.zero; 
+            rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.anchoredPosition = Vector2.zero;
@@ -191,7 +191,7 @@ namespace SeamstressMod.Survivors.Seamstress
             expungeHealing.GetComponent<Text>().font = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Font>("RoR2/Base/Common/Fonts/Bombardier/BOMBARD_.ttf").WaitForCompletion());
             expungeHealing.GetComponent<Text>().fontSize = 20;
             expungeHealing.GetComponent<Text>().fontStyle = FontStyle.Normal;
-            expungeHealing.GetComponent<Text>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/Fonts/Bombardier/BOMBARD_.ttf").WaitForCompletion());           
+            expungeHealing.GetComponent<Text>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/Fonts/Bombardier/BOMBARD_.ttf").WaitForCompletion());
             expungeHealing.GetComponent<Text>().color = new Color(155f / 255f, 55f / 255f, 55f / 255f, 1f);
             expungeHealing.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
             expungeHealing.GetComponent<Text>().text = 0.ToString();

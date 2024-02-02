@@ -26,11 +26,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject blinkPrefab;
 
-        internal static GameObject blinkPrefabBig;
-
         internal static GameObject blinkDestinationPrefab;
-
-        internal static GameObject blinkDestinationPrefabBig;
 
         internal static GameObject stitchTempEffectPrefab;
 
@@ -109,19 +105,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
             blinkPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("BlinkStart");
             blinkPrefab.AddComponent<NetworkIdentity>();
-            blinkPrefab.transform.GetChild(0).localScale = Vector3.one * 0.5f;
-            blinkPrefab.transform.GetChild(1).localScale = Vector3.one * 0.5f;
-
-            blinkPrefabBig = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("BlinkStartBig");
-            blinkPrefabBig.AddComponent<NetworkIdentity>();
+            blinkPrefab.GetComponent<EffectComponent>().applyScale = true;
+            Modules.Content.CreateAndAddEffectDef(blinkPrefab);
 
             blinkDestinationPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/ImpBossBlinkDestination.prefab").WaitForCompletion().InstantiateClone("BlinkEnd");
             blinkDestinationPrefab.AddComponent<NetworkIdentity>();
-            blinkDestinationPrefab.transform.GetChild(0).localScale = Vector3.one * 0.5f;
-            blinkDestinationPrefab.transform.GetChild(1).localScale = Vector3.one * 0.5f;
-
-            blinkDestinationPrefabBig = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/ImpBossBlinkDestination.prefab").WaitForCompletion().InstantiateClone("BlinkEndEmpowered");
-            blinkDestinationPrefabBig.AddComponent<NetworkIdentity>();
+            blinkDestinationPrefab.transform.GetChild(0).localScale = Vector3.one * 0.2f;
+            blinkDestinationPrefab.transform.GetChild(1).localScale = Vector3.one * 0.2f;
 
             scissorsButcheredSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
             scissorsButcheredSwingEffect.AddComponent<NetworkIdentity>();
@@ -325,7 +315,7 @@ namespace SeamstressMod.Survivors.Seamstress
         #region projectiles
         private static void CreateProjectiles()
         {
-            CreateNeedle ();
+            CreateNeedle();
             Content.AddProjectilePrefab(needlePrefab);
             CreateEmpoweredNeedle();
             Content.AddProjectilePrefab(needleButcheredPrefab);
@@ -338,7 +328,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleSimple.desiredForwardSpeed = 150f;
             needleSimple.lifetime = 5f;
             needleSimple.updateAfterFiring = true;
-            
+
             ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
             needleDamage.damageType = DamageType.Generic;
             DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needlePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
@@ -375,9 +365,9 @@ namespace SeamstressMod.Survivors.Seamstress
             needleGhost = PrefabAPI.InstantiateClone(needleGhost, "Needle");
             if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile") != null)
                 needleController.ghostPrefab = needleGhost;
-            if (!needleController.ghostPrefab.GetComponent<NetworkIdentity>()) 
+            if (!needleController.ghostPrefab.GetComponent<NetworkIdentity>())
                 needleController.ghostPrefab.AddComponent<NetworkIdentity>();
-            if (!needleController.ghostPrefab.GetComponent<ProjectileGhostController>()) 
+            if (!needleController.ghostPrefab.GetComponent<ProjectileGhostController>())
                 needleController.ghostPrefab.AddComponent<ProjectileGhostController>();
             needleController.startSound = "";
         }
@@ -428,9 +418,9 @@ namespace SeamstressMod.Survivors.Seamstress
             needleButcheredGhost = PrefabAPI.InstantiateClone(needleButcheredGhost, "NeedleButchered");
             if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile") != null)
                 needleController.ghostPrefab = needleButcheredGhost;
-            if(!needleController.ghostPrefab.GetComponent<NetworkIdentity>()) 
+            if (!needleController.ghostPrefab.GetComponent<NetworkIdentity>())
                 needleController.ghostPrefab.AddComponent<NetworkIdentity>();
-            if(!needleController.ghostPrefab.GetComponent<ProjectileGhostController>()) 
+            if (!needleController.ghostPrefab.GetComponent<ProjectileGhostController>())
                 needleController.ghostPrefab.AddComponent<ProjectileGhostController>();
             needleController.startSound = "";
         }
