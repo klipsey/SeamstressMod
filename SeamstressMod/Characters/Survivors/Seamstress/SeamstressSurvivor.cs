@@ -339,38 +339,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             GenericSkill reapRecast = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "reapRecast", true); 
 
-            SkillDef reapRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "Expunge",
-                skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
-                activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseRechargeInterval = 0f,
-                baseMaxStock = 1,
-
-                rechargeStock = 0,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = true,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-            });
-
-            Skills.AddSkillsToFamily(reapRecast.skillFamily, reapRecastSkillDef);
+            Skills.AddSkillsToFamily(reapRecast.skillFamily, SeamstressAssets.reapRecastSkillDef);
         }
 
         private void AddSpecialSkills()

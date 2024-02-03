@@ -12,9 +12,9 @@ namespace SeamstressMod.Modules.BaseStates
     {
         protected SeamstressController seamCon;
 
-        public int baseNeedleAmount;
+        protected int baseNeedleAmount;
 
-        public bool empowered;
+        protected bool empowered;
 
         public override void OnEnter()
         {
@@ -27,14 +27,17 @@ namespace SeamstressMod.Modules.BaseStates
         }
         protected void RefreshState()
         {
-            if (!this.seamCon)
+            if (!
+                
+                
+                seamCon)
             {
-                this.seamCon = this.GetComponent<SeamstressController>();
+                seamCon = GetComponent<SeamstressController>();
             }
-            if ((bool)this.seamCon)
+            if ((bool)seamCon)
             {
-                this.empowered = this.seamCon.butchered;
-                this.baseNeedleAmount = this.seamCon.baseNeedleAmount;
+                empowered = characterBody.HasBuff(SeamstressBuffs.butchered);
+                baseNeedleAmount = seamCon.NeedleTracking(true);
             }
         }
     }

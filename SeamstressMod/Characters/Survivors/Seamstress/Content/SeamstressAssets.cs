@@ -5,7 +5,7 @@ using RoR2.Projectile;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using R2API;
-using RoR2.UI;
+using RoR2.Skills;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -72,6 +72,8 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject needlePrefab;
 
         internal static GameObject needleButcheredPrefab;
+
+        public static SkillDef reapRecastSkillDef;
         public static void Init(AssetBundle assetBundle)
         {
 
@@ -80,6 +82,37 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_bandit2_m2_impact");
 
             sewHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_imp_overlord_attack2_tell");
+
+            reapRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "Expunge",
+                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_NAME",
+                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.stitchKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
+                activationStateMachineName = "Weapon2",
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+
+                baseRechargeInterval = 1f,
+                baseMaxStock = 1,
+
+                rechargeStock = 0,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = true,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
 
             CreateEffects();
 

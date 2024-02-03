@@ -14,7 +14,7 @@ namespace SeamstressMod.SkillStates
 
         public static float firePercentTime = 0f;
 
-        public float duration;
+        private float duration;
 
         private float fireTime;
 
@@ -32,14 +32,6 @@ namespace SeamstressMod.SkillStates
             if (!base.characterMotor.isGrounded)
             {
                 SmallHop(base.characterMotor, 6f);
-            }
-            if(base.isAuthority)
-            {
-                base.skillLocator.utility = base.skillLocator.FindSkill("reapRecast");
-                if (base.skillLocator.utility.stock == 0)
-                {
-                    base.skillLocator.utility.AddOneStock();
-                }
             }
         }
         public override void FixedUpdate()
@@ -83,6 +75,7 @@ namespace SeamstressMod.SkillStates
         public override void OnExit()
         {
             base.OnExit();
+            base.skillLocator.utility.SetSkillOverride(gameObject, SeamstressAssets.reapRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
     }
 }

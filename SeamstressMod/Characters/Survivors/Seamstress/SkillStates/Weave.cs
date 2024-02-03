@@ -67,6 +67,7 @@ namespace SeamstressMod.SkillStates
 
             overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
             overlapAttack.AddModdedDamageType(DamageTypes.CutDamage);
+            overlapAttack.procCoefficient = procCoefficient;
             if (empowered)
             {
                 hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;

@@ -12,38 +12,38 @@ namespace SeamstressMod.SkillStates
 {
     public class BlinkSeamstress : BaseSeamstressSkillState
     {
-        private Transform modelTransform;
+        public Transform modelTransform;
 
-        private static bool disappearWhileBlinking = true;
+        public static bool disappearWhileBlinking = true;
 
-        private CameraTargetParams.AimRequest aimRequest;
+        public CameraTargetParams.AimRequest aimRequest;
 
         private Vector3 blinkDestination = Vector3.zero;
 
         private Vector3 blinkStart = Vector3.zero;
 
-        private static float baseDuration = 0.5f;
+        public static float baseDuration = 0.5f;
 
-        private float exitDuration = 0.15f;
+        public float exitDuration = 0.15f;
 
-        private float destinationAlertDuration;
+        public float destinationAlertDuration;
 
-        private static float blinkDistance = 30f;
+        public static float blinkDistance = 30f;
 
-        private static string beginSoundString = "Play_imp_overlord_teleport_start";
+        public static string beginSoundString = "Play_imp_overlord_teleport_start";
 
-        private static string endSoundString = "Play_imp_overlord_teleport_end";
+        public static string endSoundString = "Play_imp_overlord_teleport_end";
 
         //test sphere collider changing with scale
-        private static float blastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius - 15;
+        public static float blastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius - 15;
 
-        private static float empoweredBlastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius - 5;
+        public static float empoweredBlastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius - 5;
 
-        private static float blastAttackDamageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
+        public static float blastAttackDamageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
 
-        private static float blastAttackForce = 50f;
+        public static float blastAttackForce = 50f;
 
-        private static float blastAttackProcCoefficient = 1f;
+        public static float blastAttackProcCoefficient = 1f;
 
         private Animator animator;
 

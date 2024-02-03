@@ -12,7 +12,6 @@ namespace SeamstressMod.SkillStates
 {
     public class ReapRecast: BaseMeleeAttack
     {
-        SeamstressController seam;
         public override void OnEnter()
         {
             RefreshState();
@@ -43,19 +42,16 @@ namespace SeamstressMod.SkillStates
             impactSound = SeamstressAssets.sewHitSoundEvent.index;
             hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             isFlatDamage = true;
-            damageTotal = characterBody.GetComponent<SeamstressController>().butcheredConversion;
+            damageTotal = this.characterBody.GetComponent<SeamstressController>().GetButcheredConversion();
             base.OnEnter();
-            this.seam = characterBody.GetComponent<SeamstressController>();
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeEffect, transform);
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect, transform);
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect2, transform);
             UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect3, transform);
-            characterBody.GetComponent<SeamstressController>().butcheredConversion = characterBody.damage;
             if (base.isAuthority) 
             {
-                Util.CleanseBody(characterBody, true, false, false, true, true, true);
+                Util.CleanseBody(this.characterBody, true, false, false, true, true, true);
             }
-            skillLocator.utility = skillLocator.FindSkill("Utility");
         }
         protected override void OnHitEnemyAuthority()
         {
@@ -94,9 +90,8 @@ namespace SeamstressMod.SkillStates
         }
         public override void OnExit()
         {
-            seam.needleHUD.expungeHealing.GetComponent<Text>().enabled = false;
-            seam.needleHUD.expungeHealing.GetComponent<Outline>().enabled = false;
             base.OnExit();
+            base.skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.reapRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
 
     }

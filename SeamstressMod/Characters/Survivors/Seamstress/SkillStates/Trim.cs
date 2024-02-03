@@ -38,7 +38,7 @@ namespace SeamstressMod.SkillStates
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
-            switch (base.swingIndex)
+            switch (swingIndex)
             {
                 case 0:
                     muzzleString = "SwingLeft";
