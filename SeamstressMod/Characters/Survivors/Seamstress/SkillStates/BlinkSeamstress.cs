@@ -22,7 +22,7 @@ namespace SeamstressMod.SkillStates
 
         public static float baseDuration = 0.5f;
 
-        public float exitDuration = 0.15f;
+        public float exitDuration;
 
         public float destinationAlertDuration;
 

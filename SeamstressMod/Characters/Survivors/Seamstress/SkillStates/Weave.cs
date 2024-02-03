@@ -13,14 +13,16 @@ namespace SeamstressMod.SkillStates
 {
     public class Weave : BaseSeamstressSkillState
     {
-        protected GameObject dashPrefab;
+        public static GameObject dashPrefab = SeamstressAssets.weaveDashButchered;
+
+        public static GameObject supaPrefab = SeamstressAssets.blinkPrefab;
 
         protected GameObject hitEffectPrefab;
         public bool hasHit { get; private set; }
 
         public static float smallHopVelocity = 10f;
 
-        public static float dashPrepDuration = 0.2f;
+        public static float dashPrepDuration = 0.4f;
 
         public static float speedCoefficient = 100f;
 
@@ -71,7 +73,6 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
-                dashPrefab = SeamstressAssets.weaveDashButchered;
                 overlapAttack.AddModdedDamageType(DamageTypes.WeaveLifeSteal);
                 Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
                 hitSound = "Play_imp_overlord_impact";
@@ -80,7 +81,6 @@ namespace SeamstressMod.SkillStates
             {
                 hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 Util.PlaySound("Play_merc_m2_uppercut", gameObject);
-                dashPrefab = SeamstressAssets.weaveDash;
                 overlapAttack.RemoveModdedDamageType(DamageTypes.WeaveLifeSteal);
                 hitSound = "Play_bandit2_m2_impact";
             }
@@ -92,6 +92,10 @@ namespace SeamstressMod.SkillStates
             Transform transform = childLocator.FindChild("CharacterCenter");
             if ((bool)transform && (bool)dashPrefab)
             {
+                if(empowered && (bool)supaPrefab)
+                {
+                    CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
+                }
                 Object.Instantiate<GameObject>(dashPrefab, transform.position, Util.QuaternionSafeLookRotation(dashVector), transform);
             }
         }
@@ -144,6 +148,17 @@ namespace SeamstressMod.SkillStates
             if (stopwatch >= dashDuration + dashPrepDuration / attackSpeedStat && base.isAuthority)
             {
                 outer.SetNextStateToMain();
+            }
+        }
+        private void CreateBlinkEffect(Vector3 origin)
+        {
+            if ((bool)SeamstressAssets.blinkPrefab)
+            {
+                EffectData effectData = new EffectData();
+                effectData.rotation = Util.QuaternionSafeLookRotation(dashVector);
+                effectData.origin = origin;
+                effectData.scale = 0.1f;
+                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: true);
             }
         }
         public override void OnExit()

@@ -14,6 +14,10 @@ namespace SeamstressMod.SkillStates
     {
         protected GameObject projectilePrefab;
 
+        public static GameObject supaEffect = SeamstressAssets.sewButcheredEffect;
+
+        public static GameObject boringEffect = SeamstressAssets.sewEffect;
+
         private float needleCompareDelay = 0.1f;
         private float needleDelay;
         private bool hasLaunched;
@@ -28,11 +32,11 @@ namespace SeamstressMod.SkillStates
             {
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                 Util.PlaySound("Play_imp_overlord_teleport_end", gameObject);
-                UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.sewButcheredEffect, transform);
+                UnityEngine.Object.Instantiate<GameObject>(supaEffect, transform);
             }
             else
             {
-                UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.sewEffect, transform);
+                UnityEngine.Object.Instantiate<GameObject>(boringEffect, transform);
                 this.projectilePrefab = SeamstressAssets.needlePrefab;
             }
             PlayAttackAnimation();

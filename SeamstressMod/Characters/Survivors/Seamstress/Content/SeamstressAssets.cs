@@ -137,6 +137,8 @@ namespace SeamstressMod.Survivors.Seamstress
             blinkPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("BlinkStart");
             blinkPrefab.AddComponent<NetworkIdentity>();
             blinkPrefab.GetComponent<EffectComponent>().applyScale = true;
+            blinkPrefab.transform.GetChild(0).localScale = Vector3.one * 0.2f;
+            blinkPrefab.transform.GetChild(1).localScale = Vector3.one * 0.2f;
             Modules.Content.CreateAndAddEffectDef(blinkPrefab);
 
             blinkDestinationPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/ImpBossBlinkDestination.prefab").WaitForCompletion().InstantiateClone("BlinkEnd");
@@ -266,8 +268,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
             weaveDash = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercAssaulterEffect.prefab").WaitForCompletion().InstantiateClone("WeaveDash");
             weaveDash.AddComponent<NetworkIdentity>();
-            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
-            material.SetColor("_TintColor", Color.white);
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercIgnition.mat").WaitForCompletion());
+            material.SetColor("_TintColor", Color.red);
             weaveDash.transform.GetChild(5).gameObject.SetActive(value: false);
             weaveDash.transform.GetChild(6).gameObject.SetActive(value: false);
             weaveDash.transform.GetChild(9).gameObject.GetComponent<TrailRenderer>().material = material;

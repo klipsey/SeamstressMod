@@ -107,23 +107,6 @@ namespace SeamstressMod.Survivors.Seamstress
                         cutsume.damage = (attacker.damage * SeamstressStaticValues.cutBaseDamage * damageInfo.procCoefficient);
                         DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                     }
-                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + attacker.skillLocator.special.maxStock - 1)
-                    {
-                        attacker.AddBuff(SeamstressBuffs.needles);
-                        Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
-                    }
-                    else
-                    {
-                        GameObject projectilePrefab;
-                        Ray aimRay;
-                        aimRay = new Ray(attacker.inputBank.aimOrigin, attacker.inputBank.aimDirection);
-                        if (attacker.HasBuff(SeamstressBuffs.butchered))
-                        {
-                            projectilePrefab = SeamstressAssets.needleButcheredPrefab;
-                        }
-                        else projectilePrefab = SeamstressAssets.needlePrefab;
-                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
-                    }
                 }
 
                 if (damageInfo.HasModdedDamageType(CutDamage))
