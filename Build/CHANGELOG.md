@@ -1,3 +1,7 @@
+# 0.1.3
+- Added alt abilites and stuff
+- Bugs
+- DO NOT PLAY MULTIPLAYER. IT'S PROBABLY IN THE WORST STATE EVER AS OF NOW.
 # 0.1.2
 - Expunge visuals reworked
 - Expunge damage amount above crosshair

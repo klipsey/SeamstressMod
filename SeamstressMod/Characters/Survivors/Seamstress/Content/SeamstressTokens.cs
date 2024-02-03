@@ -57,7 +57,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Unrelenting Flurry");
             Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.agilePrefix + ". " + Tokens.stitchPrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>. " + "While " + Tokens.butcheredPrefix +
-              $", all slashes apply " + Tokens.cutPrefix + " but ignore " + Tokens.stitchPrefix + " stacks and " + Tokens.needlePrefix + " gain.");
+              $", all slashes also apply " + Tokens.cutPrefix + " but ignore " + Tokens.stitchPrefix + " stacks and " + Tokens.needlePrefix + " gain.");
             #endregion
 
             #region Secondary

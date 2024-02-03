@@ -17,7 +17,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float weaveDamageCoefficient = 3;
 
-        internal const float blinkDamageCoefficient = 3;
+        internal const float blinkDamageCoefficient = 2.5f;
 
         internal const float weaveLifeSteal = 0.25f;
 
@@ -25,7 +25,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float reapHealthCost = 0.5f;
 
-        internal const float stitchCooldownReduction = 0.25f;
+        internal const float stitchCooldownReduction = 0.2f;
 
         internal const float needleHealAmount = 0.25f;
 

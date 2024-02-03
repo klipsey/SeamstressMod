@@ -1,11 +1,12 @@
 # Seamstress
 - BETA
 - Currently working on texturing, modeling, and animations
+- DOES NOT FUNCTION IN MULTIPLAYER WHATSOEVER
+
 ## Model Previews
-[![](https://media.discordapp.net/attachments/1195084430876872866/1200725776811692062/image.png?ex=65c73a05&is=65b4c505&hm=5f73e8af69699ce7e7c818a6aec7090cf8577f1f4f4b8f284b33a14789c459d3&=&format=webp&quality=lossless&width=550&height=671)]()
+[![](https://media.discordapp.net/attachments/1119077461783748652/1203256037986144276/image.png?ex=65d06e82&is=65bdf982&hm=231ffa6a2fcbc77ab23e667490eb951907bc3408760222bfd055221452a7a592&=&format=webp&quality=lossless&width=627&height=671)]()
 [![](https://media.discordapp.net/attachments/1119077461783748652/1199057179555147867/image.png?ex=65c12805&is=65aeb305&hm=16dd05509565282af7206b459201067aba79c29c71e97357cae699ad6e791e08&=&format=webp&quality=lossless&width=402&height=676)]()
 
-(Base model will have floating scissors blades)
 # Overview
 Seamstress is a mobile survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. 
 
@@ -18,9 +19,17 @@ Primary: **Trimming Slashes**
 ---
 - Agile. Slash in front for damage. Every 2nd hit applies Stitch. Every 3rd hit applies Cut. While Butchered, Trim always Stitches.   
 
+Primary: **Unrelenting Flurry**
+---
+- Agile. Stitch. Slash in front for damage. While Butchered, all slashes also apply Cut but ignore Stitch stacks and Needle gain.   
+
 Secondary: **Woven Fate** 
 ---
 - Cut. Dash forward, dealing damage. While Butchered, lifesteal.
+
+Secondary: **Planar Shift** 
+---
+- 25% hp. Cut. Blink in a direction dealing damage at the destination. While Butchered, Stun.
 
 Utility: **Bloodsoaked Path**
 ---
@@ -36,7 +45,7 @@ Special: **Threaded Volley**
 
 **Needles**:
 ---
-- Stitch. Firing piercing Needles that each deal damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
+- Stitch. Pierce for damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
 
 **Stitch** 
 ---
@@ -44,13 +53,11 @@ Special: **Threaded Volley**
 
 **Cut** 
 ---
-- Tear open Stitches dealing a percentage of the enemies missing health and applys Cuts. Cuts deal a percentage of the enemies missing health over time.
+- Tear open Stitches dealing damage. Afterward, deal a percentage of the enemies missing health over time.
 
 **Butchered**
 ---
 - Empower other abilities. Gain attack speed and movement speed. During Butchered, convert 50% of healing into damage for Expunge.
-
-
 
 Please play my mod. I need to find bugs.
 Contact me on the modding discord server: https://discord.gg/A9wNKWE9Ww https://discord.com/channels/562704639141740588/1195084430876872866 @tsuyoikenko
