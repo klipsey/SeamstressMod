@@ -5,6 +5,7 @@ using RoR2;
 using System.Collections.Generic;
 using System.Security;
 using System.Security.Permissions;
+using R2API.Networking;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -14,6 +15,7 @@ namespace SeamstressMod
 {
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
+    [BepInDependency(NetworkingAPI.PluginGUID)]
 
     public class SeamstressPlugin : BaseUnityPlugin
     {
@@ -45,7 +47,7 @@ namespace SeamstressMod
             // make a content pack and add it. this has to be last
             new Modules.ContentPacks().Initialize();
 
-            On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { };
+            //On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { };
         }
     }
 }

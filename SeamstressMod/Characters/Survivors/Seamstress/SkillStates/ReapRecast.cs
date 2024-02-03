@@ -4,14 +4,15 @@ using UnityEngine;
 using R2API;
 using SeamstressMod.Survivors.Seamstress;
 using SeamstressMod.Modules.BaseStates;
-using System;
-using EntityStates;
-using UnityEngine.UI;
 
 namespace SeamstressMod.SkillStates
 {
     public class ReapRecast: BaseMeleeAttack
     {
+        public static GameObject _expungeEffect = SeamstressAssets.expungeEffect;
+        public static GameObject _expungeEffect2 = SeamstressAssets.expungeSlashEffect;
+        public static GameObject _expungeEffect3 = SeamstressAssets.expungeSlashEffect2;
+        public static GameObject _expungeEffect4 = SeamstressAssets.expungeSlashEffect3;
         public override void OnEnter()
         {
             RefreshState();
@@ -21,7 +22,7 @@ namespace SeamstressMod.SkillStates
             procCoefficient = 1f;
             pushForce = 300;
             bonusForce = Vector3.zero;
-            baseDuration = 0f;
+            baseDuration = 0.1f;
 
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
@@ -44,10 +45,10 @@ namespace SeamstressMod.SkillStates
             isFlatDamage = true;
             damageTotal = this.characterBody.GetComponent<SeamstressController>().GetButcheredConversion();
             base.OnEnter();
-            UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeEffect, transform);
-            UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect, transform);
-            UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect2, transform);
-            UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.expungeSlashEffect3, transform);
+            UnityEngine.Object.Instantiate<GameObject>(_expungeEffect, transform);
+            UnityEngine.Object.Instantiate<GameObject>(_expungeEffect2, transform);
+            UnityEngine.Object.Instantiate<GameObject>(_expungeEffect3, transform);
+            UnityEngine.Object.Instantiate<GameObject>(_expungeEffect4, transform);
             if (base.isAuthority) 
             {
                 Util.CleanseBody(this.characterBody, true, false, false, true, true, true);
@@ -91,7 +92,7 @@ namespace SeamstressMod.SkillStates
         public override void OnExit()
         {
             base.OnExit();
-            base.skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.reapRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            this.skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.reapRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
 
     }

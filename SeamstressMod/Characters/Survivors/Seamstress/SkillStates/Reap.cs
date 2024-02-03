@@ -11,13 +11,11 @@ namespace SeamstressMod.SkillStates
     public class Reap : BaseSeamstressSkillState
     {
         public static float baseDuration = 1f;
-
         public static float firePercentTime = 0f;
+        public static GameObject reapBleed = SeamstressAssets.reapBleedEffect;
 
         private float duration;
-
         private float fireTime;
-
         private bool hasFired;
 
         public static float healthCostFraction = SeamstressStaticValues.reapHealthCost;
@@ -27,7 +25,7 @@ namespace SeamstressMod.SkillStates
             duration = baseDuration / attackSpeedStat;
             fireTime = firePercentTime * duration;
             Util.PlaySound("Play_item_proc_novaonheal_impact", gameObject);
-            Object.Instantiate<GameObject>(SeamstressAssets.reapBleedEffect, characterBody.modelLocator.transform);
+            Object.Instantiate<GameObject>(reapBleed, characterBody.modelLocator.transform);
             PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
             if (!base.characterMotor.isGrounded)
             {

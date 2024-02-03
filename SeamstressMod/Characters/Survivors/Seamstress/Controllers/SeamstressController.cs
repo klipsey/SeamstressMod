@@ -15,35 +15,27 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     public class SeamstressController : MonoBehaviour
     {
-        #region ignore this shit
-        #endregion
         private CharacterBody characterBody;
-
-        private bool hasEffectiveAuthority => characterBody.hasEffectiveAuthority;
 
         private HealthComponent healthComponent;
 
         private SkillLocator skillLocator;
 
-        private bool hasPlayed;
+        internal float bd = 0f;
 
-        private int lysateDiff = 0;
-
-        private bool fuckYou;
-
-        private bool butchered;
+        internal float butcheredDurationPercent;
 
         private float butcheredConversion = 0f;
 
-        private int baseNeedleAmount = SeamstressStaticValues.maxNeedleAmount;
-
-        private float bd = 0f;
-
-        private float butcheredDurationPercent;
+        private int baseNeedleAmount = 0;
 
         private int needleCount = 0;
 
-        private TemporaryOverlay component;
+        private bool hasPlayed = false;
+
+        private bool fuckYou = false;
+
+        private bool butchered = false;
         public void Awake()
         {
             Hook();
@@ -53,10 +45,6 @@ namespace SeamstressMod.Survivors.Seamstress
             characterBody = GetComponent<CharacterBody>();
             healthComponent = GetComponent<HealthComponent>();
             skillLocator = GetComponent<SkillLocator>();
-            baseNeedleAmount = SeamstressStaticValues.maxNeedleAmount + lysateDiff;
-            hasPlayed = false;
-            fuckYou = false;
-            butchered = false;
             butcheredDurationPercent = bd / 10f;
         }
         public void FixedUpdate()
@@ -70,17 +58,13 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 ButcheredEnd();
             }
-            if(characterBody && characterBody.master)
-            {
-                NeedleTracking();
-                SpecialTracker();
-                CalculateBonusDamage();
-                GetComponent<NeedleHUD>().NeedleDisplayCount(needleCount);
-                IsButchered();
-                characterBody.GetComponent<NeedleHUD>().HudColor(bd, butcheredDurationPercent);
-                ButcheredSound();
-                PassiveNeedleRegen();
-            }
+            NeedleTracking();
+            CalculateBonusDamage();
+            GetComponent<NeedleHUD>().NeedleDisplayCount(needleCount);
+            IsButchered();
+            GetComponent<NeedleHUD>().HudColor(bd, butcheredDurationPercent);
+            ButcheredSound();
+            PassiveNeedleRegen();
         }
 
         #region hooks
@@ -138,30 +122,24 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void NeedleTracking()
         {
-            baseNeedleAmount = SeamstressStaticValues.maxNeedleAmount + lysateDiff;
-            needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles) - lysateDiff;
+            baseNeedleAmount = skillLocator.special.maxStock - 1;
+            needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles) - baseNeedleAmount;
         }
-        public int NeedleTracking(bool baseOrCurrent)
+        public int ReturnNeedle(bool baseOrCurrent)
         {
             if(baseOrCurrent)
             {
-                baseNeedleAmount = SeamstressStaticValues.maxNeedleAmount + lysateDiff;
                 return baseNeedleAmount;
             }
             else
             {
-                needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles) - lysateDiff;
                 return needleCount;
             }
-        }
-        private void SpecialTracker()
-        {
-            lysateDiff = skillLocator.special.maxStock - 1;
         }
         //needle regen
         private void PassiveNeedleRegen()
         {
-            if (characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + lysateDiff)
+            if (characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + baseNeedleAmount)
             {
                 if (!characterBody.HasBuff(SeamstressBuffs.needleCountDownBuff))
                 {
@@ -171,13 +149,6 @@ namespace SeamstressMod.Survivors.Seamstress
                         characterBody.AddBuff(SeamstressBuffs.needles);
                     }
                     Util.PlaySound("Play_treeBot_m1_hit_heal", characterBody.gameObject);
-                }
-            }
-            else if(characterBody.HasBuff(SeamstressBuffs.needleCountDownBuff))
-            {
-                if(NetworkServer.active)
-                {
-                    characterBody.RemoveBuff(SeamstressBuffs.needleCountDownBuff);
                 }
             }
         }
@@ -229,9 +200,8 @@ namespace SeamstressMod.Survivors.Seamstress
                     skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
                     skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
                     //fire expunge at end of butchered
-                    if (skillLocator.utility.skillOverrides.Any() && NetworkServer.active)
+                    if (skillLocator.utility.skillOverrides.Any())
                     {
-                        Log.Debug("YEOWCH");
                         skillLocator.utility.ExecuteIfReady();
                     }
                     #endregion

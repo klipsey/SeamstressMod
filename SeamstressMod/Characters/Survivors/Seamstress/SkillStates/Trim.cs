@@ -45,7 +45,6 @@ namespace SeamstressMod.SkillStates
                     break;
                 case 1:
                     moddedDamageType = DamageTypes.StitchDamage;
-                    swingEffectPrefab = SeamstressAssets.scissorsSwingEffect2;
                     muzzleString = "SwingRight";
                     break;
                 case 2:

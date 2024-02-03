@@ -20,8 +20,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject scissorsSwingEffect;
 
-        internal static GameObject scissorsSwingEffect2;
-
         internal static GameObject scissorsButcheredSwingEffect;
 
         internal static GameObject blinkPrefab;
@@ -155,15 +153,10 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing2");
             scissorsSwingEffect.AddComponent<NetworkIdentity>();
             scissorsSwingEffect.transform.GetChild(0).gameObject.SetActive(value: false);
-            scissorsSwingEffect.transform.GetChild(1).localScale = Vector3.one * 0.75f;
-            //second swing
-            scissorsSwingEffect2 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing2");
-            scissorsSwingEffect2.AddComponent<NetworkIdentity>();
-            scissorsSwingEffect2.transform.GetChild(0).gameObject.SetActive(value: false);
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniRadialSlash1Merc.mat").WaitForCompletion());
             material.SetColor("_TintColor", Color.red);
-            scissorsSwingEffect2.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
-            scissorsSwingEffect2.transform.GetChild(1).localScale = Vector3.one * 0.75f;
+            scissorsSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            scissorsSwingEffect.transform.GetChild(1).localScale = Vector3.one * 0.75f;
 
             expungeSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("ExpungeSlash");
             expungeSlashEffect.AddComponent<NetworkIdentity>();

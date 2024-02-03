@@ -14,6 +14,8 @@ namespace SeamstressMod.Modules
 
         public const string halfHealthPrefix = "<style=cIsHealth>50% HP</style>";
 
+        public const string quartHealthPrefix = "<style=cIsHealth>25% HP</style>";
+
         public const string healthCostPrefix = "<style=cIsHealth>X% of your current health</style>";
 
         public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";

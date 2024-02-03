@@ -13,42 +13,42 @@ namespace SeamstressMod.SkillStates
 {
     public class Weave : BaseSeamstressSkillState
     {
-        private Transform modelTransform;
+        protected GameObject dashPrefab;
 
-        private GameObject dashPrefab;
+        protected GameObject hitEffectPrefab;
+        public bool hasHit { get; private set; }
 
-        private static GameObject hitEffectPrefab;
+        public static float smallHopVelocity = 10f;
 
-        private float stopwatch;
+        public static float dashPrepDuration = 0.2f;
 
-        private CameraTargetParams.AimRequest aimRequest;
+        public static float speedCoefficient = 100f;
 
-        private static float smallHopVelocity = 10f;
+        public static float damageCoefficient = SeamstressStaticValues.weaveDamageCoefficient;
 
-        private static float dashPrepDuration = 0.2f;
+        public static float procCoefficient = 1;
 
-        private float dashDuration;
-
-        private static float speedCoefficient = 100f;
+        public static float hitPauseDuration = 0.075f;
 
         private Vector3 dashVector;
 
         private OverlapAttack overlapAttack;
 
-        private static float damageCoefficient = SeamstressStaticValues.weaveDamageCoefficient;
-
-        private static float procCoefficient = 1;
-
         private ChildLocator childLocator;
 
-        private static float hitPauseDuration = 0.075f;
+        private Transform modelTransform;
+
+        private CameraTargetParams.AimRequest aimRequest;
+
+        private float stopwatch;
+
+        private float dashDuration;
 
         private bool isDashing;
 
         private bool inHitPause;
 
         private float hitPauseTimer;
-        public bool hasHit { get; private set; }
 
         private string hitSound;
         public override void OnEnter()

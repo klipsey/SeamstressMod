@@ -27,17 +27,14 @@ namespace SeamstressMod.Modules.BaseStates
         }
         protected void RefreshState()
         {
-            if (!
-                
-                
-                seamCon)
+            if (!seamCon)
             {
-                seamCon = GetComponent<SeamstressController>();
+                seamCon = base.GetComponent<SeamstressController>();
             }
             if ((bool)seamCon)
             {
                 empowered = characterBody.HasBuff(SeamstressBuffs.butchered);
-                baseNeedleAmount = seamCon.NeedleTracking(true);
+                baseNeedleAmount = seamCon.ReturnNeedle(true);
             }
         }
     }

@@ -12,8 +12,6 @@ namespace SeamstressMod.SkillStates
 {
     public class BlinkSeamstress : BaseSeamstressSkillState
     {
-        public Transform modelTransform;
-
         public static bool disappearWhileBlinking = true;
 
         public CameraTargetParams.AimRequest aimRequest;
@@ -45,6 +43,8 @@ namespace SeamstressMod.SkillStates
 
         public static float blastAttackProcCoefficient = 1f;
 
+        public static float healthCostFraction = SeamstressStaticValues.reapHealthCost / 2;
+
         private Animator animator;
 
         private CharacterModel characterModel;
@@ -52,6 +52,8 @@ namespace SeamstressMod.SkillStates
         private HurtBoxGroup hurtboxGroup;
 
         private ChildLocator childLocator;
+
+        private Transform modelTransform;
 
         private GameObject blinkDestinationInstance;
 
@@ -177,7 +179,24 @@ namespace SeamstressMod.SkillStates
             {
                 return;
             }
-            isExiting = true;
+            if (NetworkServer.active && (bool)healthComponent && healthCostFraction >= Mathf.Epsilon)
+            {
+                float currentBarrier = healthComponent.barrier;
+                DamageInfo damageInfo = new DamageInfo();
+                damageInfo.damage = ((healthComponent.health + healthComponent.shield) * healthCostFraction) + healthComponent.barrier;
+                damageInfo.position = characterBody.corePosition;
+                damageInfo.force = Vector3.zero;
+                damageInfo.damageColorIndex = DamageColorIndex.Default;
+                damageInfo.crit = false;
+                damageInfo.attacker = null;
+                damageInfo.inflictor = null;
+                damageInfo.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock;
+                damageInfo.procCoefficient = 0f;
+                healthComponent.TakeDamage(damageInfo);
+                healthComponent.AddBarrier(currentBarrier);
+            }
+                isExiting = true;
+
             Util.PlaySound(endSoundString, base.gameObject);
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
             modelTransform = GetModelTransform();
@@ -195,12 +214,10 @@ namespace SeamstressMod.SkillStates
                 {
                     blastAttack.radius = empoweredBlastAttackRadius;
                     blastAttack.damageType = DamageType.Stun1s;
-                    blastAttack.AddModdedDamageType(DamageTypes.Weaken);
                 }
                 else
                 {
                     blastAttack.radius = blastAttackRadius;
-                    blastAttack.RemoveModdedDamageType(DamageTypes.Weaken);
                 }
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                 blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;

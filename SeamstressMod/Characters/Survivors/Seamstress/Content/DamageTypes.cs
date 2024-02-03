@@ -15,7 +15,6 @@ namespace SeamstressMod.Survivors.Seamstress
     public static class DamageTypes
     {
         public static DamageAPI.ModdedDamageType Empty;
-        public static DamageAPI.ModdedDamageType Weaken;
         public static DamageAPI.ModdedDamageType CutDamage;
         public static DamageAPI.ModdedDamageType StitchDamage;
         public static DamageAPI.ModdedDamageType StitchDamageFlurry;
@@ -26,7 +25,6 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static void Init()
         {
             Empty = DamageAPI.ReserveDamageType();
-            Weaken = DamageAPI.ReserveDamageType();
             CutDamage = DamageAPI.ReserveDamageType();
             StitchDamage = DamageAPI.ReserveDamageType();
             StitchDamageFlurry = DamageAPI.ReserveDamageType();
@@ -74,10 +72,6 @@ namespace SeamstressMod.Survivors.Seamstress
                         needleSimple.lifetime = 1f;
                         needleSimple.updateAfterFiring = true;
                     }
-                }
-                if(damageInfo.HasModdedDamageType(Weaken))
-                {
-                    victimBody.AddTimedBuff(RoR2Content.Buffs.Weak, 2f);
                 }
                 if(damageInfo.HasModdedDamageType(StitchDamage))
                 {

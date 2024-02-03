@@ -12,18 +12,18 @@ namespace SeamstressMod.SkillStates
 {
     public class Sew : BaseSeamstressSkillState
     {
-        public GameObject projectilePrefab;
-        public float needleDelay;
-        public float needleCompareDelay = 0.1f;
-        public bool hasLaunched;
-        Ray aimRay;
-        public float duration;
+        protected GameObject projectilePrefab;
+
+        private float needleCompareDelay = 0.1f;
+        private float needleDelay;
+        private bool hasLaunched;
+        private Ray aimRay;
+        private float duration;
         public override void OnEnter()
         {
-            this.hasLaunched = false;
             base.OnEnter();
             RefreshState();
-            this.duration = (this.needleCompareDelay / attackSpeedStat * characterBody.GetBuffCount(SeamstressBuffs.needles));
+            this.duration = (needleCompareDelay / attackSpeedStat * characterBody.GetBuffCount(SeamstressBuffs.needles));
             if (empowered)
             {
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
@@ -55,17 +55,15 @@ namespace SeamstressMod.SkillStates
             {
                 if (needleDelay >= needleCompareDelay / attackSpeedStat)
                 {
-                    if (characterBody.HasBuff(SeamstressBuffs.needles))
+                    if (base.characterBody.HasBuff(SeamstressBuffs.needles))
                     {
                         if(base.isAuthority) 
                         {
                             aimRay = base.GetAimRay();
                             ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
                         }
-                        if (NetworkServer.active)
-                        {
-                            characterBody.RemoveBuff(SeamstressBuffs.needles);
-                        }
+                        base.characterBody.RemoveBuff(SeamstressBuffs.needles);
+                        Log.Debug("I SHOT MY FIRST CUM");
                         Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
                         needleCompareDelay += (0.1f / attackSpeedStat);
                     }
@@ -73,13 +71,6 @@ namespace SeamstressMod.SkillStates
                     {
                         hasLaunched = true;
                     }
-                }
-            }
-            else if (characterBody.GetBuffCount(SeamstressBuffs.needles) < this.baseNeedleAmount)
-            {
-                if(NetworkServer.active)
-                {
-                    characterBody.AddBuff(SeamstressBuffs.needles);
                 }
             }
             if(base.fixedAge >= duration && base.isAuthority) 
@@ -93,7 +84,7 @@ namespace SeamstressMod.SkillStates
             {
                 return InterruptPriority.Any;
             }
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Frozen;
         }
         protected void PlayAttackAnimation()
         {
