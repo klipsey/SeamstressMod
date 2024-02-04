@@ -43,7 +43,7 @@ namespace SeamstressMod.SkillStates
 
         public static float blastAttackProcCoefficient = 1f;
 
-        public static float healthCostFraction = SeamstressStaticValues.reapHealthCost / 2;
+        public static float healthCostFraction = blinkHealthCost;
 
         private Animator animator;
 

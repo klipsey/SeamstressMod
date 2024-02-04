@@ -68,7 +68,6 @@ namespace SeamstressMod.Survivors.Seamstress
             Language.Add(prefix + "SECONDARY_BLINK_NAME", "Planar Shift");
             Language.Add(prefix + "SECONDARY_BLINK_DESCRIPTION", Tokens.quartHealthPrefix + ". " + Tokens.cutPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> at the destination." +
                 " While " + Tokens.butcheredPrefix + $", <style=cIsUtility>Stun</style>.");
-
             #endregion
 
             #region Utility

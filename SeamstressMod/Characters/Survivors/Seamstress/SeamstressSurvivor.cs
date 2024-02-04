@@ -50,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
-            crosshair = Assets.LoadCrosshair("Standard"),
+            crosshair = Assets.LoadCrosshair("SimpleDot"),
             podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
             maxHealth = 160f,
