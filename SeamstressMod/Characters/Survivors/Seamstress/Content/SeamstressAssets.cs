@@ -5,7 +5,9 @@ using RoR2.Projectile;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using R2API;
+using UnityEngine.UI;
 using RoR2.Skills;
+using HarmonyLib;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -57,16 +59,27 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static Material destealthMaterial;
 
         internal static Material butcheredOverlayMat;
-        // particle effects
+        //particle overlay effects
         internal static GameObject stitchEffect;
-        // networked hit sounds
+        //networked hit sounds
         internal static NetworkSoundEventDef scissorsHitSoundEvent;
 
         internal static NetworkSoundEventDef sewHitSoundEvent;
+        //icons
+        internal static Sprite primary;
+
+        internal static Sprite primaryEmp;
+
+        internal static Sprite secondary;
+
+        internal static Sprite secondaryEmp;
+
+        internal static Sprite special;
+
+        internal static Sprite specialEmp;
 
         private static AssetBundle _assetBundle;
         //crosshairs
-
         internal static GameObject needlePrefab;
 
         internal static GameObject needleButcheredPrefab;
@@ -80,6 +93,10 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_bandit2_m2_impact");
 
             sewHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_imp_overlord_attack2_tell");
+
+            CreateEffects();
+
+            CreateProjectiles();
 
             reapRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
@@ -111,16 +128,20 @@ namespace SeamstressMod.Survivors.Seamstress
                 cancelSprintingOnActivation = false,
                 forceSprintDuringState = false,
             });
-
-            CreateEffects();
-
-            CreateProjectiles();
         }
 
 
         #region effects
         private static void CreateEffects()
         {
+            primary = _assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
+            secondary = _assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
+            special = _assetBundle.LoadAsset<Sprite>("texSpecialIcon");
+
+            primaryEmp = _assetBundle.LoadAsset<Sprite>("texStingerIcon");
+            secondaryEmp = _assetBundle.LoadAsset<Sprite>("texPistolIcon");
+            specialEmp = _assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon");
+
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             stitchEffect.AddComponent<NetworkIdentity>();
 

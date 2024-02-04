@@ -10,10 +10,11 @@ using RoR2.EntityLogic;
 using Rewired.HID;
 using UnityEngine.Networking;
 using EntityStates;
+using TMPro;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
-    public class SeamstressController : MonoBehaviour
+    public class SeamstressController : NetworkBehaviour
     {
         private CharacterBody characterBody;
 
@@ -21,30 +22,29 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private SkillLocator skillLocator;
 
-        internal float bd = 0f;
+        private GameObject endReap = SeamstressAssets.reapEndEffect;
 
-        internal float butcheredDurationPercent;
+        public int needleCount = 0;
+
+        public float bd = 0f;
+
+        public float butcheredDurationPercent = 0f;
 
         private float butcheredConversion = 0f;
 
         private int baseNeedleAmount = 0;
 
-        private int needleCount = 0;
-
         private bool hasPlayed = false;
 
-        private bool fuckYou = false;
+        public bool fuckYou = false;
 
         private bool butchered = false;
+
         public void Awake()
         {
-            Hook();
-        }
-        public void Start()
-        {
-            characterBody = GetComponent<CharacterBody>();
-            healthComponent = GetComponent<HealthComponent>();
-            skillLocator = GetComponent<SkillLocator>();
+            characterBody = base.GetComponent<CharacterBody>();
+            healthComponent = base.GetComponent<HealthComponent>();
+            skillLocator = base.GetComponent<SkillLocator>();
             butcheredDurationPercent = bd / 10f;
         }
         public void FixedUpdate()
@@ -60,60 +60,25 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             NeedleTracking();
             CalculateBonusDamage();
-            GetComponent<NeedleHUD>().NeedleDisplayCount(needleCount);
             IsButchered();
-            GetComponent<NeedleHUD>().HudColor(bd, butcheredDurationPercent);
             ButcheredSound();
             PassiveNeedleRegen();
         }
-
-        #region hooks
-        private void Hook()
+        public float getButcheredValues(bool percentOrStopwatch)
         {
-            On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
-            On.RoR2.CharacterModel.UpdateOverlays += new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
-        }
-        //butchered overlay
-        private void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
-        {
-            orig.Invoke(self);
-            if (!self || !self.body)
+            if(percentOrStopwatch)
             {
-                return;
+                return butcheredDurationPercent;
             }
-            if (self.body.HasBuff(SeamstressBuffs.butchered) && self.body.GetComponent<SeamstressController>().fuckYou == false)
+            else
             {
-                TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
-                temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
-                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
-                temporaryOverlay.animateShaderAlpha = true;
-                temporaryOverlay.destroyComponentOnEnd = true;
-                temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
-                temporaryOverlay.AddToCharacerModel(self);
-                self.body.GetComponent<SeamstressController>().fuckYou = true;
+                return bd;
             }
         }
-        //calculate expunge healing
-        private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen = true)
-        {
-            if (self.body.HasBuff(SeamstressBuffs.butchered) && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
-            {
-                amount *= SeamstressStaticValues.healConversion;
-            }
-            var res = orig(self, amount, procChainMask, nonRegen);
-            SeamstressController s = self.body.GetComponent<SeamstressController>();
-            if (self.body.TryGetComponent<SeamstressController>(out s) && self.body.HasBuff(SeamstressBuffs.butchered))
-            {
-                s.ButcheredConversionCalc((res / SeamstressStaticValues.healConversion) * 1 - SeamstressStaticValues.healConversion);
-            }
-            return res;
-        }
-        #endregion
         public float GetButcheredConversion()
         {
             float num = butcheredConversion;
             butcheredConversion = characterBody.damage;
-            characterBody.GetComponent<NeedleHUD>().ActivateExpungeHud(false);
             return num;
         }
         public void ButcheredConversionCalc(float healDamage)
@@ -158,12 +123,11 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 bd = SeamstressStaticValues.butcheredDuration;
                 butcheredDurationPercent = bd / 10f;
-                characterBody.GetComponent<NeedleHUD>().ActivateExpungeHud(true);
                 butchered = true;
                 #region IconUpdate
-                skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texStingerIcon");
-                skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPistolIcon");
-                skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon");
+                skillLocator.primary.skillDef.icon = SeamstressAssets.primaryEmp;
+                skillLocator.secondary.skillDef.icon = SeamstressAssets.secondaryEmp;
+                skillLocator.special.skillDef.icon = SeamstressAssets.specialEmp;
                 #endregion
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
@@ -179,11 +143,6 @@ namespace SeamstressMod.Survivors.Seamstress
                     #endregion
                 }
             }
-
-            if (characterBody.HasBuff(SeamstressBuffs.butchered))
-            {
-                characterBody.GetComponent<NeedleHUD>().UpdateExpunge(butcheredConversion);
-            }
         }
         private void ButcheredEnd()
         {
@@ -193,16 +152,19 @@ namespace SeamstressMod.Survivors.Seamstress
                 {
                     butchered = false;
                     fuckYou = false;
-                    UnityEngine.Object.Instantiate<GameObject>(SeamstressAssets.reapEndEffect, characterBody.modelLocator.transform);
+                    UnityEngine.Object.Instantiate<GameObject>(endReap, characterBody.modelLocator.transform);
                     Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
                     #region iconUpdate
-                    skillLocator.primary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
-                    skillLocator.secondary.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
-                    skillLocator.special.skillDef.icon = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSpecialIcon");
+                    skillLocator.primary.skillDef.icon = SeamstressAssets.primary;
+                    skillLocator.secondary.skillDef.icon = SeamstressAssets.secondary;
+                    skillLocator.special.skillDef.icon = SeamstressAssets.special;
                     //fire expunge at end of butchered
                     if (skillLocator.utility.skillOverrides.Any())
                     {
-                        skillLocator.utility.ExecuteIfReady();
+                        if(base.hasAuthority)
+                        {
+                            skillLocator.utility.ExecuteIfReady();
+                        }
                     }
                     #endregion
                 }
@@ -227,15 +189,5 @@ namespace SeamstressMod.Survivors.Seamstress
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
             characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
-        private void Unhook()
-        {
-            On.RoR2.HealthComponent.Heal -= new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
-            On.RoR2.CharacterModel.UpdateOverlays -= new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
-        }
-        public void OnDestroy()
-        {
-            Unhook();
-        }
-
     }
 }

@@ -200,7 +200,7 @@ namespace SeamstressMod.SkillStates
             Util.PlaySound(endSoundString, base.gameObject);
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
             modelTransform = GetModelTransform();
-            if (blastAttackDamageCoefficient > 0f)
+            if (blastAttackDamageCoefficient > 0f && base.isAuthority)
             {
                 BlastAttack blastAttack = new BlastAttack();
                 blastAttack.attacker = base.gameObject;

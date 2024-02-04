@@ -12,6 +12,8 @@ using RoR2.UI;
 using R2API;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
+using UnityEngine.UI;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -136,9 +138,8 @@ namespace SeamstressMod.Survivors.Seamstress
         private void AdditionalBodySetup()
         {
             AddHitboxes();
-            bodyPrefab.AddComponent<NeedleHUD>();
-            bodyPrefab.AddComponent<SeamstressController>();
             bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.stitchSetup);
+            bodyPrefab.AddComponent<SeamstressController>();
             TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
@@ -337,7 +338,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Skills.AddUtilitySkills(bodyPrefab, reapSkillDef);
 
-            GenericSkill reapRecast = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "reapRecast", true); 
+            GenericSkill reapRecast = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "reapRecast", true);
 
             Skills.AddSkillsToFamily(reapRecast.skillFamily, SeamstressAssets.reapRecastSkillDef);
         }
@@ -469,8 +470,122 @@ namespace SeamstressMod.Survivors.Seamstress
         private void AddHooks()
         {
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+            RoR2.UI.HUD.onHudTargetChangedGlobal += onHudTargetChangedGlobal;
+            On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
+            On.RoR2.CharacterModel.UpdateOverlays += new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
         }
+        private void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
+        {
+            orig.Invoke(self);
+            if (!self || !self.body || self.body.baseNameToken != "KENKO_SEAMSTRESS_NAME")
+            {
+                return;
+            }
+            SeamstressController s = self.body.GetComponent<SeamstressController>();
+            if (self.body.HasBuff(SeamstressBuffs.butchered) && s.fuckYou == false)
+            {
+                TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
+                temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
+                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
+                temporaryOverlay.animateShaderAlpha = true;
+                temporaryOverlay.destroyComponentOnEnd = true;
+                temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
+                temporaryOverlay.AddToCharacerModel(self);
+                s.fuckYou = true;
+            }
+        }
+        //calculate expunge healing
+        private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen = true)
+        {
+            if (self.body.HasBuff(SeamstressBuffs.butchered) && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            {
+                amount *= SeamstressStaticValues.healConversion;
+            }
+            var res = orig(self, amount, procChainMask, nonRegen);
+            SeamstressController s = self.body.GetComponent<SeamstressController>();
+            if (self.body.TryGetComponent<SeamstressController>(out s) && self.body.HasBuff(SeamstressBuffs.butchered))
+            {
+                s.ButcheredConversionCalc((res / SeamstressStaticValues.healConversion) * 1 - SeamstressStaticValues.healConversion);
+            }
+            return res;
+        }
+        internal static void onHudTargetChangedGlobal(RoR2.UI.HUD hud)
+        {
+            if (hud.targetBodyObject && hud.targetMaster.GetBody().baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            {
+                if (!hud.targetMaster.hasAuthority) return;
+                GameObject expungeHealing = new GameObject("ExpungeHealing"); 
+                expungeHealing.transform.SetParent(hud.transform.Find("MainContainer").Find("MainUIArea").Find("CrosshairCanvas").Find("CrosshairExtras"));
+                RectTransform rectTransform = expungeHealing.AddComponent<RectTransform>();
+                rectTransform.anchorMin = Vector2.zero;
+                rectTransform.anchorMax = Vector2.one;
+                rectTransform.sizeDelta = Vector2.zero;
+                rectTransform.anchoredPosition = Vector2.zero;
+                rectTransform.localPosition = new Vector3(0, 30, rectTransform.localPosition.z);
+                rectTransform.localScale = new Vector3(1f, 1f, rectTransform.localScale.z);
+                rectTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                expungeHealing.AddComponent<Text>();
+                expungeHealing.AddComponent<Outline>();
+                expungeHealing.GetComponent<Outline>().effectColor = Color.black;
+                expungeHealing.GetComponent<Outline>().effectDistance = Vector2.one;
+                expungeHealing.GetComponent<Text>().font = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Font>("RoR2/Base/Common/Fonts/Bombardier/BOMBARD_.ttf").WaitForCompletion());
+                expungeHealing.GetComponent<Text>().fontSize = 20;
+                expungeHealing.GetComponent<Text>().fontStyle = FontStyle.Normal;
+                expungeHealing.GetComponent<Text>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/Fonts/Bombardier/BOMBARD_.ttf").WaitForCompletion());
+                expungeHealing.GetComponent<Text>().color = new Color(155f / 255f, 55f / 255f, 55f / 255f, 1f);
+                expungeHealing.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+                expungeHealing.GetComponent<Text>().text = 0.ToString();
+                expungeHealing.GetComponent<Text>().enabled = false;
+                expungeHealing.GetComponent<Outline>().enabled = false;
+                ExpungeHud expungeHud = expungeHealing.AddComponent<ExpungeHud>();
+                expungeHud.hud = hud;
+                expungeHud.expungeOutline = expungeHealing.GetComponent<Outline>();
+                expungeHud.expungeText = expungeHealing.GetComponent<Text>();
+                GameObject needleZero = new GameObject("Needle0");
+                GameObject needleOne = new GameObject("Needle1");
+                GameObject needleTwo = new GameObject("Needle2");
+                GameObject needleThree = new GameObject("Needle3");
+                GameObject needleFour = new GameObject("Needle4");
+                GameObject needleFive = new GameObject("Needle5");
+                GameObject needleSix = new GameObject("Needle6");
+                GameObject needleSeven = new GameObject("Needle7");
+                GameObject needleEight = new GameObject("Needle8");
+                GameObject needleNine = new GameObject("Needle9");
+                GameObject[] needles = new GameObject[10];
+                needles[0] = needleZero;
+                needles[1] = needleOne;
+                needles[2] = needleTwo;
+                needles[3] = needleThree;
+                needles[4] = needleFour;
+                needles[5] = needleFive;
+                needles[6] = needleSix;
+                needles[7] = needleSeven;
+                needles[8] = needleEight;
+                needles[9] = needleNine;
+                NeedleHudController[] needleHudArray = new NeedleHudController[10];
+                int rectChange = 12;
+                for (int i = 0; i < needles.Length; i++)
+                {
+                    needles[i].transform.SetParent(hud.transform.Find("MainContainer").Find("MainUIArea").Find("CrosshairCanvas").Find("CrosshairExtras"));
+                    rectTransform = needles[i].AddComponent<RectTransform>();
+                    rectTransform.anchorMin = Vector2.zero;
+                    rectTransform.anchorMax = Vector2.one;
+                    rectTransform.sizeDelta = Vector2.zero;
+                    rectTransform.anchoredPosition = new Vector2(0.5f, 0.5f);
+                    if(i % 1 == 0) rectTransform.localPosition = new Vector3(rectChange + (i/2 * rectChange), -60f, rectTransform.localPosition.z);
+                    else rectTransform.localPosition = new Vector3((rectChange + ((i-1)/2 * rectChange)) * -1, -60f, rectTransform.localPosition.z);
+                    rectTransform.localScale = new Vector3(0.025f, 0.025f, rectTransform.localScale.z);
+                    rectTransform.rotation = Quaternion.Euler(0f, 0f, 270f);
+                    needles[i].AddComponent<Image>();
+                    needles[i].GetComponent<Image>().sprite = SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("needleHudIcon");
+                    needles[i].AddComponent<NeedleHudController>();
+                    needleHudArray[i] = needles[i].AddComponent<NeedleHudController>();
+                    needleHudArray[i].hud = hud;
+                    needleHudArray[i].needleImage = needles[i].GetComponent<Image>();
+                }
+            }
 
+        }
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
         {
             if(sender.HasBuff(SeamstressBuffs.butchered))
