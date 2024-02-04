@@ -46,8 +46,6 @@ namespace SeamstressMod
 
             // make a content pack and add it. this has to be last
             new Modules.ContentPacks().Initialize();
-
-            On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { };
         }
     }
 }

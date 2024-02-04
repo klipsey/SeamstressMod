@@ -43,7 +43,7 @@ namespace SeamstressMod.SkillStates
 
         public static float blastAttackProcCoefficient = 1f;
 
-        public static float healthCostFraction = blinkHealthCost;
+        public static float healthCostFraction = SeamstressStaticValues.blinkHealthCost;
 
         private Animator animator;
 
@@ -214,10 +214,12 @@ namespace SeamstressMod.SkillStates
                 {
                     blastAttack.radius = empoweredBlastAttackRadius;
                     blastAttack.damageType = DamageType.Stun1s;
+                    blastAttack.AddModdedDamageType(DamageTypes.BlinkLifeSteal);
                 }
                 else
                 {
                     blastAttack.radius = blastAttackRadius;
+                    blastAttack.RemoveModdedDamageType(DamageTypes.BlinkLifeSteal);
                 }
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                 blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;

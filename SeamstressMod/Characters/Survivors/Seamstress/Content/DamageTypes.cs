@@ -20,6 +20,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType StitchDamageFlurry;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
         public static DamageAPI.ModdedDamageType WeaveLifeSteal;
+        public static DamageAPI.ModdedDamageType BlinkLifeSteal;
         public static DamageAPI.ModdedDamageType BeginHoming;
 
         internal static void Init()
@@ -30,6 +31,7 @@ namespace SeamstressMod.Survivors.Seamstress
             StitchDamageFlurry = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
             WeaveLifeSteal = DamageAPI.ReserveDamageType();
+            BlinkLifeSteal = DamageAPI.ReserveDamageType();
             BeginHoming = DamageAPI.ReserveDamageType();
             Hook();
         }
@@ -222,6 +224,10 @@ namespace SeamstressMod.Survivors.Seamstress
                 if (damageInfo.HasModdedDamageType(WeaveLifeSteal))
                 {
                     attacker.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.weaveLifeSteal, default(ProcChainMask), true);
+                }
+                if (damageInfo.HasModdedDamageType(BlinkLifeSteal))
+                {
+                    attacker.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.blinkLifeSteal, default(ProcChainMask), true);
                 }
             }
         }

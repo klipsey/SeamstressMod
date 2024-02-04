@@ -1,3 +1,8 @@
+# 0.1.4
+- Might be multiplayer compatible now
+- Reworked alt abilities a tad
+- Removed UI. This may be added back in final version
+- Bugs
 # 0.1.3
 - Added alt abilites and stuff
 - Bugs

@@ -57,7 +57,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Unrelenting Flurry");
             Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.agilePrefix + ". " + Tokens.stitchPrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>. " + "While " + Tokens.butcheredPrefix +
-              $", all slashes also apply " + Tokens.cutPrefix + " but ignore " + Tokens.stitchPrefix + " stacks and " + Tokens.needlePrefix + " gain.");
+              $", <style=cIsHealing>heal for {100 * SeamstressStaticValues.weaveLifeSteal}% of damage dealt</style>, also apply " + Tokens.cutPrefix + " on hit but ignore " + Tokens.stitchPrefix + " stacks and " + Tokens.needlePrefix + " gain.");
             #endregion
 
             #region Secondary
@@ -67,7 +67,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Language.Add(prefix + "SECONDARY_BLINK_NAME", "Planar Shift");
             Language.Add(prefix + "SECONDARY_BLINK_DESCRIPTION", Tokens.quartHealthPrefix + ". " + Tokens.cutPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> at the destination." +
-                " While " + Tokens.butcheredPrefix + $", <style=cIsUtility>Stun</style>.");
+                " While " + Tokens.butcheredPrefix + $", <style=cIsUtility>Stun</style> and <style=cIsHealing>heal for {100 * SeamstressStaticValues.blinkLifeSteal}% of damage dealt</style>.");
             #endregion
 
             #region Utility

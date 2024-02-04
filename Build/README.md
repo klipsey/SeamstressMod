@@ -1,7 +1,7 @@
 # Seamstress
 - BETA
 - Currently working on texturing, modeling, and animations
-- DOES NOT FUNCTION IN MULTIPLAYER WHATSOEVER
+- Multiplayer Compatible?
 
 ## Model Previews
 [![](https://media.discordapp.net/attachments/1119077461783748652/1203256037986144276/image.png?ex=65d06e82&is=65bdf982&hm=231ffa6a2fcbc77ab23e667490eb951907bc3408760222bfd055221452a7a592&=&format=webp&quality=lossless&width=627&height=671)]()
@@ -21,7 +21,7 @@ Primary: **Trimming Slashes**
 
 Primary: **Unrelenting Flurry**
 ---
-- Agile. Stitch. Slash in front for damage. While Butchered, all slashes also apply Cut but ignore Stitch stacks and Needle gain.   
+- Agile. Stitch. Slash in front for damage. While Butchered, lifesteal, also hits apply Cut but ignore Stitch stacks and Needle gain.   
 
 Secondary: **Woven Fate** 
 ---
@@ -29,7 +29,7 @@ Secondary: **Woven Fate**
 
 Secondary: **Planar Shift** 
 ---
-- 25% hp. Cut. Blink in a direction dealing damage at the destination. While Butchered, Stun.
+- 20% hp. Cut. Blink in a direction dealing damage at the destination. While Butchered, Stun and lifesteal.
 
 Utility: **Bloodsoaked Path**
 ---

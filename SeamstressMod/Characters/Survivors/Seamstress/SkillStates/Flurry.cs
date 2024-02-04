@@ -42,6 +42,7 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 moddedDamageType = DamageTypes.StitchDamageFlurry;
+                moddedDamageType2 = DamageTypes.WeaveLifeSteal;
                 swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
                 hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             }
