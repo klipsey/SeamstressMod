@@ -194,7 +194,6 @@ namespace SeamstressMod.Survivors.Seamstress
             skillLocator.passiveSkill.skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME";
             skillLocator.passiveSkill.skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_DESCRIPTION";
             skillLocator.passiveSkill.icon = assetBundle.LoadAsset<Sprite>("texSpecialIcon");
-            skillLocator.passiveSkill.keywordToken = Tokens.passiveKeywords;
         }
 
         private void AddPrimarySkills()
@@ -246,7 +245,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
-                baseRechargeInterval = 6f,
+                baseRechargeInterval = 7f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -511,7 +510,6 @@ namespace SeamstressMod.Survivors.Seamstress
             if(sender.HasBuff(SeamstressBuffs.butchered))
             {
                 args.baseMoveSpeedAdd += 3;
-                args.attackSpeedMultAdd += 0.3f;
             }
         }
     }

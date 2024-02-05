@@ -11,29 +11,25 @@
 Seamstress is a mobile survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. 
 
 # Skills
-Passive: **Corrupted Heart**
+Passive: **Stitched Heart**
 ---
-- Gain base damage for every 1 health missing. Regenerate Needles overtime. Gain additional Needles when Stitches are torn by Cut or when enemies with Cuts die.
+- Gain base damage for every 1 health missing. Regenerate Needles overtime. 
 
 Primary: **Trimming Slashes**
 ---
-- Agile. Slash in front for damage. Every 2nd hit applies Stitch. Every 3rd hit applies Cut. While Butchered, Trim always Stitches.   
+- Agile. Slash in front for damage. Every third hit applies Stitches and deals bonus damage.
 
 Primary: **Unrelenting Flurry**
 ---
-- Agile. Stitch. Slash in front for damage. While Butchered, lifesteal, also hits apply Cut but ignore Stitch stacks and Needle gain.   
+- Agile. Slash in front for damage. Heal for 10% of damage dealt. 
 
 Secondary: **Woven Fate** 
 ---
-- Cut. Dash forward, dealing damage. While Butchered, lifesteal.
+- Leap in a direction dealing damage. Recast in the air to dash dealing damage to enemies. Both casts apply Stitches.
 
-Secondary: **Planar Shift** 
+Utility: **Planar Shift**
 ---
-- 20% hp. Cut. Blink in a direction dealing damage at the destination. While Butchered, Stun and lifesteal.
-
-Utility: **Bloodsoaked Path**
----
-- 50% hp. Stab your heart gaining Butchered. During Butchered, Bloodsoaked Path becomes Expunge.
+- 50% HP. Blink in a direction dealing massive damage applying Sitches at the destination. Gain Butchered. While Butchered Planar Shift becomes Expunge.
 
 **Expunge**
 ---
@@ -45,29 +41,29 @@ Special: **Threaded Volley**
 
 **Needles**:
 ---
-- Stitch. Pierce for damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
+- Pierce for damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
 
 **Stitch** 
 ---
-- Apply Stitches. Applying Stitches or tearing open Stitches reduce cooldowns.
+- Deal damage to tear open Stitches and apply Cut.
 
 **Cut** 
 ---
-- Tear open Stitches dealing damage. Afterward, deal a percentage of the enemies missing health over time.
+- Reduces your secondary's cooldown on hit. Apply a bleed based on enemies missing health.
 
 **Butchered**
 ---
-- Empower other abilities. Gain attack speed and movement speed. During Butchered, convert 50% of healing into damage for Expunge.
+- Gain movement speed and grant every ability Cut. During Butchered, convert 50% of healing into damage for Expunge.
 
 Please play my mod. I need to find bugs.
 Contact me on the modding discord server: https://discord.gg/A9wNKWE9Ww https://discord.com/channels/562704639141740588/1195084430876872866 @tsuyoikenko
 
 # Credits 
-me - Code and (eventually) the base model/animations.
+tsuyoikenko - Code and (eventually) the base model/animations.
 
 TheTimeSweeper - Incredible new Henry template and responsible for fixing like half my bugs.
 
-rob - Creator of the glorious Henry template. Also, his code for other survivors helped me a lot.
+rob - Creator of the glorious Henry template. Also, his code for other survivors helped me get started.
 
 Gemo - Eclipse/Monsoon skin model (Raven) and all the rigging.
 

@@ -24,10 +24,10 @@ namespace SeamstressMod.Survivors.Seamstress
 
             string desc = "Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Trimming Slashes is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
-             + "< ! > Woven Fate is your main mobility. Build up stitches on enemies to keep the cooldown low." + Environment.NewLine + Environment.NewLine
-             + "< ! > Bloodsoaked Path can give you incredible buffs through butcher but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
-             + "< ! > Don't forget to heal during butchered, it can give you incredible burst damage with Expunge." + Environment.NewLine + Environment.NewLine
-             + "< ! > Use Threaded Volley to fire your well needles for devestating group damage." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Woven Fate is your main mobility. Apply Cuts to keep the cooldown low." + Environment.NewLine + Environment.NewLine
+             + "< ! > Planar Shift can give you incredible damage through Butchered but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
+             + "< ! > Don't forget to heal during Butchered, it can give you incredible burst damage with Expunge." + Environment.NewLine + Environment.NewLine
+             + "< ! > Use Threaded Volley to fire your needles for devestating group damage." + Environment.NewLine + Environment.NewLine;
 
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
@@ -51,7 +51,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trimming Slashes");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>. " +
-              " Every 3rd hit applies " + Tokens.stitchPrefix + $" and deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style>.");
+              " Every 3rd hit " + Tokens.stitchPrefix + $" in an area and deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style>.");
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Unrelenting Flurry");
             Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>. " +
@@ -60,13 +60,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Woven Fate");
-            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.stitchPrefix + $". Leap in a direction, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. " +
-                $"Recast to dash in a targeted direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>");
+            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", $"Leap in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. " +
+                $"Recast in the air to dash dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Both casts apply " + Tokens.stitchPrefix + " on hit enemies.");
             #endregion
 
             #region Utility
             Language.Add(prefix + "UTILITY_BLINK_NAME", "Planar Shift");
-            Language.Add(prefix + "UTILITY_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + ". " + Tokens.stitchPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> at the destination. Gain " 
+            Language.Add(prefix + "UTILITY_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> applying " + Tokens.stitchPrefix + " to enemies. Gain " 
                 + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <color=#9B3737>Planar Shift</color> becomes <color=#9B3737>Expunge</color>");
 
             Language.Add(prefix + "UTILITY_EXPUNGE_NAME", "Expunge");

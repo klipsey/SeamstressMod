@@ -1,9 +1,9 @@
 {
     "name": "Seamstress",
     "author": "kenko",
-    "version_number": "0.1.4",
+    "version_number": "0.1.5",
     "website_url": "",
-    "description": "Adds the Seamstress, a highly mobile complex survivor based around losing hp and resetting cooldowns.",
+    "description": "Adds the Seamstress, a highly mobile survivor based around losing hp and resetting cooldowns. Multiplayer compatible. BETA MODEL WIP",
     "dependencies": [
         "bbepis-BepInExPack-5.4.1905",
         "RiskofThunder-R2API_Core-5.0.3",

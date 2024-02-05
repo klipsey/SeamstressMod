@@ -1,3 +1,22 @@
+# 0.1.5
+- Massive fundemental kit changes
+- Butchered no longer grants attackspeed
+- Butchered no longer empowers abilites
+- Butchered now grants Cut on all abilities
+- Cut changed to -> Reduces your secondary's cooldown on hit. Apply a bleed based on enemies missing health
+- Stitch changed to -> Deal damage to tear open Stitches and apply cut
+- Trimming Slashes changed to -> Slash in front for damage. Every third hit applies Stitches and deals bonus damage
+- Unrelenting Flurry changed to -> Slash in front for damage. Heal for 10% of damage dealt
+- Removed Planar Shift
+- Woven Fate changed to -> Leap in a direction dealing damage. Recast in the air to dash dealing damage to enemies. Both casts apply Stitches
+- Removed Bloodsoaked Path
+- Added Planar Shift -> 50% HP. Blink in a direction dealing massive damage applying Sitches at the destination. Gain Butchered. While Butchered Planar Shift becomes Expunge
+- Threaded Volley stock is now your needle count
+- Threaded Volley cooldown lowered to 7.5 seconds
+- Threaded Volley does not fire all Needles. Hold down the button for the amount of Needles you would like to fire.
+- Needles do not apply Stitches anymore.
+- Still works in multiplayer
+- Bugs
 # 0.1.4
 - Might be multiplayer compatible now
 - Reworked alt abilities a tad

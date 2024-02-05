@@ -88,6 +88,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 if (victimBody.HasBuff(SeamstressBuffs.stitchSetup))
                 {
                     victimBody.RemoveBuff(SeamstressBuffs.stitchSetup);
+                    attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient;
                     if (damageReport.victimIsBoss)
                     {
                         victim.TakeDamage(cutsume);
@@ -122,7 +123,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(CutDamage))
                 {
-                    attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.stitchCooldownReduction;
+                    attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient;
                     Util.PlaySound("Play_imp_overlord_teleport_end", victimBody.gameObject);
                     if (damageReport.victimIsBoss)
                     {
