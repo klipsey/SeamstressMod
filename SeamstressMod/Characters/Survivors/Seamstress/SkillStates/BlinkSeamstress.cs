@@ -43,7 +43,7 @@ namespace SeamstressMod.SkillStates
 
         public static float blastAttackProcCoefficient = 1f;
 
-        public static float healthCostFraction = SeamstressStaticValues.blinkHealthCost;
+        public static float healthCostFraction = SeamstressStaticValues.reapHealthCost;
 
         private Animator animator;
 
@@ -102,6 +102,7 @@ namespace SeamstressMod.SkillStates
             CalculateBlinkDestination();
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", baseDuration / this.attackSpeedStat + exitDuration);
+            base.skillLocator.utility = base.skillLocator.FindSkill("reapRecast");
         }
 
         private void CalculateBlinkDestination()
@@ -194,8 +195,10 @@ namespace SeamstressMod.SkillStates
                 damageInfo.procCoefficient = 0f;
                 healthComponent.TakeDamage(damageInfo);
                 healthComponent.AddBarrier(currentBarrier);
+                characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
+                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
             }
-                isExiting = true;
+            isExiting = true;
 
             Util.PlaySound(endSoundString, base.gameObject);
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
@@ -210,20 +213,11 @@ namespace SeamstressMod.SkillStates
                 blastAttack.baseForce = blastAttackForce;
                 blastAttack.position = blinkDestination;
                 blastAttack.procCoefficient = blastAttackProcCoefficient;
-                if (empowered)
-                {
-                    blastAttack.radius = empoweredBlastAttackRadius;
-                    blastAttack.damageType = DamageType.Stun1s;
-                    blastAttack.AddModdedDamageType(DamageTypes.BlinkLifeSteal);
-                }
-                else
-                {
-                    blastAttack.radius = blastAttackRadius;
-                    blastAttack.RemoveModdedDamageType(DamageTypes.BlinkLifeSteal);
-                }
+                blastAttack.radius = blastAttackRadius;
+                blastAttack.damageType = DamageType.Stun1s;
+                blastAttack.AddModdedDamageType(DamageTypes.StitchDamage);
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                 blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
-                blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
                 blastAttack.Fire();
             }
             if (disappearWhileBlinking)

@@ -27,7 +27,7 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
             RefreshState();
-            this.duration = (needleCompareDelay / attackSpeedStat * characterBody.GetBuffCount(SeamstressBuffs.needles));
+            this.duration = (needleCompareDelay / attackSpeedStat);
             if (empowered)
             {
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
@@ -40,15 +40,6 @@ namespace SeamstressMod.SkillStates
                 this.projectilePrefab = SeamstressAssets.needlePrefab;
             }
             PlayAttackAnimation();
-            if(base.isAuthority) 
-            {
-                aimRay = base.GetAimRay();
-                ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
-            }
-            if (!base.characterMotor.isGrounded)
-            {
-                SmallHop(base.characterMotor, 6f);
-            }
             Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
         }
         public override void FixedUpdate()
@@ -59,22 +50,13 @@ namespace SeamstressMod.SkillStates
             {
                 if (needleDelay >= needleCompareDelay / attackSpeedStat)
                 {
-                    if (base.characterBody.HasBuff(SeamstressBuffs.needles))
+                    if(base.isAuthority) 
                     {
-                        if(base.isAuthority) 
-                        {
-                            aimRay = base.GetAimRay();
-                            ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
-                        }
-                        base.characterBody.RemoveBuff(SeamstressBuffs.needles);
-                        Log.Debug("I SHOT MY FIRST CUM");
-                        Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
-                        needleCompareDelay += (0.1f / attackSpeedStat);
+                        aimRay = base.GetAimRay();
+                        ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.needleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
                     }
-                    else
-                    {
-                        hasLaunched = true;
-                    }
+                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
+                    needleCompareDelay += (0.1f / attackSpeedStat);
                 }
             }
             if(base.fixedAge >= duration && base.isAuthority) 

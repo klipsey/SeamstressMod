@@ -53,12 +53,12 @@ namespace SeamstressMod.Survivors.Seamstress
                 return;
             }
             self.transform.position = self.victimBody.corePosition;
-            if (self.victimBody.HasBuff(SeamstressBuffs.stitched) && !visualTracker)
+            if (self.victimBody.HasBuff(SeamstressBuffs.cutBleed) && !visualTracker)
             {
                 visualTracker = true;
                 stitchDot = UnityEngine.Object.Instantiate(SeamstressAssets.stitchEffect, self.transform);
             }
-            else if(!self.victimBody.HasBuff(SeamstressBuffs.stitched) && visualTracker)
+            else if(!self.victimBody.HasBuff(SeamstressBuffs.cutBleed) && visualTracker)
             {
                 UnityEngine.Object.Destroy(stitchDot);
                 stitchDot = null;
@@ -71,7 +71,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interval = 1f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
-                associatedBuff = SeamstressBuffs.stitched,
+                associatedBuff = SeamstressBuffs.cutBleed,
                 resetTimerOnAdd = false,
             }, (CustomDotBehaviour)behave1, (CustomDotVisual)visual);
 
@@ -80,7 +80,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interval = 1f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
-                associatedBuff = SeamstressBuffs.stitched,
+                associatedBuff = SeamstressBuffs.cutBleed,
                 resetTimerOnAdd = false,
             }, (CustomDotBehaviour)behave2, (CustomDotVisual)visual);
         }

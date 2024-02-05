@@ -14,6 +14,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
 using UnityEngine.UI;
+using SeamstressMod.SkillStates;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -233,18 +234,17 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void AddSecondarySkills()
         {
-            //here's a skilldef of a typical movement skill. some fields are omitted and will just have default values
             SkillDef weaveSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "Weave",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.cutKeyword },
+                keywordTokens = new string[] { Tokens.stitchKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.WeaveLeap)),
                 activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
                 baseRechargeInterval = 6f,
                 baseMaxStock = 1,
@@ -254,7 +254,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 stockToConsume = 1,
 
                 resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = true,
+                fullRestockOnAssign = false,
                 dontAllowPastMaxStocks = false,
                 mustKeyPress = true,
                 beginSkillCooldownOnSkillEnd = false,
@@ -267,20 +267,23 @@ namespace SeamstressMod.Survivors.Seamstress
             });
 
             Skills.AddSecondarySkills(bodyPrefab, weaveSkillDef);
+        }
 
+        private void AddUtilitySkills()
+        {
             SkillDef blinkSeamstressSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "BlinkSeamstress",
-                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_BLINK_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_BLINK_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.cutKeyword },
+                skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_BLINK_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_BLINK_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.butcheredKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.BlinkSeamstress)),
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 6f,
+                baseRechargeInterval = 10f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -300,43 +303,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             });
 
-            Skills.AddSecondarySkills(bodyPrefab, blinkSeamstressSkillDef);
-        }
-
-        private void AddUtilitySkills()
-        {
-            SkillDef reapSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "Reap",
-                skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_REAP_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_REAP_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.healthCostKeyword, Tokens.butcheredKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texStingerIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Reap)),
-                activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseRechargeInterval = 14f,
-                baseMaxStock = 1,
-
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = false,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-            });
-
-            Skills.AddUtilitySkills(bodyPrefab, reapSkillDef);
+            Skills.AddUtilitySkills(bodyPrefab, blinkSeamstressSkillDef);
 
             GenericSkill reapRecast = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "reapRecast", true);
 
@@ -382,7 +349,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Sew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.sewHelp, Tokens.needleKeyword, Tokens.stitchKeyword },
+                keywordTokens = new string[] { Tokens.needleKeyword, Tokens.stitchKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
@@ -390,8 +357,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseMaxStock = 1,
-                baseRechargeInterval = 16f,
+                baseMaxStock = SeamstressStaticValues.maxNeedleAmount,
+                baseRechargeInterval = SeamstressStaticValues.needleGainInterval,
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,
@@ -400,7 +367,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 fullRestockOnAssign = true,
                 dontAllowPastMaxStocks = false,
                 beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
+                mustKeyPress = false,
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,

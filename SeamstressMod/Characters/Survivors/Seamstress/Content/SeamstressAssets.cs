@@ -83,6 +83,9 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject needlePrefab;
 
         internal static GameObject needleButcheredPrefab;
+
+        //extra
+        public static SkillDef weaveRecastSkillDef;
         public static void Init(AssetBundle assetBundle)
         {
 
@@ -95,6 +98,37 @@ namespace SeamstressMod.Survivors.Seamstress
             CreateEffects();
 
             CreateProjectiles();
+
+            weaveRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "WeaveDash",
+                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_NAME",
+                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.stitchKeyword },
+                skillIcon = SeamstressAssets.secondaryEmp,
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
+                activationStateMachineName = "Weapon2",
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+
+                baseRechargeInterval = 1f,
+                baseMaxStock = 1,
+
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = true,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
         }
 
 
@@ -348,7 +382,6 @@ namespace SeamstressMod.Survivors.Seamstress
             ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
             needleDamage.damageType = DamageType.Generic;
             DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needlePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
-            needleModdedDamage.Add(DamageTypes.StitchDamage);
             needleModdedDamage.Add(DamageTypes.BeginHoming);
 
             needlePrefab.AddComponent<ProjectileTargetComponent>();
@@ -358,7 +391,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileOverlapAttack needleLap = needlePrefab.GetComponent<ProjectileOverlapAttack>();
             needleLap.resetInterval = 0.5f;
-            needleLap.overlapProcCoefficient = SeamstressStaticValues.sewNeedleDamageCoefficient;
+            needleLap.overlapProcCoefficient = SeamstressStaticValues.needleProcCoefficient;
 
             ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
             needleHeal.fractionOfDamage = SeamstressStaticValues.needleHealAmount;
@@ -397,9 +430,8 @@ namespace SeamstressMod.Survivors.Seamstress
             needleSimple.updateAfterFiring = true;
 
             ProjectileDamage needleDamage = needleButcheredPrefab.GetComponent<ProjectileDamage>();
-            needleDamage.damageType = DamageType.SlowOnHit;
             DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
-            needleModdedDamage.Add(DamageTypes.StitchDamage);
+            needleModdedDamage.Add(DamageTypes.CutDamage);
             needleModdedDamage.Add(DamageTypes.BeginHoming);
 
             needleButcheredPrefab.AddComponent<ProjectileTargetComponent>();
@@ -409,7 +441,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileOverlapAttack needleLap = needleButcheredPrefab.GetComponent<ProjectileOverlapAttack>();
             needleLap.resetInterval = 0.5f;
-            needleLap.overlapProcCoefficient = SeamstressStaticValues.sewNeedleDamageCoefficient;
+            needleLap.overlapProcCoefficient = SeamstressStaticValues.needleProcCoefficient;
 
             ProjectileHealOwnerOnDamageInflicted needleHeal = needleButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
             needleHeal.fractionOfDamage = SeamstressStaticValues.needleHealAmount;

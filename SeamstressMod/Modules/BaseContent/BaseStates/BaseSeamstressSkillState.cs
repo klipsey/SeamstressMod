@@ -34,7 +34,6 @@ namespace SeamstressMod.Modules.BaseStates
             if ((bool)seamCon)
             {
                 empowered = characterBody.HasBuff(SeamstressBuffs.butchered);
-                baseNeedleAmount = seamCon.ReturnNeedle(true);
             }
         }
     }

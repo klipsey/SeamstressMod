@@ -45,35 +45,29 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "Stitched Heart");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health missing. " +
-                $"Regenerate <color=#9B3737>Needles</color> overtime. Gain additional <color=#9B3737>Needles</color> when <color=#9B3737>Stitch</color> is torn.");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health missing. ");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trimming Slashes");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>. " +
-              " Every 3rd hit applies " + Tokens.cutPrefix + $" and deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style>. While " + Tokens.butcheredPrefix + 
-              $", every slash additionally applies " + Tokens.stitchPrefix + ".");
+              " Every 3rd hit applies " + Tokens.stitchPrefix + $" and deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style>.");
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Unrelenting Flurry");
-            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.agilePrefix + ". " + Tokens.stitchPrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>. " + "While " + Tokens.butcheredPrefix +
-              $", <style=cIsHealing>heal for {100 * SeamstressStaticValues.weaveLifeSteal}% of damage dealt</style>, also apply " + Tokens.cutPrefix + " on hit but ignore " + Tokens.stitchPrefix + " stacks and " + Tokens.needlePrefix + " gain.");
+            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>. " +
+                $"<style=cIsHealing>Heal for {100 * SeamstressStaticValues.flurryLifeSteal}% of damage dealt</style>");
             #endregion
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Woven Fate");
-            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.cutPrefix + $". Dash forward, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>." +
-                " While " + Tokens.butcheredPrefix + $", <style=cIsHealing>heal for {100 * SeamstressStaticValues.weaveLifeSteal}% of damage dealt</style>.");
-
-            Language.Add(prefix + "SECONDARY_BLINK_NAME", "Planar Shift");
-            Language.Add(prefix + "SECONDARY_BLINK_DESCRIPTION", Tokens.quartHealthPrefix + ". " + Tokens.cutPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> at the destination." +
-                " While " + Tokens.butcheredPrefix + $", <style=cIsUtility>Stun</style> and <style=cIsHealing>heal for {100 * SeamstressStaticValues.blinkLifeSteal}% of damage dealt</style>.");
+            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", Tokens.stitchPrefix + $". Leap in a direction, dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. " +
+                $"Recast to dash in a targeted direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>");
             #endregion
 
             #region Utility
-            Language.Add(prefix + "UTILITY_REAP_NAME", "Bloodsoaked Path");
-            Language.Add(prefix + "UTILITY_REAP_DESCRIPTION", Tokens.halfHealthPrefix + $". Stab your heart gaining " + Tokens.butcheredPrefix + 
-                ". During " + Tokens.butcheredPrefix + ", <color=#9B3737>Bloodsoaked Path</color> becomes <color=#9B3737>Expunge</color>.");
+            Language.Add(prefix + "UTILITY_BLINK_NAME", "Planar Shift");
+            Language.Add(prefix + "UTILITY_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + ". " + Tokens.stitchPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> at the destination. Gain " 
+                + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <color=#9B3737>Planar Shift</color> becomes <color=#9B3737>Expunge</color>");
 
             Language.Add(prefix + "UTILITY_EXPUNGE_NAME", "Expunge");
             Language.Add(prefix + "UTILITY_EXPUNGE_DESCRIPTION", Tokens.cutPrefix + ". Release stored <style=cIsHealing>healing</style> that you converted during " + Tokens.butcheredPrefix + " as a razor sharp blast of <style=cIsDamage>damage</style>.");

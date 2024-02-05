@@ -18,31 +18,34 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         private CharacterBody characterBody;
 
+        private CharacterMotor characterMotor;
+
         private HealthComponent healthComponent;
 
         private SkillLocator skillLocator;
 
         private GameObject endReap = SeamstressAssets.reapEndEffect;
 
-        public int needleCount = 0;
-
         public float bd = 0f;
+
+        public float leapLength = 0f;
 
         public float butcheredDurationPercent = 0f;
 
-        private float butcheredConversion = 0f;
+        public bool fuckYou = false;
 
-        private int baseNeedleAmount = 0;
+        private float butcheredConversion = 0f;
 
         private bool hasPlayed = false;
 
-        public bool fuckYou = false;
+        private bool inLeap = false;
 
         private bool butchered = false;
 
         public void Awake()
         {
             characterBody = base.GetComponent<CharacterBody>();
+            characterMotor = base.GetComponent<CharacterMotor>();
             healthComponent = base.GetComponent<HealthComponent>();
             skillLocator = base.GetComponent<SkillLocator>();
             butcheredDurationPercent = bd / 10f;
@@ -54,15 +57,34 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 bd -= Time.fixedDeltaTime;
             }
-            if (bd <= 0f && butchered)
+            else if (bd <= 0f && butchered)
             {
                 ButcheredEnd();
             }
-            NeedleTracking();
+            if(leapLength > 0f) 
+            {
+                leapLength -= Time.fixedDeltaTime;
+            }
+            LeapEnd();
             CalculateBonusDamage();
             IsButchered();
             ButcheredSound();
-            PassiveNeedleRegen();
+
+        }
+        private void LeapEnd()
+        {
+            if(skillLocator.secondary.skillOverrides.Any() && !inLeap)
+            {
+                inLeap = true;
+            }
+            else if(inLeap && characterMotor.isGrounded)
+            {
+                inLeap = false;
+                if (base.hasAuthority && skillLocator.secondary.skillOverrides.Any())
+                {
+                    skillLocator.secondary.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+                }
+            }
         }
         public float getButcheredValues(bool percentOrStopwatch)
         {
@@ -85,38 +107,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             butcheredConversion += healDamage;
         }
-        private void NeedleTracking()
-        {
-            baseNeedleAmount = skillLocator.special.maxStock - 1;
-            needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles) - baseNeedleAmount;
-        }
-        public int ReturnNeedle(bool baseOrCurrent)
-        {
-            if(baseOrCurrent)
-            {
-                return baseNeedleAmount;
-            }
-            else
-            {
-                return needleCount;
-            }
-        }
         //needle regen
-        private void PassiveNeedleRegen()
-        {
-            if (characterBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + baseNeedleAmount)
-            {
-                if (!characterBody.HasBuff(SeamstressBuffs.needleCountDownBuff))
-                {
-                    if(NetworkServer.active)
-                    {
-                        characterBody.AddTimedBuff(SeamstressBuffs.needleCountDownBuff, SeamstressStaticValues.needleGainInterval);
-                        characterBody.AddBuff(SeamstressBuffs.needles);
-                    }
-                    Util.PlaySound("Play_treeBot_m1_hit_heal", characterBody.gameObject);
-                }
-            }
-        }
         private void IsButchered()
         {
             if (characterBody.HasBuff(SeamstressBuffs.butchered) && !butchered)
@@ -124,11 +115,6 @@ namespace SeamstressMod.Survivors.Seamstress
                 bd = SeamstressStaticValues.butcheredDuration;
                 butcheredDurationPercent = bd / 10f;
                 butchered = true;
-                #region IconUpdate
-                skillLocator.primary.skillDef.icon = SeamstressAssets.primaryEmp;
-                skillLocator.secondary.skillDef.icon = SeamstressAssets.secondaryEmp;
-                skillLocator.special.skillDef.icon = SeamstressAssets.specialEmp;
-                #endregion
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -154,10 +140,6 @@ namespace SeamstressMod.Survivors.Seamstress
                     fuckYou = false;
                     UnityEngine.Object.Instantiate<GameObject>(endReap, characterBody.modelLocator.transform);
                     Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
-                    #region iconUpdate
-                    skillLocator.primary.skillDef.icon = SeamstressAssets.primary;
-                    skillLocator.secondary.skillDef.icon = SeamstressAssets.secondary;
-                    skillLocator.special.skillDef.icon = SeamstressAssets.special;
                     //fire expunge at end of butchered
                     if (skillLocator.utility != skillLocator.FindSkill("Utility"))
                     {
@@ -166,7 +148,6 @@ namespace SeamstressMod.Survivors.Seamstress
                             skillLocator.utility.ExecuteIfReady();
                         }
                     }
-                    #endregion
                 }
             }
         }

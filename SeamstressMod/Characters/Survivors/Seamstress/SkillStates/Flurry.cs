@@ -20,7 +20,7 @@ namespace SeamstressMod.SkillStates
             pushForce = 300f;
             bonusForce = Vector3.zero;
             baseDuration = 1f;
-            moddedDamageType = DamageTypes.StitchDamage;
+            moddedDamageType = DamageTypes.flurryLifeSteal;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
@@ -41,8 +41,7 @@ namespace SeamstressMod.SkillStates
             muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
             if (empowered)
             {
-                moddedDamageType = DamageTypes.StitchDamageFlurry;
-                moddedDamageType2 = DamageTypes.WeaveLifeSteal;
+                moddedDamageType2 = DamageTypes.CutDamage;
                 swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
                 hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             }
