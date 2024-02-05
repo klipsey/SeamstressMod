@@ -38,32 +38,32 @@ namespace SeamstressMod.SkillStates
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
-            switch (swingIndex)
-            {
-                case 0:
-                    muzzleString = "SwingLeft";
-                    break;
-                case 1:
-                    moddedDamageType = DamageTypes.StitchDamage;
-                    muzzleString = "SwingRight";
-                    break;
-                case 2:
-                    earlyExitPercentTime = 1f;
-                    moddedDamageType2 = DamageTypes.CutDamage;
-                    hitStopDuration = 0.1f;
-                    swingSoundString = "Play_bandit2_m2_slash";
-                    hitboxGroupName = "SwordBig";
-                    swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
-                    swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
-                    muzzleString = "SwingCenter";
-                    break;
-            }
             if (empowered)
             {
                 moddedDamageType = DamageTypes.StitchDamage;
                 swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
                 hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
             }
+            switch (swingIndex)
+            {
+                case 0:
+                    muzzleString = "SwingLeft";
+                    break;
+                case 1:
+                    muzzleString = "SwingRight";
+                    break;
+                case 2:
+                    earlyExitPercentTime = 1f;
+                    damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
+                    moddedDamageType2 = DamageTypes.CutDamage;
+                    hitStopDuration = 0.1f;
+                    swingSoundString = "Play_bandit2_m2_slash";
+                    hitboxGroupName = "SwordBig";
+                    swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
+                    muzzleString = "SwingCenter";
+                    break;
+            }
+
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();

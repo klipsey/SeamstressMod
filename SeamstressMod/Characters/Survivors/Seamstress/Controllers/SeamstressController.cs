@@ -159,7 +159,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     skillLocator.secondary.skillDef.icon = SeamstressAssets.secondary;
                     skillLocator.special.skillDef.icon = SeamstressAssets.special;
                     //fire expunge at end of butchered
-                    if (skillLocator.utility.skillOverrides.Any())
+                    if (skillLocator.utility != skillLocator.FindSkill("Utility"))
                     {
                         if(base.hasAuthority)
                         {

@@ -152,6 +152,23 @@ namespace SeamstressMod.Survivors.Seamstress
                             attacker.skillLocator.DeductCooldownFromAllSkillsServer(SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient);
                             victimBody.RemoveBuff(SeamstressBuffs.stitchSetup);
                         }
+                        if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + attacker.skillLocator.special.maxStock - 1)
+                        {
+                            attacker.AddBuff(SeamstressBuffs.needles);
+                            Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
+                        }
+                        else
+                        {
+                            GameObject projectilePrefab;
+                            Ray aimRay;
+                            aimRay = new Ray(attacker.inputBank.aimOrigin, attacker.inputBank.aimDirection);
+                            if (attacker.HasBuff(SeamstressBuffs.butchered))
+                            {
+                                projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                            }
+                            else projectilePrefab = SeamstressAssets.needlePrefab;
+                            ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
+                        }
                         //useless
                         #region dotController
                         /*
@@ -181,23 +198,6 @@ namespace SeamstressMod.Survivors.Seamstress
                         #endregion
                     }
 
-                    if (attacker.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount + attacker.skillLocator.special.maxStock - 1)
-                    {
-                        attacker.AddBuff(SeamstressBuffs.needles);
-                        Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
-                    }
-                    else
-                    {
-                        GameObject projectilePrefab;
-                        Ray aimRay;
-                        aimRay = new Ray(attacker.inputBank.aimOrigin, attacker.inputBank.aimDirection);
-                        if (attacker.HasBuff(SeamstressBuffs.butchered))
-                        {
-                            projectilePrefab = SeamstressAssets.needleButcheredPrefab;
-                        }
-                        else projectilePrefab = SeamstressAssets.needlePrefab;
-                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.sewNeedleDamageCoefficient, 0f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
-                    }
                 }
                 #region NeedleDamage incase of emergency
                 if (damageInfo.HasModdedDamageType(AddNeedlesDamage))
@@ -273,6 +273,7 @@ namespace SeamstressMod.Survivors.Seamstress
                             attacker.skillLocator.DeductCooldownFromAllSkillsServer(SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient);
                         }
                     }
+
                 }
             }
         }

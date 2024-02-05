@@ -53,6 +53,8 @@ namespace SeamstressMod.SkillStates
             {
                 Util.CleanseBody(this.characterBody, true, false, false, true, true, true);
             }
+            this.skillLocator.utility = skillLocator.FindSkill("Utility");
+
         }
         protected override void OnHitEnemyAuthority()
         {
@@ -92,7 +94,7 @@ namespace SeamstressMod.SkillStates
         public override void OnExit()
         {
             base.OnExit();
-            this.skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.reapRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+
         }
 
     }

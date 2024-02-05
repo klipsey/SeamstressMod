@@ -52,7 +52,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trimming Slashes");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>. " +
-              "Every 2nd hit applies " + Tokens.stitchPrefix + ". Every 3rd hit applies " + Tokens.cutPrefix + ". While " + Tokens.butcheredPrefix + 
+              " Every 3rd hit applies " + Tokens.cutPrefix + $" and deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style>. While " + Tokens.butcheredPrefix + 
               $", every slash additionally applies " + Tokens.stitchPrefix + ".");
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Unrelenting Flurry");

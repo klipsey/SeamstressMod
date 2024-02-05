@@ -31,6 +31,7 @@ namespace SeamstressMod.SkillStates
             {
                 SmallHop(base.characterMotor, 6f);
             }
+            base.skillLocator.utility = base.skillLocator.FindSkill("reapRecast");
         }
         public override void FixedUpdate()
         {
@@ -73,7 +74,6 @@ namespace SeamstressMod.SkillStates
         public override void OnExit()
         {
             base.OnExit();
-            base.skillLocator.utility.SetSkillOverride(gameObject, SeamstressAssets.reapRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
     }
 }

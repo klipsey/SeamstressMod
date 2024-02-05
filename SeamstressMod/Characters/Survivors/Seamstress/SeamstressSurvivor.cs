@@ -317,7 +317,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 16f,
+                baseRechargeInterval = 14f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -340,7 +340,38 @@ namespace SeamstressMod.Survivors.Seamstress
 
             GenericSkill reapRecast = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "reapRecast", true);
 
-            Skills.AddSkillsToFamily(reapRecast.skillFamily, SeamstressAssets.reapRecastSkillDef);
+            SkillDef reapRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "Expunge",
+                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_NAME",
+                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.stitchKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
+                activationStateMachineName = "Weapon2",
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+
+                baseRechargeInterval = 1f,
+                baseMaxStock = 1,
+
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = true,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
+
+            Skills.AddSkillsToFamily(reapRecast.skillFamily, reapRecastSkillDef);
         }
 
         private void AddSpecialSkills()
@@ -360,7 +391,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 18f,
+                baseRechargeInterval = 16f,
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,

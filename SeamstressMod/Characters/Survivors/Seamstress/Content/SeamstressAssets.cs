@@ -83,8 +83,6 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject needlePrefab;
 
         internal static GameObject needleButcheredPrefab;
-
-        public static SkillDef reapRecastSkillDef;
         public static void Init(AssetBundle assetBundle)
         {
 
@@ -97,37 +95,6 @@ namespace SeamstressMod.Survivors.Seamstress
             CreateEffects();
 
             CreateProjectiles();
-
-            reapRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "Expunge",
-                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_NAME",
-                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
-                activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
-
-                baseRechargeInterval = 1f,
-                baseMaxStock = 1,
-
-                rechargeStock = 0,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = true,
-                dontAllowPastMaxStocks = true,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-            });
         }
 
 
@@ -213,7 +180,7 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
             //ParticleSystem.MainModule main = scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
             //main.startLifetimeMultiplier = 0.1f;
-            scissorsButcheredComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 1.5f;
+            scissorsButcheredComboSwingEffect.transform.GetChild(1).localScale = new Vector3(1f, 1.5f, 1.5f);
             UnityEngine.Object.Destroy(scissorsButcheredComboSwingEffect.GetComponent<EffectComponent>());
 
             scissorsHitImpactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMerc.prefab").WaitForCompletion().InstantiateClone("ScissorImpact", false);

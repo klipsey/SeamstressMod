@@ -32,7 +32,7 @@ namespace SeamstressMod.Modules
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 
         public static string needleKeyword = KeywordText("Needle", Tokens.stitchPrefix + $". <color=#9B3737>Needles</color> pierce for <style=cIsDamage>{100f * SeamstressStaticValues.sewNeedleDamageCoefficient}% damage</style> each. " +
-            $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. While " + Tokens.butcheredPrefix + ", <color=#9B3737>Needles</color> <style=cIsUtility>slow</style> enemies. ");
+            $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. While " + Tokens.butcheredPrefix + ", <color=#9B3737>Needles</color> <style=cIsUtility>Slow</style> enemies. ");
         
         public static string passiveKeywords = needleKeyword + "\n\n" + stitchKeyword + "\n\n" + cutKeyword;
 
