@@ -57,7 +57,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 bd -= Time.fixedDeltaTime;
             }
-            else if (bd <= 0f && butchered)
+            else if (bd <= 0f && butchered || bd <= 0f && skillLocator.utility == skillLocator.FindSkill("reapRecast"))
             {
                 ButcheredEnd();
             }
@@ -65,11 +65,23 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 leapLength -= Time.fixedDeltaTime;
             }
+            RecalcNeedles();
             LeapEnd();
             CalculateBonusDamage();
             IsButchered();
             ButcheredSound();
 
+        }
+        private void RecalcNeedles()
+        {
+            if(characterBody.GetBuffCount(SeamstressBuffs.needles) < skillLocator.special.stock)
+            {
+                characterBody.AddBuff(SeamstressBuffs.needles);
+            }
+            if(characterBody.GetBuffCount(SeamstressBuffs.needles) > skillLocator.special.stock)
+            {
+                characterBody.RemoveBuff(SeamstressBuffs.needles);
+            }
         }
         private void LeapEnd()
         {
@@ -141,12 +153,13 @@ namespace SeamstressMod.Survivors.Seamstress
                     UnityEngine.Object.Instantiate<GameObject>(endReap, characterBody.modelLocator.transform);
                     Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
                     //fire expunge at end of butchered
-                    if (skillLocator.utility != skillLocator.FindSkill("Utility"))
+
+                }
+                if (skillLocator.utility == skillLocator.FindSkill("reapRecast") && !characterBody.HasBuff(SeamstressBuffs.butchered))
+                {
+                    if (base.hasAuthority)
                     {
-                        if(base.hasAuthority)
-                        {
-                            skillLocator.utility.ExecuteIfReady();
-                        }
+                        skillLocator.utility.ExecuteIfReady();
                     }
                 }
             }

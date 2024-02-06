@@ -33,7 +33,7 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private static void Hook()
         {
-            //GlobalEventManager.onCharacterDeathGlobal += GlobalEventManager_onCharacterDeathGlobal;
+            GlobalEventManager.onCharacterDeathGlobal += GlobalEventManager_onCharacterDeathGlobal;
             GlobalEventManager.onServerDamageDealt += GlobalEventManager_onServerDamageDealt;
         }
         private static void GlobalEventManager_onServerDamageDealt(DamageReport damageReport)
@@ -46,13 +46,13 @@ namespace SeamstressMod.Survivors.Seamstress
             HealthComponent victim = damageReport.victim;
             GameObject inflictorObject = damageInfo.inflictor;
             CharacterBody victimBody = damageReport.victimBody;
-            CharacterBody attacker = damageReport.attackerBody;
+            CharacterBody attackerBody = damageReport.attackerBody;
             GameObject attackerObject = damageReport.attacker.gameObject;
             if (NetworkServer.active)
             {
                 DamageInfo cutsume = new DamageInfo
                 {
-                    damage = attacker.damage * SeamstressStaticValues.stitchBaseDamage * damageInfo.procCoefficient,
+                    damage = attackerBody.damage * SeamstressStaticValues.stitchBaseDamage * damageInfo.procCoefficient,
                     damageColorIndex = DamageColorIndex.DeathMark,
                     damageType = DamageType.Generic,
                     attacker = damageInfo.attacker,
@@ -85,10 +85,10 @@ namespace SeamstressMod.Survivors.Seamstress
                     }
                 }
 
-                if (victimBody.HasBuff(SeamstressBuffs.stitchSetup))
+                if (victimBody.HasBuff(SeamstressBuffs.stitchSetup) && attackerBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
+                    Util.PlaySound("Play_imp_overlord_teleport_end", victimBody.gameObject);
                     victimBody.RemoveBuff(SeamstressBuffs.stitchSetup);
-                    attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient;
                     if (damageReport.victimIsBoss)
                     {
                         victim.TakeDamage(cutsume);
@@ -99,22 +99,22 @@ namespace SeamstressMod.Survivors.Seamstress
                         victim.TakeDamage(cutsume);
                         DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                     }
-                    if (attacker.skillLocator.special.stock < attacker.skillLocator.special.maxStock)
+                    if (attackerBody.skillLocator.special.stock < attackerBody.skillLocator.special.maxStock)
                     {
-                        attacker.skillLocator.special.AddOneStock();
+                        attackerBody.skillLocator.special.AddOneStock();
                         Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
                     }
                     else
                     {
                         GameObject projectilePrefab;
                         Ray aimRay;
-                        aimRay = new Ray(attacker.inputBank.aimOrigin, attacker.inputBank.aimDirection);
-                        if (attacker.HasBuff(SeamstressBuffs.butchered))
+                        aimRay = new Ray(attackerBody.inputBank.aimOrigin, attackerBody.inputBank.aimDirection);
+                        if (attackerBody.HasBuff(SeamstressBuffs.butchered))
                         {
                             projectilePrefab = SeamstressAssets.needleButcheredPrefab;
                         }
                         else projectilePrefab = SeamstressAssets.needlePrefab;
-                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attacker.gameObject, attacker.damage * SeamstressStaticValues.needleDamageCoefficient, 0f, attacker.RollCrit(), DamageColorIndex.Default, null, -1f);
+                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attackerBody.gameObject, attackerBody.damage * SeamstressStaticValues.needleDamageCoefficient, 0f, attackerBody.RollCrit(), DamageColorIndex.Default, null, -1f);
                     }
                 }
                 if (damageInfo.HasModdedDamageType(StitchDamage))
@@ -123,8 +123,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(CutDamage))
                 {
-                    attacker.skillLocator.secondary.rechargeStopwatch += SeamstressStaticValues.stitchCooldownReduction * damageInfo.procCoefficient;
-                    Util.PlaySound("Play_imp_overlord_teleport_end", victimBody.gameObject);
+
                     if (damageReport.victimIsBoss)
                     {
                         DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
@@ -136,11 +135,10 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(flurryLifeSteal))
                 {
-                    attacker.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.flurryLifeSteal, default(ProcChainMask), true);
+                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.flurryLifeSteal, default(ProcChainMask), true);
                 }
             }
         }
-        /*
         private static void GlobalEventManager_onCharacterDeathGlobal(DamageReport damageReport)
         {
             if (!damageReport.attackerBody || !damageReport.victimBody)
@@ -149,13 +147,32 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             DamageInfo damageInfo = damageReport.damageInfo;
             CharacterBody victimBody = damageReport.victimBody;
-            CharacterBody attacker = damageReport.attacker.GetComponent<CharacterBody>();
-            Transform attackerTransform = attacker.modelLocator.transform;
-            GameObject attackerObject = attacker.gameObject;
+            CharacterBody attackerBody = damageReport.attacker.GetComponent<CharacterBody>();
+            Transform attackerTransform = attackerBody.modelLocator.transform;
+            GameObject attackerObject = attackerBody.gameObject;
             if (NetworkServer.active)
             {
+                if(attackerBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+                {
+                    if (attackerBody.skillLocator.special.stock < attackerBody.skillLocator.special.maxStock)
+                    {
+                        attackerBody.skillLocator.special.AddOneStock();
+                        Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
+                    }
+                    else
+                    {
+                        GameObject projectilePrefab;
+                        Ray aimRay;
+                        aimRay = new Ray(attackerBody.inputBank.aimOrigin, attackerBody.inputBank.aimDirection);
+                        if (attackerBody.HasBuff(SeamstressBuffs.butchered))
+                        {
+                            projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                        }
+                        else projectilePrefab = SeamstressAssets.needlePrefab;
+                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), attackerBody.gameObject, attackerBody.damage * SeamstressStaticValues.needleDamageCoefficient, 0f, attackerBody.RollCrit(), DamageColorIndex.Default, null, -1f);
+                    }
+                }
             }
         }
-        */
     }
 }

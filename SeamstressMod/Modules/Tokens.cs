@@ -20,8 +20,7 @@ namespace SeamstressMod.Modules
 
         public static string stitchKeyword = KeywordText("Stitch", $"Deal damage to tear open Stitches dealing <style=cIsDamage>{100 * SeamstressStaticValues.stitchBaseDamage}% damage</style> and applying " + cutPrefix + ". Also gain a " + needlePrefix + ".");
 
-        public static string cutKeyword = KeywordText("Cut", $"Reduces your <style=cIsUtility>secondary's cooldowns</style> by <style=cIsUtility>{SeamstressStaticValues.stitchCooldownReduction}</style> on hit. " +
-            $"Apply a bleed that deals <style=cIsDamage>0.5%</style> (<style=cIsDamage>0.25%</style> against bosses) of the " +
+        public static string cutKeyword = KeywordText("Cut", $"Bleed enemies for <style=cIsDamage>1%</style> (<style=cIsDamage>0.5%</style> against bosses) of the " +
             $"enemies missing <style=cIsHealth>health</style> per second for {SeamstressStaticValues.cutDuration} seconds.");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");

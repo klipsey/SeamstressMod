@@ -1,3 +1,5 @@
+# 0.1.6
+- Tweaks
 # 0.1.5
 - Massive fundemental kit changes
 - Butchered no longer grants attackspeed
