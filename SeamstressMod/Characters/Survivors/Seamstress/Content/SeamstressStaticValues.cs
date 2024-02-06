@@ -21,6 +21,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float blinkDamageCoefficient = 8f;
 
+        internal const float sewAltDamageCoefficient = 1.5f;
+
         internal const float flurryLifeSteal = 0.1f;
 
         internal const float blinkLifeSteal = 0.25f;
