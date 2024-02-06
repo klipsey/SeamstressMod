@@ -161,6 +161,9 @@ namespace SeamstressMod.Survivors.Seamstress
             blinkPrefab.GetComponent<EffectComponent>().applyScale = true;
             blinkPrefab.transform.GetChild(0).localScale = Vector3.one * 0.2f;
             blinkPrefab.transform.GetChild(1).localScale = Vector3.one * 0.2f;
+            blinkPrefab.transform.GetChild(0).GetChild(2).gameObject.SetActive(value: false);
+            blinkPrefab.transform.GetChild(0).GetChild(3).gameObject.SetActive(value: false);
+            blinkPrefab.transform.GetChild(0).GetChild(5).gameObject.SetActive(value: false);
             Modules.Content.CreateAndAddEffectDef(blinkPrefab);
 
             blinkDestinationPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/ImpBossBlinkDestination.prefab").WaitForCompletion().InstantiateClone("BlinkEnd");

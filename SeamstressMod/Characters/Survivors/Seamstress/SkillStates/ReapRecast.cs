@@ -54,7 +54,10 @@ namespace SeamstressMod.SkillStates
                 Util.CleanseBody(this.characterBody, true, false, false, true, true, true);
             }
             this.skillLocator.utility = skillLocator.FindSkill("Utility");
-
+            if (!isGrounded)
+            {
+                SmallHop(characterMotor, 5f);
+            }
         }
         protected override void OnHitEnemyAuthority()
         {

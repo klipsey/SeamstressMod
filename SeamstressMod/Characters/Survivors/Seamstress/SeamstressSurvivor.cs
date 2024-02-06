@@ -245,7 +245,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
-                baseRechargeInterval = 7f,
+                baseRechargeInterval = 5f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -282,7 +282,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 10f,
+                baseRechargeInterval = 9f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -353,7 +353,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
                 //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
-                activationStateMachineName = "Weapon",
+                activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = SeamstressStaticValues.maxNeedleAmount,
@@ -493,7 +493,7 @@ namespace SeamstressMod.Survivors.Seamstress
         //calculate expunge healing
         private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen = true)
         {
-            if (self.body.HasBuff(SeamstressBuffs.butchered) && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if (self.body.skillLocator.utility == self.body.skillLocator.FindSkill("reapRecast") && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
                 amount *= SeamstressStaticValues.healConversion;
             }
@@ -501,7 +501,7 @@ namespace SeamstressMod.Survivors.Seamstress
             SeamstressController s = self.body.GetComponent<SeamstressController>();
             if (self.body.TryGetComponent<SeamstressController>(out s) && self.body.HasBuff(SeamstressBuffs.butchered))
             {
-                s.ButcheredConversionCalc((res / SeamstressStaticValues.healConversion) * 1 - SeamstressStaticValues.healConversion);
+                s.ButcheredConversionCalc((res / SeamstressStaticValues.healConversion) * (1 - SeamstressStaticValues.healConversion));
             }
             return res;
         }

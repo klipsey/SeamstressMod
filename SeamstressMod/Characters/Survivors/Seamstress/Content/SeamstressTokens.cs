@@ -60,7 +60,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Woven Fate");
-            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", $"Leap in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. " +
+            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", $"Leap in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveLeapDamageCoefficient}% damage</style>. " +
                 $"Recast in the air to dash dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Both casts apply " + Tokens.stitchPrefix + " on hit enemies.");
             #endregion
 
@@ -75,7 +75,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "Threaded Volley");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. Hold up to 10 <color=#9B3737>Needles</color> before auto firing. " );
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. Hold up to 10 <color=#9B3737>Needles</color> before auto firing. Gain <color=#9B3737>Needles</color> by tearing "
+                + Tokens.stitchPrefix + " or killing enemies.");
             #endregion
 
             #region Achievements

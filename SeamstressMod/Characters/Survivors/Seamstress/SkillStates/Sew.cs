@@ -31,13 +31,16 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
-                Util.PlaySound("Play_imp_overlord_teleport_end", gameObject);
                 UnityEngine.Object.Instantiate<GameObject>(supaEffect, transform);
             }
             else
             {
                 UnityEngine.Object.Instantiate<GameObject>(boringEffect, transform);
                 this.projectilePrefab = SeamstressAssets.needlePrefab;
+            }
+            if(!isGrounded)
+            {
+                SmallHop(characterMotor, 3f);
             }
             PlayAttackAnimation();
             Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
@@ -70,7 +73,7 @@ namespace SeamstressMod.SkillStates
             {
                 return InterruptPriority.Any;
             }
-            return InterruptPriority.Frozen;
+            return InterruptPriority.PrioritySkill;
         }
         protected void PlayAttackAnimation()
         {
