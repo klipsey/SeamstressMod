@@ -1,7 +1,7 @@
 {
     "name": "Seamstress",
     "author": "kenko",
-    "version_number": "0.1.5",
+    "version_number": "0.1.6",
     "website_url": "",
     "description": "Adds the Seamstress, a highly mobile survivor based around losing hp and resetting cooldowns. Multiplayer compatible. BETA MODEL WIP",
     "dependencies": [

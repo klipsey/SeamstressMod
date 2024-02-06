@@ -13,7 +13,7 @@ Seamstress is a mobile survivor who uses her health for damage. She doesn't gain
 # Skills
 Passive: **Stitched Heart**
 ---
-- Gain base damage for every 1 health missing. Regenerate Needles overtime. 
+- Gain base damage for every 1 health missing. 
 
 Primary: **Trimming Slashes**
 ---
@@ -37,23 +37,23 @@ Utility: **Planar Shift**
 
 Special: **Threaded Volley**
 ---
-- Expels Needles. Hold up to ten before autofiring.
+- Expels Needles. Hold up to ten before autofiring. Gain Needles from Stitch or kills.
 
 **Needles**:
 ---
-- Pierce for damage and heal for a percentage of damage dealt. While Butchered, Needles slow enemies.
+- Pierce for damage and heal for a percentage of damage dealt.
 
 **Stitch** 
 ---
-- Deal damage to tear open Stitches and apply Cut.
+- Deal damage to tear open Stitches and apply Cut. Gain a Needle.
 
 **Cut** 
 ---
-- Reduces your secondary's cooldown on hit. Apply a bleed based on enemies missing health.
+- Apply a bleed based on enemies missing health.
 
 **Butchered**
 ---
-- Gain movement speed and grant every ability Cut. During Butchered, convert 50% of healing into damage for Expunge.
+- Gain movement speed and grant every ability Cut. During Butchered, convert % of healing into damage for Expunge.
 
 Please play my mod. I need to find bugs.
 Contact me on the modding discord server: https://discord.gg/A9wNKWE9Ww https://discord.com/channels/562704639141740588/1195084430876872866 @tsuyoikenko
