@@ -27,7 +27,7 @@ Secondary: **Woven Fate**
 ---
 - Leap in a direction dealing damage. Recast in the air to dash dealing damage to enemies. Both casts apply Stitches.
 
-Utility: **Planar Shift**
+Utility: **Glimpse of Corruption**
 ---
 - 50% HP. Blink in a direction dealing massive damage applying Sitches at the destination. Gain Butchered. While Butchered Planar Shift becomes Expunge.
 
@@ -38,6 +38,10 @@ Utility: **Planar Shift**
 Special: **Threaded Volley**
 ---
 - Expels Needles. Hold up to ten before autofiring. Gain Needles from Stitch or kills.
+
+Special: **Planar Shift**
+---
+- Temporarily shift and reappear dealing Needlesxdamage to surrounding enemies. Heal for some of the damage dealt. Consume all Needles.
 
 **Needles**:
 ---

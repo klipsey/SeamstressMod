@@ -40,7 +40,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public bool fuckYou = false;
 
-        public void Awake()
+        public bool fuck = false;
+
+        private void Awake()
         {
             characterBody = base.GetComponent<CharacterBody>();
             characterMotor = base.GetComponent<CharacterMotor>();
@@ -48,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
             skillLocator = base.GetComponent<SkillLocator>();
             butcheredDurationPercent = bd / 10f;
         }
-        public void FixedUpdate()
+        private void FixedUpdate()
         {
             //stopwatch
             if (bd > 0f)
@@ -62,20 +64,13 @@ namespace SeamstressMod.Survivors.Seamstress
             if(leapLength > 0f) 
             {
                 leapLength -= Time.fixedDeltaTime;
+                Log.Debug(leapLength + " uuh is this working?");
             }
             RecalcNeedles();
-            RecalcPlanarShift();
             LeapEnd();
             CalculateBonusDamage();
             IsButchered();
             ButcheredSound();        
-        }
-        private void RecalcPlanarShift()
-        {
-            if (skillLocator.special.skillDef.skillName == "sewAlt")
-            {
-                skillLocator.special.skillDef.stockToConsume = skillLocator.special.stock;
-            }
         }
         private void RecalcNeedles()
         {
@@ -90,12 +85,15 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void LeapEnd()
         {
-            if(skillLocator.secondary.skillOverrides.Any() && leapLength <= 0f)
+            if(skillLocator.secondary.skillOverrides.Any() && leapLength <= 0f && !fuck)
             {
+                fuck = true;
                 leapLength = 2f;
             }
-            else if(leapLength < 0f && characterMotor.isGrounded || !skillLocator.secondary.skillOverrides.Any())
+            else if(leapLength < 0f && (characterMotor.isGrounded || !skillLocator.secondary.skillOverrides.Any()) && fuck)
             {
+                fuck = false;
+                Log.Debug("I worked");
                 leapLength = 0f;
                 if (base.hasAuthority && skillLocator.secondary.skillOverrides.Any())
                 {

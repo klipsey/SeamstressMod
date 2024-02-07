@@ -20,7 +20,7 @@ namespace SeamstressMod.SkillStates
             pushForce = 300f;
             bonusForce = Vector3.zero;
             baseDuration = 1f;
-            moddedDamageType = DamageTypes.flurryLifeSteal;
+            moddedDamageType = DamageTypes.FlurryLifeSteal;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)

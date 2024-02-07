@@ -1,3 +1,6 @@
+# 0.1.7
+- Alt special added
+- Woven Fate has a 2 second grace period for recasting if you are on the ground
 # 0.1.6
 - Tweaks
 # 0.1.5

@@ -379,12 +379,12 @@ namespace SeamstressMod.Survivors.Seamstress
             SkillDef sewAltSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "SewAlt",
-                skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SEW_DESCRIPTION",
+                skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_ALTSEW_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_ALTSEW_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.needleKeyword, Tokens.stitchKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SewAltAbility)),
                 //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
@@ -393,13 +393,13 @@ namespace SeamstressMod.Survivors.Seamstress
                 baseRechargeInterval = SeamstressStaticValues.needleGainInterval,
                 rechargeStock = 1,
                 requiredStock = 1,
-                stockToConsume = 1,
+                stockToConsume = 0,
 
                 resetCooldownTimerOnUse = false,
                 fullRestockOnAssign = true,
                 dontAllowPastMaxStocks = false,
                 beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = false,
+                mustKeyPress = true,
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,
@@ -407,7 +407,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 forceSprintDuringState = false,
             });
 
-            Skills.AddSpecialSkills(bodyPrefab, sewSkillDef);
+            Skills.AddSpecialSkills(bodyPrefab, sewAltSkillDef);
         }
         #endregion skills
 

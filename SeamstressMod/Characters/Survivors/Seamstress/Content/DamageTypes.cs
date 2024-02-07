@@ -18,7 +18,8 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType CutDamage;
         public static DamageAPI.ModdedDamageType StitchDamage;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
-        public static DamageAPI.ModdedDamageType flurryLifeSteal;
+        public static DamageAPI.ModdedDamageType FlurryLifeSteal;
+        public static DamageAPI.ModdedDamageType PlanarLifeSteal;
         public static DamageAPI.ModdedDamageType BeginHoming;
 
         internal static void Init()
@@ -27,7 +28,8 @@ namespace SeamstressMod.Survivors.Seamstress
             CutDamage = DamageAPI.ReserveDamageType();
             StitchDamage = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
-            flurryLifeSteal = DamageAPI.ReserveDamageType();
+            FlurryLifeSteal = DamageAPI.ReserveDamageType();
+            PlanarLifeSteal = DamageAPI.ReserveDamageType();
             BeginHoming = DamageAPI.ReserveDamageType();
             Hook();
         }
@@ -133,9 +135,13 @@ namespace SeamstressMod.Survivors.Seamstress
                         DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                     }
                 }
-                if (damageInfo.HasModdedDamageType(flurryLifeSteal))
+                if (damageInfo.HasModdedDamageType(FlurryLifeSteal))
                 {
                     attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.flurryLifeSteal, default(ProcChainMask), true);
+                }
+                if (damageInfo.HasModdedDamageType(PlanarLifeSteal))
+                {
+                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.needleHealAmount, default(ProcChainMask), true);
                 }
             }
         }
