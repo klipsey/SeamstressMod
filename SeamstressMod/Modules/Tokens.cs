@@ -26,7 +26,7 @@ namespace SeamstressMod.Modules
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 
         public static string needleKeyword = KeywordText("Needle", $"<color=#9B3737>Needles</color> pierce for <style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style> each. " +
-            $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>.");
+            $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. Hold up to 10 base <color=#9B3737>Needles</color> before auto firing.");
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 

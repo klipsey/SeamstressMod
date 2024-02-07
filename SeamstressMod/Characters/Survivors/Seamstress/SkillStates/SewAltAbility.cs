@@ -20,7 +20,7 @@ namespace SeamstressMod.SkillStates
 
         private Vector3 blinkStart = Vector3.zero;
 
-        public static float baseDuration = 1f;
+        public float baseDuration;
 
         public float exitDuration;
 
@@ -33,17 +33,13 @@ namespace SeamstressMod.SkillStates
         public static string endSoundString = "Play_imp_overlord_teleport_end";
 
         //test sphere collider changing with scale
-        public static float blastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius - 15;
+        public float blastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius;
 
-        public static float empoweredBlastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius - 5;
-
-        public static float blastAttackDamageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
+        public static float blastAttackDamageCoefficient = SeamstressStaticValues.sewAltDamageCoefficient;
 
         public static float blastAttackForce = 50f;
 
         public static float blastAttackProcCoefficient = 1f;
-
-        public static float healthCostFraction = SeamstressStaticValues.reapHealthCost;
 
         private Animator animator;
 
@@ -61,10 +57,26 @@ namespace SeamstressMod.SkillStates
 
         private bool hasBlinked = false;
 
+        private float doThings;
+
         public override void OnEnter()
         {
-            this.exitDuration = (baseDuration / 2) / this.attackSpeedStat;
+            if(base.skillLocator.special.stock > 10)
+            {
+                this.baseDuration = 1f;
+            }
+            else
+            {
+                this.baseDuration = base.skillLocator.special.stock / 10;
+            }
+            this.exitDuration = (this.baseDuration / 2) / this.attackSpeedStat;
             this.destinationAlertDuration = (baseDuration / 2) / this.attackSpeedStat;
+            this.doThings = 0.5f * (base.skillLocator.special.stock / base.skillLocator.special.maxStock);
+            if(this.doThings < 0.1f)
+            {
+                this.doThings = 0.1f;
+            }
+            this.blastAttackRadius *= this.doThings;
             base.OnEnter();
             RefreshState();
             if ((bool)base.cameraTargetParams)
@@ -125,7 +137,7 @@ namespace SeamstressMod.SkillStates
                 EffectData effectData = new EffectData();
                 effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination - blinkStart);
                 effectData.origin = origin;
-                effectData.scale = 0.2f;
+                effectData.scale = doThings;
                 EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: true);
             }
         }
@@ -156,10 +168,6 @@ namespace SeamstressMod.SkillStates
                 {
                     blinkDestinationInstance = Object.Instantiate(SeamstressAssets.blinkDestinationPrefab, blinkDestination, Quaternion.identity);
                     blinkDestinationInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = destinationAlertDuration;
-                    if (empowered)
-                    {
-                        Object.Instantiate(SeamstressAssets.expungeEffect, blinkDestination, Quaternion.identity);
-                    }
                 }
                 SetPosition(blinkDestination);
             }
@@ -188,13 +196,21 @@ namespace SeamstressMod.SkillStates
                 blastAttack.attacker = base.gameObject;
                 blastAttack.inflictor = base.gameObject;
                 blastAttack.teamIndex = TeamComponent.GetObjectTeam(base.gameObject);
-                blastAttack.baseDamage = damageStat * blastAttackDamageCoefficient;
+                blastAttack.baseDamage = damageStat * blastAttackDamageCoefficient * skillLocator.special.stock;
                 blastAttack.baseForce = blastAttackForce;
                 blastAttack.position = blinkDestination;
                 blastAttack.procCoefficient = blastAttackProcCoefficient;
                 blastAttack.radius = blastAttackRadius;
                 blastAttack.damageType = DamageType.Stun1s;
                 blastAttack.AddModdedDamageType(DamageTypes.StitchDamage);
+                if(empowered)
+                {
+                    blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
+                }
+                else
+                {
+                    blastAttack.RemoveModdedDamageType(DamageTypes.CutDamage);
+                }
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                 blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
                 blastAttack.Fire();

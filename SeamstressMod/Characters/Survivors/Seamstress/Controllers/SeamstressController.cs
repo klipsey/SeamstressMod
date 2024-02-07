@@ -26,6 +26,12 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private GameObject endReap = SeamstressAssets.reapEndEffect;
 
+        private float butcheredConversion = 0f;
+
+        private bool hasPlayed = false;
+
+        private bool butchered = false;
+
         public float bd = 0f;
 
         public float leapLength = 0f;
@@ -33,14 +39,6 @@ namespace SeamstressMod.Survivors.Seamstress
         public float butcheredDurationPercent = 0f;
 
         public bool fuckYou = false;
-
-        private float butcheredConversion = 0f;
-
-        private bool hasPlayed = false;
-
-        private bool inLeap = false;
-
-        private bool butchered = false;
 
         public void Awake()
         {
@@ -66,11 +64,18 @@ namespace SeamstressMod.Survivors.Seamstress
                 leapLength -= Time.fixedDeltaTime;
             }
             RecalcNeedles();
+            RecalcPlanarShift();
             LeapEnd();
             CalculateBonusDamage();
             IsButchered();
-            ButcheredSound();
-
+            ButcheredSound();        
+        }
+        private void RecalcPlanarShift()
+        {
+            if (skillLocator.special.skillDef.skillName == "sewAlt")
+            {
+                skillLocator.special.skillDef.stockToConsume = skillLocator.special.stock;
+            }
         }
         private void RecalcNeedles()
         {
@@ -85,13 +90,13 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void LeapEnd()
         {
-            if(skillLocator.secondary.skillOverrides.Any() && !inLeap)
+            if(skillLocator.secondary.skillOverrides.Any() && leapLength <= 0f)
             {
-                inLeap = true;
+                leapLength = 2f;
             }
-            else if(inLeap && characterMotor.isGrounded)
+            else if(leapLength < 0f && characterMotor.isGrounded || !skillLocator.secondary.skillOverrides.Any())
             {
-                inLeap = false;
+                leapLength = 0f;
                 if (base.hasAuthority && skillLocator.secondary.skillOverrides.Any())
                 {
                     skillLocator.secondary.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);

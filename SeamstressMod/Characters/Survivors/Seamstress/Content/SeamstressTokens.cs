@@ -65,7 +65,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Utility
-            Language.Add(prefix + "UTILITY_BLINK_NAME", "Planar Shift");
+            Language.Add(prefix + "UTILITY_BLINK_NAME", "Glimpse of Corruption");
             Language.Add(prefix + "UTILITY_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> applying " + Tokens.stitchPrefix + " to enemies. Gain " 
                 + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <color=#9B3737>Planar Shift</color> becomes <color=#9B3737>Expunge</color>");
 
@@ -75,8 +75,11 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Special
             Language.Add(prefix + "SPECIAL_SEW_NAME", "Threaded Volley");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. Hold up to 10 <color=#9B3737>Needles</color> before auto firing. Gain <color=#9B3737>Needles</color> by tearing "
+            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. Gain <color=#9B3737>Needles</color> by tearing "
                 + Tokens.stitchPrefix + " or killing enemies.");
+
+            Language.Add(prefix + "SPECIAL_SEWALT_NAME", "Planar Shift");
+            Language.Add(prefix + "SPECIAL_SEWALT_DESCRIPTION", $"Temporarily shift into the red plane and reappear dealing <style=cIsDamage>Needlesx{100f * SeamstressStaticValues.sewAltDamageCoefficient}% damage</style> to surrounding enemies.");
             #endregion
 
             #region Achievements
