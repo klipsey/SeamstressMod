@@ -23,11 +23,11 @@ namespace SeamstressMod.Survivors.Seamstress
             string prefix = SeamstressSurvivor.SEAMSTRESS_PREFIX;
 
             string desc = "Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
-             + "< ! > Trimming Slashes is a consistent way to deal damage while full hp." + Environment.NewLine + Environment.NewLine
-             + "< ! > Woven Fate is your main mobility. Apply Cuts to keep the cooldown low." + Environment.NewLine + Environment.NewLine
-             + "< ! > Planar Shift can give you incredible damage through Butchered but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
+             + "< ! > Trimming Slashes is a consistent way to apply Cut while Butchered is inactive." + Environment.NewLine + Environment.NewLine
+             + "< ! > Woven Fate is your main mobility. Use the recast to reposition your self after you leap." + Environment.NewLine + Environment.NewLine
+             + "< ! > Glimpse of Corruption can give you incredible damage through Butchered but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
              + "< ! > Don't forget to heal during Butchered, it can give you incredible burst damage with Expunge." + Environment.NewLine + Environment.NewLine
-             + "< ! > Use Threaded Volley to fire your needles for devestating group damage." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Use Threaded Volley to fire your needles for devestating group damage and healing." + Environment.NewLine + Environment.NewLine;
 
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
