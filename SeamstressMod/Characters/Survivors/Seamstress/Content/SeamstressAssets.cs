@@ -124,10 +124,10 @@ namespace SeamstressMod.Survivors.Seamstress
                 beginSkillCooldownOnSkillEnd = false,
                 mustKeyPress = true,
 
-                isCombatSkill = true,
+                isCombatSkill = false,
                 canceledFromSprinting = false,
                 cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
+                forceSprintDuringState = true,
             });
         }
 

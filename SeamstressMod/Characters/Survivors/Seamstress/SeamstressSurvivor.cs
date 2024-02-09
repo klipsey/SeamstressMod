@@ -258,7 +258,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 mustKeyPress = true,
                 beginSkillCooldownOnSkillEnd = false,
 
-                isCombatSkill = true,
+                isCombatSkill = false,
                 canceledFromSprinting = false,
                 cancelSprintingOnActivation = false,
                 forceSprintDuringState = true,
@@ -370,7 +370,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,
-                cancelSprintingOnActivation = true,
+                cancelSprintingOnActivation = false,
                 forceSprintDuringState = false,
             });
 
@@ -403,7 +403,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,
-                cancelSprintingOnActivation = true,
+                cancelSprintingOnActivation = false,
                 forceSprintDuringState = false,
             });
 
