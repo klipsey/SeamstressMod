@@ -41,7 +41,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float butcheredDuration = 7f;
 
-        internal const float passiveScaling = 0.05f;
+        internal const float passiveScaling = 0.075f;
 
         internal const float needleDamageCoefficient = 1f;
 
