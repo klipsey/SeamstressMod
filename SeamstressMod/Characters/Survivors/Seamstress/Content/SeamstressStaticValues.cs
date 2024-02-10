@@ -7,9 +7,9 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         internal const float trimDamageCoefficient = 2f;
 
-        internal const float trimThirdDamageCoefficient = 3.5f;
+        internal const float trimThirdDamageCoefficient = 3.2f;
 
-        internal const float flurryDamageCoefficient = 2.6f;
+        internal const float flurryDamageCoefficient = 2.4f;
 
         internal const float cutDotDamage = 0.01f;
 
@@ -23,7 +23,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float blinkDamageCoefficient = 5f;
 
-        internal const float sewAltDamageCoefficient = 1.7f;
+        internal const float sewAltDamageCoefficient = 1.2f;
 
         internal const float flurryLifeSteal = 0.1f;
 
@@ -43,7 +43,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float passiveScaling = 0.075f;
 
-        internal const float needleDamageCoefficient = 1f;
+        internal const float needleDamageCoefficient = 0.7f;
 
         internal const float needleProcCoefficient = 0.5f;
 

@@ -51,7 +51,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trimming Slashes");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>. " +
-              " Every 3rd hit " + Tokens.stitchPrefix + $" in an area and deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style>.");
+              " Every 3rd hit strikes at a longer range and " + Tokens.stitchPrefix + $" enemies.");
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Unrelenting Flurry");
             Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>. " +

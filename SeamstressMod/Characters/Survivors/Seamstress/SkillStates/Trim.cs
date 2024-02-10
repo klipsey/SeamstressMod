@@ -54,7 +54,6 @@ namespace SeamstressMod.SkillStates
                     break;
                 case 2:
                     earlyExitPercentTime = 1f;
-                    damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
                     moddedDamageType2 = DamageTypes.StitchDamage;
                     hitStopDuration = 0.1f;
                     swingSoundString = "Play_bandit2_m2_slash";
