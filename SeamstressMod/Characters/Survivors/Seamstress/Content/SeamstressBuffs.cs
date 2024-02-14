@@ -13,6 +13,10 @@ namespace SeamstressMod.Survivors.Seamstress
         public static BuffDef stitchSetup;
 
         public static BuffDef needles;
+
+        public static BuffDef parryStart;
+
+        public static BuffDef parrySuccess;
         public static void Init(AssetBundle assetBundle)
         {
             butchered = Modules.Content.CreateAndAddBuff("ButcheredBuff", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Bandit2/texBuffSuperBleedingIcon.tif").WaitForCompletion(), 
@@ -23,6 +27,11 @@ namespace SeamstressMod.Survivors.Seamstress
                 new Color(155f / 255f, 55f / 255f, 55f / 255f), false, true, false);
             needles = Modules.Content.CreateAndAddBuff("NeedlesBuff", assetBundle.LoadAsset<Sprite>("texNeedleBuffIcon"),
                 Color.white, true, false, false);
+            parryStart = Modules.Content.CreateAndAddBuff("ParryBuff", LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
+                new Color(155f / 255f, 55f / 255f, 55f / 255f), false, false, false);
+            parrySuccess = Modules.Content.CreateAndAddBuff("ParryEndBuff", LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
+                Color.red, false, false, false);
+
         }
     }
 }

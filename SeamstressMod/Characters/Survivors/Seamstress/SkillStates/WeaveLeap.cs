@@ -97,7 +97,7 @@ namespace SeamstressMod.SkillStates
             }
             SmallHop(base.characterMotor, 5f);
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration + dashPrepDuration);
-            base.skillLocator.secondary.SetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            base.skillLocator.special.SetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
         public void CreateDashEffect()
         {

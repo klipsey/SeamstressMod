@@ -59,28 +59,33 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Secondary
-            Language.Add(prefix + "SECONDARY_WEAVE_NAME", "Woven Fate");
-            Language.Add(prefix + "SECONDARY_WEAVE_DESCRIPTION", $"Leap in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveLeapDamageCoefficient}% damage</style>. " +
+            Language.Add(prefix + "SECONDARY_SEW_NAME", "Threaded Volley");
+            Language.Add(prefix + "SECONDARY_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. Gain <color=#9B3737>Needles</color> by tearing "
+                + Tokens.stitchPrefix + " or killing enemies.");
+
+            Language.Add(prefix + "SECONDARY_ALTSEW_NAME", "Planar Shift");
+            Language.Add(prefix + "SECONDARY_ALTSEW_DESCRIPTION", $"Temporarily shift and reappear dealing <style=cIsDamage>Needlesx{100f * SeamstressStaticValues.sewAltDamageCoefficient}% damage</style> to surrounding enemies. " +
+                $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. Consume all <color=#9B3737>Needles</color>.");
+
+            #endregion
+
+            #region 
+            Language.Add(prefix + "UTILITY_WEAVE_NAME", "Woven Fate");
+            Language.Add(prefix + "UTILITY_WEAVE_DESCRIPTION", $"Leap in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveLeapDamageCoefficient}% damage</style>. " +
                 $"Recast in the air to dash dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Both casts apply " + Tokens.stitchPrefix + " on hit enemies.");
             #endregion
 
-            #region Utility
-            Language.Add(prefix + "UTILITY_BLINK_NAME", "Glimpse of Corruption");
-            Language.Add(prefix + "UTILITY_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> applying " + Tokens.stitchPrefix + " to enemies. Gain " 
+            #region Special
+            Language.Add(prefix + "SPECIAL_BLINK_NAME", "Glimpse of Corruption");
+            Language.Add(prefix + "SPECIAL_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> applying " + Tokens.stitchPrefix + " to enemies. Gain "
                 + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <color=#9B3737>Glimpse of Corruption</color> becomes <color=#9B3737>Expunge</color>");
 
-            Language.Add(prefix + "UTILITY_EXPUNGE_NAME", "Expunge");
-            Language.Add(prefix + "UTILITY_EXPUNGE_DESCRIPTION", Tokens.cutPrefix + ". Release stored <style=cIsHealing>healing</style> that you converted during " + Tokens.butcheredPrefix + " as a razor sharp blast of <style=cIsDamage>damage</style>.");
-            #endregion
+            Language.Add(prefix + "SPECAL_EXPUNGE_NAME", "Expunge");
+            Language.Add(prefix + "SPECIAL_EXPUNGE_DESCRIPTION", Tokens.cutPrefix + ". Release stored <style=cIsHealing>healing</style> that you converted during " + Tokens.butcheredPrefix + " as a razor sharp blast of <style=cIsDamage>damage</style>.");
 
-            #region Special
-            Language.Add(prefix + "SPECIAL_SEW_NAME", "Threaded Volley");
-            Language.Add(prefix + "SPECIAL_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. Gain <color=#9B3737>Needles</color> by tearing "
-                + Tokens.stitchPrefix + " or killing enemies.");
-
-            Language.Add(prefix + "SPECIAL_ALTSEW_NAME", "Planar Shift");
-            Language.Add(prefix + "SPECIAL_ALTSEW_DESCRIPTION", $"Temporarily shift and reappear dealing <style=cIsDamage>Needlesx{100f * SeamstressStaticValues.sewAltDamageCoefficient}% damage</style> to surrounding enemies. " +
-                $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. Consume all <color=#9B3737>Needles</color>.");
+            Language.Add(prefix + "SPECIAL_PARRY_NAME", "Glimpse of Purity");
+            Language.Add(prefix + "SPECIAL_PARRY_DESCRIPTION", $"Briefly enter a stance becoming <style=cIsUtility>Invulnerable</style>. If hit, deal <style=cIsDamage>{100f * SeamstressStaticValues.parryDamage}% damage</style> nearby applying " + Tokens.stitchPrefix + ". Also gain " +
+               Tokens.butcheredPrefix + $". During " + Tokens.butcheredPrefix + $", gain base damage as if your health was at 50%.");
             #endregion
 
             #region Achievements

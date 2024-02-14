@@ -57,7 +57,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 bd -= Time.fixedDeltaTime;
             }
-            else if (bd <= 0f && butchered || bd <= 0f && skillLocator.utility == skillLocator.FindSkill("reapRecast"))
+            else if (bd <= 0f && butchered || bd <= 0f && skillLocator.special == skillLocator.FindSkill("reapRecast"))
             {
                 ButcheredEnd();
             }
@@ -74,30 +74,29 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void RecalcNeedles()
         {
-            if(characterBody.GetBuffCount(SeamstressBuffs.needles) < skillLocator.special.stock)
+            if(characterBody.GetBuffCount(SeamstressBuffs.needles) < skillLocator.utility.stock)
             {
                 characterBody.AddBuff(SeamstressBuffs.needles);
             }
-            if(characterBody.GetBuffCount(SeamstressBuffs.needles) > skillLocator.special.stock)
+            if(characterBody.GetBuffCount(SeamstressBuffs.needles) > skillLocator.utility.stock)
             {
                 characterBody.RemoveBuff(SeamstressBuffs.needles);
             }
         }
         private void LeapEnd()
         {
-            if(skillLocator.secondary.skillOverrides.Any() && leapLength <= 0f && !fuck)
+            if(skillLocator.utility.skillOverrides.Any() && leapLength <= 0f && !fuck)
             {
                 fuck = true;
                 leapLength = 2f;
             }
-            else if(leapLength < 0f && (characterMotor.isGrounded || !skillLocator.secondary.skillOverrides.Any()) && fuck)
+            else if(leapLength < 0f && (characterMotor.isGrounded || !skillLocator.utility.skillOverrides.Any()) && fuck)
             {
                 fuck = false;
-                Log.Debug("I worked");
                 leapLength = 0f;
-                if (base.hasAuthority && skillLocator.secondary.skillOverrides.Any())
+                if (base.hasAuthority && skillLocator.utility.skillOverrides.Any())
                 {
-                    skillLocator.secondary.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+                    skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
                 }
             }
         }
@@ -158,11 +157,11 @@ namespace SeamstressMod.Survivors.Seamstress
                     //fire expunge at end of butchered
 
                 }
-                if (skillLocator.utility == skillLocator.FindSkill("reapRecast") && !characterBody.HasBuff(SeamstressBuffs.butchered))
+                if (skillLocator.special == skillLocator.FindSkill("reapRecast") && !characterBody.HasBuff(SeamstressBuffs.butchered))
                 {
                     if (base.hasAuthority)
                     {
-                        skillLocator.utility.ExecuteIfReady();
+                        skillLocator.special.ExecuteIfReady();
                     }
                 }
             }
@@ -184,7 +183,9 @@ namespace SeamstressMod.Survivors.Seamstress
         private void CalculateBonusDamage()
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
-            characterBody.baseDamage = 12f + (healthMissing * SeamstressStaticValues.passiveScaling);
+            float fakeHealthMissing = (healthComponent.fullHealth + healthComponent.fullShield) * 0.5f;
+            if(characterBody.HasBuff(SeamstressBuffs.butchered) && skillLocator.special.skillNameToken == "") characterBody.baseDamage = 12f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
+            else characterBody.baseDamage = 12f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
     }
 }

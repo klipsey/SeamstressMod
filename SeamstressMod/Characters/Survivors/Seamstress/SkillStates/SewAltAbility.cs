@@ -66,8 +66,8 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
             RefreshState();
-            this.stockMultiplier = base.skillLocator.special.stock;
-            base.skillLocator.special.stock = 0;
+            this.stockMultiplier = base.skillLocator.secondary.stock;
+            base.skillLocator.secondary.stock = 0;
             if (this.stockMultiplier > 10)
             {
                 this.baseDuration = 1f;
@@ -75,7 +75,7 @@ namespace SeamstressMod.SkillStates
             }
             else
             {
-                this.doThings = 0.5f * (this.stockMultiplier / base.skillLocator.special.maxStock);
+                this.doThings = 0.5f * (this.stockMultiplier / base.skillLocator.secondary.maxStock);
                 this.baseDuration = this.stockMultiplier / 10;
             }
             this.exitDuration = (this.baseDuration / 2);

@@ -121,8 +121,7 @@ namespace SeamstressMod.SkillStates
                     healthComponent.TakeDamage(damageInfo);
                     healthComponent.AddBarrier(currentBarrier);
                     characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
-                    characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
-                    this.skillLocator.utility = skillLocator.FindSkill("reapRecast");
+                    this.skillLocator.special = skillLocator.FindSkill("reapRecast");
                 }
 
                 Util.PlaySound(endSoundString, base.gameObject);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using TMPro;
 
 namespace SeamstressMod.Survivors.Seamstress
@@ -43,9 +44,12 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float passiveScaling = 0.075f;
 
+        internal const float parryDamage = 7f;
+
         internal const float needleDamageCoefficient = 0.7f;
 
         internal const float needleProcCoefficient = 0.5f;
 
+        internal const float parryDuration = 0.5f;
     }
 }

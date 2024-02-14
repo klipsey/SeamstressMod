@@ -101,9 +101,9 @@ namespace SeamstressMod.Survivors.Seamstress
                         victim.TakeDamage(cutsume);
                         DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                     }
-                    if (attackerBody.skillLocator.special.stock < attackerBody.skillLocator.special.maxStock)
+                    if (attackerBody.skillLocator.secondary.stock < attackerBody.skillLocator.secondary.maxStock)
                     {
-                        attackerBody.skillLocator.special.AddOneStock();
+                        attackerBody.skillLocator.secondary.AddOneStock();
                         Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
                     }
                     else
@@ -125,7 +125,6 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(CutDamage))
                 {
-
                     if (damageReport.victimIsBoss)
                     {
                         DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
@@ -160,9 +159,9 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 if(attackerBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
-                    if (attackerBody.skillLocator.special.stock < attackerBody.skillLocator.special.maxStock)
+                    if (attackerBody.skillLocator.secondary.stock < attackerBody.skillLocator.secondary.maxStock)
                     {
-                        attackerBody.skillLocator.special.AddOneStock();
+                        attackerBody.skillLocator.secondary.AddOneStock();
                         Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
                     }
                     else

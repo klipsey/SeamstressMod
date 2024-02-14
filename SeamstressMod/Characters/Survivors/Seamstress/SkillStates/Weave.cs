@@ -81,7 +81,7 @@ namespace SeamstressMod.SkillStates
                 hitSound = "Play_bandit2_m2_impact";
             }
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration);
-            skillLocator.secondary.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
         public void CreateDashEffect()
         {
