@@ -22,7 +22,7 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         //todo guide
         //used to load the assetbundle for this character. must be unique
-        public override string assetBundleName => "henryassets"; //if you do not change this, you are giving permission to deprecate the mod
+        public override string assetBundleName => "seamstressassets"; //if you do not change this, you are giving permission to deprecate the mod
 
         //the name of the prefab we will create. conventionally ending in "Body". must be unique
         public override string bodyName => "SeamstressBody"; //if you do not change this, you get the point by now
@@ -31,8 +31,8 @@ namespace SeamstressMod.Survivors.Seamstress
         public override string masterName => "SeamstressMonsterMaster"; //if you do not
 
         //the names of the prefabs you set up in unity that we will use to build your character
-        public override string modelPrefabName => "mdlHenry";
-        public override string displayPrefabName => "HenryDisplay";
+        public override string modelPrefabName => "mdlSeamstress";
+        public override string displayPrefabName => "SeamstressDisplay";
 
         public const string SEAMSTRESS_PREFIX = SeamstressPlugin.DEVELOPER_PREFIX + "_SEAMSTRESS_";
 
