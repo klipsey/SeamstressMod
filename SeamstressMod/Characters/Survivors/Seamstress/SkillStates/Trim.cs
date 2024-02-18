@@ -19,7 +19,7 @@ namespace SeamstressMod.SkillStates
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
-            baseDuration = 1f;
+            baseDuration = 1.15f;
             moddedDamageType = DamageTypes.Empty;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;

@@ -40,7 +40,7 @@ namespace SeamstressMod.SkillStates
             }
             if(!isGrounded)
             {
-                SmallHop(characterMotor, 3f);
+                SmallHop(characterMotor, 2f);
             }
             PlayAttackAnimation();
             Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);

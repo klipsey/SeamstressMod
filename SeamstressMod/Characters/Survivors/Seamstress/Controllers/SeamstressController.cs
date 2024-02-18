@@ -14,7 +14,7 @@ using TMPro;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
-    public class SeamstressController : NetworkBehaviour
+    public class SeamstressController : MonoBehaviour
     {
         private CharacterBody characterBody;
 
@@ -32,56 +32,35 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private bool butchered = false;
 
-        public float bd = 0f;
+        private float leapLength = 0f;
 
-        public float leapLength = 0f;
-
-        public float butcheredDurationPercent = 0f;
+        private float bd = 0f;
 
         public bool fuckYou = false;
 
-        public bool fuck = false;
+        private bool fuck = false;
 
-        private void Awake()
+        public void Awake()
         {
             characterBody = base.GetComponent<CharacterBody>();
             characterMotor = base.GetComponent<CharacterMotor>();
             healthComponent = base.GetComponent<HealthComponent>();
             skillLocator = base.GetComponent<SkillLocator>();
-            butcheredDurationPercent = bd / 10f;
         }
-        private void FixedUpdate()
+        public void FixedUpdate()
         {
-            //stopwatch
-            if (bd > 0f)
-            {
-                bd -= Time.fixedDeltaTime;
-            }
-            else if (bd <= 0f && butchered || bd <= 0f && skillLocator.special == skillLocator.FindSkill("reapRecast"))
-            {
-                ButcheredEnd();
-            }
             if(leapLength > 0f) 
             {
                 leapLength -= Time.fixedDeltaTime;
-                Log.Debug(leapLength + " uuh is this working?");
             }
-            RecalcNeedles();
+            if(bd > 0f)
+            {
+                bd -= Time.fixedDeltaTime;
+            }
             LeapEnd();
             CalculateBonusDamage();
             IsButchered();
             ButcheredSound();        
-        }
-        private void RecalcNeedles()
-        {
-            if(characterBody.GetBuffCount(SeamstressBuffs.needles) < skillLocator.utility.stock)
-            {
-                characterBody.AddBuff(SeamstressBuffs.needles);
-            }
-            if(characterBody.GetBuffCount(SeamstressBuffs.needles) > skillLocator.utility.stock)
-            {
-                characterBody.RemoveBuff(SeamstressBuffs.needles);
-            }
         }
         private void LeapEnd()
         {
@@ -94,21 +73,10 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 fuck = false;
                 leapLength = 0f;
-                if (base.hasAuthority && skillLocator.utility.skillOverrides.Any())
+                if (skillLocator.utility.skillOverrides.Any())
                 {
                     skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
                 }
-            }
-        }
-        public float getButcheredValues(bool percentOrStopwatch)
-        {
-            if(percentOrStopwatch)
-            {
-                return butcheredDurationPercent;
-            }
-            else
-            {
-                return bd;
             }
         }
         public float GetButcheredConversion()
@@ -124,10 +92,9 @@ namespace SeamstressMod.Survivors.Seamstress
         //needle regen
         private void IsButchered()
         {
-            if (characterBody.HasBuff(SeamstressBuffs.butchered) && !butchered)
+            if (fuckYou && !butchered)
             {
                 bd = SeamstressStaticValues.butcheredDuration;
-                butcheredDurationPercent = bd / 10f;
                 butchered = true;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
@@ -143,33 +110,22 @@ namespace SeamstressMod.Survivors.Seamstress
                     #endregion
                 }
             }
-        }
-        private void ButcheredEnd()
-        {
-            if(characterBody && characterBody.master)
+            else if (!fuckYou && butchered)
             {
-                if (!characterBody.HasBuff(SeamstressBuffs.butchered) && butchered)
+                butchered = false;
+                UnityEngine.Object.Instantiate<GameObject>(endReap, characterBody.modelLocator.transform);
+                Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
+                //fire expunge at end of butchered
+                if (skillLocator.special == skillLocator.FindSkill("reapRecast"))
                 {
-                    butchered = false;
-                    fuckYou = false;
-                    UnityEngine.Object.Instantiate<GameObject>(endReap, characterBody.modelLocator.transform);
-                    Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
-                    //fire expunge at end of butchered
-
-                }
-                if (skillLocator.special == skillLocator.FindSkill("reapRecast") && !characterBody.HasBuff(SeamstressBuffs.butchered))
-                {
-                    if (base.hasAuthority)
-                    {
-                        skillLocator.special.ExecuteIfReady();
-                    }
+                    skillLocator.special.ExecuteIfReady();
                 }
             }
         }
         //butchered end sound
         private void ButcheredSound()
         {
-            if (characterBody.HasBuff(SeamstressBuffs.butchered))
+            if (fuckYou)
             {
                 if (bd < 2f && !hasPlayed)
                 {
@@ -177,15 +133,18 @@ namespace SeamstressMod.Survivors.Seamstress
                     hasPlayed = true;
                 }
             }
-            hasPlayed = false;
+            else
+            {
+                hasPlayed = false;
+            }
         }
         //passive damage
         private void CalculateBonusDamage()
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
             float fakeHealthMissing = (healthComponent.fullHealth + healthComponent.fullShield) * 0.5f;
-            if(characterBody.HasBuff(SeamstressBuffs.butchered) && skillLocator.special.skillNameToken == "") characterBody.baseDamage = 12f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
-            else characterBody.baseDamage = 12f + (healthMissing * SeamstressStaticValues.passiveScaling);
+            if(fuckYou && skillLocator.special.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_PARRY_NAME") characterBody.baseDamage = 10f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
+            else characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
     }
 }

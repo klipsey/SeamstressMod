@@ -22,7 +22,7 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         //todo guide
         //used to load the assetbundle for this character. must be unique
-        public override string assetBundleName => "seamstressassets"; //if you do not change this, you are giving permission to deprecate the mod
+        public override string assetBundleName => "henryassets"; //if you do not change this, you are giving permission to deprecate the mod
 
         //the name of the prefab we will create. conventionally ending in "Body". must be unique
         public override string bodyName => "SeamstressBody"; //if you do not change this, you get the point by now
@@ -31,8 +31,8 @@ namespace SeamstressMod.Survivors.Seamstress
         public override string masterName => "SeamstressMonsterMaster"; //if you do not
 
         //the names of the prefabs you set up in unity that we will use to build your character
-        public override string modelPrefabName => "mdlSeamstress";
-        public override string displayPrefabName => "SeamstressDisplay";
+        public override string modelPrefabName => "mdlHenry";
+        public override string displayPrefabName => "HenryDisplay";
 
         public const string SEAMSTRESS_PREFIX = SeamstressPlugin.DEVELOPER_PREFIX + "_SEAMSTRESS_";
 
@@ -141,6 +141,7 @@ namespace SeamstressMod.Survivors.Seamstress
             AddHitboxes();
             bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.stitchSetup);
             bodyPrefab.AddComponent<SeamstressController>();
+            bodyPrefab.AddComponent<NeedleController>();
             TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
@@ -424,7 +425,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 8f,
+                baseRechargeInterval = 7f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -575,6 +576,10 @@ namespace SeamstressMod.Survivors.Seamstress
                 temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
                 temporaryOverlay.AddToCharacerModel(self);
                 s.fuckYou = true;
+            }
+            else if(!self.body.HasBuff(SeamstressBuffs.butchered) && s.fuckYou == true)
+            {
+                s.fuckYou = false;
             }
         }
         //calculate expunge healing

@@ -19,7 +19,7 @@ namespace SeamstressMod.SkillStates
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
-            baseDuration = 1f;
+            baseDuration = 1.5f;
             moddedDamageType = DamageTypes.FlurryLifeSteal;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
@@ -30,7 +30,7 @@ namespace SeamstressMod.SkillStates
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             earlyExitPercentTime = 0.5f;
-            hitStopDuration = 0.05f;
+            hitStopDuration = 0.2f;
             attackRecoil = 0.75f;
             hitHopVelocity = 3.5f;
 

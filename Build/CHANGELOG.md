@@ -1,3 +1,12 @@
+# 0.1.10
+- Flurry is stronger but slower
+- NETWORKING FIXED AGAIN
+- Needles no longer auto fire. Git gud.
+# 0.1.9
+- Ability slot locations changed to make more sense.
+- Added Glimpse of Purity.
+- Slower swing speed on both primaries
+- Probably other stuff?
 # 0.1.7
 - Alt special added
 - Woven Fate has a 2 second grace period for recasting if you are on the ground

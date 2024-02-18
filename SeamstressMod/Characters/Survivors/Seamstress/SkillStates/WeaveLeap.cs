@@ -97,7 +97,7 @@ namespace SeamstressMod.SkillStates
             }
             SmallHop(base.characterMotor, 5f);
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration + dashPrepDuration);
-            base.skillLocator.special.SetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            base.skillLocator.utility.SetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
         public void CreateDashEffect()
         {
@@ -178,7 +178,6 @@ namespace SeamstressMod.SkillStates
             base.characterMotor.Motor.RebuildCollidableLayers();
             base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
             base.characterMotor.airControl = previousAirControl;
-            base.characterBody.isSprinting = false;
             if (!empowered) Util.PlaySound("Play_item_proc_whip", gameObject);
             if (base.isAuthority)
             {

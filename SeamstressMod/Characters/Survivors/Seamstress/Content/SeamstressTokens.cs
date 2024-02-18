@@ -45,7 +45,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "Stitched Heart");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health missing. ");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health or shield missing. ");
             #endregion
 
             #region Primary
@@ -64,12 +64,12 @@ namespace SeamstressMod.Survivors.Seamstress
                 + Tokens.stitchPrefix + " or killing enemies.");
 
             Language.Add(prefix + "SECONDARY_ALTSEW_NAME", "Planar Shift");
-            Language.Add(prefix + "SECONDARY_ALTSEW_DESCRIPTION", $"Temporarily shift and reappear dealing <style=cIsDamage>Needlesx{100f * SeamstressStaticValues.sewAltDamageCoefficient}% damage</style> to surrounding enemies. " +
+            Language.Add(prefix + "SECONDARY_ALTSEW_DESCRIPTION", $"Temporarily shift and reappear dealing <style=cIsDamage>NeedleAmountx{100f * SeamstressStaticValues.sewAltDamageCoefficient}% damage</style> to surrounding enemies. " +
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. Consume all <color=#9B3737>Needles</color>.");
 
             #endregion
 
-            #region 
+            #region Utility 
             Language.Add(prefix + "UTILITY_WEAVE_NAME", "Woven Fate");
             Language.Add(prefix + "UTILITY_WEAVE_DESCRIPTION", $"Leap in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveLeapDamageCoefficient}% damage</style>. " +
                 $"Recast in the air to dash dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Both casts apply " + Tokens.stitchPrefix + " on hit enemies.");
@@ -80,12 +80,12 @@ namespace SeamstressMod.Survivors.Seamstress
             Language.Add(prefix + "SPECIAL_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> applying " + Tokens.stitchPrefix + " to enemies. Gain "
                 + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <color=#9B3737>Glimpse of Corruption</color> becomes <color=#9B3737>Expunge</color>");
 
-            Language.Add(prefix + "SPECAL_EXPUNGE_NAME", "Expunge");
+            Language.Add(prefix + "SPECIAL_EXPUNGE_NAME", "Expunge");
             Language.Add(prefix + "SPECIAL_EXPUNGE_DESCRIPTION", Tokens.cutPrefix + ". Release stored <style=cIsHealing>healing</style> that you converted during " + Tokens.butcheredPrefix + " as a razor sharp blast of <style=cIsDamage>damage</style>.");
 
             Language.Add(prefix + "SPECIAL_PARRY_NAME", "Glimpse of Purity");
             Language.Add(prefix + "SPECIAL_PARRY_DESCRIPTION", $"Briefly enter a stance becoming <style=cIsUtility>Invulnerable</style>. If hit, deal <style=cIsDamage>{100f * SeamstressStaticValues.parryDamage}% damage</style> nearby applying " + Tokens.stitchPrefix + ". Also gain " +
-               Tokens.butcheredPrefix + $". During " + Tokens.butcheredPrefix + $", gain base damage as if your health was at 50%.");
+               Tokens.butcheredPrefix + $". During " + Tokens.butcheredPrefix + $", gain base damage as if your health was at <style=cIsHealth>50%</style>.");
             #endregion
 
             #region Achievements

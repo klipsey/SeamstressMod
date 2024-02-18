@@ -65,6 +65,8 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static NetworkSoundEventDef scissorsHitSoundEvent;
 
         internal static NetworkSoundEventDef sewHitSoundEvent;
+
+        internal static NetworkSoundEventDef parrySuccessSoundEvent;
         //icons
         internal static Sprite primary;
 
@@ -94,6 +96,8 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_bandit2_m2_impact");
 
             sewHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_imp_overlord_attack2_tell");
+
+            parrySuccessSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_voidman_m2_explode");
 
             CreateEffects();
 

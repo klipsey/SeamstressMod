@@ -18,9 +18,9 @@ namespace SeamstressMod.SkillStates
         public static GameObject _expungeEffect3 = SeamstressAssets.expungeSlashEffect2;
         public static GameObject _expungeEffect4 = SeamstressAssets.expungeSlashEffect3;
 
-        public static string enterSoundString = "";
+        public static string enterSoundString = "Play_bandit2_m2_impact";
 
-        public static NetworkSoundEventDef parrySoundDef = SeamstressAssets.scissorsHitSoundEvent;
+        public static NetworkSoundEventDef parrySoundDef = SeamstressAssets.parrySuccessSoundEvent;
 
         public static float duration = SeamstressStaticValues.parryDuration;
 
@@ -88,6 +88,13 @@ namespace SeamstressMod.SkillStates
         private void DoAttackServer()
         {
             bool num = base.characterBody.HasBuff(SeamstressBuffs.parrySuccess);
+            if (num)
+            {
+                UnityEngine.Object.Instantiate<GameObject>(_expungeEffect, transform);
+                UnityEngine.Object.Instantiate<GameObject>(_expungeEffect2, transform);
+                UnityEngine.Object.Instantiate<GameObject>(_expungeEffect3, transform);
+                UnityEngine.Object.Instantiate<GameObject>(_expungeEffect4, transform);
+            }
             if (!NetworkServer.active || !num)
             {
                 return;
@@ -102,10 +109,6 @@ namespace SeamstressMod.SkillStates
                     EffectManager.SimpleSoundEffect(parrySoundDef.index, base.characterBody.corePosition, transmit: true);
                 }
             }
-            UnityEngine.Object.Instantiate<GameObject>(_expungeEffect, transform);
-            UnityEngine.Object.Instantiate<GameObject>(_expungeEffect2, transform);
-            UnityEngine.Object.Instantiate<GameObject>(_expungeEffect3, transform);
-            UnityEngine.Object.Instantiate<GameObject>(_expungeEffect4, transform);
             BlastAttack blastAttack = new BlastAttack();
             blastAttack.attacker = base.gameObject;
             blastAttack.inflictor = base.gameObject;
