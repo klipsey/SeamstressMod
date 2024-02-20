@@ -20,7 +20,7 @@ namespace SeamstressMod.SkillStates
         protected GameObject hitEffectPrefab;
         public bool hasHit { get; private set; }
 
-        public static float dashPrepDuration = 0.4f;
+        public static float dashPrepDuration = 0.35f;
 
         public static float speedCoefficient = 100f;
 
@@ -121,7 +121,6 @@ namespace SeamstressMod.SkillStates
                 isDashing = true;
                 direction = GetAimRay().direction;
                 CreateDashEffect();
-                //PlayCrossfade("FullBody, Override", "AssaulterLoop", 0.1f);
                 base.characterBody.isSprinting = true;
                 direction.y = Mathf.Max(direction.y, minimumY);
                 Vector3 vector = direction.normalized * aimVelocity * 3 * (moveSpeedStat * 0.25f);

@@ -57,7 +57,7 @@ namespace SeamstressMod.Survivors.Seamstress
             maxHealth = 160f,
             healthRegen = 1f,
             armor = 0f,
-            damage = 10f,
+            damage = 8f,
 
             damageGrowth = 0f,
             healthGrowth = 160f * 0.3f,
@@ -239,7 +239,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Sew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword, Tokens.stitchKeyword, Tokens.cutKeyword },
+                keywordTokens = new string[] { Tokens.needleKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
@@ -272,7 +272,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "SewAlt",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_ALTSEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_ALTSEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword, Tokens.stitchKeyword, Tokens.cutKeyword },
+                keywordTokens = new string[] { Tokens.needleKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SewAltAbility)),
@@ -294,11 +294,44 @@ namespace SeamstressMod.Survivors.Seamstress
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
+                cancelSprintingOnActivation = true,
                 forceSprintDuringState = false,
             });
 
             Skills.AddSecondarySkills(bodyPrefab, sewAltSkillDef);
+
+            SkillDef Clip = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "Clip",
+                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.needleKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texStingerIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Clip)),
+
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseMaxStock = SeamstressStaticValues.maxNeedleAmount,
+                baseRechargeInterval = SeamstressStaticValues.needleGainInterval,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 0,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = false,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = true,
+                forceSprintDuringState = false,
+            });
+
+            Skills.AddSecondarySkills(bodyPrefab, Clip);
 
         }
 
@@ -384,7 +417,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_EXPUNGE_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_EXPUNGE_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.cutKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
                 activationStateMachineName = "Weapon2",
@@ -620,6 +653,16 @@ namespace SeamstressMod.Survivors.Seamstress
             else if(!self.body.HasBuff(SeamstressBuffs.butchered) && s.fuckYou == true)
             {
                 s.fuckYou = false;
+            }
+            if(self.body.HasBuff(SeamstressBuffs.parryStart))
+            {
+                TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
+                temporaryOverlay.duration = 0.4f;
+                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                temporaryOverlay.animateShaderAlpha = true;
+                temporaryOverlay.destroyComponentOnEnd = true;
+                temporaryOverlay.originalMaterial = SeamstressAssets.parryMat;
+                temporaryOverlay.AddToCharacerModel(self);
             }
         }
         //calculate expunge healing

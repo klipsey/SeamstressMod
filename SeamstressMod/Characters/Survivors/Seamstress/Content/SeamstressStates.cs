@@ -10,6 +10,12 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Modules.Content.AddEntityState(typeof(Flurry));
 
+            Modules.Content.AddEntityState(typeof(Sew));
+
+            Modules.Content.AddEntityState(typeof(SewAltAbility));
+
+            Modules.Content.AddEntityState(typeof(Clip));
+
             Modules.Content.AddEntityState(typeof(WeaveLeap));
             Modules.Content.AddEntityState(typeof(Weave));
 
@@ -18,11 +24,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Modules.Content.AddEntityState(typeof(Parry));
             Modules.Content.AddEntityState(typeof(ParryDash));
-
-            Modules.Content.AddEntityState(typeof(Sew));
-
-            Modules.Content.AddEntityState(typeof(SewAltAbility));
-
         }
     }
 }

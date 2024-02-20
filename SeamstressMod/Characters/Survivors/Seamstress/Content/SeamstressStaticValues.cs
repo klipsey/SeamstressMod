@@ -22,15 +22,17 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float weaveDamageCoefficient = 2.6f;
 
-        internal const float blinkDamageCoefficient = 4f;
+        internal const float clipDamageCoefficient = 0.5f;
 
-        internal const float planarLifeSteal = 0.25f;
+        internal const float blinkDamageCoefficient = 4f;
 
         internal const float cutDuration = 3f;
 
         internal const float reapHealthCost = 0.5f;
 
         internal const float needleHealAmount = 0.15f;
+
+        internal const float planarLifeSteal = 0.25f;
         //1-0.25f but i was too lazy oops
         internal const float healConversion = 0.25f;
 
@@ -40,7 +42,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float butcheredDuration = 10f;
 
-        internal const float passiveScaling = 0.075f;
+        internal const float passiveScaling = 0.1f;
 
         internal const float parryDamage = 3.5f;
 

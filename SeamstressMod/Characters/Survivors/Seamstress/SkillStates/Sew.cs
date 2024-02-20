@@ -18,16 +18,15 @@ namespace SeamstressMod.SkillStates
 
         public static GameObject boringEffect = SeamstressAssets.sewEffect;
 
-        private float needleCompareDelay = 0.1f;
-        private float needleDelay;
-        private bool hasLaunched;
+        private float baseDuration = 0.2f;
+        private bool hasFired;
         private Ray aimRay;
         private float duration;
         public override void OnEnter()
         {
             base.OnEnter();
             RefreshState();
-            this.duration = (needleCompareDelay / attackSpeedStat);
+            this.duration = (baseDuration / attackSpeedStat);
             if (empowered)
             {
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
@@ -48,28 +47,24 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            needleDelay += Time.fixedDeltaTime;
-            if (!hasLaunched)
+            if (base.fixedAge >= duration && !hasFired)
             {
-                if (needleDelay >= needleCompareDelay / attackSpeedStat)
+                if(base.isAuthority) 
                 {
-                    if(base.isAuthority) 
-                    {
-                        aimRay = base.GetAimRay();
-                        ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.needleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
-                    }
-                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
-                    needleCompareDelay += (0.1f / attackSpeedStat);
+                    aimRay = base.GetAimRay();
+                    ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.needleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
+                hasFired = true;
                 }
+                Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
             }
-            if(base.fixedAge >= duration && base.isAuthority) 
+            if(base.fixedAge >= duration && hasFired && base.isAuthority) 
             {
                 this.outer.SetNextStateToMain();
             }
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            if (needleDelay >= this.duration)
+            if (base.fixedAge >= duration)
             {
                 return InterruptPriority.Any;
             }

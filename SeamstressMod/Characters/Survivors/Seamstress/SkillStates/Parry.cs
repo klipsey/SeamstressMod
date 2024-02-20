@@ -20,8 +20,6 @@ namespace SeamstressMod.SkillStates
 
         public static float invulnDuration = SeamstressStaticValues.parryDuration * 1.25f;
 
-        private bool hasFiredServer;
-
         public override void OnEnter()
         {
             base.OnEnter();
@@ -81,7 +79,6 @@ namespace SeamstressMod.SkillStates
             SeamstressController s = characterBody.GetComponent<SeamstressController>();
             s.fuckYou = false;
             CleanBuffsServer();
-            hasFiredServer = true;
             if (parrySoundDef)
             {
                 EffectManager.SimpleSoundEffect(parrySoundDef.index, base.characterBody.corePosition, transmit: true);

@@ -7,6 +7,7 @@ using SeamstressMod.Survivors.Seamstress;
 using R2API;
 using UnityEngine.Networking;
 using EntityStates;
+using UnityEngine.Networking.Match;
 
 namespace SeamstressMod.SkillStates
 {
@@ -17,7 +18,7 @@ namespace SeamstressMod.SkillStates
 
         public static GameObject blinkPrefab;
 
-        private float stopwatch;
+        private CameraTargetParams.AimRequest request;
 
         private float healthCostFraction = 0.5f;
 
@@ -51,29 +52,45 @@ namespace SeamstressMod.SkillStates
             base.OnEnter();
             Util.PlaySound(beginSoundString, base.gameObject);
             modelTransform = GetModelTransform();
-            if ((bool)modelTransform)
+            if (modelTransform)
             {
                 characterModel = modelTransform.GetComponent<CharacterModel>();
                 hurtboxGroup = modelTransform.GetComponent<HurtBoxGroup>();
                 animator = modelTransform.GetComponent<Animator>();
             }
-            if ((bool)characterModel)
+            if (characterModel)
             {
                 characterModel.invisibilityCount++;
             }
-            if ((bool)hurtboxGroup)
+            if (hurtboxGroup)
             {
                 HurtBoxGroup hurtBoxGroup = hurtboxGroup;
                 int hurtBoxesDeactivatorCounter = hurtBoxGroup.hurtBoxesDeactivatorCounter + 1;
                 hurtBoxGroup.hurtBoxesDeactivatorCounter = hurtBoxesDeactivatorCounter;
             }
+            if (base.cameraTargetParams)
+            {
+                request = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
+            }
             blinkVector = GetBlinkVector();
+            if (blinkVector.sqrMagnitude < Mathf.Epsilon)
+            {
+                blinkVector = base.inputBank.aimDirection;
+            }
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
         }
 
         protected virtual Vector3 GetBlinkVector()
         {
-            return ((base.inputBank.moveVector == Vector3.zero) ? base.transform.position : base.inputBank.moveVector).normalized;
+            Vector3 aimDirection = base.inputBank.aimDirection;
+            aimDirection.y = 0f;
+            Vector3 axis = -Vector3.Cross(Vector3.up, aimDirection);
+            float num = Vector3.Angle(base.inputBank.aimDirection, aimDirection);
+            if (base.inputBank.aimDirection.y < 0f)
+            {
+                num = 0f - num;
+            }
+            return Vector3.Normalize(Quaternion.AngleAxis(num, axis) * base.inputBank.moveVector);
         }
         private void CreateBlinkEffect(Vector3 origin)
         {
@@ -90,13 +107,11 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            stopwatch += Time.fixedDeltaTime;
             if ((bool)base.characterMotor && (bool)base.characterDirection)
             {
-                base.characterMotor.velocity = Vector3.zero;
                 base.characterMotor.rootMotion += blinkVector * (speedCoefficient * Time.fixedDeltaTime);
             }
-            if (stopwatch >= duration && base.isAuthority)
+            if (base.fixedAge >= duration && base.isAuthority)
             {
                 outer.SetNextStateToMain();
             }
@@ -160,19 +175,28 @@ namespace SeamstressMod.SkillStates
                     blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
                     blastAttack.Fire();
                 }
-                if ((bool)characterModel)
+                if (characterModel)
                 {
                     characterModel.invisibilityCount--;
                 }
-                if ((bool)hurtboxGroup)
+                if (hurtboxGroup)
                 {
                     HurtBoxGroup hurtBoxGroup = hurtboxGroup;
                     int hurtBoxesDeactivatorCounter = hurtBoxGroup.hurtBoxesDeactivatorCounter - 1;
                     hurtBoxGroup.hurtBoxesDeactivatorCounter = hurtBoxesDeactivatorCounter;
                 }
-                if ((bool)base.characterMotor)
+                if (base.characterMotor)
                 {
                     base.characterMotor.disableAirControlUntilCollision = false;
+                }
+                if(base.cameraTargetParams)
+                {
+                    request.Dispose();
+                }
+                if(base.isAuthority) 
+                {
+                    base.characterMotor.velocity *= 0.3f;
+                    SmallHop(base.characterMotor, 3f);
                 }
             }
             base.OnExit();

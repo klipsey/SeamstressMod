@@ -17,7 +17,7 @@ namespace SeamstressMod.SkillStates
 
         public static GameObject supaPrefab = SeamstressAssets.blinkPrefab;
 
-        protected GameObject hitEffectPrefab;
+        protected GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
         public bool hasHit { get; private set; }
 
         public static float speedCoefficient = 100f;
@@ -166,8 +166,8 @@ namespace SeamstressMod.SkillStates
             {
                 base.characterMotor.disableAirControlUntilCollision = false;
                 base.characterMotor.airControl = 0.25f;
-                base.characterMotor.velocity *= 0.1f;
-                SmallHop(base.characterMotor, 5f);
+                base.characterMotor.velocity *= 0.3f;
+                SmallHop(base.characterMotor, 3f);
             }
             aimRequest?.Dispose();
             //PlayAnimation("FullBody, Override", "EvisLoopExit");

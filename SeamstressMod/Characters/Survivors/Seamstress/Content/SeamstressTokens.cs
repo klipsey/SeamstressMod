@@ -64,9 +64,13 @@ namespace SeamstressMod.Survivors.Seamstress
             $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>.");
 
             Language.Add(prefix + "SECONDARY_ALTSEW_NAME", "Planar Shift");
-            Language.Add(prefix + "SECONDARY_ALTSEW_DESCRIPTION", $"Temporarily shift and reappear dealing <style=cIsDamage>NeedleAmountx{100f * SeamstressStaticValues.sewAltDamageCoefficient}% damage</style> to surrounding enemies. " +
-                $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>. Consume all <color=#9B3737>Needles</color>.");
+            Language.Add(prefix + "SECONDARY_ALTSEW_DESCRIPTION", $"Consume all <color=#9B3737>Needles</color>. Temporarily shift and reappear dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewAltDamageCoefficient}% damage</style>" +
+                $" per <color=#9B3737>Needle</color> to surrounding enemies. " +
+                $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.planarLifeSteal}% of the damage dealt</style>.");
 
+            Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", $"Consume all <color=#9B3737>Needles</color>. Snip in front for every 2 <color=#9B3737>Needles</color> consumed dealing <style=cIsDamage>{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style> per hit." +
+                $" <color=#9B3737>Needles</color> that can't be consumed increase damage instead. <style=cIsHealing>Heal for {100f * SeamstressStaticValues.planarLifeSteal}% of the damage dealt</style>.");
             #endregion
 
             #region Utility 

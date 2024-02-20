@@ -35,7 +35,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject sewButcheredEffect;
 
-        internal static GameObject scissorsComboSwingEffect;
+        //internal static GameObject scissorsComboSwingEffect;
 
         internal static GameObject scissorsButcheredComboSwingEffect;
 
@@ -60,6 +60,8 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static Material destealthMaterial;
 
         internal static Material butcheredOverlayMat;
+
+        internal static Material parryMat;
         //particle overlay effects
         internal static GameObject stitchEffect;
         //networked hit sounds
@@ -166,6 +168,8 @@ namespace SeamstressMod.Survivors.Seamstress
             butcheredOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
 
             destealthMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpBossDissolve.mat").WaitForCompletion();
+
+            parryMat = Addressables.LoadAssetAsync<Material>("RoR2/Base/CritOnUse/matFullCrit.mat").WaitForCompletion();
 
             blinkPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("BlinkStart");
             blinkPrefab.AddComponent<NetworkIdentity>();

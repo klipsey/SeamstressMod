@@ -127,13 +127,13 @@ namespace SeamstressMod.Survivors.Seamstress
                     if(skillLocator.special.ExecuteIfReady())
                     {
                         hasFired = true;
+                        butcheredConversion = characterBody.damage;
                     }
                 }
                 else if(!fuckYou && skillLocator.special != skillLocator.FindSkill("reapRecast"))
                 {
                     hasFired = true;
                 }
-                butcheredConversion = characterBody.damage;
             }
 
         }
@@ -155,8 +155,8 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
             float fakeHealthMissing = (healthComponent.fullHealth + healthComponent.fullShield) * 0.5f;
-            if(fuckYou && skillLocator.special.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_PARRY_NAME") characterBody.baseDamage = 10f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
-            else characterBody.baseDamage = 10f + (healthMissing * SeamstressStaticValues.passiveScaling);
+            if(fuckYou && skillLocator.special.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_PARRY_NAME") characterBody.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
+            else characterBody.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
     }
 }
