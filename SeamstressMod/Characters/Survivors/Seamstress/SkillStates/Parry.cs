@@ -1,34 +1,24 @@
-﻿
-
-// Parry, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// Parry.ParryStrike
-using EntityStates;
+﻿using EntityStates;
 using R2API;
 using RoR2;
+using SeamstressMod.Modules.BaseStates;
 using SeamstressMod.Survivors.Seamstress;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace SeamstressMod.SkillStates
 {
-    public class Parry : BaseState
+    public class Parry : BaseSeamstressSkillState
     {
-        public static GameObject _expungeEffect = SeamstressAssets.expungeEffect;
-        public static GameObject _expungeEffect2 = SeamstressAssets.expungeSlashEffect;
-        public static GameObject _expungeEffect3 = SeamstressAssets.expungeSlashEffect2;
-        public static GameObject _expungeEffect4 = SeamstressAssets.expungeSlashEffect3;
+        public static NetworkSoundEventDef parrySoundDef = SeamstressAssets.parrySuccessSoundEvent;
 
         public static string enterSoundString = "Play_bandit2_m2_impact";
 
-        public static NetworkSoundEventDef parrySoundDef = SeamstressAssets.parrySuccessSoundEvent;
-
         public static float duration = SeamstressStaticValues.parryDuration;
 
-        public static float attackDelay = 0.3f;
+        public static float attackDelay = SeamstressStaticValues.parryDuration;
 
-        public static float invulnDuration = SeamstressStaticValues.parryDuration;
-
-        public static float blastAttackDamageCoefficient = SeamstressStaticValues.parryDamage;
+        public static float invulnDuration = SeamstressStaticValues.parryDuration * 1.25f;
 
         private bool hasFiredServer;
 
@@ -47,26 +37,21 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (NetworkServer.active && !hasFiredServer && base.fixedAge >= attackDelay)
+            bool num = base.characterBody.HasBuff(SeamstressBuffs.parrySuccess);
+            if (base.isAuthority && base.fixedAge >= duration && num)
             {
                 DoAttackServer();
             }
-            if (base.isAuthority && base.fixedAge >= duration)
+            else if(base.isAuthority && base.fixedAge >= duration && !num)
             {
+                skillLocator.special.rechargeStopwatch += 0.5f * skillLocator.special.cooldownRemaining;
                 outer.SetNextStateToMain();
             }
         }
 
         public override void OnExit()
         {
-            if (NetworkServer.active)
-            {
-                if (!hasFiredServer)
-                {
-                    DoAttackServer();
-                }
-                CleanBuffsServer();
-            }
+            CleanBuffsServer();
             base.OnExit();
         }
 
@@ -87,42 +72,38 @@ namespace SeamstressMod.SkillStates
 
         private void DoAttackServer()
         {
-            bool num = base.characterBody.HasBuff(SeamstressBuffs.parrySuccess);
-            if (num)
-            {
-                UnityEngine.Object.Instantiate<GameObject>(_expungeEffect, transform);
-                UnityEngine.Object.Instantiate<GameObject>(_expungeEffect2, transform);
-                UnityEngine.Object.Instantiate<GameObject>(_expungeEffect3, transform);
-                UnityEngine.Object.Instantiate<GameObject>(_expungeEffect4, transform);
-            }
-            if (!NetworkServer.active || !num)
+            if (!NetworkServer.active)
             {
                 return;
             }
+            CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
             characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
-            PlayCrossfade("Gesture, Override", "Slash", "Slash.playbackRate", duration, 0.05f);
-            hasFiredServer = true;
-            if (num)
-            {
-                if (parrySoundDef)
-                {
-                    EffectManager.SimpleSoundEffect(parrySoundDef.index, base.characterBody.corePosition, transmit: true);
-                }
-            }
-            BlastAttack blastAttack = new BlastAttack();
-            blastAttack.attacker = base.gameObject;
-            blastAttack.inflictor = base.gameObject;
-            blastAttack.teamIndex = TeamComponent.GetObjectTeam(base.gameObject);
-            blastAttack.baseDamage = damageStat * blastAttackDamageCoefficient;
-            blastAttack.baseForce = 200f;
-            blastAttack.position = base.characterBody.corePosition;
-            blastAttack.radius = base.characterBody.radius + 12f;
-            blastAttack.falloffModel = BlastAttack.FalloffModel.None;
-            blastAttack.damageType = DamageType.Stun1s;
-            blastAttack.AddModdedDamageType(DamageTypes.StitchDamage);
-            blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
-            blastAttack.Fire();
+            SeamstressController s = characterBody.GetComponent<SeamstressController>();
+            s.fuckYou = false;
             CleanBuffsServer();
+            hasFiredServer = true;
+            if (parrySoundDef)
+            {
+                EffectManager.SimpleSoundEffect(parrySoundDef.index, base.characterBody.corePosition, transmit: true);
+            }
+            outer.SetNextState(new ParryDash());
+        }
+
+        private void CreateBlinkEffect(Vector3 origin)
+        {
+            if ((bool)SeamstressAssets.blinkPrefab)
+            {
+                EffectData effectData = new EffectData();
+                effectData.rotation = Util.QuaternionSafeLookRotation(inputBank.aimDirection);
+                effectData.origin = origin;
+                effectData.scale = 0.025f;
+                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: true);
+            }
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.PrioritySkill;
         }
     }
 

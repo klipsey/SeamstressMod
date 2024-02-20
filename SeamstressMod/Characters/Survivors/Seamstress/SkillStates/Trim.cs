@@ -42,7 +42,7 @@ namespace SeamstressMod.SkillStates
             {
                 moddedDamageType = DamageTypes.CutDamage;
                 swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
-                hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
+                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             }
             switch (swingIndex)
             {
@@ -52,7 +52,7 @@ namespace SeamstressMod.SkillStates
                 case 1:
                     muzzleString = "SwingRight";
                     break;
-                case 2:
+                case 2:damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
                     earlyExitPercentTime = 1f;
                     moddedDamageType2 = DamageTypes.StitchDamage;
                     hitStopDuration = 0.1f;

@@ -105,7 +105,7 @@ namespace SeamstressMod.SkillStates
         {
             if (!outer.destroying)
             {
-                if (NetworkServer.active && (bool)healthComponent && healthCostFraction >= Mathf.Epsilon)
+                if (NetworkServer.active && healthComponent && healthCostFraction >= Mathf.Epsilon)
                 {
                     float currentBarrier = healthComponent.barrier;
                     DamageInfo damageInfo = new DamageInfo();
@@ -120,6 +120,8 @@ namespace SeamstressMod.SkillStates
                     damageInfo.procCoefficient = 0f;
                     healthComponent.TakeDamage(damageInfo);
                     healthComponent.AddBarrier(currentBarrier);
+                    SeamstressController s = characterBody.GetComponent<SeamstressController>();
+                    s.fuckYou = false;
                     characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
                 }
                 this.skillLocator.special = skillLocator.FindSkill("reapRecast");
@@ -127,7 +129,7 @@ namespace SeamstressMod.SkillStates
                 Util.PlaySound(endSoundString, base.gameObject);
                 CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
                 modelTransform = GetModelTransform();
-                if ((bool)this.modelTransform && (bool)SeamstressAssets.destealthMaterial)
+                if (this.modelTransform && SeamstressAssets.destealthMaterial)
                 {
                     TemporaryOverlay temporaryOverlay = animator.gameObject.AddComponent<TemporaryOverlay>();
                     temporaryOverlay.duration = 1f;
@@ -150,6 +152,10 @@ namespace SeamstressMod.SkillStates
                     blastAttack.radius = blastAttackRadius;
                     blastAttack.damageType = DamageType.Stun1s;
                     blastAttack.AddModdedDamageType(DamageTypes.StitchDamage);
+                    if(empowered)
+                    {
+                        blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
+                    }
                     blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                     blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
                     blastAttack.Fire();

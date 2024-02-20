@@ -4,6 +4,7 @@ using RoR2;
 using RoR2.Audio;
 using RoR2.Skills;
 using SeamstressMod.Survivors.Seamstress;
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -41,6 +42,7 @@ namespace SeamstressMod.Modules.BaseStates
         protected GameObject swingEffectPrefab;
         protected GameObject hitEffectPrefab;
         protected NetworkSoundEventIndex impactSound;
+        protected bool buffer = false;
 
         public float duration;
         protected bool hasFired;
@@ -84,7 +86,10 @@ namespace SeamstressMod.Modules.BaseStates
         {
             PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, duration, 0.05f);
         }
-
+        protected virtual void PlayTrueAttackAnimation()
+        {
+            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration * (attackEndPercentTime - attackStartPercentTime), 0.1f * duration);
+        }
         public override void OnExit()
         {
             if (inHitPause)
@@ -142,7 +147,10 @@ namespace SeamstressMod.Modules.BaseStates
         {
             hasFired = true;
             Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
-
+            if(buffer == true)
+            {
+                PlayTrueAttackAnimation();
+            }
             PlaySwingEffect();
 
             if (base.isAuthority)

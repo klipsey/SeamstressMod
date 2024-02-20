@@ -83,7 +83,7 @@ namespace SeamstressMod.SkillStates
             overlapAttack.procCoefficient = procCoefficient;
             if (empowered)
             {
-                hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
+                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 overlapAttack.AddModdedDamageType(DamageTypes.CutDamage);
                 Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
                 hitSound = "Play_imp_overlord_impact";

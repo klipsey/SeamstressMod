@@ -18,20 +18,20 @@ namespace SeamstressMod.Modules
 
         public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";
 
-        public static string stitchKeyword = KeywordText("Stitch", $"Deal damage to tear open Stitches dealing <style=cIsDamage>{100 * SeamstressStaticValues.stitchBaseDamage}% damage</style> and applying " + cutPrefix + ". Also gain a " + needlePrefix + ".");
+        public static string stitchKeyword = KeywordText("Stitch", $"Deal damage to tear open Stitches dealing <style=cIsDamage>{100 * SeamstressStaticValues.stitchBaseDamage}% damage</style> and applying " + cutPrefix + ".");
 
         public static string cutKeyword = KeywordText("Cut", $"Bleed enemies for <style=cIsDamage>1%</style> (<style=cIsDamage>0.5%</style> against bosses) of the " +
             $"enemies missing <style=cIsHealth>health</style> per second for {SeamstressStaticValues.cutDuration} seconds.");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 
-        public static string needleKeyword = KeywordText("Needle", $"<color=#9B3737>Needles</color> pierce for <style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style> each. " +
-            $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.needleHealAmount}% of the damage dealt</style>.");
+        public static string needleKeyword = KeywordText("Needle", $" Gain <color=#9B3737>Needles</color> by tearing "
+                + Tokens.stitchPrefix + " or killing enemies.");
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 
         public static string butcheredKeyword = KeywordText("Butchered", "Gain movement speed and grant every ability " + cutPrefix +
-            ". During " + Tokens.butcheredPrefix +  $" convert <style=cIsHealing>{100f * (1 - SeamstressStaticValues.healConversion)}% of healing</style> into damage for <color=#9B3737>Expunge</color>.");
+            ".");
         public static string DamageText(string text)
         {
             return $"<style=cIsDamage>{text}</style>";

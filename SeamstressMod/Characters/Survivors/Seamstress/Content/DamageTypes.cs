@@ -18,9 +18,9 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType CutDamage;
         public static DamageAPI.ModdedDamageType StitchDamage;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
-        public static DamageAPI.ModdedDamageType FlurryLifeSteal;
         public static DamageAPI.ModdedDamageType PlanarLifeSteal;
         public static DamageAPI.ModdedDamageType BeginHoming;
+        public static DamageAPI.ModdedDamageType DotFlag;
 
         internal static void Init()
         {
@@ -28,9 +28,9 @@ namespace SeamstressMod.Survivors.Seamstress
             CutDamage = DamageAPI.ReserveDamageType();
             StitchDamage = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
-            FlurryLifeSteal = DamageAPI.ReserveDamageType();
             PlanarLifeSteal = DamageAPI.ReserveDamageType();
             BeginHoming = DamageAPI.ReserveDamageType();
+            DotFlag = DamageAPI.ReserveDamageType();
             Hook();
         }
         private static void Hook()
@@ -51,19 +51,6 @@ namespace SeamstressMod.Survivors.Seamstress
             GameObject attackerObject = damageReport.attacker.gameObject;
             if (NetworkServer.active)
             {
-                DamageInfo cutsume = new DamageInfo
-                {
-                    damage = attackerBody.damage * SeamstressStaticValues.stitchBaseDamage * damageInfo.procCoefficient,
-                    damageColorIndex = DamageColorIndex.DeathMark,
-                    damageType = DamageType.Generic,
-                    attacker = damageInfo.attacker,
-                    crit = false,
-                    force = Vector3.zero,
-                    inflictor = damageInfo.inflictor,
-                    position = damageInfo.position,
-                    procCoefficient = 0f
-                };
-
                 if (damageInfo.HasModdedDamageType(BeginHoming))
                 {
                     ProjectileDirectionalTargetFinder s = inflictorObject.GetComponent<ProjectileDirectionalTargetFinder>();
@@ -85,45 +72,9 @@ namespace SeamstressMod.Survivors.Seamstress
                         needleSimple.updateAfterFiring = true;
                     }
                 }
-                if (victimBody.HasBuff(SeamstressBuffs.stitchSetup) && attackerBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
-                {
-                    Util.PlaySound("Play_imp_overlord_teleport_end", victimBody.gameObject);
-                    damageReport.victimBody.RemoveBuff(SeamstressBuffs.stitchSetup);
-                    if (damageReport.victimIsBoss)
-                    {
-                        victim.TakeDamage(cutsume);
-                        DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                    }
-                    else
-                    {
-                        victim.TakeDamage(cutsume);
-                        DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                    }
-                    NeedleController n = attackerBody.GetComponent<NeedleController>();
-                    n.RpcAddSecondaryStock();
-                }
-                if (damageInfo.HasModdedDamageType(StitchDamage))
-                {
-                    victimBody.AddBuff(SeamstressBuffs.stitchSetup);
-                }
-                if (damageInfo.HasModdedDamageType(CutDamage))
-                {
-                    if (damageReport.victimIsBoss)
-                    {
-                        DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                    }
-                    else
-                    {
-                        DotController.InflictDot(victimBody.gameObject, attackerObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                    }
-                }
-                if (damageInfo.HasModdedDamageType(FlurryLifeSteal))
-                {
-                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.flurryLifeSteal, default(ProcChainMask), true);
-                }
                 if (damageInfo.HasModdedDamageType(PlanarLifeSteal))
                 {
-                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.needleHealAmount, default(ProcChainMask), true);
+                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.planarLifeSteal, default(ProcChainMask), true);
                 }
             }
         }

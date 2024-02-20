@@ -28,9 +28,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private float butcheredConversion = 0f;
 
+        public float savedConverstion = 0f;
+
         private bool hasPlayed = false;
 
         private bool butchered = false;
+
+        private bool hasFired = false;
 
         private float leapLength = 0f;
 
@@ -59,8 +63,8 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             LeapEnd();
             CalculateBonusDamage();
-            IsButchered();
-            ButcheredSound();        
+            ButcheredSound();
+            IsButchered();      
         }
         private void LeapEnd()
         {
@@ -81,21 +85,20 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         public float GetButcheredConversion()
         {
-            float num = butcheredConversion;
-            butcheredConversion = characterBody.damage;
-            return num;
+            return savedConverstion;
         }
         public void ButcheredConversionCalc(float healDamage)
         {
             butcheredConversion += healDamage;
+            savedConverstion = butcheredConversion;
         }
-        //needle regen
         private void IsButchered()
         {
             if (fuckYou && !butchered)
             {
                 bd = SeamstressStaticValues.butcheredDuration;
                 butchered = true;
+                hasFired = false;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -116,11 +119,23 @@ namespace SeamstressMod.Survivors.Seamstress
                 UnityEngine.Object.Instantiate<GameObject>(endReap, characterBody.modelLocator.transform);
                 Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
                 //fire expunge at end of butchered
+            }
+            if(bd < 0f && !hasFired)
+            {
                 if (skillLocator.special == skillLocator.FindSkill("reapRecast"))
                 {
-                    skillLocator.special.ExecuteIfReady();
+                    if(skillLocator.special.ExecuteIfReady())
+                    {
+                        hasFired = true;
+                    }
                 }
+                else if(!fuckYou && skillLocator.special != skillLocator.FindSkill("reapRecast"))
+                {
+                    hasFired = true;
+                }
+                butcheredConversion = characterBody.damage;
             }
+
         }
         //butchered end sound
         private void ButcheredSound()
@@ -133,10 +148,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     hasPlayed = true;
                 }
             }
-            else
-            {
-                hasPlayed = false;
-            }
+            hasPlayed = false;
         }
         //passive damage
         private void CalculateBonusDamage()

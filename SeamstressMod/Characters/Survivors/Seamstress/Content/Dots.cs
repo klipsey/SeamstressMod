@@ -35,14 +35,16 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             if (dotStack.dotIndex == SeamstressDot) 
             {
-                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * SeamstressStaticValues.cutDotDamage);
+                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * (SeamstressStaticValues.cutDotDamage * 0.2f));
+                dotStack.damageType = DamageType.DoT;
             }
         }
         public static void DelegateBehave2(RoR2.DotController self, RoR2.DotController.DotStack dotStack) 
         {
             if (dotStack.dotIndex == SeamstressBossDot)
             {
-                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * SeamstressStaticValues.cutDotBossDamage);
+                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.fullCombinedHealth - self.victimBody.healthComponent.health) * (SeamstressStaticValues.cutDotBossDamage * 0.2f));
+                dotStack.damageType = DamageType.DoT;
             }
         }
 
@@ -68,7 +70,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             SeamstressDot = DotAPI.RegisterDotDef(new DotController.DotDef
             {
-                interval = 1f,
+                interval = 0.2f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.cutBleed,
@@ -77,7 +79,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             SeamstressBossDot = DotAPI.RegisterDotDef(new DotController.DotDef
             {
-                interval = 1f,
+                interval = 0.2f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.cutBleed,

@@ -234,18 +234,16 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void AddSecondarySkills()
         {
-
-            //a basic skill
             SkillDef sewSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "Sew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_SEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword, Tokens.stitchKeyword },
+                keywordTokens = new string[] { Tokens.needleKeyword, Tokens.stitchKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
-                //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
+                
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
@@ -274,11 +272,11 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "SewAlt",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_ALTSEW_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_ALTSEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword, Tokens.stitchKeyword },
+                keywordTokens = new string[] { Tokens.needleKeyword, Tokens.stitchKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SewAltAbility)),
-                //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
+                
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
@@ -311,14 +309,14 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Weave",
                 skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_WEAVE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_WEAVE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword },
+                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.WeaveLeap)),
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
-                baseRechargeInterval = 5f,
+                baseRechargeInterval = 6f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -349,14 +347,14 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "BlinkSeamstress",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_BLINK_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_BLINK_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.butcheredKeyword },
+                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.butcheredKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.BlinkSeamstress)),
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 8f,
+                baseRechargeInterval = 12f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -385,12 +383,12 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Expunge",
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_EXPUNGE_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_EXPUNGE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword },
+                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
                 activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseRechargeInterval = 1f,
                 baseMaxStock = 1,
@@ -418,14 +416,14 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "ParrySeamstress",
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_PARRY_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_PARRY_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword },
+                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.butcheredKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Parry)),
-                activationStateMachineName = "Weapon2",
+                activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 7f,
+                baseRechargeInterval = 12f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -436,7 +434,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 fullRestockOnAssign = true,
                 dontAllowPastMaxStocks = false,
                 mustKeyPress = true,
-                beginSkillCooldownOnSkillEnd = true,
+                beginSkillCooldownOnSkillEnd = false,
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,
@@ -544,18 +542,56 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            if (NetworkServer.active && self.body && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME" && self.body.HasBuff(SeamstressBuffs.parryStart))
+            if(!NetworkServer.active)
             {
-                self.body.RemoveBuff(SeamstressBuffs.parryStart);
-                if (!self.body.HasBuff(SeamstressBuffs.parrySuccess))
-                {
-                    self.body.AddBuff(SeamstressBuffs.parrySuccess);
-                }
-                self.body.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryDuration + 0.5f);
+                return;
             }
-            else
+            CharacterBody victimBody = self.body;
+            CharacterBody attackerBody = null;
+            if (damageInfo.attacker)
             {
-                orig.Invoke(self, damageInfo);
+                attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
+            }
+            float damageCheck = damageInfo.damage;
+            if (damageCheck > 0)
+            {
+                if (victimBody.HasBuff(SeamstressBuffs.stitchSetup) && damageInfo.attacker.GetComponent<CharacterBody>().baseNameToken == "KENKO_SEAMSTRESS_NAME" && attackerBody && damageInfo.damageType != DamageType.DoT)
+                {
+                    victimBody.RemoveBuff(SeamstressBuffs.stitchSetup);
+                    damageInfo.damage += attackerBody.damage * SeamstressStaticValues.stitchBaseDamage * damageInfo.procCoefficient;
+                    damageInfo.AddModdedDamageType(DamageTypes.CutDamage);
+                    NeedleController n = attackerBody.GetComponent<NeedleController>();
+                    n.RpcAddSecondaryStock();
+                    EffectManager.SimpleImpactEffect(SeamstressAssets.stitchConsumeEffectPrefab, damageInfo.position, Vector3.up, transmit: true);
+                }
+                if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))
+                {
+                    if (victimBody.isBoss)
+                    {
+                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
+                    }
+                    else
+                    {
+                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
+                    }
+                }
+                if (damageInfo.HasModdedDamageType(DamageTypes.StitchDamage))
+                {
+                    victimBody.AddBuff(SeamstressBuffs.stitchSetup);
+                }
+                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && victimBody.HasBuff(SeamstressBuffs.parryStart))
+                {
+                    victimBody.RemoveBuff(SeamstressBuffs.parryStart);
+                    if (!victimBody.HasBuff(SeamstressBuffs.parrySuccess))
+                    {
+                        victimBody.AddBuff(SeamstressBuffs.parrySuccess);
+                    }
+                    victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryDuration + 0.5f);
+                }
+                else
+                {
+                    orig.Invoke(self, damageInfo);
+                }
             }
         }
         private void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
@@ -568,6 +604,10 @@ namespace SeamstressMod.Survivors.Seamstress
             SeamstressController s = self.body.GetComponent<SeamstressController>();
             if (self.body.HasBuff(SeamstressBuffs.butchered) && s.fuckYou == false)
             {
+                if(self.gameObject.GetComponent<TemporaryOverlay>() != null)
+                {
+                    UnityEngine.Object.Destroy(self.gameObject.GetComponent<TemporaryOverlay>());
+                }
                 TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
                 temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
                 temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);

@@ -63,7 +63,6 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             if (NetworkServer.active)
             {
-                Log.Debug("Uh hello??");
                 int buffCount = characterBody.GetBuffCount(SeamstressBuffs.needles);
                 if (buffCount < newCount)
                 {

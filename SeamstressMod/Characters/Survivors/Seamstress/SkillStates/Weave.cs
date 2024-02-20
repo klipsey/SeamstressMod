@@ -68,7 +68,7 @@ namespace SeamstressMod.SkillStates
             overlapAttack.procCoefficient = procCoefficient;
             if (empowered)
             {
-                hitEffectPrefab = SeamstressAssets.scissorsButcheredHitImpactEffect;
+                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 overlapAttack.AddModdedDamageType(DamageTypes.CutDamage);
                 Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
                 hitSound = "Play_imp_overlord_impact";
@@ -167,6 +167,7 @@ namespace SeamstressMod.SkillStates
                 base.characterMotor.disableAirControlUntilCollision = false;
                 base.characterMotor.airControl = 0.25f;
                 base.characterMotor.velocity *= 0.1f;
+                SmallHop(base.characterMotor, 5f);
             }
             aimRequest?.Dispose();
             //PlayAnimation("FullBody, Override", "EvisLoopExit");

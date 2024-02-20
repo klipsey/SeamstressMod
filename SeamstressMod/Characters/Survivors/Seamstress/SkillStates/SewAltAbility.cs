@@ -114,7 +114,7 @@ namespace SeamstressMod.SkillStates
                 /*
                 if ((bool)this.childLocator)
                 {
-                    this.childLocator.FindChild("DustCenter").gameObject.SetActive(value: false);
+                    this.childLocator.FindChild("DustCenter").gameObject.SetActive(false);
                 }
                 */
             }
@@ -210,7 +210,7 @@ namespace SeamstressMod.SkillStates
                 blastAttack.procCoefficient = blastAttackProcCoefficient;
                 blastAttack.radius = blastAttackRadius;
                 blastAttack.damageType = DamageType.Stun1s;
-                blastAttack.AddModdedDamageType(DamageTypes.FlurryLifeSteal);
+                blastAttack.AddModdedDamageType(DamageTypes.PlanarLifeSteal);
                 if (empowered)
                 {
                     blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
@@ -248,7 +248,8 @@ namespace SeamstressMod.SkillStates
                 /*
                 if ((bool)this.childLocator)
                 {
-                    childLocator.FindChild("DustCenter").gameObject.SetActive(value: true);
+                    childLocator.FindChild("DustCenter").gameObject.SetActive(
+                true);
                 }
                 */
                 //PlayAnimation("Gesture, Additive", "BlinkEnd", "BlinkEnd.playbackRate", exitDuration);
