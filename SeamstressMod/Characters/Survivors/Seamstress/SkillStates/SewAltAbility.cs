@@ -263,6 +263,8 @@ namespace SeamstressMod.SkillStates
         public override void OnExit()
         {
             aimRequest?.Dispose();
+            characterBody.AddTimedBuff(SeamstressBuffs.needlesChill, 2f);
+            characterBody.skillLocator.secondary.rechargeStopwatch = 0f;
             base.OnExit();
             ExitCleanup();
         }

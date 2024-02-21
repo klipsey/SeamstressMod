@@ -14,6 +14,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public static BuffDef needles;
 
+        public static BuffDef needlesChill;
+
         public static BuffDef parryStart;
 
         public static BuffDef parrySuccess;
@@ -27,6 +29,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 new Color(155f / 255f, 55f / 255f, 55f / 255f), false, true, false);
             needles = Modules.Content.CreateAndAddBuff("NeedlesBuff", assetBundle.LoadAsset<Sprite>("texNeedleBuffIcon"),
                 Color.white, true, false, false);
+            needlesChill = Modules.Content.CreateAndAddBuff("NeedlesCdBuff", assetBundle.LoadAsset<Sprite>("texNeedleBuffIcon"),
+                Color.gray, false, false, true);
             parryStart = Modules.Content.CreateAndAddBuff("ParryBuff", LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
                 new Color(155f / 255f, 55f / 255f, 55f / 255f), false, false, false);
             parrySuccess = Modules.Content.CreateAndAddBuff("ParryEndBuff", LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,

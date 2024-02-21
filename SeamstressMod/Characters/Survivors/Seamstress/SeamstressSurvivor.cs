@@ -594,7 +594,10 @@ namespace SeamstressMod.Survivors.Seamstress
                     damageInfo.damage += attackerBody.damage * SeamstressStaticValues.stitchBaseDamage * damageInfo.procCoefficient;
                     damageInfo.AddModdedDamageType(DamageTypes.CutDamage);
                     NeedleController n = attackerBody.GetComponent<NeedleController>();
-                    n.RpcAddSecondaryStock();
+                    if(!attackerBody.HasBuff(SeamstressBuffs.needlesChill))
+                    {
+                        n.RpcAddSecondaryStock();
+                    }
                     EffectManager.SimpleImpactEffect(SeamstressAssets.stitchConsumeEffectPrefab, damageInfo.position, Vector3.up, transmit: true);
                 }
                 if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))

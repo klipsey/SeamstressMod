@@ -15,6 +15,8 @@ namespace SeamstressMod.Survivors.Seamstress
         //effects
         internal static GameObject parrySlashEffect;
 
+        internal static GameObject clipSlashEffect;
+
         internal static GameObject expungeSlashEffect;
 
         internal static GameObject expungeSlashEffect2;
@@ -22,6 +24,8 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject expungeSlashEffect3;
 
         internal static GameObject scissorsSwingEffect;
+
+        internal static GameObject clipSwingEffect;
 
         internal static GameObject scissorsButcheredSwingEffect;
 
@@ -189,6 +193,13 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsButcheredSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();//Assets.LoadEffect("HenrySwordSwingEffect", true);
             scissorsButcheredSwingEffect.transform.GetChild(1).localScale = Vector3.one;
 
+            scissorsButcheredComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing3");
+            scissorsButcheredComboSwingEffect.AddComponent<NetworkIdentity>();
+            scissorsButcheredComboSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
+            scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
+            scissorsButcheredComboSwingEffect.transform.GetChild(1).localScale = new Vector3(1f, 1.5f, 1.5f);
+            UnityEngine.Object.Destroy(scissorsButcheredComboSwingEffect.GetComponent<EffectComponent>());
+
             scissorsSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing2");
             scissorsSwingEffect.AddComponent<NetworkIdentity>();
             scissorsSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
@@ -197,7 +208,26 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             scissorsSwingEffect.transform.GetChild(1).localScale = Vector3.one;
 
-            parrySlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("ParrySlash");
+            clipSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ClipSwing");
+            clipSwingEffect.AddComponent<NetworkIdentity>();
+            clipSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniRadialSlash1Merc.mat").WaitForCompletion());
+            material.SetColor("_TintColor", Color.red);
+            clipSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            clipSwingEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 1f);
+            var fard1 = clipSwingEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            fard1.startLifetimeMultiplier = 0.6f;
+
+            clipSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ClipSwing");
+            clipSlashEffect.AddComponent<NetworkIdentity>();
+            clipSlashEffect.transform.GetChild(0).gameObject.SetActive(false);
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
+            clipSlashEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            clipSlashEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 1f);
+            fard1 = clipSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            fard1.startLifetimeMultiplier = 0.6f;
+
+            parrySlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlash.prefab").WaitForCompletion().InstantiateClone("ParrySlash");
             parrySlashEffect.AddComponent<NetworkIdentity>();
             parrySlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
             parrySlashEffect.transform.GetChild(0).localScale = Vector3.one * 2f;
@@ -246,14 +276,6 @@ namespace SeamstressMod.Survivors.Seamstress
             */
 
             //final hit butchered
-            scissorsButcheredComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing3");
-            scissorsButcheredComboSwingEffect.AddComponent<NetworkIdentity>();
-            scissorsButcheredComboSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
-            scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            //ParticleSystem.MainModule main = scissorsButcheredComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
-            //main.startLifetimeMultiplier = 0.1f;
-            scissorsButcheredComboSwingEffect.transform.GetChild(1).localScale = new Vector3(1f, 1.5f, 1.5f);
-            UnityEngine.Object.Destroy(scissorsButcheredComboSwingEffect.GetComponent<EffectComponent>());
 
             scissorsHitImpactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMerc.prefab").WaitForCompletion().InstantiateClone("ScissorImpact", false);
             scissorsHitImpactEffect.AddComponent<NetworkIdentity>();

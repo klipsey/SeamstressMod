@@ -41,13 +41,29 @@ namespace SeamstressMod.SkillStates
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.parrySlashEffect;
-            muzzleString = "SwingCharCenter";
+            muzzleString = "SwingCenter";
             if (empowered)
             {
                 moddedDamageType2 = DamageTypes.CutDamage;
             }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
             base.OnEnter();
+            if (isGrounded)
+            {
+                float dashVector = 30f;
+                if (this.inputBank.moveVector != Vector3.zero) this.characterMotor.velocity += this.characterDirection.forward * dashVector;
+                else
+                {
+                    dashVector = 15f;
+                    this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
+                }
+
+            }
+            else if (!isGrounded)
+            {
+                float dashVector = 20f;
+                this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
+            }
         }
 
         public override void FixedUpdate()
@@ -80,22 +96,6 @@ namespace SeamstressMod.SkillStates
                 this.swingEffectInstance = UnityEngine.Object.Instantiate<GameObject>(this.swingEffectPrefab, transform);
                 ScaleParticleSystemDuration scale = this.swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
                 if (scale) scale.newDuration = scale.initialDuration + (scale.initialDuration * (earlyExitPercentTime - attackStartPercentTime));
-            }
-            if(isGrounded)
-            {
-                float dashVector = 50f;
-                if (this.inputBank.moveVector != Vector3.zero) this.characterMotor.velocity += this.characterDirection.forward * dashVector;
-                else
-                {
-                    dashVector = 30f; 
-                    this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
-                }
-
-            }
-            else if (!isGrounded)
-            {
-                float dashVector = 30f;
-                this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
             }
         }
         protected override void OnHitEnemyAuthority()

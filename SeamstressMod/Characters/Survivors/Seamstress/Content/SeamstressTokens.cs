@@ -69,14 +69,14 @@ namespace SeamstressMod.Survivors.Seamstress
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.planarLifeSteal}% of the damage dealt</style>.");
 
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
-            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", $"Consume all <color=#9B3737>Needles</color>. Snip in front for every 2 <color=#9B3737>Needles</color> consumed dealing <style=cIsDamage>{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style> per hit." +
-                $" <color=#9B3737>Needles</color> that can't be consumed increase damage instead. <style=cIsHealing>Heal for {100f * SeamstressStaticValues.planarLifeSteal}% of the damage dealt</style>.");
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", $"Consume all <color=#9B3737>Needles</color>. Snip up to 5 times based on <color=#9B3737>Needles</color> consumed dealing " +
+                $"<style=cIsDamage>{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style> per <color=#9B3737>Needle</color> consumed. <style=cIsHealing>Heal for {100f * SeamstressStaticValues.planarLifeSteal}% of the damage dealt</style>.");
             #endregion
 
             #region Utility 
             Language.Add(prefix + "UTILITY_WEAVE_NAME", "Woven Fate");
             Language.Add(prefix + "UTILITY_WEAVE_DESCRIPTION", $"Leap in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveLeapDamageCoefficient}% damage</style>. " +
-                $"Recast in the air to dash dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Both casts apply " + Tokens.stitchPrefix + " on hit enemies.");
+                $"Recast in the air to dash dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Apply " + Tokens.stitchPrefix + " to enemies hit.");
             #endregion
 
             #region Special

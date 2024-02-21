@@ -22,7 +22,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float weaveDamageCoefficient = 2.6f;
 
-        internal const float clipDamageCoefficient = 0.5f;
+        internal const float clipDamageCoefficient = 0.75f;
 
         internal const float blinkDamageCoefficient = 4f;
 

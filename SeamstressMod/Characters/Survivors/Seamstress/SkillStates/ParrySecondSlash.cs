@@ -41,7 +41,7 @@ namespace SeamstressMod.SkillStates
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.parrySlashEffect;
-            muzzleString = "SwingCharCenter";
+            muzzleString = "SwingCenter";
             if (empowered)
             {
                 moddedDamageType2 = DamageTypes.CutDamage;
