@@ -30,7 +30,7 @@ namespace SeamstressMod.SkillStates
         private DamageAPI.ModdedDamageType moddedDamageType2 = DamageTypes.PlanarLifeSteal;
         private DamageAPI.ModdedDamageType moddedDamageType = DamageTypes.CutDamage;
         private float damageCoefficient;
-        private float procCoefficient = 0.7f;
+        private float procCoefficient = 1f;
         private float pushForce = 0f;
         private Vector3 bonusForce = Vector3.zero;
 
@@ -54,6 +54,8 @@ namespace SeamstressMod.SkillStates
 
         private float currentDuration = 0f;
 
+        private float exhaustDuration = 6f;
+
         private bool hasFired;
 
         private bool iAmAwesome;
@@ -75,6 +77,11 @@ namespace SeamstressMod.SkillStates
             base.skillLocator.secondary.stock = 0;
             StartAimMode(0.5f + duration, false);
             PlayAttackAnimation();
+            characterBody.skillLocator.secondary.rechargeStopwatch = 0f;
+            float exhaustApply = Mathf.Min(exhaustDuration, Mathf.Max(0.5f, exhaustDuration * skillLocator.secondary.cooldownScale - skillLocator.secondary.flatCooldownReduction));
+            if (NetworkServer.active) characterBody.AddTimedBuff(SeamstressBuffs.needlesChill, exhaustApply);
+            seamCon.lockOutLength = exhaustApply;
+            skillLocator.secondary.SetSkillOverride(gameObject, SeamstressAssets.lockOutSkillDef, RoR2.GenericSkill.SkillOverridePriority.Contextual);
         }
         public override void FixedUpdate()
         {
@@ -187,7 +194,6 @@ namespace SeamstressMod.SkillStates
         private void EnterAttack()
         {
             Util.PlayAttackSpeedSound("Play_bandit2_m2_impact", gameObject, attackSpeedStat);
-            PlaySwingEffect();
         }
         protected virtual void PlaySwingEffect()
         {
@@ -215,26 +221,28 @@ namespace SeamstressMod.SkillStates
         }
         protected virtual void FireAttack()
         {
-            if(base.isAuthority)
+            hasHopped = false;
+
+            overlapAttack = new OverlapAttack();
+            overlapAttack.damageType = damageType;
+            if (empowered)
             {
-                hasHopped = false;
-                overlapAttack = new OverlapAttack();
-                overlapAttack.damageType = damageType;
-                if (empowered)
-                {
-                    overlapAttack.AddModdedDamageType(moddedDamageType2);
-                }
-                overlapAttack.AddModdedDamageType(moddedDamageType);
-                overlapAttack.attacker = gameObject;
-                overlapAttack.inflictor = gameObject;
-                overlapAttack.teamIndex = GetTeam();
-                overlapAttack.damage = damageCoefficient * base.damageStat;
-                overlapAttack.procCoefficient = procCoefficient;
-                overlapAttack.hitEffectPrefab = hitEffectPrefab;
-                overlapAttack.forceVector = bonusForce;
-                overlapAttack.pushAwayForce = pushForce;
-                overlapAttack.hitBoxGroup = FindHitBoxGroup("Sword");
-                overlapAttack.isCrit = RollCrit();
+                overlapAttack.AddModdedDamageType(moddedDamageType2);
+            }
+            overlapAttack.AddModdedDamageType(moddedDamageType);
+            overlapAttack.attacker = gameObject;
+            overlapAttack.inflictor = gameObject;
+            overlapAttack.teamIndex = GetTeam();
+            overlapAttack.damage = damageCoefficient * base.damageStat;
+            overlapAttack.procCoefficient = procCoefficient;
+            overlapAttack.hitEffectPrefab = hitEffectPrefab;
+            overlapAttack.forceVector = bonusForce;
+            overlapAttack.pushAwayForce = pushForce;
+            overlapAttack.hitBoxGroup = FindHitBoxGroup("Sword");
+            overlapAttack.isCrit = RollCrit();
+
+            if (base.isAuthority)
+            {
                 Vector3 direction = GetAimRay().direction;
                 direction.y = Mathf.Max(direction.y, direction.y * 0.5f);
                 FindModelChild("SwingPivot").rotation = Util.QuaternionSafeLookRotation(direction);
@@ -243,6 +251,7 @@ namespace SeamstressMod.SkillStates
                     OnHitEnemyAuthority();
                 }
             }
+            PlaySwingEffect();
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
@@ -258,8 +267,6 @@ namespace SeamstressMod.SkillStates
         }
         public override void OnExit()
         {
-            characterBody.AddTimedBuff(SeamstressBuffs.needlesChill, 2f);
-            characterBody.skillLocator.secondary.rechargeStopwatch = 0f;
             base.OnExit();
         }
 

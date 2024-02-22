@@ -22,8 +22,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float weaveDamageCoefficient = 2.6f;
 
-        internal const float clipDamageCoefficient = 0.75f;
-
         internal const float blinkDamageCoefficient = 4f;
 
         internal const float cutDuration = 3f;
@@ -48,7 +46,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float needleDamageCoefficient = 0.5f;
 
-        internal const float sewAltDamageCoefficient = 0.7f;
+        internal const float sewAltDamageCoefficient = 1f;
+
+        internal const float clipDamageCoefficient = 1.2f;
 
         internal const float needleProcCoefficient = 0.5f;
 

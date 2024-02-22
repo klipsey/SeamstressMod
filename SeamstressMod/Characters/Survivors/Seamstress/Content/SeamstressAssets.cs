@@ -77,9 +77,11 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static Sprite primaryEmp;
 
-        internal static Sprite secondary;
+        internal static Sprite weave;
 
-        internal static Sprite secondaryEmp;
+        internal static Sprite utilityEmp;
+
+        internal static Sprite secondaryDisabled;
 
         internal static Sprite special;
 
@@ -93,6 +95,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         //extra
         public static SkillDef weaveRecastSkillDef;
+
+        public static SkillDef lockOutSkillDef;
         public static void Init(AssetBundle assetBundle)
         {
 
@@ -112,7 +116,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SECONDARY_WEAVE_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.stitchKeyword },
-                skillIcon = SeamstressAssets.secondaryEmp,
+                skillIcon = SeamstressAssets.weave,
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Weave)),
                 activationStateMachineName = "Weapon2",
@@ -136,6 +140,37 @@ namespace SeamstressMod.Survivors.Seamstress
                 cancelSprintingOnActivation = false,
                 forceSprintDuringState = true,
             });
+
+            lockOutSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "LockOut",
+                skillNameToken = "Exhausted",
+                skillDescriptionToken = "Recharging",
+                keywordTokens = new string[] {},
+                skillIcon = secondaryDisabled,
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Exhaustion)),
+                activationStateMachineName = "Weapon2",
+                interruptPriority = EntityStates.InterruptPriority.Any,
+
+                baseRechargeInterval = 0f,
+                baseMaxStock = 10,
+
+                rechargeStock = 0,
+                requiredStock = 999999999,
+                stockToConsume = 0,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = false,
+                dontAllowPastMaxStocks = false,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = false,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
         }
 
 
@@ -143,13 +178,14 @@ namespace SeamstressMod.Survivors.Seamstress
         private static void CreateEffects()
         {
             primary = _assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
-            secondary = _assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
+            weave = _assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
             special = _assetBundle.LoadAsset<Sprite>("texSpecialIcon");
 
             primaryEmp = _assetBundle.LoadAsset<Sprite>("texStingerIcon");
-            secondaryEmp = _assetBundle.LoadAsset<Sprite>("texPistolIcon");
+            secondaryDisabled = _assetBundle.LoadAsset<Sprite>("texBazookaOutIcon");
+            utilityEmp = _assetBundle.LoadAsset<Sprite>("texPistolIcon");
             specialEmp = _assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon");
-
+            
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             stitchEffect.AddComponent<NetworkIdentity>();
 
@@ -214,7 +250,7 @@ namespace SeamstressMod.Survivors.Seamstress
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniRadialSlash1Merc.mat").WaitForCompletion());
             material.SetColor("_TintColor", Color.red);
             clipSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
-            clipSwingEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 1f);
+            clipSwingEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 0.5f);
             var fard1 = clipSwingEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             fard1.startLifetimeMultiplier = 0.6f;
 
@@ -223,7 +259,7 @@ namespace SeamstressMod.Survivors.Seamstress
             clipSlashEffect.transform.GetChild(0).gameObject.SetActive(false);
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
             clipSlashEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
-            clipSlashEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 1f);
+            clipSlashEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 0.5f);
             fard1 = clipSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             fard1.startLifetimeMultiplier = 0.6f;
 
@@ -256,6 +292,8 @@ namespace SeamstressMod.Survivors.Seamstress
             expungeSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
             expungeSlashEffect.transform.GetChild(0).localRotation = new Quaternion(0f, 90f, 90f, expungeSlashEffect.transform.GetChild(0).localRotation.w);
             expungeSlashEffect.transform.GetChild(0).localScale = Vector3.one * 2.5f;
+            fard = expungeSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startLifetimeMultiplier = 0.6f;
             SeamstressPlugin.Destroy(expungeSlashEffect.GetComponent<EffectComponent>());
 
             expungeSlashEffect2 = expungeSlashEffect.InstantiateClone("ExpungeSlash2");

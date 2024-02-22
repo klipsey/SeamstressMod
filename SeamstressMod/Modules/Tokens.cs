@@ -26,8 +26,7 @@ namespace SeamstressMod.Modules
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 
         public static string needleKeyword = KeywordText("Needle", $" Gain <color=#9B3737>Needles</color> by tearing "
-                + Tokens.stitchPrefix + " or killing enemies. When <color=#9B3737>Needles</color> are consumed, <color=#9B3737>Needle</color> gain from " +
-            "tearing " + Tokens.stitchPrefix + " or killing enemies is disabled for 2 seconds.");
+                + Tokens.stitchPrefix + " or killing enemies. When <color=#9B3737>Needles</color> are consumed, disable the used skill for <style=cIsUtility>6</style> seconds.");
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 

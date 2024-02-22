@@ -39,7 +39,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public void OnKilledOtherServer(DamageReport damageReport)
         {
-            if (NetworkServer.active && damageReport.attacker == base.gameObject && !characterBody.HasBuff(SeamstressBuffs.needlesChill))
+            if (NetworkServer.active && damageReport.attacker == base.gameObject)
             {
                 RpcAddSecondaryStock();
             }

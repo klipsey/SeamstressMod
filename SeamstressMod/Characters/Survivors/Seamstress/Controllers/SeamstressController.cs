@@ -38,6 +38,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private float leapLength = 0f;
 
+        public float lockOutLength = 0f;
+
         private float bd = 0f;
 
         public bool fuckYou = false;
@@ -57,18 +59,23 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 leapLength -= Time.fixedDeltaTime;
             }
+            if(lockOutLength > 0f)
+            {
+                lockOutLength -= Time.fixedDeltaTime;
+            }
             if(bd > 0f)
             {
                 bd -= Time.fixedDeltaTime;
             }
             LeapEnd();
+            ExhaustEnd();
             CalculateBonusDamage();
             ButcheredSound();
             IsButchered();      
         }
         private void LeapEnd()
         {
-            if(skillLocator.utility.skillOverrides.Any() && leapLength <= 0f && !fuck)
+            if(skillLocator.utility.skillOverrides.Any() && leapLength <= 0f && !fuck && skillLocator.utility.skillDef == SeamstressAssets.weaveRecastSkillDef)
             {
                 fuck = true;
                 leapLength = 2f;
@@ -77,10 +84,26 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 fuck = false;
                 leapLength = 0f;
-                if (skillLocator.utility.skillOverrides.Any())
+                if (skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressAssets.weaveRecastSkillDef) skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            }
+        }
+
+        private void ExhaustEnd()
+        {
+            if (skillLocator.secondary.skillOverrides.Any() && lockOutLength < 0f && skillLocator.secondary.skillDef == SeamstressAssets.lockOutSkillDef)
+            {
+                int holdStocks = skillLocator.secondary.stock;
+                Log.Debug("held stocks" + holdStocks);
+                skillLocator.secondary.UnsetSkillOverride(gameObject, SeamstressAssets.lockOutSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+                if(holdStocks + skillLocator.secondary.stock > skillLocator.secondary.maxStock)
                 {
-                    skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+                    skillLocator.secondary.stock = skillLocator.secondary.maxStock;
                 }
+                else
+                {
+                    skillLocator.secondary.stock += holdStocks;
+                }
+                lockOutLength = 0f;
             }
         }
         public float GetButcheredConversion()

@@ -16,6 +16,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Modules.Content.AddEntityState(typeof(Clip));
 
+            Modules.Content.AddEntityState(typeof(Exhaustion));
+
             Modules.Content.AddEntityState(typeof(WeaveLeap));
             Modules.Content.AddEntityState(typeof(Weave));
 

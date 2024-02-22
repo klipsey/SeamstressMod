@@ -141,6 +141,7 @@ namespace SeamstressMod.Modules.BaseStates
                     OnHitEnemyAuthority();
                 }
             }
+            PlaySwingEffect();
         }
 
         private void EnterAttack()
@@ -151,7 +152,6 @@ namespace SeamstressMod.Modules.BaseStates
             {
                 PlayTrueAttackAnimation();
             }
-            PlaySwingEffect();
 
             if (base.isAuthority)
             {

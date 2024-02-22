@@ -44,6 +44,8 @@ namespace SeamstressMod.SkillStates
 
         public static float blastAttackProcCoefficient = 1f;
 
+        private float exhaustDuration = 6f;
+
         private Animator animator;
 
         private CharacterModel characterModel;
@@ -121,6 +123,11 @@ namespace SeamstressMod.SkillStates
             CalculateBlinkDestination();
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", (baseDuration + exitDuration) / this.attackSpeedStat );
+            float exhaustApply = Mathf.Min(exhaustDuration, Mathf.Max(0.5f, exhaustDuration * skillLocator.secondary.cooldownScale - skillLocator.secondary.flatCooldownReduction));
+            skillLocator.secondary.rechargeStopwatch = 0f;
+            if (NetworkServer.active) characterBody.AddTimedBuff(SeamstressBuffs.needlesChill, exhaustApply);
+            seamCon.lockOutLength = exhaustApply;
+            skillLocator.secondary.SetSkillOverride(gameObject, SeamstressAssets.lockOutSkillDef, RoR2.GenericSkill.SkillOverridePriority.Contextual);
         }
 
         private void CalculateBlinkDestination()
@@ -262,9 +269,6 @@ namespace SeamstressMod.SkillStates
 
         public override void OnExit()
         {
-            aimRequest?.Dispose();
-            characterBody.AddTimedBuff(SeamstressBuffs.needlesChill, 2f);
-            characterBody.skillLocator.secondary.rechargeStopwatch = 0f;
             base.OnExit();
             ExitCleanup();
         }
