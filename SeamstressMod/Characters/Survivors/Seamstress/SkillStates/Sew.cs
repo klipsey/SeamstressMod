@@ -14,11 +14,9 @@ namespace SeamstressMod.SkillStates
     {
         protected GameObject projectilePrefab;
 
-        public static GameObject supaEffect = SeamstressAssets.sewButcheredEffect;
+        public static GameObject supaEffect = SeamstressAssets.sewEffect;
 
-        public static GameObject boringEffect = SeamstressAssets.sewEffect;
-
-        private float baseDuration = 0.2f;
+        private float baseDuration = 0.1f;
         private bool hasFired;
         private Ray aimRay;
         private float duration;
@@ -27,14 +25,13 @@ namespace SeamstressMod.SkillStates
             base.OnEnter();
             RefreshState();
             this.duration = (baseDuration / attackSpeedStat);
+            UnityEngine.Object.Instantiate<GameObject>(supaEffect, transform);
             if (empowered)
             {
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
-                UnityEngine.Object.Instantiate<GameObject>(supaEffect, transform);
             }
             else
             {
-                UnityEngine.Object.Instantiate<GameObject>(boringEffect, transform);
                 this.projectilePrefab = SeamstressAssets.needlePrefab;
             }
             if(!isGrounded)

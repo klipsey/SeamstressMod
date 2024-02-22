@@ -4,6 +4,7 @@ using R2API;
 using SeamstressMod.Survivors.Seamstress;
 using SeamstressMod.Modules.BaseStates;
 using System;
+using System.ComponentModel;
 
 
 namespace SeamstressMod.SkillStates
@@ -11,6 +12,10 @@ namespace SeamstressMod.SkillStates
     public class Flurry : BaseMeleeAttack
     {
         private GameObject swingEffectInstance;
+
+        private GameObject chargeEffectInstance;
+
+        public static GameObject chargeEffectPrefab = SeamstressAssets.flurryCharge;
         public override void OnEnter()
         {
             RefreshState();
@@ -44,13 +49,17 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 moddedDamageType2 = DamageTypes.CutDamage;
-                swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
-                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();
             Util.PlayAttackSpeedSound("Play_imp_overlord_attack2_tell", gameObject, duration * attackStartPercentTime);
+            Transform transform = FindModelChild(this.muzzleString);
+            if (transform && chargeEffectPrefab)
+            {
+                chargeEffectInstance = UnityEngine.Object.Instantiate(chargeEffectPrefab, transform.position, transform.rotation);
+                chargeEffectInstance.transform.parent = transform;
+            }
         }
 
         protected override void FireAttack()
@@ -73,6 +82,7 @@ namespace SeamstressMod.SkillStates
 
         protected override void PlayTrueAttackAnimation()
         {
+            Destroy(chargeEffectInstance);
             PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration * (earlyExitPercentTime - attackStartPercentTime), 0.1f * duration);
         }
         protected override void PlaySwingEffect()
@@ -82,7 +92,7 @@ namespace SeamstressMod.SkillStates
                 return;
             }
             Transform transform = FindModelChild(this.muzzleString);
-            if ((bool)transform)
+            if (transform)
             {
                 this.swingEffectInstance = UnityEngine.Object.Instantiate<GameObject>(this.swingEffectPrefab, transform);
                 ScaleParticleSystemDuration scale = this.swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();

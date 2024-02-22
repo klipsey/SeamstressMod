@@ -52,7 +52,8 @@ namespace SeamstressMod.Survivors.Seamstress
             sortPosition = 100,
 
             crosshair = Assets.LoadCrosshair("SimpleDot"),
-            podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
+            podPrefab = null,
+            initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressSpawnState)),
 
             maxHealth = 160f,
             healthRegen = 1f,
@@ -275,7 +276,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 keywordTokens = new string[] { Tokens.needleKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SewAltAbility)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SpecialExpunge)),
                 
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,

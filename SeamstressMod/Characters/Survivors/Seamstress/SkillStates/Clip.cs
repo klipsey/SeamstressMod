@@ -19,8 +19,6 @@ namespace SeamstressMod.SkillStates
     {
         public static GameObject supaEffect = SeamstressAssets.clipSlashEffect;
 
-        public static GameObject boringEffect = SeamstressAssets.clipSwingEffect;
-
         private GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
 
         protected Animator animator;
@@ -197,7 +195,7 @@ namespace SeamstressMod.SkillStates
         }
         protected virtual void PlaySwingEffect()
         {
-            if (!supaEffect || !boringEffect)
+            if (!supaEffect)
             {
                 Log.Debug("Error, no effect?");
                 return;
@@ -208,14 +206,14 @@ namespace SeamstressMod.SkillStates
             {
                 if (empowered || iAmAwesome)
                 {
-                    UnityEngine.Object.Instantiate(SeamstressAssets.scissorsButcheredComboSwingEffect, transform);
+                    UnityEngine.Object.Instantiate(SeamstressAssets.scissorsComboSwingEffect, transform);
                     UnityEngine.Object.Instantiate(supaEffect, transform2);
                     iAmAwesome = false;
                 }
                 else
                 {
-                    UnityEngine.Object.Instantiate(SeamstressAssets.scissorsButcheredSwingEffect, transform);
-                    UnityEngine.Object.Instantiate(boringEffect, transform2);
+                    UnityEngine.Object.Instantiate(SeamstressAssets.scissorsSwingEffect, transform);
+                    UnityEngine.Object.Instantiate(supaEffect, transform2);
                 }
             }
         }

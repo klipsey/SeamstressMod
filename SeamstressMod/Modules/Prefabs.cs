@@ -150,6 +150,7 @@ namespace SeamstressMod.Modules
             bodyComponent._defaultCrosshairPrefab = bodyInfo.crosshair;
             bodyComponent.hideCrosshair = false;
             bodyComponent.preferredPodPrefab = bodyInfo.podPrefab;
+            bodyComponent.preferredInitialStateType = bodyInfo.initialStateType;
 
             //stats
             bodyComponent.baseMaxHealth = bodyInfo.maxHealth;

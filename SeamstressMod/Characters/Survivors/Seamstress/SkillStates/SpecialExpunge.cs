@@ -11,7 +11,7 @@ using static R2API.DamageAPI;
 
 namespace SeamstressMod.SkillStates
 {
-    public class SewAltAbility : BaseSeamstressSkillState
+    public class SpecialExpunge : BaseSeamstressSkillState
     {
         public static bool disappearWhileBlinking = true;
 
@@ -88,13 +88,13 @@ namespace SeamstressMod.SkillStates
             }
             this.blastAttackRadius += this.doThings * 20;
 
-            if ((bool)base.cameraTargetParams)
+            if (base.cameraTargetParams)
             {
                 aimRequest = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
             Util.PlaySound(beginSoundString, base.gameObject);
             this.modelTransform = GetModelTransform();
-            if ((bool)this.modelTransform)
+            if (this.modelTransform)
             {
                 this.animator = this.modelTransform.GetComponent<Animator>();
                 this.characterModel = this.modelTransform.GetComponent<CharacterModel>();
@@ -103,18 +103,18 @@ namespace SeamstressMod.SkillStates
             }
             if (disappearWhileBlinking)
             {
-                if ((bool)this.characterModel)
+                if (this.characterModel)
                 {
                     this.characterModel.invisibilityCount++;
                 }
-                if ((bool)this.hurtboxGroup)
+                if (this.hurtboxGroup)
                 {
                     HurtBoxGroup hurtBoxGroup = hurtboxGroup;
                     int hurtBoxesDeactivatorCounter = hurtBoxGroup.hurtBoxesDeactivatorCounter + 1;
                     hurtBoxGroup.hurtBoxesDeactivatorCounter = hurtBoxesDeactivatorCounter;
                 }
                 /*
-                if ((bool)this.childLocator)
+                if (this.childLocator)
                 {
                     this.childLocator.FindChild("DustCenter").gameObject.SetActive(false);
                 }
@@ -146,7 +146,7 @@ namespace SeamstressMod.SkillStates
         }
         private void CreateBlinkEffect(Vector3 origin)
         {
-            if ((bool)SeamstressAssets.blinkPrefab)
+            if (SeamstressAssets.blinkPrefab)
             {
                 EffectData effectData = new EffectData();
                 effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination - blinkStart);
@@ -158,7 +158,7 @@ namespace SeamstressMod.SkillStates
 
         private void SetPosition(Vector3 newPosition)
         {
-            if ((bool)base.characterMotor)
+            if (base.characterMotor)
             {
                 base.characterMotor.Motor.SetPositionAndRotation(newPosition, Quaternion.identity);
             }
@@ -167,7 +167,7 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if ((bool)base.characterMotor)
+            if (base.characterMotor)
             {
                 base.characterMotor.velocity = Vector3.zero;
             }
@@ -178,7 +178,7 @@ namespace SeamstressMod.SkillStates
             if (base.fixedAge >= (baseDuration - destinationAlertDuration) / this.attackSpeedStat && !hasBlinked)
             {
                 hasBlinked = true;
-                if ((bool)SeamstressAssets.blinkDestinationPrefab)
+                if (SeamstressAssets.blinkDestinationPrefab)
                 {
                     blinkDestinationInstance = Object.Instantiate(SeamstressAssets.blinkDestinationPrefab, blinkDestination, Quaternion.identity);
                     blinkDestinationInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = destinationAlertDuration;
@@ -232,7 +232,7 @@ namespace SeamstressMod.SkillStates
             }
             if (disappearWhileBlinking)
             {
-                if ((bool)this.modelTransform && (bool)SeamstressAssets.destealthMaterial)
+                if (this.modelTransform && SeamstressAssets.destealthMaterial)
                 {
                     TemporaryOverlay temporaryOverlay = animator.gameObject.AddComponent<TemporaryOverlay>();
                     temporaryOverlay.duration = 1f;
@@ -242,18 +242,18 @@ namespace SeamstressMod.SkillStates
                     temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                     temporaryOverlay.animateShaderAlpha = true;
                 }
-                if ((bool)this.characterModel)
+                if (this.characterModel)
                 {
                     characterModel.invisibilityCount--;
                 }
-                if ((bool)this.hurtboxGroup)
+                if (this.hurtboxGroup)
                 {
                     HurtBoxGroup hurtBoxGroup = hurtboxGroup;
                     int hurtBoxesDeactivatorCounter = hurtBoxGroup.hurtBoxesDeactivatorCounter - 1;
                     hurtBoxGroup.hurtBoxesDeactivatorCounter = hurtBoxesDeactivatorCounter;
                 }
                 /*
-                if ((bool)this.childLocator)
+                if (this.childLocator)
                 {
                     childLocator.FindChild("DustCenter").gameObject.SetActive(
                 true);
@@ -261,7 +261,7 @@ namespace SeamstressMod.SkillStates
                 */
                 //PlayAnimation("Gesture, Additive", "BlinkEnd", "BlinkEnd.playbackRate", exitDuration);
             }
-            if ((bool)blinkDestinationInstance)
+            if (blinkDestinationInstance)
             {
                 UnityEngine.Object.Destroy(blinkDestinationInstance);
             }

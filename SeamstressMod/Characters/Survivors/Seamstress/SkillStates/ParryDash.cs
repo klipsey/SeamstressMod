@@ -23,7 +23,7 @@ namespace SeamstressMod.SkillStates
             procCoefficient = 1f;
             pushForce = 200f;
             bonusForce = Vector3.zero;
-            baseDuration = 0.1f;
+            baseDuration = 0.2f;
             moddedDamageType = DamageTypes.StitchDamage;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
@@ -34,7 +34,7 @@ namespace SeamstressMod.SkillStates
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             earlyExitPercentTime = 1f;
-            hitStopDuration = 0.1f;
+            hitStopDuration = 0.2f;
             attackRecoil = 0.75f;
             hitHopVelocity = 3.5f;
             swingSoundString = "Play_imp_attack";
@@ -48,21 +48,23 @@ namespace SeamstressMod.SkillStates
             }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
             base.OnEnter();
-            if (isGrounded)
+            if (first)
             {
-                float dashVector = 30f;
-                if (this.inputBank.moveVector != Vector3.zero) this.characterMotor.velocity += this.characterDirection.forward * dashVector;
-                else
+                if (isGrounded)
                 {
-                    dashVector = 15f;
+                    float dashVector = 40f;
+                    if (this.inputBank.moveVector != Vector3.zero) this.characterMotor.velocity += this.characterDirection.forward * dashVector;
+                    else
+                    {
+                        dashVector = 25f;
+                        this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
+                    }
+                }
+                else if (!isGrounded)
+                {
+                    float dashVector = 30f;
                     this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
                 }
-
-            }
-            else if (!isGrounded)
-            {
-                float dashVector = 20f;
-                this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
             }
         }
 

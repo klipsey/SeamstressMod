@@ -6,13 +6,16 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         public static void Init()
         {
+
+            Modules.Content.AddEntityState(typeof(SeamstressSpawnState));
+
             Modules.Content.AddEntityState(typeof(Trim));
 
             Modules.Content.AddEntityState(typeof(Flurry));
 
             Modules.Content.AddEntityState(typeof(Sew));
 
-            Modules.Content.AddEntityState(typeof(SewAltAbility));
+            Modules.Content.AddEntityState(typeof(SpecialExpunge));
 
             Modules.Content.AddEntityState(typeof(Clip));
 

@@ -13,11 +13,11 @@ namespace SeamstressMod.SkillStates
 {
     public class WeaveLeap : BaseSeamstressSkillState
     {
-        public static GameObject dashPrefab = SeamstressAssets.weaveDashButchered;
+        public static GameObject dashPrefab = SeamstressAssets.impDash;
 
-        public static GameObject supaPrefab = SeamstressAssets.sewButcheredEffect;
+        public static GameObject supaPrefab = SeamstressAssets.sewEffect;
 
-        protected GameObject hitEffectPrefab;
+        public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
         public bool hasHit { get; private set; }
 
         public static float dashPrepDuration = 0.35f;
@@ -73,7 +73,7 @@ namespace SeamstressMod.SkillStates
             RefreshState();
             modelTransform = GetModelTransform();
             childLocator = modelTransform.GetComponent<ChildLocator>();
-            if ((bool)base.cameraTargetParams)
+            if (base.cameraTargetParams)
             {
                 aimRequest = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
@@ -83,14 +83,12 @@ namespace SeamstressMod.SkillStates
             overlapAttack.procCoefficient = procCoefficient;
             if (empowered)
             {
-                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 overlapAttack.AddModdedDamageType(DamageTypes.CutDamage);
                 Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
                 hitSound = "Play_imp_overlord_impact";
             }
             else
             {
-                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 overlapAttack.RemoveModdedDamageType(DamageTypes.CutDamage);
                 Util.PlaySound("Play_merc_m2_uppercut", gameObject);
                 hitSound = "Play_bandit2_m2_impact";
@@ -102,9 +100,9 @@ namespace SeamstressMod.SkillStates
         public void CreateDashEffect()
         {
             Transform transform = childLocator.FindChild("CharacterCenter");
-            if ((bool)transform && (bool)dashPrefab)
+            if (transform && dashPrefab)
             {
-                if (empowered && (bool)supaPrefab)
+                if (empowered && supaPrefab)
                 {
                     Object.Instantiate<GameObject>(supaPrefab, Util.GetCorePosition(base.gameObject), Util.QuaternionSafeLookRotation(direction));
                 }
@@ -152,7 +150,7 @@ namespace SeamstressMod.SkillStates
                         inHitPause = true;
                         hitPauseTimer = hitPauseDuration / attackSpeedStat;
                     }
-                    if((bool)base.characterMotor)
+                    if(base.characterMotor)
                     {
                         base.characterMotor.moveDirection = base.inputBank.moveVector;
                     }

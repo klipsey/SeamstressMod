@@ -31,7 +31,7 @@ namespace SeamstressMod.Modules.BaseStates
             {
                 seamCon = base.GetComponent<SeamstressController>();
             }
-            if ((bool)seamCon)
+            if (seamCon)
             {
                 empowered = characterBody.HasBuff(SeamstressBuffs.butchered);
             }

@@ -41,8 +41,6 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 moddedDamageType = DamageTypes.CutDamage;
-                swingEffectPrefab = SeamstressAssets.scissorsButcheredSwingEffect;
-                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             }
             switch (swingIndex)
             {
@@ -58,7 +56,7 @@ namespace SeamstressMod.SkillStates
                     hitStopDuration = 0.1f;
                     swingSoundString = "Play_bandit2_m2_slash";
                     hitboxGroupName = "SwordBig";
-                    swingEffectPrefab = SeamstressAssets.scissorsButcheredComboSwingEffect;
+                    swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                     muzzleString = "SwingCenter";
                     break;
             }
@@ -102,7 +100,7 @@ namespace SeamstressMod.SkillStates
                 return;
             }
             Transform transform = FindModelChild(muzzleString);
-            if ((bool)transform)
+            if (transform)
             {
                 UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
             }

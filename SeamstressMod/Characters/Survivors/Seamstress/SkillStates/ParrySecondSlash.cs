@@ -34,7 +34,7 @@ namespace SeamstressMod.SkillStates
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             earlyExitPercentTime = 0.6f;
-            hitStopDuration = 0.1f;
+            hitStopDuration = 0.2f;
             attackRecoil = 0.75f;
             hitHopVelocity = 3.5f;
             swingSoundString = "Play_imp_attack";

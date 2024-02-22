@@ -141,14 +141,14 @@ namespace SeamstressMod.Modules.BaseStates
                     OnHitEnemyAuthority();
                 }
             }
-            PlaySwingEffect();
         }
 
         private void EnterAttack()
         {
             hasFired = true;
             Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
-            if(buffer == true)
+            PlaySwingEffect();
+            if (buffer == true)
             {
                 PlayTrueAttackAnimation();
             }

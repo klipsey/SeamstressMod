@@ -16,7 +16,7 @@ namespace SeamstressMod.SkillStates
 
         private Transform modelTransform;
 
-        public static GameObject blinkPrefab;
+        public static GameObject blinkPrefab = SeamstressAssets.impDash;
 
         private CameraTargetParams.AimRequest request;
 
@@ -107,7 +107,7 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if ((bool)base.characterMotor && (bool)base.characterDirection)
+            if (base.characterMotor && base.characterDirection)
             {
                 base.characterMotor.rootMotion += blinkVector * (speedCoefficient * Time.fixedDeltaTime);
             }

@@ -13,11 +13,11 @@ namespace SeamstressMod.SkillStates
 {
     public class Weave : BaseSeamstressSkillState
     {
-        public static GameObject dashPrefab = SeamstressAssets.weaveDashButchered;
+        public static GameObject dashPrefab = SeamstressAssets.impDash;
 
         public static GameObject supaPrefab = SeamstressAssets.blinkPrefab;
 
-        protected GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+        public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
         public bool hasHit { get; private set; }
 
         public static float speedCoefficient = 100f;
@@ -56,7 +56,7 @@ namespace SeamstressMod.SkillStates
             RefreshState();
             modelTransform = GetModelTransform();
             childLocator = modelTransform.GetComponent<ChildLocator>();
-            if ((bool)base.cameraTargetParams)
+            if (base.cameraTargetParams)
             {
                 aimRequest = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
@@ -68,14 +68,12 @@ namespace SeamstressMod.SkillStates
             overlapAttack.procCoefficient = procCoefficient;
             if (empowered)
             {
-                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 overlapAttack.AddModdedDamageType(DamageTypes.CutDamage);
                 Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
                 hitSound = "Play_imp_overlord_impact";
             }
             else
             {
-                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
                 Util.PlaySound("Play_merc_m2_uppercut", gameObject);
                 overlapAttack.RemoveModdedDamageType(DamageTypes.CutDamage);
                 hitSound = "Play_bandit2_m2_impact";
@@ -86,9 +84,9 @@ namespace SeamstressMod.SkillStates
         public void CreateDashEffect()
         {
             Transform transform = childLocator.FindChild("CharacterCenter");
-            if ((bool)transform && (bool)dashPrefab)
+            if (transform && dashPrefab)
             {
-                if(empowered && (bool)supaPrefab)
+                if(empowered && supaPrefab)
                 {
                     CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
                 }
@@ -148,13 +146,13 @@ namespace SeamstressMod.SkillStates
         }
         private void CreateBlinkEffect(Vector3 origin)
         {
-            if ((bool)SeamstressAssets.blinkPrefab)
+            if (supaPrefab)
             {
                 EffectData effectData = new EffectData();
                 effectData.rotation = Util.QuaternionSafeLookRotation(dashVector);
                 effectData.origin = origin;
                 effectData.scale = 0.1f;
-                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: true);
+                EffectManager.SpawnEffect(supaPrefab, effectData, transmit: true);
             }
         }
         public override void OnExit()

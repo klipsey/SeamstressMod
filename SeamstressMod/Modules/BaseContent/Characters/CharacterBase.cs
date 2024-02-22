@@ -4,6 +4,8 @@ using SeamstressMod.Modules;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using SeamstressMod.Survivors.Seamstress;
+using EntityStates;
 
 namespace SeamstressMod.Modules.Characters
 {
@@ -101,6 +103,7 @@ namespace SeamstressMod.Modules.Characters
 
         public GameObject crosshair = null;
         public GameObject podPrefab = null;
+        public SerializableEntityStateType initialStateType;
         #endregion Character
 
         #region Stats
