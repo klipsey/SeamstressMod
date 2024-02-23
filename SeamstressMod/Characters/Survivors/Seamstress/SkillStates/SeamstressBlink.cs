@@ -13,14 +13,13 @@ namespace SeamstressMod.SkillStates
 {
     public class SeamstressBlink : BaseSeamstressSkillState
     {
+        protected Transform modelTransform;
 
-        private Transform modelTransform;
+        protected GameObject blinkPrefab = SeamstressAssets.smallBlinkPrefab;
 
-        public static GameObject blinkPrefab = SeamstressAssets.impDash;
+        protected CameraTargetParams.AimRequest request;
 
-        private CameraTargetParams.AimRequest request;
-
-        private Vector3 blinkVector = Vector3.zero;
+        protected Vector3 blinkVector;
 
         public float duration = 0.2f;
 
@@ -28,11 +27,13 @@ namespace SeamstressMod.SkillStates
 
         public static string beginSoundString = "Play_imp_attack_blink";
 
-        private CharacterModel characterModel;
+        protected CharacterModel characterModel;
 
-        private HurtBoxGroup hurtboxGroup;
+        protected HurtBoxGroup hurtboxGroup;
 
-        private Animator animator;
+        public bool split;
+
+        protected Animator animator;
 
         public override void OnEnter()
         {
@@ -64,7 +65,10 @@ namespace SeamstressMod.SkillStates
             {
                 blinkVector = base.inputBank.aimDirection;
             }
+            if(characterMotor.isGrounded) base.characterMotor.velocity = Vector3.zero;
+            base.characterDirection.forward = blinkVector;
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
+            base.characterBody.SetAimTimer(0f);
         }
 
         protected virtual Vector3 GetBlinkVector()
@@ -79,16 +83,20 @@ namespace SeamstressMod.SkillStates
             }
             return Vector3.Normalize(Quaternion.AngleAxis(num, axis) * base.inputBank.moveVector);
         }
-        private void CreateBlinkEffect(Vector3 origin)
+        protected void CreateBlinkEffect(Vector3 origin)
         {
-            if ((bool)SeamstressAssets.blinkPrefab)
+            if(!split)
             {
-                EffectData effectData = new EffectData();
-                effectData.rotation = Util.QuaternionSafeLookRotation(blinkVector);
-                effectData.origin = origin;
-                effectData.scale = 0.15f;
-                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: true);
+                if (blinkPrefab)
+                {
+                    EffectData effectData = new EffectData();
+                    effectData.rotation = Util.QuaternionSafeLookRotation(blinkVector);
+                    effectData.origin = origin;
+                    effectData.scale = 0.15f;
+                    EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: true);
+                }
             }
+            else split = false;
         }
 
         public override void FixedUpdate()

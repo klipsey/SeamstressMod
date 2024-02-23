@@ -27,7 +27,7 @@ namespace SeamstressMod.SkillStates
         private DamageType damageType = DamageType.Generic;
         private DamageAPI.ModdedDamageType moddedDamageType2 = DamageTypes.ButcheredLifeSteal;
         private DamageAPI.ModdedDamageType moddedDamageType = DamageTypes.CutDamage;
-        private float damageCoefficient;
+        private float damageCoefficient = SeamstressStaticValues.clipDamageCoefficient;
         private float procCoefficient = 1f;
         private float pushForce = 0f;
         private Vector3 bonusForce = Vector3.zero;
@@ -217,6 +217,7 @@ namespace SeamstressMod.SkillStates
                 overlapAttack.AddModdedDamageType(moddedDamageType2);
                 overlapAttack.AddModdedDamageType(moddedDamageType);
             }
+            overlapAttack.AddModdedDamageType(DamageTypes.ClipLifeSteal);
             overlapAttack.attacker = gameObject;
             overlapAttack.inflictor = gameObject;
             overlapAttack.teamIndex = GetTeam();

@@ -22,7 +22,6 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
         }
-
         public override void FixedUpdate()
         {
             base.FixedUpdate();
@@ -36,7 +35,7 @@ namespace SeamstressMod.SkillStates
                 this.projectilePrefab = SeamstressAssets.needlePrefab;
             }
             if(blinkCd > 0) blinkCd -= Time.fixedDeltaTime;
-            if (base.characterMotor.jumpCount < base.characterBody.maxJumpCount || hasNeedles || characterMotor.isGrounded && blinkCd <= 0) this.seamCon.blinkReady = true;
+            if ((base.characterMotor.jumpCount < base.characterBody.maxJumpCount || hasNeedles) && (blinkCd <= 0 || !this.isGrounded)) this.seamCon.blinkReady = true;
             if (this.inputBank.jump.justPressed && this.isGrounded)
             {
                 if (this.seamCon.blinkReady)
@@ -53,7 +52,7 @@ namespace SeamstressMod.SkillStates
                 {
                     this.seamCon.blinkReady = false;
                     blinkCd = 0.5f;
-                    if(base.characterMotor.jumpCount >= base.characterBody.maxJumpCount)
+                    if(base.characterMotor.jumpCount == base.characterBody.maxJumpCount)
                     {
                         if (NetworkServer.active) characterBody.RemoveBuff(SeamstressBuffs.needles);
                     }

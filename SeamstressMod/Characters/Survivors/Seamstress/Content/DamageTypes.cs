@@ -19,7 +19,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType NoSword;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
         public static DamageAPI.ModdedDamageType ButcheredLifeSteal;
-        public static DamageAPI.ModdedDamageType BeginHoming;
+        public static DamageAPI.ModdedDamageType ClipLifeSteal;
 
         internal static void Init()
         {
@@ -28,7 +28,7 @@ namespace SeamstressMod.Survivors.Seamstress
             NoSword = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
             ButcheredLifeSteal = DamageAPI.ReserveDamageType();
-            BeginHoming = DamageAPI.ReserveDamageType();
+            ClipLifeSteal = DamageAPI.ReserveDamageType();
             Hook();
         }
         private static void Hook()
@@ -49,27 +49,6 @@ namespace SeamstressMod.Survivors.Seamstress
             GameObject attackerObject = damageReport.attacker.gameObject;
             if (NetworkServer.active)
             {
-                if (damageInfo.HasModdedDamageType(BeginHoming))
-                {
-                    ProjectileDirectionalTargetFinder s = inflictorObject.GetComponent<ProjectileDirectionalTargetFinder>();
-                    if(!inflictorObject.TryGetComponent<ProjectileDirectionalTargetFinder>(out s))
-                    {
-                        ProjectileDirectionalTargetFinder needleFinder = inflictorObject.AddComponent<ProjectileDirectionalTargetFinder>();
-                        needleFinder.lookRange = 35f;
-                        needleFinder.lookCone = 180f;
-                        needleFinder.targetSearchInterval = 0.2f;
-                        needleFinder.onlySearchIfNoTarget = false;
-                        needleFinder.allowTargetLoss = true;
-                        needleFinder.testLoS = true;
-                        needleFinder.ignoreAir = false;
-                        needleFinder.flierAltitudeTolerance = Mathf.Infinity;
-
-                        ProjectileSimple needleSimple = inflictorObject.GetComponent<ProjectileSimple>();
-                        needleSimple.desiredForwardSpeed = 150f;
-                        needleSimple.lifetime = 1f;
-                        needleSimple.updateAfterFiring = true;
-                    }
-                }
                 if (damageInfo.HasModdedDamageType(NoSword) && attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
                 {
                     attackerBody.AddBuff(SeamstressBuffs.needles);
@@ -79,6 +58,10 @@ namespace SeamstressMod.Survivors.Seamstress
                     attackerBody.AddBuff(SeamstressBuffs.needles);
                 }
                 if (damageInfo.HasModdedDamageType(ButcheredLifeSteal))
+                {
+                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.butcheredLifeSteal, default(ProcChainMask), true);
+                }
+                if (damageInfo.HasModdedDamageType(ClipLifeSteal))
                 {
                     attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.butcheredLifeSteal, default(ProcChainMask), true);
                 }

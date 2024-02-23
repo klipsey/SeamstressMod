@@ -64,14 +64,14 @@ namespace SeamstressMod.Survivors.Seamstress
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
 
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
-            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", $"Consume all <color=#9B3737>Needles</color>. Snip up to 5 times based on <color=#9B3737>Needles</color> consumed dealing " +
-                $"<style=cIsDamage>{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style> per <color=#9B3737>Needle</color> consumed. <style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", $"Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip up to 5 additional times based on <color=#9B3737>Needles</color> consumed. " +
+                $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
             #endregion
 
             #region Utility 
             Language.Add(prefix + "UTILITY_BLINK_NAME", "Glimpse of Corruption");
             Language.Add(prefix + "UTILITY_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> applying to enemies. Gain "
-                + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <color=#9B3737>Glimpse of Corruption</color> becomes <color=#9B3737>Expunge</color>.");
+                + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <style=cIsHealing>75% of healing</style> is converted into <color=#9B3737>Fiend Gauge</color>.");
 
             Language.Add(prefix + "UTILITY_PARRY_NAME", "Glimpse of Purity");
             Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Briefly become <style=cIsUtility>Invulnerable</style>. If hit, dash forward dealing <style=cIsDamage>2x{100f * SeamstressStaticValues.parryDamage}% damage</style> applying . Gain " +

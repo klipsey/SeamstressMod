@@ -184,7 +184,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             stitchEffect.AddComponent<NetworkIdentity>();
-            stitchEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", theRed);
+            stitchEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
 
             clawsEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/WIPImpEffect.prefab").WaitForCompletion().InstantiateClone("ClawsEffect");
             clawsEffect.AddComponent<NetworkIdentity>();
@@ -222,6 +222,10 @@ namespace SeamstressMod.Survivors.Seamstress
             blinkPrefab.transform.GetChild(1).localScale = Vector3.one * 0.2f;
             Modules.Content.CreateAndAddEffectDef(blinkPrefab);
 
+            smallBlinkPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/ImpBlinkEffect.prefab").WaitForCompletion().InstantiateClone("BlinkSmall");
+            smallBlinkPrefab.AddComponent<NetworkIdentity>();
+            Modules.Content.CreateAndAddEffectDef(smallBlinkPrefab);
+
             blinkDestinationPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/ImpBossBlinkDestination.prefab").WaitForCompletion().InstantiateClone("BlinkEnd");
             blinkDestinationPrefab.AddComponent<NetworkIdentity>();
             blinkDestinationPrefab.transform.GetChild(0).localScale = Vector3.one * 0.2f;
@@ -232,6 +236,8 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
             scissorsSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();//Assets.LoadEffect("HenrySwordSwingEffect", true);
             scissorsSwingEffect.transform.GetChild(1).localScale = Vector3.one;
+            var fard = scissorsSwingEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startLifetimeMultiplier = 1.8f;
 
             scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing3");
             scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
@@ -246,8 +252,8 @@ namespace SeamstressMod.Survivors.Seamstress
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
             clipSlashEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             clipSlashEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 0.5f);
-            var fard = clipSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
-            fard.startLifetimeMultiplier = 0.6f;
+            fard = clipSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startLifetimeMultiplier = 1.8f;
 
             parrySlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlash.prefab").WaitForCompletion().InstantiateClone("ParrySlash");
             parrySlashEffect.AddComponent<NetworkIdentity>();
@@ -261,7 +267,7 @@ namespace SeamstressMod.Survivors.Seamstress
             flurryCharge.AddComponent<NetworkIdentity>();
             flurryCharge.transform.GetChild(2).gameObject.SetActive(false);
 
-            expungeEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("WeaveReset");
+            expungeEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("ExpungeEffect");
             expungeEffect.AddComponent<NetworkIdentity>();
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercExposedBackdrop.mat").WaitForCompletion());
             material.SetColor("_TintColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
@@ -341,7 +347,7 @@ namespace SeamstressMod.Survivors.Seamstress
             sewEffect.transform.GetChild(2).localScale = Vector3.one * 1f;
             sewEffect.transform.GetChild(2).GetComponent<ParticleSystemRenderer>().material = material;
 
-            impDash = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercAssaulterEffect.prefab").WaitForCompletion().InstantiateClone("WeaveDash");
+            impDash = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercAssaulterEffect.prefab").WaitForCompletion().InstantiateClone("ImpDash");
             impDash.AddComponent<NetworkIdentity>();
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
             material.SetColor("_TintColor", theRed);
@@ -377,7 +383,7 @@ namespace SeamstressMod.Survivors.Seamstress
             CreateNeedle();
             Content.AddProjectilePrefab(needlePrefab);
             CreateEmpoweredNeedle();
-            Content.AddProjectilePrefab(needlePrefab);
+            Content.AddProjectilePrefab(needleButcheredPrefab);
         }
         private static void CreateNeedle()
         {
@@ -385,16 +391,15 @@ namespace SeamstressMod.Survivors.Seamstress
             needlePrefab = Assets.CloneProjectilePrefab("FMJ", "Needle");
 
             ProjectileSimple needleSimple = needlePrefab.GetComponent<ProjectileSimple>();
-            needleSimple.desiredForwardSpeed = 150f;
-            needleSimple.lifetime = 5f;
+            needleSimple.desiredForwardSpeed = 125f;
+            needleSimple.lifetime = 3f;
             needleSimple.updateAfterFiring = true;
 
             ProjectileDamage needleDamage = needlePrefab.GetComponent<ProjectileDamage>();
             needleDamage.damageType = DamageType.Generic;
-            DamageAPI.ModdedDamageTypeHolderComponent needleModdedDamage = needlePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
-            needleModdedDamage.Add(DamageTypes.BeginHoming);
 
             needlePrefab.AddComponent<ProjectileTargetComponent>();
+
             ProjectileSteerTowardTarget needleSteer = needlePrefab.AddComponent<ProjectileSteerTowardTarget>();
             needleSteer.yAxisOnly = false;
             needleSteer.rotationSpeed = 700f;
@@ -403,8 +408,15 @@ namespace SeamstressMod.Survivors.Seamstress
             needleLap.resetInterval = 0.5f;
             needleLap.overlapProcCoefficient = SeamstressStaticValues.needleProcCoefficient;
 
-            ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
+            ProjectileDirectionalTargetFinder needleFinder = needlePrefab.AddComponent<ProjectileDirectionalTargetFinder>();
+            needleFinder.lookRange = 35f;
+            needleFinder.lookCone = 110f;
+            needleFinder.targetSearchInterval = 0.2f;
+            needleFinder.onlySearchIfNoTarget = false;
+            needleFinder.allowTargetLoss = true;
+            needleFinder.testLoS = true;
+            needleFinder.ignoreAir = false;
+            needleFinder.flierAltitudeTolerance = Mathf.Infinity;
 
             ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
             needleController.procCoefficient = 1f;
@@ -416,6 +428,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleGhost.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(84f / 255f, 0f / 255f, 11f / 255f));
             needleGhost.transform.GetChild(3).gameObject.SetActive(false);
             needleGhost.transform.GetChild(4).localScale = new Vector3(.5f, .5f, .5f);
+            //REACTIVATE NEEDLE TRAILS!!!!!
             needleGhost.transform.GetChild(4).GetChild(3).gameObject.SetActive(false);
             needleGhost.transform.GetChild(4).GetChild(0).gameObject.SetActive(false);
             needleGhost.transform.GetChild(4).GetChild(1).gameObject.SetActive(false);
@@ -433,7 +446,9 @@ namespace SeamstressMod.Survivors.Seamstress
         private static void CreateEmpoweredNeedle()
         {
             needleButcheredPrefab = PrefabAPI.InstantiateClone(needlePrefab, "NeedleButchered");
-            needleButcheredPrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
+            ProjectileHealOwnerOnDamageInflicted needleHeal = needleButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
+            needleHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
+            needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
         }
         #endregion projectiles
     }

@@ -26,9 +26,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private GameObject endReap = SeamstressAssets.reapEndEffect;
 
-        private float butcheredConversion = 0f;
-
-        public float savedConverstion = 0f;
+        public float fiendGauge = 0f;
 
         public float hopoopFeatherTimer;
 
@@ -118,14 +116,16 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         */
         #endregion
-        public float GetButcheredConversion()
-        {
-            return savedConverstion;
-        }
         public void ButcheredConversionCalc(float healDamage)
         {
-            butcheredConversion += healDamage;
-            savedConverstion = butcheredConversion;
+            if((fiendGauge + healDamage) < (5 * healthComponent.fullHealth))
+            {
+                fiendGauge += healDamage;
+            }
+            else if((fiendGauge + healDamage) >= (5 * healthComponent.fullHealth) && fiendGauge != (5 * healthComponent.fullHealth))
+            {
+                fiendGauge += (5 * healthComponent.fullHealth) - fiendGauge; 
+            }
         }
         private void IsButchered()
         {
@@ -151,10 +151,22 @@ namespace SeamstressMod.Survivors.Seamstress
             else if (!fuckYou && butchered)
             {
                 butchered = false;
+                Transform modelTransform = characterBody.modelLocator.modelTransform;
+                if (modelTransform)
+                {
+                    TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
+                temporaryOverlay.duration = 1f;
+                temporaryOverlay.destroyComponentOnEnd = true;
+                temporaryOverlay.originalMaterial = SeamstressAssets.destealthMaterial;
+                temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
+                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                temporaryOverlay.animateShaderAlpha = true;
+                }
                 UnityEngine.Object.Instantiate<GameObject>(endReap, characterBody.modelLocator.transform);
                 Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
                 //fire expunge at end of butchered
             }
+            /*
             if(bd < 0f && !hasFired)
             {
                 if (skillLocator.special == skillLocator.FindSkill("reapRecast"))
@@ -170,7 +182,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     hasFired = true;
                 }
             }
-
+            */
         }
         //butchered end sound
         private void ButcheredSound()
@@ -189,7 +201,7 @@ namespace SeamstressMod.Survivors.Seamstress
         private void CalculateBonusDamage()
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
-            float fakeHealthMissing = (healthComponent.fullHealth + healthComponent.fullShield) * 0.5f;
+            float fakeHealthMissing = (healthComponent.fullHealth) * 0.5f;
             if(fuckYou && skillLocator.special.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") characterBody.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
             else characterBody.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }

@@ -32,10 +32,10 @@ namespace SeamstressMod.SkillStates
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             attackStartPercentTime = 0.2f;
-            attackEndPercentTime = 0.6f;
+            attackEndPercentTime = 0.5f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            earlyExitPercentTime = 0.8f;
+            earlyExitPercentTime = 0.6f;
             hitStopDuration = 0.1f;
             attackRecoil = 0.75f;
             hitHopVelocity = 3.5f;
@@ -101,7 +101,7 @@ namespace SeamstressMod.SkillStates
         }
         protected override void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration * (earlyExitPercentTime - attackStartPercentTime), 0.1f * duration);
+            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
         }
         protected override void PlaySwingEffect()
         {
@@ -109,12 +109,10 @@ namespace SeamstressMod.SkillStates
             {
                 return;
             }
-            Transform transform = FindModelChild(this.muzzleString);
+            Transform transform = FindModelChild(muzzleString);
             if (transform)
             {
-                this.swingEffectInstance = UnityEngine.Object.Instantiate<GameObject>(this.swingEffectPrefab, transform);
-                ScaleParticleSystemDuration scale = this.swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
-                if (scale) scale.newDuration = scale.initialDuration + (scale.initialDuration * (earlyExitPercentTime - attackStartPercentTime));
+                UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
             }
         }
         protected override void OnHitEnemyAuthority()

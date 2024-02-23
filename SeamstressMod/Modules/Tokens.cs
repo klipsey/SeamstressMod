@@ -28,7 +28,7 @@ namespace SeamstressMod.Modules
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 
-        public static string butcheredKeyword = KeywordText("Butchered", "Gain movement speed and grant every ability " + cutPrefix +
+        public static string butcheredKeyword = KeywordText("Butchered", "Grant all skills an additional <style=cIsHealing>10% lifesteal</style> and grant every ability " + cutPrefix +
             ".");
         public static string DamageText(string text)
         {

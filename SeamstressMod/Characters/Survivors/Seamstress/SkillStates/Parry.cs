@@ -54,13 +54,13 @@ namespace SeamstressMod.SkillStates
                     if (this.inputBank.moveVector != Vector3.zero) this.characterMotor.velocity += this.characterDirection.forward * dashVector;
                     else
                     {
-                        dashVector = 25f;
+                        dashVector = 80f;
                         this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
                     }
                 }
                 else if (!isGrounded)
                 {
-                    float dashVector = 30f;
+                    float dashVector = 40f;
                     this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
                 }
                 skillLocator.special.rechargeStopwatch += 0.5f * skillLocator.special.cooldownRemaining;

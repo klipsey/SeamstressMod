@@ -48,7 +48,14 @@ namespace SeamstressMod.SkillStates
                         }
                     }
 
-                    GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
+                    if(seamCon.blinkReady)
+                    {
+                        GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
+                    }
+                    else
+                    {
+                        GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, 0, 0, false);
+                    }
 
                     if (hasModelAnimator)
                     {

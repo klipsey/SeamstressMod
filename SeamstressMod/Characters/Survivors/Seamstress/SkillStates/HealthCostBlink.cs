@@ -14,7 +14,6 @@ namespace SeamstressMod.SkillStates
     public class HealthCostBlink : SeamstressBlink
     {
         private float healthCostFraction = 0.5f;
-
         //test sphere collider changing with scale
         public static float blastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius - 10;
 
@@ -26,6 +25,8 @@ namespace SeamstressMod.SkillStates
 
         public override void OnEnter()
         {
+            this.blinkPrefab = SeamstressAssets.blinkPrefab;
+            this.split = true;
             base.OnEnter();
         }
         public override void FixedUpdate()

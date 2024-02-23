@@ -153,12 +153,19 @@ namespace SeamstressMod.Survivors.Seamstress
             //example of how to create a hitbox
             Transform hitBoxTransform = childLocator.FindChild("SwordHitbox");
             Prefabs.SetupHitBoxGroup(characterModelObject, "Sword", hitBoxTransform);
+
             hitBoxTransform = childLocator.FindChild("SwordHitboxBig");
             Prefabs.SetupHitBoxGroup(characterModelObject, "SwordBig", hitBoxTransform);
-            hitBoxTransform = childLocator.FindChild("SewHitbox");
-            Prefabs.SetupHitBoxGroup(characterModelObject, "Sew", hitBoxTransform);
+
             hitBoxTransform = childLocator.FindChild("WeaveHitbox");
             Prefabs.SetupHitBoxGroup(characterModelObject, "Weave", hitBoxTransform);
+
+            hitBoxTransform = childLocator.FindChild("RightScissorHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Right", hitBoxTransform);
+
+            hitBoxTransform = childLocator.FindChild("LeftScissorHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Left", hitBoxTransform);
+
         }
 
         public override void InitializeEntityStateMachines() 
@@ -172,7 +179,7 @@ namespace SeamstressMod.Survivors.Seamstress
             //the main "body" state machine has some special properties
             Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(SkillStates.SeamstressMainState), typeof(EntityStates.SpawnTeleporterState));
 
-            Prefabs.AddEntityStateMachine(bodyPrefab, "Blink", typeof(SkillStates.SeamstressJump), typeof(SkillStates.SeamstressJump));
+            Prefabs.AddEntityStateMachine(bodyPrefab, "Jump", typeof(SkillStates.SeamstressJump), typeof(SkillStates.SeamstressJump));
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Blink");
@@ -236,39 +243,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void AddSecondarySkills()
         {
-            SkillDef planarShift = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "PlanarShift",
-                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANARSHIFT_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANARSHIFT_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SecondaryBlink)),
-                
-                activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseMaxStock = 1,
-                baseRechargeInterval = 6,
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = false,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-            });
-
-            Skills.AddSecondarySkills(bodyPrefab, planarShift);
-
             SkillDef Clip = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "Clip",
@@ -302,6 +276,38 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Skills.AddSecondarySkills(bodyPrefab, Clip);
 
+            SkillDef planarShift = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "PlanarShift",
+                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANARSHIFT_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANARSHIFT_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.needleKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SecondaryBlink)),
+                
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseMaxStock = 1,
+                baseRechargeInterval = 6,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = false,
+                dontAllowPastMaxStocks = false,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
+
+            Skills.AddSecondarySkills(bodyPrefab, planarShift);
         }
 
         private void AddUtilitySkills()
@@ -480,7 +486,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void AddSpecialSkills()
         {
-            SkillDef parrySeamstressSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef parrySeamstressSkillD2ef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "ParrySeamstress",
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME",
@@ -511,7 +517,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 forceSprintDuringState = false,
             });
 
-            Skills.AddUtilitySkills(bodyPrefab, parrySeamstressSkillDef);
+            Skills.AddSpecialSkills(bodyPrefab, parrySeamstressSkillD2ef);
         }
         #endregion skills
 
@@ -690,7 +696,7 @@ namespace SeamstressMod.Survivors.Seamstress
         //calculate expunge healing
         private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen = true)
         {
-            if (self.body.skillLocator.special == self.body.skillLocator.FindSkill("reapRecast") && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if (self.body.HasBuff(SeamstressBuffs.butchered) && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
                 amount *= SeamstressStaticValues.healConversion;
             }
