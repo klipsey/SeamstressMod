@@ -12,7 +12,9 @@ namespace SeamstressMod.Modules.BaseStates
     {
         protected SeamstressController seamCon;
 
-        protected int baseNeedleAmount;
+        protected int scissorCount;
+
+        protected int needleCount;
 
         protected bool empowered;
 
@@ -27,6 +29,12 @@ namespace SeamstressMod.Modules.BaseStates
         }
         protected void RefreshState()
         {
+            if (NetworkServer.active)
+            {
+                scissorCount = characterBody.GetBuffCount(SeamstressBuffs.scissorCount);
+                needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles);
+
+            }
             if (!seamCon)
             {
                 seamCon = base.GetComponent<SeamstressController>();

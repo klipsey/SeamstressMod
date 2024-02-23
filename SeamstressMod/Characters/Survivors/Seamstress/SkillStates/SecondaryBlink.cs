@@ -11,7 +11,7 @@ using static R2API.DamageAPI;
 
 namespace SeamstressMod.SkillStates
 {
-    public class SpecialExpunge : BaseSeamstressSkillState
+    public class SecondaryBlink : BaseSeamstressSkillState
     {
         public static bool disappearWhileBlinking = true;
 
@@ -123,11 +123,6 @@ namespace SeamstressMod.SkillStates
             CalculateBlinkDestination();
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", (baseDuration + exitDuration) / this.attackSpeedStat );
-            float exhaustApply = Mathf.Min(exhaustDuration, Mathf.Max(0.5f, exhaustDuration * skillLocator.secondary.cooldownScale - skillLocator.secondary.flatCooldownReduction));
-            skillLocator.secondary.rechargeStopwatch = 0f;
-            if (NetworkServer.active) characterBody.AddTimedBuff(SeamstressBuffs.needlesChill, exhaustApply);
-            seamCon.lockOutLength = exhaustApply;
-            skillLocator.secondary.SetSkillOverride(gameObject, SeamstressAssets.lockOutSkillDef, RoR2.GenericSkill.SkillOverridePriority.Contextual);
         }
 
         private void CalculateBlinkDestination()
@@ -217,13 +212,14 @@ namespace SeamstressMod.SkillStates
                 blastAttack.procCoefficient = blastAttackProcCoefficient;
                 blastAttack.radius = blastAttackRadius;
                 blastAttack.damageType = DamageType.Stun1s;
-                blastAttack.AddModdedDamageType(DamageTypes.PlanarLifeSteal);
                 if (empowered)
                 {
+                    blastAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
                     blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
                 }
                 else
                 {
+                    blastAttack.RemoveModdedDamageType(DamageTypes.ButcheredLifeSteal);
                     blastAttack.RemoveModdedDamageType(DamageTypes.CutDamage);
                 }
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;

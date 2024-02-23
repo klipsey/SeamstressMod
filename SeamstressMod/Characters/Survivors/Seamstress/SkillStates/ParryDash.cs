@@ -12,8 +12,6 @@ namespace SeamstressMod.SkillStates
     public class ParryDash : BaseMeleeAttack
     {
         private GameObject swingEffectInstance;
-
-        protected bool first = true;
         public override void OnEnter()
         {
             RefreshState();
@@ -24,7 +22,7 @@ namespace SeamstressMod.SkillStates
             pushForce = 200f;
             bonusForce = Vector3.zero;
             baseDuration = 0.2f;
-            moddedDamageType = DamageTypes.StitchDamage;
+            moddedDamageType = DamageTypes.NoSword;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
@@ -45,10 +43,14 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 moddedDamageType2 = DamageTypes.CutDamage;
+                moddedDamageType3 = DamageTypes.ButcheredLifeSteal;
             }
+            if (scissorCount < 2) moddedDamageType = DamageTypes.NoSword;
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
+            setDiffState = true;
+            setState = new ParrySecondSlash();
             base.OnEnter();
-            if (first)
+            if (setDiffState)
             {
                 if (isGrounded)
                 {
@@ -66,11 +68,6 @@ namespace SeamstressMod.SkillStates
                     this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
                 }
             }
-        }
-
-        public override void FixedUpdate()
-        {
-            base.FixedUpdate();
         }
         protected override void PlayAttackAnimation()
         {
@@ -106,10 +103,6 @@ namespace SeamstressMod.SkillStates
         }
         public override void OnExit()
         {
-            if(first)
-            {
-                outer.SetNextState(new ParrySecondSlash());
-            }
             base.OnExit();
         }
 

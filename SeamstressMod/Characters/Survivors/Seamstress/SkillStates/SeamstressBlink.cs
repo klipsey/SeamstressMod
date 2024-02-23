@@ -11,7 +11,7 @@ using UnityEngine.Networking.Match;
 
 namespace SeamstressMod.SkillStates
 {
-    public class BlinkSeamstress : BaseSeamstressSkillState
+    public class SeamstressBlink : BaseSeamstressSkillState
     {
 
         private Transform modelTransform;
@@ -20,26 +20,13 @@ namespace SeamstressMod.SkillStates
 
         private CameraTargetParams.AimRequest request;
 
-        private float healthCostFraction = 0.5f;
-
         private Vector3 blinkVector = Vector3.zero;
 
-        public float duration = 0.3f;
+        public float duration = 0.2f;
 
         public float speedCoefficient = 30f;
 
-        public static string beginSoundString = "Play_imp_overlord_teleport_start";
-
-        public static string endSoundString = "Play_imp_overlord_teleport_end";
-
-        //test sphere collider changing with scale
-        public static float blastAttackRadius = SeamstressAssets.blinkDestinationPrefab.transform.GetChild(1).gameObject.GetComponent<SphereCollider>().radius - 10;
-
-        public static float blastAttackDamageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
-
-        public static float blastAttackForce = 25f;
-
-        public static float blastAttackProcCoefficient = 1f;
+        public static string beginSoundString = "Play_imp_attack_blink";
 
         private CharacterModel characterModel;
 
@@ -120,28 +107,6 @@ namespace SeamstressMod.SkillStates
         {
             if (!outer.destroying)
             {
-                if (NetworkServer.active && healthComponent && healthCostFraction >= Mathf.Epsilon)
-                {
-                    float currentBarrier = healthComponent.barrier;
-                    DamageInfo damageInfo = new DamageInfo();
-                    damageInfo.damage = ((healthComponent.health + healthComponent.shield) * healthCostFraction) + healthComponent.barrier;
-                    damageInfo.position = characterBody.corePosition;
-                    damageInfo.force = Vector3.zero;
-                    damageInfo.damageColorIndex = DamageColorIndex.Default;
-                    damageInfo.crit = false;
-                    damageInfo.attacker = null;
-                    damageInfo.inflictor = null;
-                    damageInfo.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock;
-                    damageInfo.procCoefficient = 0f;
-                    healthComponent.TakeDamage(damageInfo);
-                    healthComponent.AddBarrier(currentBarrier);
-                    SeamstressController s = characterBody.GetComponent<SeamstressController>();
-                    s.fuckYou = false;
-                    characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
-                }
-                this.skillLocator.special = skillLocator.FindSkill("reapRecast");
-
-                Util.PlaySound(endSoundString, base.gameObject);
                 CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
                 modelTransform = GetModelTransform();
                 if (this.modelTransform && SeamstressAssets.destealthMaterial)
@@ -153,27 +118,6 @@ namespace SeamstressMod.SkillStates
                     temporaryOverlay.inspectorCharacterModel = animator.gameObject.GetComponent<CharacterModel>();
                     temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                     temporaryOverlay.animateShaderAlpha = true;
-                }
-                if (blastAttackDamageCoefficient > 0f && base.isAuthority)
-                {
-                    BlastAttack blastAttack = new BlastAttack();
-                    blastAttack.attacker = base.gameObject;
-                    blastAttack.inflictor = base.gameObject;
-                    blastAttack.teamIndex = TeamComponent.GetObjectTeam(base.gameObject);
-                    blastAttack.baseDamage = damageStat * blastAttackDamageCoefficient;
-                    blastAttack.baseForce = blastAttackForce;
-                    blastAttack.position = base.transform.position;
-                    blastAttack.procCoefficient = blastAttackProcCoefficient;
-                    blastAttack.radius = blastAttackRadius;
-                    blastAttack.damageType = DamageType.Stun1s;
-                    blastAttack.AddModdedDamageType(DamageTypes.StitchDamage);
-                    if(empowered)
-                    {
-                        blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
-                    }
-                    blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
-                    blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
-                    blastAttack.Fire();
                 }
                 if (characterModel)
                 {

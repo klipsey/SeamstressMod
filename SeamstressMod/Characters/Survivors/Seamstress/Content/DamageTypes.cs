@@ -16,21 +16,19 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         public static DamageAPI.ModdedDamageType Empty;
         public static DamageAPI.ModdedDamageType CutDamage;
-        public static DamageAPI.ModdedDamageType StitchDamage;
+        public static DamageAPI.ModdedDamageType NoSword;
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
-        public static DamageAPI.ModdedDamageType PlanarLifeSteal;
+        public static DamageAPI.ModdedDamageType ButcheredLifeSteal;
         public static DamageAPI.ModdedDamageType BeginHoming;
-        public static DamageAPI.ModdedDamageType DotFlag;
 
         internal static void Init()
         {
             Empty = DamageAPI.ReserveDamageType();
             CutDamage = DamageAPI.ReserveDamageType();
-            StitchDamage = DamageAPI.ReserveDamageType();
+            NoSword = DamageAPI.ReserveDamageType();
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
-            PlanarLifeSteal = DamageAPI.ReserveDamageType();
+            ButcheredLifeSteal = DamageAPI.ReserveDamageType();
             BeginHoming = DamageAPI.ReserveDamageType();
-            DotFlag = DamageAPI.ReserveDamageType();
             Hook();
         }
         private static void Hook()
@@ -72,9 +70,17 @@ namespace SeamstressMod.Survivors.Seamstress
                         needleSimple.updateAfterFiring = true;
                     }
                 }
-                if (damageInfo.HasModdedDamageType(PlanarLifeSteal))
+                if (damageInfo.HasModdedDamageType(NoSword) && attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
                 {
-                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.planarLifeSteal, default(ProcChainMask), true);
+                    attackerBody.AddBuff(SeamstressBuffs.needles);
+                }
+                if(damageInfo.HasModdedDamageType(AddNeedlesDamage) && attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
+                {
+                    attackerBody.AddBuff(SeamstressBuffs.needles);
+                }
+                if (damageInfo.HasModdedDamageType(ButcheredLifeSteal))
+                {
+                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.butcheredLifeSteal, default(ProcChainMask), true);
                 }
             }
         }

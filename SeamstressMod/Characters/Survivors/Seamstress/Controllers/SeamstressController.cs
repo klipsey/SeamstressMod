@@ -30,21 +30,23 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public float savedConverstion = 0f;
 
+        public float hopoopFeatherTimer;
+
         private bool hasPlayed = false;
 
         private bool butchered = false;
 
         private bool hasFired = false;
 
-        private float leapLength = 0f;
+        //private float leapLength = 0f;
 
-        public float lockOutLength = 0f;
+        //public float lockOutLength = 0f;
 
         private float bd = 0f;
 
         public bool fuckYou = false;
 
-        private bool fuck = false;
+        public bool blinkReady = true;
 
         public void Awake()
         {
@@ -55,7 +57,10 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         public void FixedUpdate()
         {
-            if(leapLength > 0f) 
+            hopoopFeatherTimer -= Time.fixedDeltaTime;
+            #region Scrapped
+            /*
+            if (leapLength > 0f) 
             {
                 leapLength -= Time.fixedDeltaTime;
             }
@@ -63,16 +68,20 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 lockOutLength -= Time.fixedDeltaTime;
             }
-            if(bd > 0f)
+            */
+            //LeapEnd();
+            //ExhaustEnd();
+            #endregion
+            if (bd > 0f)
             {
                 bd -= Time.fixedDeltaTime;
             }
-            LeapEnd();
-            ExhaustEnd();
             CalculateBonusDamage();
             ButcheredSound();
             IsButchered();      
         }
+        #region scrapped
+        /*
         private void LeapEnd()
         {
             if(skillLocator.utility.skillOverrides.Any() && leapLength <= 0f && !fuck && skillLocator.utility.skillDef == SeamstressAssets.weaveRecastSkillDef)
@@ -87,6 +96,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 if (skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressAssets.weaveRecastSkillDef) skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
             }
         }
+
 
         private void ExhaustEnd()
         {
@@ -106,6 +116,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 lockOutLength = 0f;
             }
         }
+        */
+        #endregion
         public float GetButcheredConversion()
         {
             return savedConverstion;
@@ -178,7 +190,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
             float fakeHealthMissing = (healthComponent.fullHealth + healthComponent.fullShield) * 0.5f;
-            if(fuckYou && skillLocator.special.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_PARRY_NAME") characterBody.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
+            if(fuckYou && skillLocator.special.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") characterBody.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
             else characterBody.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
     }

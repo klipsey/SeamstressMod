@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿/*
+using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 using R2API;
@@ -78,3 +79,4 @@ namespace SeamstressMod.SkillStates
 
     }
 }
+*/

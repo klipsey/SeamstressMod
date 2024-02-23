@@ -1,4 +1,5 @@
-﻿using SeamstressMod.Modules.BaseStates;
+﻿/*
+using SeamstressMod.Modules.BaseStates;
 using SeamstressMod.Survivors.Seamstress;
 using RoR2;
 using UnityEngine;
@@ -7,40 +8,28 @@ using UnityEngine.Networking;
 using TMPro;
 using EntityStates;
 using static R2API.DamageAPI;
-using static UnityEngine.UI.Image;
+
 
 namespace SeamstressMod.SkillStates
 {
-    public class WeaveLeap : BaseSeamstressSkillState
+    public class Weave : BaseSeamstressSkillState
     {
         public static GameObject dashPrefab = SeamstressAssets.impDash;
 
-        public static GameObject supaPrefab = SeamstressAssets.sewEffect;
+        public static GameObject supaPrefab = SeamstressAssets.blinkPrefab;
 
         public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
         public bool hasHit { get; private set; }
 
-        public static float dashPrepDuration = 0.35f;
-
         public static float speedCoefficient = 100f;
 
-        public static float damageCoefficient = SeamstressStaticValues.weaveLeapDamageCoefficient;
+        public static float damageCoefficient = SeamstressStaticValues.weaveDamageCoefficient;
 
         public static float procCoefficient = 1;
 
         public static float hitPauseDuration = 0.075f;
 
-        private Vector3 direction;
-
-        public static float airControl = 0.15f;
-
-        public static float aimVelocity = 5;
-
-        public static float upwardVelocity = 7;
-
-        public static float forwardVelocity = 4;
-
-        public static float minimumY = 0.1f;
+        private Vector3 dashVector;
 
         private OverlapAttack overlapAttack;
 
@@ -54,8 +43,6 @@ namespace SeamstressMod.SkillStates
 
         private float dashDuration;
 
-        private float previousAirControl;
-
         private bool isDashing;
 
         private bool inHitPause;
@@ -65,11 +52,8 @@ namespace SeamstressMod.SkillStates
         private string hitSound;
         public override void OnEnter()
         {
+            dashDuration = 0.3f;
             base.OnEnter();
-            direction = GetAimRay().direction;
-            dashDuration = 0.5f;
-            previousAirControl = base.characterMotor.airControl;
-            base.characterMotor.airControl = airControl;
             RefreshState();
             modelTransform = GetModelTransform();
             childLocator = modelTransform.GetComponent<ChildLocator>();
@@ -78,8 +62,10 @@ namespace SeamstressMod.SkillStates
                 aimRequest = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
             //PlayAnimation("FullBody, Override", "AssaulterPrep", "AssaulterPrep.playbackRate", dashPrepDuration);
+            dashVector = inputBank.aimDirection;
+
             overlapAttack = InitMeleeOverlap(damageCoefficient, hitEffectPrefab, modelTransform, "Weave");
-            overlapAttack.AddModdedDamageType(DamageTypes.StitchDamage);
+            overlapAttack.AddModdedDamageType(DamageTypes.NoSword);
             overlapAttack.procCoefficient = procCoefficient;
             if (empowered)
             {
@@ -89,44 +75,36 @@ namespace SeamstressMod.SkillStates
             }
             else
             {
-                overlapAttack.RemoveModdedDamageType(DamageTypes.CutDamage);
                 Util.PlaySound("Play_merc_m2_uppercut", gameObject);
+                overlapAttack.RemoveModdedDamageType(DamageTypes.CutDamage);
                 hitSound = "Play_bandit2_m2_impact";
             }
-            SmallHop(base.characterMotor, 5f);
-            PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration + dashPrepDuration);
-            base.skillLocator.utility.SetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration);
+            skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
         public void CreateDashEffect()
         {
             Transform transform = childLocator.FindChild("CharacterCenter");
             if (transform && dashPrefab)
             {
-                if (empowered && supaPrefab)
+                if(empowered && supaPrefab)
                 {
-                    Object.Instantiate<GameObject>(supaPrefab, Util.GetCorePosition(base.gameObject), Util.QuaternionSafeLookRotation(direction));
+                    CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
                 }
-                Object.Instantiate<GameObject>(dashPrefab, transform.position, Util.QuaternionSafeLookRotation(direction), transform);
+                Object.Instantiate<GameObject>(dashPrefab, transform.position, Util.QuaternionSafeLookRotation(dashVector), transform);
             }
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            characterDirection.forward = direction;
-            if (stopwatch > dashPrepDuration / attackSpeedStat && !isDashing)
+            characterDirection.forward = dashVector;
+            if (!isDashing)
             {
                 isDashing = true;
-                direction = GetAimRay().direction;
+                dashVector = inputBank.aimDirection;
                 CreateDashEffect();
-                base.characterBody.isSprinting = true;
-                direction.y = Mathf.Max(direction.y, minimumY);
-                Vector3 vector = direction.normalized * aimVelocity * 3 * (moveSpeedStat * 0.25f);
-                Vector3 vector2 = Vector3.up * upwardVelocity;
-                Vector3 vector3 = new Vector3(direction.x, 0f, direction.z).normalized * forwardVelocity;
-                base.characterMotor.Motor.ForceUnground();
-                base.characterMotor.velocity = vector + vector2 + vector3;
-                base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+                //PlayCrossfade("FullBody, Override", "AssaulterLoop", 0.1f);
                 gameObject.layer = LayerIndex.fakeActor.intVal;
                 base.characterMotor.Motor.RebuildCollidableLayers();
             }
@@ -146,14 +124,12 @@ namespace SeamstressMod.SkillStates
                         {
                             Util.PlaySound(hitSound, gameObject);
                             hasHit = true;
+                            dashDuration *= 0.75f;
                         }
                         inHitPause = true;
                         hitPauseTimer = hitPauseDuration / attackSpeedStat;
                     }
-                    if(base.characterMotor)
-                    {
-                        base.characterMotor.moveDirection = base.inputBank.moveVector;
-                    }
+                    base.characterMotor.rootMotion += dashVector * speedCoefficient * Time.fixedDeltaTime;
                 }
                 else
                 {
@@ -164,22 +140,33 @@ namespace SeamstressMod.SkillStates
                     }
                 }
             }
-            if ((stopwatch >= dashDuration + dashPrepDuration / attackSpeedStat) && base.isAuthority)
+            if (stopwatch >= dashDuration / attackSpeedStat && base.isAuthority)
             {
                 outer.SetNextStateToMain();
+            }
+        }
+        private void CreateBlinkEffect(Vector3 origin)
+        {
+            if (supaPrefab)
+            {
+                EffectData effectData = new EffectData();
+                effectData.rotation = Util.QuaternionSafeLookRotation(dashVector);
+                effectData.origin = origin;
+                effectData.scale = 0.1f;
+                EffectManager.SpawnEffect(supaPrefab, effectData, transmit: true);
             }
         }
         public override void OnExit()
         {
             gameObject.layer = LayerIndex.defaultLayer.intVal;
             base.characterMotor.Motor.RebuildCollidableLayers();
-            base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
-            base.characterMotor.airControl = previousAirControl;
-            if (!empowered) Util.PlaySound("Play_item_proc_whip", gameObject);
+            if (!empowered)Util.PlaySound("Play_item_proc_whip", gameObject);
             if (base.isAuthority)
             {
                 base.characterMotor.disableAirControlUntilCollision = false;
-                SmallHop(base.characterMotor, 5f);
+                base.characterMotor.airControl = 0.25f;
+                base.characterMotor.velocity *= 0.3f;
+                SmallHop(base.characterMotor, 3f);
             }
             aimRequest?.Dispose();
             //PlayAnimation("FullBody, Override", "EvisLoopExit");
@@ -189,18 +176,19 @@ namespace SeamstressMod.SkillStates
         public override void OnSerialize(NetworkWriter writer)
         {
             base.OnSerialize(writer);
-            writer.Write(direction);
+            writer.Write(dashVector);
         }
 
         public override void OnDeserialize(NetworkReader reader)
         {
             base.OnDeserialize(reader);
-            direction = reader.ReadVector3();
+            dashVector = reader.ReadVector3();
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
             return InterruptPriority.PrioritySkill;
         }
+ 
     }
 }
-
+*/

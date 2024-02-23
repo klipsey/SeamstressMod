@@ -42,6 +42,7 @@ namespace SeamstressMod.SkillStates
             {
                 blinkPrefab = SeamstressAssets.blinkPrefab;
                 DoAttackServer();
+                outer.SetNextState(new ParryDash());
             }
             else if(base.isAuthority && base.fixedAge >= duration && !num)
             {
@@ -103,7 +104,6 @@ namespace SeamstressMod.SkillStates
             {
                 EffectManager.SimpleSoundEffect(parrySoundDef.index, base.characterBody.corePosition, transmit: true);
             }
-            outer.SetNextState(new ParryDash());
         }
 
         private void CreateBlinkEffect(Vector3 origin)

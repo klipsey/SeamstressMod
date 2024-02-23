@@ -43,7 +43,8 @@ namespace SeamstressMod.Modules.BaseStates
         protected GameObject hitEffectPrefab;
         protected NetworkSoundEventIndex impactSound;
         protected bool buffer = false;
-
+        protected bool setDiffState = false;
+        protected EntityState setState;
         public float duration;
         protected bool hasFired;
         private float hitPauseTimer;
@@ -193,9 +194,14 @@ namespace SeamstressMod.Modules.BaseStates
                 FireAttack();
             }
 
-            if (stopwatch >= duration && base.isAuthority)
+            if (stopwatch >= duration && base.isAuthority && !setDiffState)
             {
                 outer.SetNextStateToMain();
+                return;
+            }
+            else if(stopwatch >= duration && base.isAuthority && setDiffState)
+            {
+                outer.SetNextState(setState);
                 return;
             }
         }

@@ -33,8 +33,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject blinkDestinationPrefab;
 
-        internal static GameObject stitchTempEffectPrefab;
-
         internal static GameObject sewEffect;
 
         internal static GameObject clawsEffect;
@@ -89,7 +87,7 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject needleButcheredPrefab;
 
         //extra
-        public static SkillDef weaveRecastSkillDef;
+        //public static SkillDef weaveRecastSkillDef;
 
         public static SkillDef lockOutSkillDef;
         public static void Init(AssetBundle assetBundle)
@@ -104,7 +102,8 @@ namespace SeamstressMod.Survivors.Seamstress
             CreateEffects();
 
             CreateProjectiles();
-
+            #region scrapped
+            /*
             weaveRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "WeaveDash",
@@ -135,7 +134,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 cancelSprintingOnActivation = false,
                 forceSprintDuringState = true,
             });
-
+            */
+            #endregion
             lockOutSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "LockOut",
@@ -190,7 +190,8 @@ namespace SeamstressMod.Survivors.Seamstress
             clawsEffect.AddComponent<NetworkIdentity>();
             var claws = clawsEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             claws.startLifetimeMultiplier = 0.5f;
-
+            #region scrapped
+            /*
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/DeathMark/matDeathMarkSkull.mat").WaitForCompletion()); 
             stitchTempEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercExposeEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffectPrefab");
             stitchTempEffectPrefab.AddComponent<NetworkIdentity>();
@@ -206,7 +207,8 @@ namespace SeamstressMod.Survivors.Seamstress
             stitchConsumeEffectPrefab.transform.GetChild(0).GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
             stitchConsumeEffectPrefab.GetComponent<EffectComponent>().soundName = "Play_imp_overlord_teleport_end";
             Modules.Content.CreateAndAddEffectDef(stitchConsumeEffectPrefab);
-
+            */
+            #endregion
             butcheredOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
 
             destealthMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpBossDissolve.mat").WaitForCompletion();
@@ -241,7 +243,7 @@ namespace SeamstressMod.Survivors.Seamstress
             clipSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ClipSwing");
             clipSlashEffect.AddComponent<NetworkIdentity>();
             clipSlashEffect.transform.GetChild(0).gameObject.SetActive(false);
-            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
+            Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
             clipSlashEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             clipSlashEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 0.5f);
             var fard = clipSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
@@ -402,7 +404,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleLap.overlapProcCoefficient = SeamstressStaticValues.needleProcCoefficient;
 
             ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = SeamstressStaticValues.needleHealAmount;
+            needleHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
 
             ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
             needleController.procCoefficient = 1f;

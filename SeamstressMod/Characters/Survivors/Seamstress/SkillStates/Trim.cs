@@ -38,10 +38,6 @@ namespace SeamstressMod.SkillStates
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
-            if (empowered)
-            {
-                moddedDamageType = DamageTypes.CutDamage;
-            }
             switch (swingIndex)
             {
                 case 0:
@@ -52,7 +48,7 @@ namespace SeamstressMod.SkillStates
                     break;
                 case 2:damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
                     earlyExitPercentTime = 1f;
-                    moddedDamageType2 = DamageTypes.StitchDamage;
+                    moddedDamageType2 = DamageTypes.NoSword;
                     hitStopDuration = 0.1f;
                     swingSoundString = "Play_bandit2_m2_slash";
                     hitboxGroupName = "SwordBig";
@@ -60,6 +56,26 @@ namespace SeamstressMod.SkillStates
                     muzzleString = "SwingCenter";
                     break;
             }
+            switch (scissorCount)
+            {
+                case 0:
+                    //change to remove the nextstate
+                    hitboxGroupName = "Sword";
+                    moddedDamageType = DamageTypes.NoSword;
+                    break;
+                case 1:
+                    if (muzzleString == "SwingRight" || muzzleString == "SwingCenter")
+                    {
+                        //change to remove the next states double hit instead
+                        hitboxGroupName = "Sword";
+                        moddedDamageType = DamageTypes.NoSword;
+                    }
+                    break;
+                case 2:
+                    //change to approve next state
+                    break;
+            }
+
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();

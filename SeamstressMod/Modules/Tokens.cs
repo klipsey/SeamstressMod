@@ -8,7 +8,7 @@ namespace SeamstressMod.Modules
 
         public const string cutPrefix = "<color=#9B3737>Cut</color>";
 
-        public const string stitchPrefix = "<color=#9B3737>Stitches</color>";
+        public const string sentiencePrefix = "<color=#9B3737>Sentient</color>";
 
         public const string needlePrefix = "<color=#9B3737>Needle</color>";
 
@@ -18,15 +18,13 @@ namespace SeamstressMod.Modules
 
         public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";
 
-        public static string stitchKeyword = KeywordText("Stitch", $"Deal damage to tear open Stitches dealing <style=cIsDamage>{100 * SeamstressStaticValues.stitchBaseDamage}% damage</style> and applying " + cutPrefix + ".");
-
         public static string cutKeyword = KeywordText("Cut", $"Bleed enemies for <style=cIsDamage>1%</style> (<style=cIsDamage>0.5%</style> against bosses) of the " +
             $"enemies missing <style=cIsHealth>health</style> per second for {SeamstressStaticValues.cutDuration} seconds.");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 
-        public static string needleKeyword = KeywordText("Needle", $" Gain <color=#9B3737>Needles</color> by tearing "
-                + Tokens.stitchPrefix + " or killing enemies. When <color=#9B3737>Needles</color> are consumed, disable the used skill for <style=cIsUtility>6</style> seconds.");
+        public static string needleKeyword = KeywordText("Needle", $" Gain <color=#9B3737>Needles</color> by picking up your " 
+            + sentiencePrefix + " weapon or when landing attacks without your " + sentiencePrefix + " weapon.");
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 

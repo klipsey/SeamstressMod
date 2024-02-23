@@ -19,23 +19,23 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             RefreshState();
-            hitboxGroupName = "Sword";
+            hitboxGroupName = "SwordBig";
             damageType = DamageType.Generic;
             damageTotal = SeamstressStaticValues.flurryDamageCoefficient;
             procCoefficient = 1f;
             pushForce = 600f;
             bonusForce = Vector3.zero;
             baseDuration = 2f;
-            moddedDamageType = DamageTypes.StitchDamage;
+            moddedDamageType = DamageTypes.Empty;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
-            attackStartPercentTime = 0.4f;
+            attackStartPercentTime = 0.2f;
             attackEndPercentTime = 0.6f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            earlyExitPercentTime = 0.85f;
+            earlyExitPercentTime = 0.8f;
             hitStopDuration = 0.1f;
             attackRecoil = 0.75f;
             hitHopVelocity = 3.5f;
@@ -45,23 +45,47 @@ namespace SeamstressMod.SkillStates
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
-            buffer = true;
+            buffer = false;
             if (empowered)
             {
                 moddedDamageType2 = DamageTypes.CutDamage;
+                moddedDamageType3 = DamageTypes.ButcheredLifeSteal;
+            }
+            switch (scissorCount)
+            {
+                case 0:
+                    //change to remove the nextstate
+                    hitboxGroupName = "Sword";
+                    moddedDamageType = DamageTypes.NoSword;
+                    break;
+                case 1:
+                    if (muzzleString == "SwingRight")
+                    {
+                        //change to remove the next states double hit instead
+                        hitboxGroupName = "Sword";
+                        moddedDamageType = DamageTypes.NoSword;
+                    }
+                    break;
+                case 2:
+                    //change to approve next state
+                    break;
             }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();
             Util.PlayAttackSpeedSound("Play_imp_overlord_attack2_tell", gameObject, duration * attackStartPercentTime);
-            Transform transform = FindModelChild(this.muzzleString);
+            Transform transform = FindModelChild("meshHenrySword");
             if (transform && chargeEffectPrefab)
             {
                 chargeEffectInstance = UnityEngine.Object.Instantiate(chargeEffectPrefab, transform.position, transform.rotation);
                 chargeEffectInstance.transform.parent = transform;
             }
         }
-
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            if (base.fixedAge > attackStartPercentTime) Destroy(chargeEffectInstance);
+        }
         protected override void FireAttack()
         {
             if (base.isAuthority)
@@ -77,12 +101,6 @@ namespace SeamstressMod.SkillStates
         }
         protected override void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", attackStartPercentTime * duration, 0.1f * duration);
-        }
-
-        protected override void PlayTrueAttackAnimation()
-        {
-            Destroy(chargeEffectInstance);
             PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration * (earlyExitPercentTime - attackStartPercentTime), 0.1f * duration);
         }
         protected override void PlaySwingEffect()

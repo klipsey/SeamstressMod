@@ -140,10 +140,9 @@ namespace SeamstressMod.Survivors.Seamstress
         private void AdditionalBodySetup()
         {
             AddHitboxes();
-            bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.stitchSetup);
             bodyPrefab.AddComponent<SeamstressController>();
-            bodyPrefab.AddComponent<NeedleController>();
-            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
+            //bodyPrefab.AddComponent<NeedleController>();
+            //TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
         }
@@ -171,10 +170,12 @@ namespace SeamstressMod.Survivors.Seamstress
             //if you set up a custom main characterstate, set it up here
                 //don't forget to register custom entitystates in your HenryStates.cs
             //the main "body" state machine has some special properties
-            Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.SpawnTeleporterState));
-            
+            Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(SkillStates.SeamstressMainState), typeof(EntityStates.SpawnTeleporterState));
+
+            Prefabs.AddEntityStateMachine(bodyPrefab, "Blink", typeof(SkillStates.SeamstressJump), typeof(SkillStates.SeamstressJump));
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
+            Prefabs.AddEntityStateMachine(bodyPrefab, "Blink");
         }
 
         #region skills
@@ -235,7 +236,213 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void AddSecondarySkills()
         {
-            SkillDef sewSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef planarShift = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "PlanarShift",
+                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANARSHIFT_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANARSHIFT_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.needleKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SecondaryBlink)),
+                
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseMaxStock = 1,
+                baseRechargeInterval = 6,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = false,
+                dontAllowPastMaxStocks = false,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
+
+            Skills.AddSecondarySkills(bodyPrefab, planarShift);
+
+            SkillDef Clip = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "Clip",
+                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.needleKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texStingerIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Clip)),
+
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseMaxStock = 1,
+                baseRechargeInterval = 6,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = false,
+                dontAllowPastMaxStocks = false,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = true,
+                forceSprintDuringState = false,
+            });
+
+            Skills.AddSecondarySkills(bodyPrefab, Clip);
+
+        }
+
+        private void AddUtilitySkills()
+        {
+            SkillDef blinkSeamstressSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "BlinkSeamstress",
+                skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_BLINK_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_BLINK_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HealthCostBlink)),
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseRechargeInterval = 12f,
+                baseMaxStock = 1,
+
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = false,
+                mustKeyPress = true,
+                beginSkillCooldownOnSkillEnd = false,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+
+            });
+
+            Skills.AddUtilitySkills(bodyPrefab, blinkSeamstressSkillDef);
+
+            SkillDef parrySeamstressSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "ParrySeamstress",
+                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME",
+                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Parry)),
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseRechargeInterval = 12f,
+                baseMaxStock = 1,
+
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = false,
+                mustKeyPress = true,
+                beginSkillCooldownOnSkillEnd = false,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = true,
+                forceSprintDuringState = false,
+            });
+
+            Skills.AddUtilitySkills(bodyPrefab, parrySeamstressSkillDef);
+            #region scrapped
+            /*
+            GenericSkill reapRecast = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "reapRecast", true);
+
+            SkillDef reapRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "Expunge",
+                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_NAME",
+                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.cutKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
+                activationStateMachineName = "Weapon2",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseRechargeInterval = 1f,
+                baseMaxStock = 1,
+
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = true,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
+
+            Skills.AddSkillsToFamily(reapRecast.skillFamily, reapRecastSkillDef);
+
+            SkillDef weaveSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "Weave",
+                skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_WEAVE_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_WEAVE_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.cutKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.WeaveLeap)),
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+
+                baseRechargeInterval = 6f,
+                baseMaxStock = 1,
+
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = false,
+                dontAllowPastMaxStocks = false,
+                mustKeyPress = true,
+                beginSkillCooldownOnSkillEnd = false,
+
+                isCombatSkill = false,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = true,
+
+            });
+
+            Skills.AddUtilitySkills(bodyPrefab, weaveSkillDef);
+                        SkillDef sewSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "Sew",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_SEW_NAME",
@@ -267,190 +474,18 @@ namespace SeamstressMod.Survivors.Seamstress
             });
 
             Skills.AddSecondarySkills(bodyPrefab, sewSkillDef);
-
-            SkillDef sewAltSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "SewAlt",
-                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_ALTSEW_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_ALTSEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SpecialExpunge)),
-                
-                activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseMaxStock = SeamstressStaticValues.maxNeedleAmount,
-                baseRechargeInterval = SeamstressStaticValues.needleGainInterval,
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 0,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = false,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = true,
-                forceSprintDuringState = false,
-            });
-
-            Skills.AddSecondarySkills(bodyPrefab, sewAltSkillDef);
-
-            SkillDef Clip = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "Clip",
-                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texStingerIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Clip)),
-
-                activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseMaxStock = SeamstressStaticValues.maxNeedleAmount,
-                baseRechargeInterval = SeamstressStaticValues.needleGainInterval,
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 0,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = false,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = true,
-                forceSprintDuringState = false,
-            });
-
-            Skills.AddSecondarySkills(bodyPrefab, Clip);
-
-        }
-
-        private void AddUtilitySkills()
-        {
-            SkillDef weaveSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "Weave",
-                skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_WEAVE_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_WEAVE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.cutKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.WeaveLeap)),
-                activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
-
-                baseRechargeInterval = 6f,
-                baseMaxStock = 1,
-
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = false,
-                mustKeyPress = true,
-                beginSkillCooldownOnSkillEnd = false,
-
-                isCombatSkill = false,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = true,
-
-            });
-
-            Skills.AddUtilitySkills(bodyPrefab, weaveSkillDef);
+            */
+            #endregion
         }
 
         private void AddSpecialSkills()
         {
-
-            SkillDef blinkSeamstressSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "BlinkSeamstress",
-                skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_BLINK_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_BLINK_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.butcheredKeyword, Tokens.cutKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.BlinkSeamstress)),
-                activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseRechargeInterval = 12f,
-                baseMaxStock = 1,
-
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = true,
-                dontAllowPastMaxStocks = false,
-                mustKeyPress = true,
-                beginSkillCooldownOnSkillEnd = false,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-
-            });
-
-            Skills.AddSpecialSkills(bodyPrefab, blinkSeamstressSkillDef);
-
-            GenericSkill reapRecast = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "reapRecast", true);
-
-            SkillDef reapRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "Expunge",
-                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_EXPUNGE_NAME",
-                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_EXPUNGE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.cutKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
-                activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseRechargeInterval = 1f,
-                baseMaxStock = 1,
-
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = true,
-                dontAllowPastMaxStocks = true,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-            });
-
-            Skills.AddSkillsToFamily(reapRecast.skillFamily, reapRecastSkillDef);
-
             SkillDef parrySeamstressSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "ParrySeamstress",
-                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_PARRY_NAME",
-                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_PARRY_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.stitchKeyword, Tokens.butcheredKeyword, Tokens.cutKeyword },
+                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME",
+                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Parry)),
@@ -476,8 +511,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 forceSprintDuringState = false,
             });
 
-            Skills.AddSpecialSkills(bodyPrefab, parrySeamstressSkillDef);
-
+            Skills.AddUtilitySkills(bodyPrefab, parrySeamstressSkillDef);
         }
         #endregion skills
 
@@ -589,15 +623,6 @@ namespace SeamstressMod.Survivors.Seamstress
             float damageCheck = damageInfo.damage;
             if (damageCheck > 0)
             {
-                if (victimBody.HasBuff(SeamstressBuffs.stitchSetup) && damageInfo.attacker.GetComponent<CharacterBody>().baseNameToken == "KENKO_SEAMSTRESS_NAME" && attackerBody && damageInfo.damageType != DamageType.DoT)
-                {
-                    victimBody.RemoveBuff(SeamstressBuffs.stitchSetup);
-                    damageInfo.damage += attackerBody.damage * SeamstressStaticValues.stitchBaseDamage * damageInfo.procCoefficient;
-                    damageInfo.AddModdedDamageType(DamageTypes.CutDamage);
-                    NeedleController n = attackerBody.GetComponent<NeedleController>();
-                    n.RpcAddSecondaryStock();
-                    EffectManager.SimpleImpactEffect(SeamstressAssets.stitchConsumeEffectPrefab, damageInfo.position, Vector3.up, transmit: true);
-                }
                 if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))
                 {
                     if (victimBody.isBoss)
@@ -608,10 +633,6 @@ namespace SeamstressMod.Survivors.Seamstress
                     {
                         DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                     }
-                }
-                if (damageInfo.HasModdedDamageType(DamageTypes.StitchDamage))
-                {
-                    victimBody.AddBuff(SeamstressBuffs.stitchSetup);
                 }
                 if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && victimBody.HasBuff(SeamstressBuffs.parryStart))
                 {

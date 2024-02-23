@@ -16,8 +16,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float cutDotBossDamage = 0.005f;
 
-        internal const float stitchBaseDamage = 1f;
-
         internal const float weaveLeapDamageCoefficient = 2.3f;
 
         internal const float weaveDamageCoefficient = 2.6f;
@@ -28,15 +26,14 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float reapHealthCost = 0.5f;
 
-        internal const float needleHealAmount = 0.15f;
+        internal const float butcheredLifeSteal = 0.1f;
 
-        internal const float planarLifeSteal = 0.25f;
-        //1-0.25f but i was too lazy oops
+        //75% of healing is converted but i was too lazy oops
         internal const float healConversion = 0.25f;
 
-        internal const float needleGainInterval = 12f;
+        internal const float needleGainInterval = 1f;
 
-        internal const int maxNeedleAmount = 10;
+        internal const int maxNeedleAmount = 5;
 
         internal const float butcheredDuration = 10f;
 

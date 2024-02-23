@@ -6,17 +6,17 @@ using SeamstressMod.Modules.BaseStates;
 using System;
 using static UnityEngine.ParticleSystem.PlaybackState;
 using EntityStates;
+using UnityEngine.Networking;
 
 
 namespace SeamstressMod.SkillStates
 {
-    public class ParrySecondSlash : ParryDash
+    public class ParrySecondSlash : BaseMeleeAttack
     {
         private GameObject swingEffectInstance;
         public override void OnEnter()
         {
             RefreshState();
-            first = false;
             hitboxGroupName = "Weave";
             damageType = DamageType.Generic;
             damageTotal = SeamstressStaticValues.parryDamage;
@@ -24,7 +24,7 @@ namespace SeamstressMod.SkillStates
             pushForce = 200f;
             bonusForce = Vector3.zero;
             baseDuration = 0.9f;
-            moddedDamageType = DamageTypes.StitchDamage;
+            moddedDamageType = DamageTypes.Empty;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
@@ -45,12 +45,25 @@ namespace SeamstressMod.SkillStates
             if (empowered)
             {
                 moddedDamageType2 = DamageTypes.CutDamage;
+                moddedDamageType3 = DamageTypes.ButcheredLifeSteal;
             }
+            if (scissorCount == 0) moddedDamageType = DamageTypes.NoSword;
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
             base.OnEnter();
         }
         protected override void PlayAttackAnimation()
         {
+            PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", this.duration + (0.9f / attackSpeedStat), 0.1f * (this.duration + (0.9f / attackSpeedStat)));
+        }
+        protected override void FireAttack()
+        {
+            if (base.isAuthority)
+            {
+                Vector3 direction = GetAimRay().direction;
+                direction.y = Mathf.Max(direction.y, direction.y * 0.5f);
+                FindModelChild("SwingPivot").rotation = Util.QuaternionSafeLookRotation(direction);
+            }
+            base.FireAttack();
         }
         protected override void PlaySwingEffect()
         {
@@ -73,10 +86,6 @@ namespace SeamstressMod.SkillStates
         public override void OnExit()
         {
             base.OnExit();
-        }
-        public override InterruptPriority GetMinimumInterruptPriority()
-        {
-            return InterruptPriority.Skill;
         }
 
     }

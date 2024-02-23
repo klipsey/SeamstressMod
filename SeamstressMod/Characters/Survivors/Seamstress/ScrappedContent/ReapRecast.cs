@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿/*
+using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 using R2API;
@@ -68,7 +69,7 @@ namespace SeamstressMod.SkillStates
             blastAttack.radius = base.characterBody.radius + 12f;
             blastAttack.falloffModel = BlastAttack.FalloffModel.None;
             blastAttack.damageType = DamageType.Stun1s;
-            blastAttack.AddModdedDamageType(DamageTypes.StitchDamage);
+            blastAttack.AddModdedDamageType(DamageTypes.NoSword);
             blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
             blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
             blastAttack.Fire();
@@ -86,3 +87,4 @@ namespace SeamstressMod.SkillStates
         }
     }
 }
+*/
