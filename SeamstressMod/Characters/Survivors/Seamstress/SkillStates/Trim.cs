@@ -31,7 +31,7 @@ namespace SeamstressMod.SkillStates
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             earlyExitPercentTime = 0.5f;
             hitStopDuration = 0.05f;
-            attackRecoil = 0.75f;
+            attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 5f;
 
             swingSoundString = "Play_imp_attack";
@@ -61,21 +61,25 @@ namespace SeamstressMod.SkillStates
                 case 0:
                     //change to remove the nextstate
                     hitboxGroupName = "Sword";
-                    moddedDamageType = DamageTypes.NoSword;
+                    moddedDamageType2 = DamageTypes.NoSword;
                     break;
                 case 1:
                     if (muzzleString == "SwingRight" || muzzleString == "SwingCenter")
                     {
                         //change to remove the next states double hit instead
                         hitboxGroupName = "Sword";
-                        moddedDamageType = DamageTypes.NoSword;
+                        moddedDamageType2 = DamageTypes.NoSword;
                     }
                     break;
                 case 2:
                     //change to approve next state
                     break;
             }
-
+            if (empowered)
+            {
+                moddedDamageType = DamageTypes.ButcheredLifeSteal;
+                moddedDamageType3 = DamageTypes.CutDamage;
+            }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();

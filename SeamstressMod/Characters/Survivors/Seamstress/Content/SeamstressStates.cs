@@ -10,6 +10,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Modules.Content.AddEntityState(typeof(SeamstressSpawnState));
             Modules.Content.AddEntityState(typeof(SeamstressMainState));
             Modules.Content.AddEntityState(typeof(SeamstressBlink));
+            Modules.Content.AddEntityState(typeof(SeamstressBlinkUp));
 
             Modules.Content.AddEntityState(typeof(Trim));
 

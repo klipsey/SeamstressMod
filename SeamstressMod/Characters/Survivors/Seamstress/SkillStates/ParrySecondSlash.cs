@@ -35,7 +35,7 @@ namespace SeamstressMod.SkillStates
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             earlyExitPercentTime = 0.6f;
             hitStopDuration = 0.2f;
-            attackRecoil = 0.75f;
+            attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 3.5f;
             swingSoundString = "Play_imp_attack";
             hitSoundString = "";
@@ -78,6 +78,10 @@ namespace SeamstressMod.SkillStates
                 ScaleParticleSystemDuration scale = this.swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
                 if (scale) scale.newDuration = scale.initialDuration + (scale.initialDuration * (earlyExitPercentTime - attackStartPercentTime));
             }
+        }
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Death;
         }
         protected override void OnHitEnemyAuthority()
         {

@@ -704,16 +704,19 @@ namespace SeamstressMod.Survivors.Seamstress
             SeamstressController s = self.body.GetComponent<SeamstressController>();
             if (self.body.TryGetComponent<SeamstressController>(out s) && self.body.HasBuff(SeamstressBuffs.butchered))
             {
-                s.ButcheredConversionCalc((res / SeamstressStaticValues.healConversion) * (1 - SeamstressStaticValues.healConversion));
+                s.FiendGaugeCalc((res / SeamstressStaticValues.healConversion) * (1 - SeamstressStaticValues.healConversion));
             }
             return res;
         }
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if(sender.HasBuff(SeamstressBuffs.butchered))
+            SeamstressController s = sender.GetComponent<SeamstressController>();
+            if (sender.TryGetComponent<SeamstressController>(out s) && s.FiendGaugeAmount() > 0)
             {
-                args.baseMoveSpeedAdd += 3;
+                args.baseMoveSpeedAdd += 2;
             }
+            if (sender.GetBuffCount(SeamstressBuffs.scissorCount) == 1) args.baseMoveSpeedAdd += 1;
+            if (sender.GetBuffCount(SeamstressBuffs.scissorCount) == 0) args.baseMoveSpeedAdd += 2;
         }
     }
 }

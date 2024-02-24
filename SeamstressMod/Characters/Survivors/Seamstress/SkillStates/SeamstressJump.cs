@@ -42,7 +42,8 @@ namespace SeamstressMod.SkillStates
                 {
                     this.seamCon.blinkReady = false;
                     blinkCd = 0.5f;
-                    this.BlinkForward();
+                    if (this.inputBank.moveVector != Vector3.zero) this.BlinkForward();
+                    else BlinkUp();
                     return;
                 }
             }
@@ -61,7 +62,8 @@ namespace SeamstressMod.SkillStates
                         aimRay = base.GetAimRay();
                         ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.needleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
                     }
-                    this.BlinkForward();
+                    if (this.inputBank.moveVector != Vector3.zero) this.BlinkForward();
+                    else BlinkUp();
                     return;
                 }
             }
@@ -69,6 +71,10 @@ namespace SeamstressMod.SkillStates
         private void BlinkForward()
         {
             EntityStateMachine.FindByCustomName(this.gameObject, "Blink").SetInterruptState(new SeamstressBlink(), InterruptPriority.Any);
+        }
+        private void BlinkUp()
+        {
+            EntityStateMachine.FindByCustomName(this.gameObject, "Blink").SetInterruptState(new SeamstressBlinkUp(), InterruptPriority.Any);
         }
     }
 }

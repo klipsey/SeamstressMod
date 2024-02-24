@@ -26,7 +26,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private GameObject endReap = SeamstressAssets.reapEndEffect;
 
-        public float fiendGauge = 0f;
+        private float fiendGauge = 0f;
+
+        private float drainAmount;
 
         public float hopoopFeatherTimer;
 
@@ -46,6 +48,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public bool blinkReady = true;
 
+        public bool drainGauge;
         public void Awake()
         {
             characterBody = base.GetComponent<CharacterBody>();
@@ -73,6 +76,15 @@ namespace SeamstressMod.Survivors.Seamstress
             if (bd > 0f)
             {
                 bd -= Time.fixedDeltaTime;
+            }
+            if (drainGauge && fiendGauge > 0)
+            {
+                fiendGauge -= drainAmount;
+            }
+            else if (fiendGauge < 0)
+            {
+                drainGauge = false;
+                fiendGauge = 0f;
             }
             CalculateBonusDamage();
             ButcheredSound();
@@ -116,7 +128,7 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         */
         #endregion
-        public void ButcheredConversionCalc(float healDamage)
+        public void FiendGaugeCalc(float healDamage)
         {
             if((fiendGauge + healDamage) < (5 * healthComponent.fullHealth))
             {
@@ -126,6 +138,10 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 fiendGauge += (5 * healthComponent.fullHealth) - fiendGauge; 
             }
+        }
+        public float FiendGaugeAmount()
+        {
+            return fiendGauge;
         }
         private void IsButchered()
         {
@@ -151,6 +167,8 @@ namespace SeamstressMod.Survivors.Seamstress
             else if (!fuckYou && butchered)
             {
                 butchered = false;
+                drainGauge = true;
+                drainAmount = fiendGauge / 5;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -202,7 +220,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
             float fakeHealthMissing = (healthComponent.fullHealth) * 0.5f;
-            if(fuckYou && skillLocator.special.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") characterBody.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
+            if(fuckYou && skillLocator.utility.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") characterBody.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
             else characterBody.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
     }

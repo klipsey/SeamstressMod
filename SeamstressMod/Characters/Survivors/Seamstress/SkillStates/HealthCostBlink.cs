@@ -27,6 +27,7 @@ namespace SeamstressMod.SkillStates
         {
             this.blinkPrefab = SeamstressAssets.blinkPrefab;
             this.split = true;
+            GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, 1f, 1f, false);
             base.OnEnter();
         }
         public override void FixedUpdate()

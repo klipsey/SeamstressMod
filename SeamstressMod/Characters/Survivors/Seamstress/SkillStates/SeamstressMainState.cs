@@ -52,10 +52,6 @@ namespace SeamstressMod.SkillStates
                     {
                         GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
                     }
-                    else
-                    {
-                        GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, 0, 0, false);
-                    }
 
                     if (hasModelAnimator)
                     {
@@ -98,7 +94,10 @@ namespace SeamstressMod.SkillStates
                         }, true);
                     }
 
-                    base.characterMotor.jumpCount++;
+                    if (seamCon.blinkReady)
+                    {
+                        base.characterMotor.jumpCount++;
+                    }
                     #region For later? thank you rob
                     /*
                     if (this.animator)

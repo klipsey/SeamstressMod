@@ -314,12 +314,12 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsHitImpactEffect.AddComponent<NetworkIdentity>();
             scissorsHitImpactEffect.GetComponent<OmniEffect>().enabled = false;
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniHitspark3Merc.mat").WaitForCompletion());
-            material.SetColor("_TintColor", theRed);
+            material.SetColor("_TintColor", Color.red);
             scissorsHitImpactEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             scissorsHitImpactEffect.transform.GetChild(2).localScale = Vector3.one * 1.5f;
             scissorsHitImpactEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorBlasterFireCorrupted.mat").WaitForCompletion();
-            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSlashImpact.mat").WaitForCompletion());
-            material.SetColor("_TintColor", theRed);
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniRadialSlash1Merc.mat").WaitForCompletion());
+            material.SetColor("_TintColor", Color.red);
             scissorsHitImpactEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             scissorsHitImpactEffect.transform.GetChild(4).localScale = Vector3.one * 3f;
             scissorsHitImpactEffect.transform.GetChild(4).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDust.mat").WaitForCompletion();
@@ -367,7 +367,7 @@ namespace SeamstressMod.Survivors.Seamstress
             fart.startColor = Color.red;
             reapEndEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
             reapEndEffect.transform.GetChild(3).gameObject.SetActive(false);
-            reapEndEffect.transform.GetChild(4).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintCOlor", theRed);
+            reapEndEffect.transform.GetChild(4).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/LunarSkillReplacements/matLunarNeedleImpactEffect.mat").WaitForCompletion());
             material.SetColor("_TintColor", Color.red);
             reapEndEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
@@ -424,15 +424,13 @@ namespace SeamstressMod.Survivors.Seamstress
             needleGhost = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab;
             needleGhost.transform.GetChild(0).gameObject.SetActive(false);
             needleGhost.transform.GetChild(1).gameObject.SetActive(false);
-            needleGhost.transform.GetChild(2).localScale = new Vector3(0.1f, 0.1f, 1.66f);
+            needleGhost.transform.GetChild(2).localScale = new Vector3(0.2f, 0.2f, 1.66f);
             needleGhost.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(84f / 255f, 0f / 255f, 11f / 255f));
             needleGhost.transform.GetChild(3).gameObject.SetActive(false);
-            needleGhost.transform.GetChild(4).localScale = new Vector3(.5f, .5f, .5f);
+            needleGhost.transform.GetChild(4).localScale = new Vector3(.2f, .2f, .2f);
             //REACTIVATE NEEDLE TRAILS!!!!!
-            needleGhost.transform.GetChild(4).GetChild(3).gameObject.SetActive(false);
-            needleGhost.transform.GetChild(4).GetChild(0).gameObject.SetActive(false);
-            needleGhost.transform.GetChild(4).GetChild(1).gameObject.SetActive(false);
-            needleGhost.transform.GetChild(4).GetChild(2).gameObject.SetActive(false);
+            needleGhost.transform.GetChild(4).GetChild(0).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
+            needleGhost.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
             needleGhost.transform.GetChild(4).GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
             needleGhost = PrefabAPI.InstantiateClone(needleGhost, "NeedleGhost");
             if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile") != null)

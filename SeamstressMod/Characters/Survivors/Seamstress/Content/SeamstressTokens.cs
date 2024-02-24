@@ -44,16 +44,16 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Passive
-            Language.Add(prefix + "PASSIVE_NAME", "Stitched Heart");
+            Language.Add(prefix + "PASSIVE_NAME", "Fiendish Corruption");
             Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health or shield missing. ");
             #endregion
 
             #region Primary
-            Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trimming Slashes");
+            Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>. " +
               $" Every 3rd hit deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style> and enemies.");
 
-            Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Unrelenting Flurry");
+            Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Flurry");
             Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style> applying to enemies.");
             #endregion
 
@@ -81,6 +81,12 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Special
             #endregion
+
+            #region Achievements
+            Language.Add(Tokens.GetAchievementNameToken(SeamstressMasteryAchievement.identifier), "Seamstress: Mastery");
+            Language.Add(Tokens.GetAchievementDescriptionToken(SeamstressMasteryAchievement.identifier), "As Seamstress, beat the game or obliterate on Monsoon.");
+            #endregion
+
             #region scrapped
             /*
             Language.Add(prefix + "UTILITY_WEAVE_NAME", "Woven Fate");
@@ -94,10 +100,6 @@ namespace SeamstressMod.Survivors.Seamstress
             Language.Add(prefix + "SECONDARY_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. <color=#9B3737>Needles</color> pierce for <style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style> each. " +
             $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
              */
-            #endregion
-            #region Achievements
-            Language.Add(Tokens.GetAchievementNameToken(SeamstressMasteryAchievement.identifier), "Seamstress: Mastery");
-            Language.Add(Tokens.GetAchievementDescriptionToken(SeamstressMasteryAchievement.identifier), "As Seamstress, beat the game or obliterate on Monsoon.");
             #endregion
             #endregion
         }
