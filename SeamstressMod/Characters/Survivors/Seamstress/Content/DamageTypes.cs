@@ -20,7 +20,6 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
         public static DamageAPI.ModdedDamageType ButcheredLifeSteal;
         public static DamageAPI.ModdedDamageType ClipLifeSteal;
-
         internal static void Init()
         {
             Empty = DamageAPI.ReserveDamageType();

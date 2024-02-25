@@ -44,7 +44,7 @@ namespace SeamstressMod.SkillStates
 
         private int snips;
 
-        public static float baseDuration = 0.5f;
+        private float baseDuration = 0.5f;
 
         private float duration;
 
@@ -68,6 +68,7 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+            baseDuration = 0.5f - (0.5f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             if (NetworkServer.active)
             {
                 snips = needleCount;

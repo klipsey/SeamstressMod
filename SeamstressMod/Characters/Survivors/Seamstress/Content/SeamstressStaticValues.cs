@@ -50,5 +50,9 @@ namespace SeamstressMod.Survivors.Seamstress
         internal const float needleProcCoefficient = 0.5f;
 
         internal const float parryDuration = 0.4f;
+
+        internal const float scissorDamageCoefficient = 6f;
+
+        internal const float maxFiendGaugeCoefficient = 2.5f;
     }
 }

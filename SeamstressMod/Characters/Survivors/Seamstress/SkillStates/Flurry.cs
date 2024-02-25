@@ -25,7 +25,7 @@ namespace SeamstressMod.SkillStates
             procCoefficient = 1f;
             pushForce = 600f;
             bonusForce = Vector3.zero;
-            baseDuration = 2f;
+            baseDuration = 2f - (2f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             moddedDamageType = DamageTypes.Empty;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;

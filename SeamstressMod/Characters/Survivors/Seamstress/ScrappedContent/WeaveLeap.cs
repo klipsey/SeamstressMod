@@ -122,7 +122,7 @@ namespace SeamstressMod.SkillStates
                 CreateDashEffect();
                 base.characterBody.isSprinting = true;
                 direction.y = Mathf.Max(direction.y, minimumY);
-                Vector3 vector = direction.normalized * aimVelocity * 3 * (moveSpeedStat * 0.25f);
+                Vector3 vector = direction.normalized * aimVelocity * 3 * (moveSpeedStat * 0.5f);
                 Vector3 vector2 = Vector3.up * upwardVelocity;
                 Vector3 vector3 = new Vector3(direction.x, 0f, direction.z).normalized * forwardVelocity;
                 base.characterMotor.Motor.ForceUnground();

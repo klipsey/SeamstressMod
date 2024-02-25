@@ -141,7 +141,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             AddHitboxes();
             bodyPrefab.AddComponent<SeamstressController>();
-            //bodyPrefab.AddComponent<NeedleController>();
+            bodyPrefab.AddComponent<ScissorController>();
             //TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
@@ -194,7 +194,6 @@ namespace SeamstressMod.Survivors.Seamstress
             AddSecondarySkills();
             AddUtilitySkills();
             AddSpecialSkills();
-
         }
 
         private void AddPassiveSkill(GameObject bodyPrefab)
@@ -486,28 +485,28 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void AddSpecialSkills()
         {
-            SkillDef parrySeamstressSkillD2ef = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef fireScissor = Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = "ParrySeamstress",
-                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME",
-                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_DESCRIPTION",
+                skillName = "FireSeamstress",
+                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_FIRE_NAME",
+                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_FIRE_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Parry)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.FireScissor)),
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 12f,
-                baseMaxStock = 1,
+                baseRechargeInterval = 16f,
+                baseMaxStock = 2,
 
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,
 
                 resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = true,
-                dontAllowPastMaxStocks = false,
+                fullRestockOnAssign = false,
+                dontAllowPastMaxStocks = true,
                 mustKeyPress = true,
                 beginSkillCooldownOnSkillEnd = false,
 
@@ -517,7 +516,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 forceSprintDuringState = false,
             });
 
-            Skills.AddSpecialSkills(bodyPrefab, parrySeamstressSkillD2ef);
+            Skills.AddSpecialSkills(bodyPrefab, fireScissor);
         }
         #endregion skills
 
@@ -715,8 +714,16 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 args.baseMoveSpeedAdd += 2;
             }
-            if (sender.GetBuffCount(SeamstressBuffs.scissorCount) == 1) args.baseMoveSpeedAdd += 1;
-            if (sender.GetBuffCount(SeamstressBuffs.scissorCount) == 0) args.baseMoveSpeedAdd += 2;
+            if (sender.GetBuffCount(SeamstressBuffs.scissorCount) == 1)
+            {
+                args.attackSpeedMultAdd += .1f;
+                args.baseMoveSpeedAdd += 1;
+            }
+            if (sender.GetBuffCount(SeamstressBuffs.scissorCount) == 0)
+            {
+                args.attackSpeedMultAdd += .2f;
+                args.baseMoveSpeedAdd += 2;
+            }
         }
     }
 }

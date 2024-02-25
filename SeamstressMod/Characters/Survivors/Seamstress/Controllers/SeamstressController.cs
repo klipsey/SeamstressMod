@@ -1,16 +1,7 @@
 ﻿using RoR2;
-using System.Collections.Generic;
-using SeamstressMod.Survivors.Seamstress;
 using UnityEngine;
-using System;
-using UnityEngine.UI;
-using System.Linq;
 using UnityEngine.AddressableAssets;
 using RoR2.EntityLogic;
-using Rewired.HID;
-using UnityEngine.Networking;
-using EntityStates;
-using TMPro;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -43,6 +34,11 @@ namespace SeamstressMod.Survivors.Seamstress
         //public float lockOutLength = 0f;
 
         private float bd = 0f;
+
+        private float rechargeScissorR = 0f;
+
+        private float rechargeScissorL = 0f;
+
 
         public bool fuckYou = false;
 
@@ -130,13 +126,13 @@ namespace SeamstressMod.Survivors.Seamstress
         #endregion
         public void FiendGaugeCalc(float healDamage)
         {
-            if((fiendGauge + healDamage) < (5 * healthComponent.fullHealth))
+            if((fiendGauge + healDamage) < (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))
             {
                 fiendGauge += healDamage;
             }
-            else if((fiendGauge + healDamage) >= (5 * healthComponent.fullHealth) && fiendGauge != (5 * healthComponent.fullHealth))
+            else if((fiendGauge + healDamage) >= (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient) && fiendGauge != (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))
             {
-                fiendGauge += (5 * healthComponent.fullHealth) - fiendGauge; 
+                fiendGauge += (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient) - fiendGauge; 
             }
         }
         public float FiendGaugeAmount()
@@ -168,7 +164,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 butchered = false;
                 drainGauge = true;
-                drainAmount = fiendGauge / 5;
+                drainAmount = healthComponent.fullHealth / 125;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {

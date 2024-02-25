@@ -164,7 +164,7 @@ namespace SeamstressMod.SkillStates
             if (base.isAuthority)
             {
                 base.characterMotor.disableAirControlUntilCollision = false;
-                base.characterMotor.airControl = 0.25f;
+                base.characterMotor.airControl = 0.5f;
                 base.characterMotor.velocity *= 0.3f;
                 SmallHop(base.characterMotor, 3f);
             }

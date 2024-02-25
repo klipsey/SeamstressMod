@@ -18,7 +18,7 @@ namespace SeamstressMod.SkillStates
 
         public static NetworkSoundEventDef expungeSoundDef = SeamstressAssets.parrySuccessSoundEvent;
 
-        public static float duration = 0.25f;
+        public static float duration = 0.5f;
 
         private bool hasFiredServer;
         public override void OnEnter()
