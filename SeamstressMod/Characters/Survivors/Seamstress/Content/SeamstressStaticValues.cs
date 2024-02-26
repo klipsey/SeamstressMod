@@ -6,11 +6,13 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     public static class SeamstressStaticValues
     {
-        internal const float trimDamageCoefficient = 2f;
+        internal const float trimDamageCoefficient = 1f;
 
-        internal const float trimThirdDamageCoefficient = 2.6f;
+        internal const float trimThirdDamageCoefficient = 1.3f;
 
-        internal const float flurryDamageCoefficient = 2.3f;
+        internal const float flurryDamageCoefficient = 1.15f;
+
+        internal const float scissorSlashDamageCoefficient = 2f;
 
         internal const float cutDotDamage = 0.01f;
 

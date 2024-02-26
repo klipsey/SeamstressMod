@@ -19,56 +19,51 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             RefreshState();
-            hitboxGroupName = "SwordBig";
+            hitboxGroupName = "Sword";
             damageType = DamageType.Generic;
             damageTotal = SeamstressStaticValues.flurryDamageCoefficient;
             procCoefficient = 1f;
-            pushForce = 600f;
+            pushForce = 300f;
             bonusForce = Vector3.zero;
-            baseDuration = 2f - (2f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseDuration = 1.1f - (1.1f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseScissorDuration = 2.2f - (2.2f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             moddedDamageType = DamageTypes.Empty;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             attackStartPercentTime = 0.2f;
-            attackEndPercentTime = 0.5f;
+            attackEndPercentTime = 0.4f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
             earlyExitPercentTime = 0.6f;
-            hitStopDuration = 0.1f;
+            hitStopDuration = 0.05f;
             attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 3.5f;
 
-            swingSoundString = "Play_moonBrother_swing_horizontal";
+            swingSoundString = "Play_imp_attack";
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
-            muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
+            muzzleString = swingIndex % 2 == 0 ? "SwingLeftSmall" : "SwingRightSmall";
             buffer = false;
             if (empowered)
             {
                 moddedDamageType2 = DamageTypes.CutDamage;
                 moddedDamageType3 = DamageTypes.ButcheredLifeSteal;
             }
-            switch (scissorCount)
+            scissorHit = true;
+            if (muzzleString == "SwingRightSmall" && !scissorLeft)
             {
-                case 0:
-                    //change to remove the nextstate
-                    hitboxGroupName = "Sword";
-                    moddedDamageType = DamageTypes.NoSword;
-                    break;
-                case 1:
-                    if (muzzleString == "SwingRight")
-                    {
-                        //change to remove the next states double hit instead
-                        hitboxGroupName = "Sword";
-                        moddedDamageType = DamageTypes.NoSword;
-                    }
-                    break;
-                case 2:
-                    //change to approve next state
-                    break;
+                //change to remove the next states double hit instead
+                moddedDamageType = DamageTypes.NoSword;
+                scissorHit = false;
+            }
+            if (muzzleString == "SwingLeftSmall" && !scissorRight)
+            {
+                //change to remove the next states double hit instead
+                moddedDamageType = DamageTypes.NoSword;
+                scissorHit = false;
             }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 

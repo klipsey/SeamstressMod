@@ -8,6 +8,7 @@ using R2API;
 using UnityEngine.Networking;
 using EntityStates;
 using static Rewired.ComponentControls.Effects.RotateAroundAxis;
+using static UnityEngine.UI.Image;
 
 namespace SeamstressMod.SkillStates
 {
@@ -40,7 +41,14 @@ namespace SeamstressMod.SkillStates
             base.OnEnter();
             duration = baseDuration / attackSpeedStat;
             modelAnimator = GetModelAnimator();
-            chosenAnim = (characterBody.GetBuffCount(SeamstressBuffs.scissorCount));
+            if(scissorRight && scissorLeft)
+            {
+                chosenAnim = 2;
+            }    
+            else if(scissorRight && !scissorLeft)
+            {
+                chosenAnim = 1;
+            }
             if (modelAnimator)
             {
                 /*
@@ -91,7 +99,11 @@ namespace SeamstressMod.SkillStates
             Transform transform = FindModelChild(muzzleName);
             if (transform)
             {
-                UnityEngine.Object.Instantiate(swordFiringPrefab, transform);
+                EffectData effectData = new EffectData();
+                effectData.rotation = transform.rotation;
+                effectData.origin = transform.position;
+                effectData.scale = 1f;
+                EffectManager.SpawnEffect(swordFiringPrefab, effectData, transmit: true);
             }
             if (base.isAuthority)
             {

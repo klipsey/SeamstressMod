@@ -19,7 +19,8 @@ namespace SeamstressMod.SkillStates
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
-            baseDuration = 1.15f - (1.15f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseDuration = 1.1f - (1.1f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseScissorDuration = 1.8f - (1.8f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             moddedDamageType = DamageTypes.Empty;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
@@ -29,7 +30,7 @@ namespace SeamstressMod.SkillStates
             attackEndPercentTime = 0.4f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            earlyExitPercentTime = 0.5f;
+            earlyExitPercentTime = 0.6f;
             hitStopDuration = 0.05f;
             attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 5f;
@@ -41,39 +42,35 @@ namespace SeamstressMod.SkillStates
             switch (swingIndex)
             {
                 case 0:
-                    muzzleString = "SwingLeft";
+                    muzzleString = "SwingLeftSmall";
                     break;
                 case 1:
-                    muzzleString = "SwingRight";
+                    muzzleString = "SwingRightSmall";
                     break;
                 case 2:damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
-                    earlyExitPercentTime = 1f;
                     moddedDamageType2 = DamageTypes.NoSword;
-                    hitStopDuration = 0.1f;
-                    swingSoundString = "Play_bandit2_m2_slash";
-                    hitboxGroupName = "SwordBig";
+                    hitboxGroupName = "Sword";
                     swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
-                    muzzleString = "SwingCenter";
+                    muzzleString = "SwingCenterSmall";
                     break;
             }
-            switch (scissorCount)
+            scissorHit = true;
+            if (muzzleString == "SwingRightSmall" && !scissorLeft)
             {
-                case 0:
-                    //change to remove the nextstate
-                    hitboxGroupName = "Sword";
-                    moddedDamageType2 = DamageTypes.NoSword;
-                    break;
-                case 1:
-                    if (muzzleString == "SwingRight" || muzzleString == "SwingCenter")
-                    {
-                        //change to remove the next states double hit instead
-                        hitboxGroupName = "Sword";
-                        moddedDamageType2 = DamageTypes.NoSword;
-                    }
-                    break;
-                case 2:
-                    //change to approve next state
-                    break;
+                //change to remove the next states double hit instead
+                moddedDamageType = DamageTypes.NoSword;
+                scissorHit = false;
+            }
+            if (muzzleString == "SwingLeftSmall" && !scissorRight)
+            {
+                //change to remove the next states double hit instead
+                moddedDamageType = DamageTypes.NoSword;
+                scissorHit = false;
+            }
+            if (muzzleString == "SwingCenterSmall" && !scissorRight || !scissorLeft)
+            {
+                moddedDamageType = DamageTypes.NoSword;
+                scissorHit = false;
             }
             if (empowered)
             {

@@ -22,7 +22,7 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         //todo guide
         //used to load the assetbundle for this character. must be unique
-        public override string assetBundleName => "henryassets"; //if you do not change this, you are giving permission to deprecate the mod
+        public override string assetBundleName => "seamstressassets"; //if you do not change this, you are giving permission to deprecate the mod
 
         //the name of the prefab we will create. conventionally ending in "Body". must be unique
         public override string bodyName => "SeamstressBody"; //if you do not change this, you get the point by now
@@ -68,6 +68,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public override CustomRendererInfo[] customRendererInfos => new CustomRendererInfo[]
         {
+            
                 new CustomRendererInfo
                 {
                     childName = "SwordModel",
@@ -81,6 +82,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 {
                     childName = "Model",
                 }
+            
         };
 
         public override UnlockableDef characterUnlockableDef => SeamstressUnlockables.characterUnlockableDef;
@@ -714,12 +716,12 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 args.baseMoveSpeedAdd += 2;
             }
-            if (sender.GetBuffCount(SeamstressBuffs.scissorCount) == 1)
+            if (!sender.HasBuff(SeamstressBuffs.scissorLeftBuff))
             {
                 args.attackSpeedMultAdd += .1f;
                 args.baseMoveSpeedAdd += 1;
             }
-            if (sender.GetBuffCount(SeamstressBuffs.scissorCount) == 0)
+            if (!sender.HasBuff(SeamstressBuffs.scissorRightBuff))
             {
                 args.attackSpeedMultAdd += .2f;
                 args.baseMoveSpeedAdd += 2;

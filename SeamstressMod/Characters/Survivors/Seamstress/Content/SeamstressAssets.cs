@@ -90,13 +90,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject scissorRPrefab;
 
-        internal static GameObject scissorRHitbox;
-
         internal static GameObject scissorRButcheredPrefab;
 
         internal static GameObject scissorLPrefab;
-
-        internal static GameObject scissorLHitbox;
 
         internal static GameObject scissorLButcheredPrefab;
 
@@ -295,6 +291,7 @@ namespace SeamstressMod.Survivors.Seamstress
             expungeEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             expungeEffect.transform.GetChild(5).gameObject.transform.localScale = new Vector3(.1f, .1f, .1f);
             expungeEffect.transform.GetChild(6).gameObject.SetActive(false);
+            Content.CreateAndAddEffectDef(expungeEffect);
 
             expungeSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("ExpungeSlash");
             expungeSlashEffect.AddComponent<NetworkIdentity>();
@@ -481,14 +478,6 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             scissorRPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorR");
 
-            scissorRHitbox = new GameObject("ScissorHitBox");
-            scissorRHitbox.transform.localScale = new Vector3(1.2f, 1.2f, 14f);
-            scissorRHitbox.AddComponent<HitBox>();
-            scissorRHitbox.transform.parent = scissorRPrefab.transform;
-
-            MeshFilter meshFilter = scissorRPrefab.AddComponent<MeshFilter>();
-            meshFilter.mesh = needlePrefab.GetComponent<MeshFilter>().mesh;
-
             Rigidbody rigid = scissorRPrefab.GetComponent<Rigidbody>();
             rigid.useGravity = true;
             rigid.freezeRotation = true;
@@ -497,6 +486,7 @@ namespace SeamstressMod.Survivors.Seamstress
             sphereCollider.material.bounciness = 0;
             sphereCollider.material.staticFriction = 10000;
             sphereCollider.material.dynamicFriction = 10000;
+            sphereCollider.radius = 0.1f;
 
             ProjectileImpactExplosion impactAlly = scissorRPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = 0f;
@@ -504,7 +494,7 @@ namespace SeamstressMod.Survivors.Seamstress
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
             impactAlly.lifetime = 16f;
-            impactAlly.lifetimeAfterImpact = 32f;
+            impactAlly.lifetimeAfterImpact = 16f;
 
             ProjectileController scissorController = scissorRPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
@@ -545,6 +535,15 @@ namespace SeamstressMod.Survivors.Seamstress
             Object.Destroy(scissorRPrefab.GetComponent<ProjectileStickOnImpact>());
 
             scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
+
+            ProjectileController controller = scissorRPrefab.GetComponent<ProjectileController>();
+            if (!controller.ghostPrefab.GetComponent<ProjectileGhostController>())
+                controller.ghostPrefab.AddComponent<ProjectileGhostController>();
+            controller.ghostPrefab.GetComponent<ProjectileGhostController>().inheritScaleFromProjectile = false;
+            if (_assetBundle.LoadAsset<GameObject>("ScissorRightGhost") != null)
+                controller.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorRightGhost");
+            if (!controller.ghostPrefab.GetComponent<NetworkIdentity>())
+                controller.ghostPrefab.AddComponent<NetworkIdentity>();
         }
         private static void CreateEmpoweredScissorR()
         {
@@ -558,24 +557,15 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             scissorLPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorL");
 
-            scissorLHitbox = new GameObject("ScissorHitBox");
-            scissorLHitbox.transform.localScale = new Vector3(1.2f, 1.2f, 14f);
-            scissorLHitbox.AddComponent<HitBox>();
-            scissorLHitbox.transform.parent = scissorLPrefab.transform;
-
-            MeshFilter meshFilter = scissorLPrefab.AddComponent<MeshFilter>();
-            meshFilter.mesh = needlePrefab.GetComponent<MeshFilter>().mesh;
-
             Rigidbody rigid = scissorLPrefab.GetComponent<Rigidbody>();
             rigid.useGravity = true;
             rigid.freezeRotation = true;
 
             SphereCollider sphereCollider = scissorLPrefab.GetComponent<SphereCollider>();
-            sphereCollider.material = needlePrefab.GetComponent<SphereCollider>().material;
-
-            scissorLPrefab.AddComponent<HitBoxGroup>();
-            scissorLPrefab.GetComponent<HitBoxGroup>().hitBoxes = new HitBox[1];
-            scissorLPrefab.GetComponent<HitBoxGroup>().hitBoxes[0] = scissorLPrefab.transform.GetChild(1).gameObject.GetComponent<HitBox>();
+            sphereCollider.material.bounciness = 0;
+            sphereCollider.material.staticFriction = 10000;
+            sphereCollider.material.dynamicFriction = 10000;
+            sphereCollider.radius = 0.1f;
 
             ProjectileOverlapAttack attack = scissorLPrefab.AddComponent<ProjectileOverlapAttack>();
             attack.damageCoefficient = 1f;
@@ -592,7 +582,7 @@ namespace SeamstressMod.Survivors.Seamstress
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
             impactAlly.lifetime = 16f;
-            impactAlly.lifetimeAfterImpact = 32f;
+            impactAlly.lifetimeAfterImpact = 16f;
 
             ProjectileController scissorController = scissorLPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
@@ -633,6 +623,15 @@ namespace SeamstressMod.Survivors.Seamstress
             Object.Destroy(scissorLPrefab.GetComponent<ProjectileStickOnImpact>());
 
             scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
+
+            ProjectileController controller = scissorLPrefab.GetComponent<ProjectileController>();
+            if (!controller.ghostPrefab.GetComponent<ProjectileGhostController>())
+                controller.ghostPrefab.AddComponent<ProjectileGhostController>();
+            controller.ghostPrefab.GetComponent<ProjectileGhostController>().inheritScaleFromProjectile = false;
+            if (_assetBundle.LoadAsset<GameObject>("ScissorLeftGhost") != null)
+                controller.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorLeftGhost");
+            if (!controller.ghostPrefab.GetComponent<NetworkIdentity>())
+                controller.ghostPrefab.AddComponent<NetworkIdentity>();
         }
         private static void CreateEmpoweredScissorL()
         {

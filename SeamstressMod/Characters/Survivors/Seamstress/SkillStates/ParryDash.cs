@@ -46,7 +46,7 @@ namespace SeamstressMod.SkillStates
                 moddedDamageType2 = DamageTypes.CutDamage;
                 moddedDamageType3 = DamageTypes.ButcheredLifeSteal;
             }
-            if (scissorCount < 2) moddedDamageType = DamageTypes.NoSword;
+            if (!characterBody.HasBuff(SeamstressBuffs.scissorLeftBuff)) moddedDamageType = DamageTypes.NoSword;
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
             setDiffState = true;
             setState = new ParrySecondSlash();

@@ -54,26 +54,27 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             if (NetworkServer.active)
             {
-                int buffCount = characterBody.GetBuffCount(SeamstressBuffs.scissorCount);
-                if (buffCount < newCount)
+                int buffLeft = characterBody.GetBuffCount(SeamstressBuffs.scissorLeftBuff);
+                int buffRight = characterBody.GetBuffCount(SeamstressBuffs.scissorRightBuff);
+                //fix how scissor pickups work
+                if (newCount == 2 && buffLeft == 0)
                 {
-                    int diff = newCount - buffCount;
-                    for (int i = 0; i < diff; i++)
-                    {
-                        characterBody.AddBuff(SeamstressBuffs.scissorCount);
-                    }
+                    characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
                 }
-                else if (buffCount > newCount)
+                else if(newCount == 2 && buffLeft == 0 && buffRight == 1) characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
+
+                else if (newCount == 1 && buffRight == 0)
                 {
-                    for (int i = 0; i < buffCount; i++)
-                    {
-                        characterBody.RemoveBuff(SeamstressBuffs.scissorCount);
-                    }
-                    for (int i = 0; i < newCount; i++)
-                    {
-                        characterBody.AddBuff(SeamstressBuffs.scissorCount);
-                    }
+                    characterBody.AddBuff(SeamstressBuffs.scissorRightBuff);
                 }
+                else if(newCount == 1 && buffLeft == 1)
+                {
+                    characterBody.RemoveBuff(SeamstressBuffs.scissorLeftBuff);
+                }
+                else if(newCount == 0 && buffRight == 1)
+                {
+                    characterBody.RemoveBuff(SeamstressBuffs.scissorRightBuff);
+                } 
             }
         }
     }

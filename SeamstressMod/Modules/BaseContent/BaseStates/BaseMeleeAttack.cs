@@ -13,6 +13,7 @@ namespace SeamstressMod.Modules.BaseStates
     public abstract class BaseMeleeAttack : BaseSeamstressSkillState, SteppedSkillDef.IStepSetter
     {
         public int swingIndex;
+        public bool scissorHit;
         protected string hitboxGroupName = "Sword";
 
         protected DamageType damageType = DamageType.Generic;
@@ -25,6 +26,7 @@ namespace SeamstressMod.Modules.BaseStates
         protected float pushForce = 300f;
         protected Vector3 bonusForce = Vector3.zero;
         protected float baseDuration = 1f;
+        protected float baseScissorDuration = 1.5f;
 
         protected float attackStartPercentTime = 0.2f;
         protected float attackEndPercentTime = 0.4f;
@@ -46,9 +48,13 @@ namespace SeamstressMod.Modules.BaseStates
         protected bool setDiffState = false;
         protected EntityState setState;
         public float duration;
+        public float scissorDuration;
         protected bool hasFired;
+        protected bool hasFired2;
+        protected bool hasPlayed;
         private float hitPauseTimer;
         protected OverlapAttack attack;
+        protected OverlapAttack scissorAttack;
         protected bool inHitPause;
         private bool hasHopped;
         protected float stopwatch;
@@ -59,6 +65,8 @@ namespace SeamstressMod.Modules.BaseStates
         {
             base.OnEnter();
             duration = baseDuration / attackSpeedStat;
+            scissorDuration = baseScissorDuration / attackSpeedStat;
+
             animator = GetModelAnimator();
             StartAimMode(0.5f + duration, false);
 
@@ -85,7 +93,11 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected virtual void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, duration, 0.05f);
+            if(!hasPlayed)
+            {
+                PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, duration, 0.05f);
+                hasPlayed = true;
+            }
         }
         protected virtual void PlayTrueAttackAnimation()
         {
@@ -146,7 +158,6 @@ namespace SeamstressMod.Modules.BaseStates
 
         private void EnterAttack()
         {
-            hasFired = true;
             Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
             PlaySwingEffect();
             if (buffer == true)
@@ -183,26 +194,102 @@ namespace SeamstressMod.Modules.BaseStates
 
             bool fireStarted = stopwatch >= duration * attackStartPercentTime;
             bool fireEnded = stopwatch >= duration * attackEndPercentTime;
+            bool fireStartedS = stopwatch >= scissorDuration * attackStartPercentTime;
+            bool fireEndedS = stopwatch >= scissorDuration * attackEndPercentTime;
 
             //to guarantee attack comes out if at high attack speed the stopwatch skips past the firing duration between frames
-            if (fireStarted && !fireEnded || fireStarted && fireEnded && !hasFired)
+            if (!scissorHit)
             {
-                if (!hasFired)
+                if (fireStarted && !fireEnded || fireStarted && fireEnded && !hasFired)
                 {
-                    EnterAttack();
+                    if (!hasFired)
+                    {
+                        EnterAttack();
+                        hasFired = true;
+                    }
+                    FireAttack();
                 }
-                FireAttack();
-            }
 
-            if (stopwatch >= duration && base.isAuthority && !setDiffState)
-            {
-                outer.SetNextStateToMain();
-                return;
+                if (stopwatch >= duration && base.isAuthority && !setDiffState)
+                {
+                    outer.SetNextStateToMain();
+                    return;
+                }
+                else if (stopwatch >= duration && base.isAuthority && setDiffState)
+                {
+                    outer.SetNextState(setState);
+                    return;
+                }
             }
-            else if(stopwatch >= duration && base.isAuthority && setDiffState)
+            else
             {
-                outer.SetNextState(setState);
-                return;
+                if (fireStarted && !fireEnded || fireStarted && fireEnded && !hasFired)
+                {
+                    if (!hasFired)
+                    {
+                        EnterAttack();
+                        hasFired = true;
+                    }
+                    FireAttack();
+                }
+                if (fireStartedS && !fireEndedS || fireStartedS && fireEndedS && !hasFired2)
+                {
+                    if (!hasFired2)
+                    {
+                        attack = new OverlapAttack();
+                        attack.damageType = damageType;
+                        attack.AddModdedDamageType(moddedDamageType);
+                        attack.AddModdedDamageType(moddedDamageType2);
+                        attack.AddModdedDamageType(moddedDamageType3);
+                        attack.attacker = gameObject;
+                        attack.inflictor = gameObject;
+                        attack.teamIndex = GetTeam();
+                        if (!isFlatDamage) attack.damage = damageTotal * base.damageStat;
+                        else attack.damage = damageTotal;
+                        attack.procCoefficient = procCoefficient;
+                        attack.hitEffectPrefab = hitEffectPrefab;
+                        attack.forceVector = bonusForce;
+                        attack.pushAwayForce = pushForce;
+                        attack.hitBoxGroup = FindHitBoxGroup(hitboxGroupName);
+                        attack.isCrit = RollCrit();
+                        attack.impactSound = impactSound;
+                        attack.damageType = DamageType.Stun1s;
+                        attack.damage = SeamstressStaticValues.scissorDamageCoefficient * base.damageStat;
+                        if(attack.HasModdedDamageType(DamageTypes.NoSword)) attack.RemoveModdedDamageType(DamageTypes.NoSword);
+                        attack.pushAwayForce = 600f;
+                        attackRecoil = 0.2f;
+                        swingSoundString = "Play_moonBrother_swing_horizontal";
+                        if (muzzleString == "SwingLeftSmall")
+                        {
+                            attack.hitBoxGroup = FindHitBoxGroup("Right");
+                            muzzleString = "SwingLeft";
+                        }
+                        else if(muzzleString == "SwingRightSmall")
+                        {
+                            attack.hitBoxGroup = FindHitBoxGroup("Left");
+                            muzzleString = "SwingRight";
+                        }
+                        else if(muzzleString == "SwingCenterSmall")
+                        {
+                            muzzleString = "SwingCenter";
+                            attack.hitBoxGroup = FindHitBoxGroup("SwordBig");
+                        }
+
+                        EnterAttack();
+                        hasFired2 = true;
+                    }
+                    FireAttack();
+                }
+                if (stopwatch >= scissorDuration && base.isAuthority && !setDiffState)
+                {
+                    outer.SetNextStateToMain();
+                    return;
+                }
+                else if (stopwatch >= scissorDuration && base.isAuthority && setDiffState)
+                {
+                    outer.SetNextState(setState);
+                    return;
+                }
             }
         }
 
@@ -215,7 +302,11 @@ namespace SeamstressMod.Modules.BaseStates
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            if (stopwatch >= duration * earlyExitPercentTime)
+            if (!scissorHit && stopwatch >= duration * earlyExitPercentTime)
+            {
+                return InterruptPriority.Any;
+            }
+            else if(scissorHit && stopwatch >= scissorDuration * earlyExitPercentTime)
             {
                 return InterruptPriority.Any;
             }

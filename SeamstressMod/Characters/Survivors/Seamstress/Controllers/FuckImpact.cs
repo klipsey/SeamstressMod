@@ -195,6 +195,7 @@ namespace SeamstressMod.Survivors.Seamstress
             else if (!component && !ignoreWorld)
             {
                 gameObject = hitCollider.gameObject;
+                GetComponent<ProjectileProximityBeamController>().enabled = false;
                 networkhitHurtboxIndex = -2;
             }
             if ((bool)gameObject)

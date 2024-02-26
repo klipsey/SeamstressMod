@@ -16,7 +16,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private bool hasFired;
 
-        private float pickupTimer = 4f;
+        private float pickupTimer = 2f;
 
         public void FixedUpdate()
         {

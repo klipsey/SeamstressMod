@@ -10,7 +10,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public static BuffDef cutBleed;
 
-        public static BuffDef scissorCount;
+        public static BuffDef scissorRightBuff;
+
+        public static BuffDef scissorLeftBuff;
 
         public static BuffDef needles;
 
@@ -23,7 +25,9 @@ namespace SeamstressMod.Survivors.Seamstress
                 Color.red, false, false, false);
             cutBleed = Modules.Content.CreateAndAddBuff("CutBleed", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Bandit2/texBuffSuperBleedingIcon.tif").WaitForCompletion(),
                 new Color(155f / 255f, 55f / 255f, 55f / 255f), true, false, false);
-            scissorCount = Modules.Content.CreateAndAddBuff("ScissorCount", Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/VoidSurvivor/texBuffVoidSurvivorCorruptionIcon.tif").WaitForCompletion(),
+            scissorRightBuff = Modules.Content.CreateAndAddBuff("ScissorRightBuff", Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/VoidSurvivor/texBuffVoidSurvivorCorruptionIcon.tif").WaitForCompletion(),
+                new Color(155f / 255f, 55f / 255f, 55f / 255f), true, false, false);
+            scissorLeftBuff = Modules.Content.CreateAndAddBuff("ScissorLeftBuff", Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/VoidSurvivor/texBuffVoidSurvivorCorruptionIcon.tif").WaitForCompletion(),
                 new Color(155f / 255f, 55f / 255f, 55f / 255f), true, false, false);
             needles = Modules.Content.CreateAndAddBuff("NeedlesBuff", assetBundle.LoadAsset<Sprite>("texNeedleBuffIcon"),
                 Color.white, true, false, false);

@@ -12,7 +12,9 @@ namespace SeamstressMod.Modules.BaseStates
     {
         protected SeamstressController seamCon;
 
-        protected int scissorCount;
+        protected bool scissorRight;
+
+        protected bool scissorLeft;
 
         protected int needleCount;
 
@@ -31,7 +33,8 @@ namespace SeamstressMod.Modules.BaseStates
         {
             if (NetworkServer.active)
             {
-                scissorCount = characterBody.GetBuffCount(SeamstressBuffs.scissorCount);
+                scissorRight = characterBody.HasBuff(SeamstressBuffs.scissorRightBuff);
+                scissorLeft = characterBody.HasBuff(SeamstressBuffs.scissorLeftBuff);
                 needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles);
 
             }
