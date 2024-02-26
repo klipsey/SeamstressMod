@@ -16,6 +16,12 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private bool hasFired;
 
+        private float pickupTimer = 4f;
+
+        public void FixedUpdate()
+        {
+            pickupTimer -= Time.fixedDeltaTime;
+        }
         public void OnTriggerEnter(Collider collider)
         {
             if (!NetworkServer.active || !collider)
@@ -31,7 +37,7 @@ namespace SeamstressMod.Survivors.Seamstress
             if ((bool)healthComponent)
             {
                 TeamComponent component2 = healthComponent.GetComponent<TeamComponent>();
-                if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired)
+                if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer < 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
                     triggerEvents?.Invoke();
                     if (healthComponent.body.GetBuffCount(SeamstressBuffs.needles) < 5) healthComponent.body.AddBuff(SeamstressBuffs.needles);

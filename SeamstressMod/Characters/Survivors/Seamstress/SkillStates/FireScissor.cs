@@ -25,7 +25,7 @@ namespace SeamstressMod.SkillStates
 
         public static string attackSoundString = "Play_imp_overlord_attack1_throw";
 
-        private GameObject projectilePrefab = SeamstressAssets.scissorRPrefab;
+        private GameObject projectilePrefab;
 
         private Animator modelAnimator;
 

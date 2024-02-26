@@ -8,6 +8,7 @@ using R2API;
 using RoR2.UI;
 using RoR2.Skills;
 using UnityEngine.Events;
+using HarmonyLib;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -89,9 +90,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject scissorRPrefab;
 
+        internal static GameObject scissorRHitbox;
+
         internal static GameObject scissorRButcheredPrefab;
 
         internal static GameObject scissorLPrefab;
+
+        internal static GameObject scissorLHitbox;
 
         internal static GameObject scissorLButcheredPrefab;
 
@@ -474,10 +479,24 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private static void CreateScissorR()
         {
-            scissorRPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorL");
+            scissorRPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorR");
+
+            scissorRHitbox = new GameObject("ScissorHitBox");
+            scissorRHitbox.transform.localScale = new Vector3(1.2f, 1.2f, 14f);
+            scissorRHitbox.AddComponent<HitBox>();
+            scissorRHitbox.transform.parent = scissorRPrefab.transform;
+
+            MeshFilter meshFilter = scissorRPrefab.AddComponent<MeshFilter>();
+            meshFilter.mesh = needlePrefab.GetComponent<MeshFilter>().mesh;
 
             Rigidbody rigid = scissorRPrefab.GetComponent<Rigidbody>();
             rigid.useGravity = true;
+            rigid.freezeRotation = true;
+
+            SphereCollider sphereCollider = scissorRPrefab.GetComponent <SphereCollider>();
+            sphereCollider.material.bounciness = 0;
+            sphereCollider.material.staticFriction = 10000;
+            sphereCollider.material.dynamicFriction = 10000;
 
             ProjectileImpactExplosion impactAlly = scissorRPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = 0f;
@@ -487,8 +506,6 @@ namespace SeamstressMod.Survivors.Seamstress
             impactAlly.lifetime = 16f;
             impactAlly.lifetimeAfterImpact = 32f;
 
-            ProjectileStickOnImpact what = scissorRPrefab.GetComponent<ProjectileStickOnImpact>();
-
             ProjectileController scissorController = scissorRPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
 
@@ -496,14 +513,13 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorDamage.damageType = DamageType.Stun1s;
 
             ProjectileSimple simple = scissorRPrefab.GetComponent<ProjectileSimple>();
-            simple.desiredForwardSpeed = 200f;
-            simple.updateAfterFiring = false;
+            simple.desiredForwardSpeed = 120f;
 
             ProjectileProximityBeamController prox = scissorRPrefab.AddComponent<ProjectileProximityBeamController>();
             prox.attackFireCount = 1;
-            prox.attackInterval = 0.125f;
-            prox.listClearInterval = 1;
-            prox.attackRange = 12f;
+            prox.attackInterval = 0.01f;
+            prox.listClearInterval = 10f;
+            prox.attackRange = 8f;
             prox.minAngleFilter = 0f;
             prox.maxAngleFilter = 180;
             prox.procCoefficient = 1f;
@@ -519,6 +535,15 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorPickup.triggerEvents = scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
             UnityEngine.Object.Destroy(scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
 
+            FuckImpact fuck = scissorRPrefab.AddComponent<FuckImpact>();
+            fuck.stickSoundString = scissorRPrefab.GetComponent<ProjectileStickOnImpact>().stickSoundString;
+            fuck.stickParticleSystem = scissorRPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
+            fuck.ignoreCharacters = true;
+            fuck.ignoreWorld = false;
+            fuck.stickEvent = scissorRPrefab.GetComponent<ProjectileStickOnImpact>().stickEvent;
+            fuck.alignNormals = true;
+            Object.Destroy(scissorRPrefab.GetComponent<ProjectileStickOnImpact>());
+
             scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
         }
         private static void CreateEmpoweredScissorR()
@@ -533,8 +558,33 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             scissorLPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorL");
 
+            scissorLHitbox = new GameObject("ScissorHitBox");
+            scissorLHitbox.transform.localScale = new Vector3(1.2f, 1.2f, 14f);
+            scissorLHitbox.AddComponent<HitBox>();
+            scissorLHitbox.transform.parent = scissorLPrefab.transform;
+
+            MeshFilter meshFilter = scissorLPrefab.AddComponent<MeshFilter>();
+            meshFilter.mesh = needlePrefab.GetComponent<MeshFilter>().mesh;
+
             Rigidbody rigid = scissorLPrefab.GetComponent<Rigidbody>();
             rigid.useGravity = true;
+            rigid.freezeRotation = true;
+
+            SphereCollider sphereCollider = scissorLPrefab.GetComponent<SphereCollider>();
+            sphereCollider.material = needlePrefab.GetComponent<SphereCollider>().material;
+
+            scissorLPrefab.AddComponent<HitBoxGroup>();
+            scissorLPrefab.GetComponent<HitBoxGroup>().hitBoxes = new HitBox[1];
+            scissorLPrefab.GetComponent<HitBoxGroup>().hitBoxes[0] = scissorLPrefab.transform.GetChild(1).gameObject.GetComponent<HitBox>();
+
+            ProjectileOverlapAttack attack = scissorLPrefab.AddComponent<ProjectileOverlapAttack>();
+            attack.damageCoefficient = 1f;
+            attack.impactEffect = scissorsHitImpactEffect;
+            attack.forceVector = Vector3.zero;
+            attack.overlapProcCoefficient = 1f;
+            attack.maximumOverlapTargets = 100;
+            attack.fireFrequency = 60f;
+            attack.resetInterval = -1;
 
             ProjectileImpactExplosion impactAlly = scissorLPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = 0f;
@@ -542,9 +592,7 @@ namespace SeamstressMod.Survivors.Seamstress
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
             impactAlly.lifetime = 16f;
-            impactAlly.lifetimeAfterImpact = 16f;
-
-            ProjectileStickOnImpact what = scissorLPrefab.GetComponent<ProjectileStickOnImpact>();
+            impactAlly.lifetimeAfterImpact = 32f;
 
             ProjectileController scissorController = scissorLPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
@@ -553,14 +601,13 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorDamage.damageType = DamageType.Stun1s;
 
             ProjectileSimple simple = scissorLPrefab.GetComponent<ProjectileSimple>();
-            simple.desiredForwardSpeed = 200f;
-            simple.updateAfterFiring = false;
+            simple.desiredForwardSpeed = 120f;
 
             ProjectileProximityBeamController prox = scissorLPrefab.AddComponent<ProjectileProximityBeamController>();
             prox.attackFireCount = 1;
-            prox.attackInterval = 0.125f;
-            prox.listClearInterval = 1;
-            prox.attackRange = 12f;
+            prox.attackInterval = 0.01f;
+            prox.listClearInterval = 10f;
+            prox.attackRange = 8f;
             prox.minAngleFilter = 0f;
             prox.maxAngleFilter = 180;
             prox.procCoefficient = 1f;
@@ -575,6 +622,15 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorPickup.myTeamFilter = scissorLPrefab.GetComponent<TeamFilter>();
             scissorPickup.triggerEvents = scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
             UnityEngine.Object.Destroy(scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
+
+            FuckImpact fuck = scissorLPrefab.AddComponent<FuckImpact>();
+            fuck.stickSoundString = scissorLPrefab.GetComponent<ProjectileStickOnImpact>().stickSoundString;
+            fuck.stickParticleSystem = scissorLPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
+            fuck.ignoreCharacters = true;
+            fuck.ignoreWorld = false;
+            fuck.stickEvent = scissorLPrefab.GetComponent<ProjectileStickOnImpact>().stickEvent;
+            fuck.alignNormals = true;
+            Object.Destroy(scissorLPrefab.GetComponent<ProjectileStickOnImpact>());
 
             scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
         }

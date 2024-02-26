@@ -725,5 +725,16 @@ namespace SeamstressMod.Survivors.Seamstress
                 args.baseMoveSpeedAdd += 2;
             }
         }
+        public static float GetICBMDamageMult(CharacterBody body)
+        {
+            float mult = 1f;
+            if (body && body.inventory)
+            {
+                int itemcount = body.inventory.GetItemCount(DLC1Content.Items.MoreMissile);
+                int stack = itemcount - 1;
+                if (stack > 0) mult += stack * 0.5f;
+            }
+            return mult;
+        }
     }
 }

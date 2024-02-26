@@ -5,7 +5,7 @@ using RoR2.Projectile;
 using SeamstressMod.Modules.BaseStates;
 using UnityEngine.Networking;
 using SeamstressMod.Survivors.Seamstress;
-using System;
+using UnityEngine.AddressableAssets;
 
 namespace SeamstressMod.SkillStates
 {
@@ -14,6 +14,12 @@ namespace SeamstressMod.SkillStates
         private float blinkCd;
 
         private bool hasNeedles;
+        
+        public float minSpread;
+
+        public float maxSpread;
+
+        public float projectilePitchBonus;
 
         private Ray aimRay;
 
@@ -60,10 +66,37 @@ namespace SeamstressMod.SkillStates
                     if (base.isAuthority)
                     {
                         aimRay = base.GetAimRay();
-                        ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.needleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
+                        aimRay.direction = Util.ApplySpread(aimRay.direction, this.minSpread, this.maxSpread, 1f, 1f, 0f, this.projectilePitchBonus);
+
+                        if (this.characterBody.inventory && this.characterBody.inventory.GetItemCount(DLC1Content.Items.MoreMissile) > 0)
+                        {
+                            float damageMult = SeamstressSurvivor.GetICBMDamageMult(this.characterBody);
+
+                            Vector3 rhs = Vector3.Cross(Vector3.up, aimRay.direction);
+                            Vector3 axis = Vector3.Cross(aimRay.direction, rhs);
+
+                            float currentSpread = 0f;
+                            float angle = 0f;
+                            float num2 = 0f;
+                            num2 = UnityEngine.Random.Range(1f + currentSpread, 1f + currentSpread) * 3f;   //Bandit is x2
+                            angle = num2 / 2f;  //3 - 1 rockets
+
+                            Vector3 direction = Quaternion.AngleAxis(-num2 * 0.5f, axis) * aimRay.direction;
+                            Quaternion rotation = Quaternion.AngleAxis(angle, axis);
+                            Ray aimRay2 = new Ray(aimRay.origin, direction);
+                            for (int i = 0; i < 3; i++)
+                            {
+                                ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay2.origin, Util.QuaternionSafeLookRotation(aimRay2.direction), this.gameObject, damageMult * damageStat * SeamstressStaticValues.needleDamageCoefficient, 0f, this.RollCrit(), DamageColorIndex.Default, null, -1f);
+                                aimRay2.direction = rotation * aimRay2.direction;
+                            }
+                        }
+                        else
+                        {
+                            ProjectileManager.instance.FireProjectile(this.projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.needleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
+                        }
+                        if (this.inputBank.moveVector != Vector3.zero) this.BlinkForward();
+                        else BlinkUp();
                     }
-                    if (this.inputBank.moveVector != Vector3.zero) this.BlinkForward();
-                    else BlinkUp();
                     return;
                 }
             }
