@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1116621897299892237}
   - component: {fileID: 1923176722413663748}
   m_Layer: 0
-  m_Name: mdlScissorLeft
+  m_Name: ScissorLeftGhost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 7150959319352204122}
   m_LocalRotation: {x: 1, y: 0, z: -0, w: 0.0000000754979}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9458266, y: 0.008352455, z: 2.883598}
+  m_LocalScale: {x: 1.1349919, y: 0.010022946, z: 3.4603176}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0

@@ -39,6 +39,8 @@ namespace SeamstressMod.Survivors.Seamstress
                 TeamComponent component2 = healthComponent.GetComponent<TeamComponent>();
                 if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer < 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
+                    if (this.name == "ScissorR" || this.name == "ScissorRButchered") healthComponent.body.GetComponent<ScissorController>().isRight = true;
+                    else if (this.name == "ScissorL" || this.name == "ScissorLButchered") healthComponent.body.GetComponent<ScissorController>().isRight = false;
                     triggerEvents?.Invoke();
                     if (healthComponent.body.GetBuffCount(SeamstressBuffs.needles) < 5) healthComponent.body.AddBuff(SeamstressBuffs.needles);
                     healthComponent.body.GetComponent<ScissorController>().RpcAddSpecialStock();

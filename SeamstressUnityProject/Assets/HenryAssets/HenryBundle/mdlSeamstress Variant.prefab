@@ -14,18 +14,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 88f6cbc7965cc1a4a92e90d88db1c83d,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 88f6cbc7965cc1a4a92e90d88db1c83d,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 88f6cbc7965cc1a4a92e90d88db1c83d,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 88f6cbc7965cc1a4a92e90d88db1c83d,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.23091114
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 88f6cbc7965cc1a4a92e90d88db1c83d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.5813544
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 88f6cbc7965cc1a4a92e90d88db1c83d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.587881
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 88f6cbc7965cc1a4a92e90d88db1c83d,
         type: 3}
@@ -65,7 +80,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 88f6cbc7965cc1a4a92e90d88db1c83d,
         type: 3}
       propertyPath: m_Name
-      value: mdlSeamstress
+      value: mdlSeamstress Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88f6cbc7965cc1a4a92e90d88db1c83d, type: 3}

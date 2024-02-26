@@ -12,13 +12,18 @@ namespace SeamstressMod.Survivors.Seamstress
         private int oldScissorCount = 0;
 
         private int scissorCount = 0;
+
+        public bool isRight;
+
         public void Awake()
         {
             characterBody = base.GetComponent<CharacterBody>();
         }
+
         public void Start()
         {
         }
+
         public void FixedUpdate()
         {
             if(hasAuthority) 
@@ -35,6 +40,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 oldScissorCount = scissorCount;
             }
         }
+
         [ClientRpc]
         public void RpcAddSpecialStock()
         {
@@ -48,7 +54,6 @@ namespace SeamstressMod.Survivors.Seamstress
             }
         }
 
-
         [Command]
         public void CmdUpdateScissors(int newCount)
         {
@@ -56,25 +61,29 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 int buffLeft = characterBody.GetBuffCount(SeamstressBuffs.scissorLeftBuff);
                 int buffRight = characterBody.GetBuffCount(SeamstressBuffs.scissorRightBuff);
-                //fix how scissor pickups work
-                if (newCount == 2 && buffLeft == 0)
+                switch(newCount)
                 {
-                    characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
+                    case 0:
+                        if(buffLeft == 1)characterBody.RemoveBuff(SeamstressBuffs.scissorLeftBuff);
+                        if(buffRight == 1)characterBody.RemoveBuff(SeamstressBuffs.scissorRightBuff);
+                        break;
+                    case 1:
+                        if(isRight)
+                        {
+                            if (buffRight == 0) characterBody.AddBuff(SeamstressBuffs.scissorRightBuff);
+                            if (buffLeft == 1) characterBody.RemoveBuff(SeamstressBuffs.scissorLeftBuff);
+                        }
+                        if (!isRight)
+                        {
+                            if (buffRight == 1) characterBody.RemoveBuff(SeamstressBuffs.scissorRightBuff);
+                            if (buffLeft == 0) characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
+                        }
+                        break;
+                    case 2:
+                        if(buffLeft == 0)characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
+                        if (buffRight == 0)characterBody.AddBuff(SeamstressBuffs.scissorRightBuff);
+                        break;
                 }
-                else if(newCount == 2 && buffLeft == 0 && buffRight == 1) characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
-
-                else if (newCount == 1 && buffRight == 0)
-                {
-                    characterBody.AddBuff(SeamstressBuffs.scissorRightBuff);
-                }
-                else if(newCount == 1 && buffLeft == 1)
-                {
-                    characterBody.RemoveBuff(SeamstressBuffs.scissorLeftBuff);
-                }
-                else if(newCount == 0 && buffRight == 1)
-                {
-                    characterBody.RemoveBuff(SeamstressBuffs.scissorRightBuff);
-                } 
             }
         }
     }

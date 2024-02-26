@@ -38,6 +38,7 @@ namespace SeamstressMod.SkillStates
 
         public override void OnEnter()
         {
+            characterBody.GetComponent<ScissorController>().isRight = true;
             base.OnEnter();
             duration = baseDuration / attackSpeedStat;
             modelAnimator = GetModelAnimator();
@@ -49,6 +50,11 @@ namespace SeamstressMod.SkillStates
             {
                 chosenAnim = 1;
             }
+            else if(scissorLeft && !scissorRight) 
+            {
+                chosenAnim = 2;
+            }
+
             if (modelAnimator)
             {
                 /*
