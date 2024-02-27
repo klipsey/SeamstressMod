@@ -184,18 +184,13 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 networkhitHurtboxIndex = (sbyte)component.indexInGroup;
             }
-            if (gameObject == projectileController.owner || (ignoreCharacters && (bool)component))
-            {
-                gameObject = null;
-                networkhitHurtboxIndex = -1;
-            }
-            else if (!component && !ignoreWorld)
+            if (!component && !ignoreWorld)
             {
                 gameObject = hitCollider.gameObject;
                 GetComponent<ProjectileProximityBeamController>().enabled = false;
                 networkhitHurtboxIndex = -2;
             }
-            if ((bool)gameObject)
+            if (gameObject)
             {
                 stickEvent.Invoke();
                 ParticleSystem[] array = stickParticleSystem;
@@ -203,6 +198,24 @@ namespace SeamstressMod.Survivors.Seamstress
                 {
                     array[i].Play();
                 }
+                Vector3 effectPos = this.transform.localPosition;
+                RaycastHit raycastHit;
+                if (Physics.Raycast(effectPos, Vector3.down, out raycastHit, 10f, LayerIndex.world.mask))
+                {
+                    effectPos = raycastHit.point;
+                }
+                EffectManager.SpawnEffect(SeamstressAssets.expungeEffect, new EffectData
+                {
+                    origin = effectPos,
+                    rotation = Quaternion.identity,
+                    scale = 1.5f,
+                }, true);
+                EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                {
+                    origin = effectPos,
+                    rotation = Quaternion.identity,
+                    color = Color.white,
+                }, true);
                 if (stickSoundString.Length > 0)
                 {
                     Util.PlaySound(stickSoundString, base.gameObject);

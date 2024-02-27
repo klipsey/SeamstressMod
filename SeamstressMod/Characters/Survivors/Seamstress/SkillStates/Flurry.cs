@@ -14,8 +14,6 @@ namespace SeamstressMod.SkillStates
         private GameObject swingEffectInstance;
 
         private GameObject chargeEffectInstance;
-
-        public static GameObject chargeEffectPrefab = SeamstressAssets.flurryCharge;
         public override void OnEnter()
         {
             RefreshState();
@@ -69,12 +67,6 @@ namespace SeamstressMod.SkillStates
 
             base.OnEnter();
             Util.PlayAttackSpeedSound("Play_imp_overlord_attack2_tell", gameObject, duration * attackStartPercentTime);
-            Transform transform = FindModelChild("meshHenrySword");
-            if (transform && chargeEffectPrefab)
-            {
-                chargeEffectInstance = UnityEngine.Object.Instantiate(chargeEffectPrefab, transform.position, transform.rotation);
-                chargeEffectInstance.transform.parent = transform;
-            }
         }
         public override void FixedUpdate()
         {

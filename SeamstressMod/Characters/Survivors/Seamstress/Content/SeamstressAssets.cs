@@ -5,11 +5,10 @@ using RoR2.Projectile;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using R2API;
-using RoR2.UI;
 using RoR2.Skills;
-using UnityEngine.Events;
-using HarmonyLib;
-using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
+using TMPro;
+using ThreeEyedGames;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -17,8 +16,6 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         //effects
         internal static GameObject parrySlashEffect;
-
-        internal static GameObject flurryCharge;
 
         internal static GameObject clipSlashEffect;
 
@@ -39,7 +36,8 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject sewEffect;
 
         internal static GameObject clawsEffect;
-        //internal static GameObject scissorsComboSwingEffect;
+
+        internal static GameObject genericImpactExplosionEffect;
 
         internal static GameObject scissorsComboSwingEffect;
 
@@ -274,10 +272,6 @@ namespace SeamstressMod.Survivors.Seamstress
             fard.startLifetimeMultiplier = 0.6f;
             SeamstressPlugin.Destroy(parrySlashEffect.GetComponent<EffectComponent>());
 
-            flurryCharge = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorChargeCrabCannon.prefab").WaitForCompletion().InstantiateClone("FlurryCharge");
-            flurryCharge.AddComponent<NetworkIdentity>();
-            flurryCharge.transform.GetChild(2).gameObject.SetActive(false);
-
             expungeEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("ExpungeEffect");
             expungeEffect.AddComponent<NetworkIdentity>();
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercExposedBackdrop.mat").WaitForCompletion());
@@ -385,7 +379,62 @@ namespace SeamstressMod.Survivors.Seamstress
             reapEndEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             reapEndEffect.transform.GetChild(6).gameObject.SetActive(false);
 
+            genericImpactExplosionEffect = CreateImpactExplosionEffect("SeamstressScissorImpact", Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matBloodGeneric.mat").WaitForCompletion(), 4);
+
         }
+        //love ya rob
+        private static GameObject CreateImpactExplosionEffect(string effectName, Material bloodMat, float scale = 1f)
+        {
+            GameObject newEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Brother/BrotherSlamImpact.prefab").WaitForCompletion().InstantiateClone(effectName, true);
+
+            newEffect.transform.Find("Spikes, Small").gameObject.SetActive(false);
+
+            newEffect.transform.Find("PP").gameObject.SetActive(false);
+            newEffect.transform.Find("Point light").gameObject.SetActive(false);;
+            newEffect.transform.Find("Flash Lines").GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matOpaqueDustLargeDirectional.mat").WaitForCompletion();
+
+            newEffect.transform.GetChild(3).GetComponent<ParticleSystemRenderer>().material = bloodMat;
+            newEffect.transform.Find("Flash Lines, Fire").GetComponent<ParticleSystemRenderer>().material = bloodMat;
+            newEffect.transform.GetChild(6).GetComponent<ParticleSystemRenderer>().material = bloodMat;
+            newEffect.transform.Find("Fire").GetComponent<ParticleSystemRenderer>().material = bloodMat;
+
+            var boom = newEffect.transform.Find("Fire").GetComponent<ParticleSystem>().main;
+            boom.startLifetimeMultiplier = 0.5f;
+            boom = newEffect.transform.Find("Flash Lines, Fire").GetComponent<ParticleSystem>().main;
+            boom.startLifetimeMultiplier = 0.3f;
+            boom = newEffect.transform.GetChild(6).GetComponent<ParticleSystem>().main;
+            boom.startLifetimeMultiplier = 0.4f;
+
+            newEffect.transform.Find("Physics").GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/MagmaWorm/matFracturedGround.mat").WaitForCompletion();
+
+            newEffect.transform.Find("Decal").GetComponent<Decal>().Material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDecal.mat").WaitForCompletion();
+            newEffect.transform.Find("Decal").GetComponent<AnimateShaderAlpha>().timeMax = 10f;
+
+            newEffect.transform.Find("FoamSplash").gameObject.SetActive(false);
+            newEffect.transform.Find("FoamBilllboard").gameObject.SetActive(false);
+            newEffect.transform.Find("Dust").gameObject.SetActive(false);
+            newEffect.transform.Find("Dust, Directional").gameObject.SetActive(false);
+
+            newEffect.transform.localScale = Vector3.one * scale;
+            newEffect.transform.Find("Flash").localScale = Vector3.one * 0.5f;
+            newEffect.transform.Find("Flash Lines").localScale = Vector3.one * 0.5f;
+
+            newEffect.AddComponent<NetworkIdentity>();
+            Content.CreateAndAddEffectDef(newEffect);
+
+            ParticleSystemColorFromEffectData PSCFED = newEffect.AddComponent<ParticleSystemColorFromEffectData>();
+            PSCFED.particleSystems = new ParticleSystem[]
+            {
+                newEffect.transform.Find("Fire").GetComponent<ParticleSystem>(),
+                newEffect.transform.Find("Flash Lines, Fire").GetComponent<ParticleSystem>(),
+                newEffect.transform.GetChild(6).GetComponent<ParticleSystem>(),
+                newEffect.transform.GetChild(3).GetComponent<ParticleSystem>()
+            };
+            PSCFED.effectComponent = newEffect.GetComponent<EffectComponent>();
+
+            return newEffect;
+        }
+
 
         #endregion effects
 
