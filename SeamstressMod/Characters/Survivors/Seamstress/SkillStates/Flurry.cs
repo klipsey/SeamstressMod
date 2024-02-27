@@ -53,13 +53,13 @@ namespace SeamstressMod.SkillStates
                 moddedDamageType3 = DamageTypes.ButcheredLifeSteal;
             }
             scissorHit = true;
-            if (muzzleString == "SwingRightSmall" && !scissorLeft)
+            if (muzzleString == "SwingLeftSmall" && !scissorLeft)
             {
                 //change to remove the next states double hit instead
                 moddedDamageType = DamageTypes.NoSword;
                 scissorHit = false;
             }
-            if (muzzleString == "SwingLeftSmall" && !scissorRight)
+            if (muzzleString == "SwingRightSmall" && !scissorRight)
             {
                 //change to remove the next states double hit instead
                 moddedDamageType = DamageTypes.NoSword;

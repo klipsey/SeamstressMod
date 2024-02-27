@@ -9,6 +9,7 @@ using RoR2.UI;
 using RoR2.Skills;
 using UnityEngine.Events;
 using HarmonyLib;
+using UnityEngine.UI;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -95,7 +96,6 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject scissorLPrefab;
 
         internal static GameObject scissorLButcheredPrefab;
-
         //extra
         //public static SkillDef weaveRecastSkillDef;
 
@@ -105,7 +105,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             _assetBundle = assetBundle;
 
-            scissorsHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_bandit2_m2_impact");
+            scissorsHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_merc_sword_impact");
 
             parrySuccessSoundEvent = Content.CreateAndAddNetworkSoundEventDef("Play_voidman_m2_explode");
 
@@ -183,6 +183,7 @@ namespace SeamstressMod.Survivors.Seamstress
         private static void CreateEffects()
         {
             Color theRed = new Color(155f / 255f, 55f / 255f, 55f / 255f);
+
             primary = _assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
             weave = _assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
             special = _assetBundle.LoadAsset<Sprite>("texSpecialIcon");
@@ -404,10 +405,10 @@ namespace SeamstressMod.Survivors.Seamstress
             Content.AddProjectilePrefab(scissorRButcheredPrefab);
 
             CreateScissorL();
-            Content.AddProjectilePrefab(scissorRPrefab);
+            Content.AddProjectilePrefab(scissorLPrefab);
 
             CreateEmpoweredScissorL();
-            Content.AddProjectilePrefab(scissorRButcheredPrefab);
+            Content.AddProjectilePrefab(scissorLButcheredPrefab);
         }
         private static void CreateNeedle()
         {
@@ -507,7 +508,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileProximityBeamController prox = scissorRPrefab.AddComponent<ProjectileProximityBeamController>();
             prox.attackFireCount = 1;
-            prox.attackInterval = 0.01f;
+            prox.inheritDamageType = true;
+            prox.attackInterval = 0.001f;
             prox.listClearInterval = 10f;
             prox.attackRange = 8f;
             prox.minAngleFilter = 0f;
@@ -547,11 +549,78 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private static void CreateEmpoweredScissorR()
         {
-            scissorRButcheredPrefab = scissorRPrefab;
+            scissorRButcheredPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("scissorRButchered");
+
+            Rigidbody rigid = scissorRButcheredPrefab.GetComponent<Rigidbody>();
+            rigid.useGravity = true;
+            rigid.freezeRotation = true;
+
+            SphereCollider sphereCollider = scissorRButcheredPrefab.GetComponent<SphereCollider>();
+            sphereCollider.material.bounciness = 0;
+            sphereCollider.material.staticFriction = 10000;
+            sphereCollider.material.dynamicFriction = 10000;
+            sphereCollider.radius = 0.1f;
+
+            ProjectileImpactExplosion impactAlly = scissorRButcheredPrefab.GetComponent<ProjectileImpactExplosion>();
+            impactAlly.blastDamageCoefficient = 0f;
+            impactAlly.blastProcCoefficient = 0f;
+            impactAlly.destroyOnEnemy = false;
+            impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
+            impactAlly.lifetime = 16f;
+            impactAlly.lifetimeAfterImpact = 16f;
+
+            ProjectileController scissorController = scissorRButcheredPrefab.GetComponent<ProjectileController>();
+            scissorController.procCoefficient = 1f;
+
+            ProjectileDamage scissorDamage = scissorRButcheredPrefab.GetComponent<ProjectileDamage>();
+            scissorDamage.damageType = DamageType.Stun1s;
+
+            ProjectileSimple simple = scissorRButcheredPrefab.GetComponent<ProjectileSimple>();
+            simple.desiredForwardSpeed = 120f;
+
+            ProjectileProximityBeamController prox = scissorRButcheredPrefab.AddComponent<ProjectileProximityBeamController>();
+            prox.attackFireCount = 1;
+            prox.inheritDamageType = true;
+            prox.attackInterval = 0.001f;
+            prox.listClearInterval = 10f;
+            prox.attackRange = 8f;
+            prox.minAngleFilter = 0f;
+            prox.maxAngleFilter = 180;
+            prox.procCoefficient = 1f;
+            prox.damageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
+            prox.bounces = 0;
+            prox.lightningType = RoR2.Orbs.LightningOrb.LightningType.MageLightning;
+
+            scissorRButcheredPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
+
+            //changes team filter to only team
+            PickupFilter scissorPickup = scissorRButcheredPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilter>();
+            scissorPickup.myTeamFilter = scissorRButcheredPrefab.GetComponent<TeamFilter>();
+            scissorPickup.triggerEvents = scissorRButcheredPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
+            UnityEngine.Object.Destroy(scissorRButcheredPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
+
+            FuckImpact fuck = scissorRButcheredPrefab.AddComponent<FuckImpact>();
+            fuck.stickSoundString = scissorRButcheredPrefab.GetComponent<ProjectileStickOnImpact>().stickSoundString;
+            fuck.stickParticleSystem = scissorRButcheredPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
+            fuck.ignoreCharacters = true;
+            fuck.ignoreWorld = false;
+            fuck.stickEvent = scissorRButcheredPrefab.GetComponent<ProjectileStickOnImpact>().stickEvent;
+            fuck.alignNormals = true;
+            Object.Destroy(scissorRButcheredPrefab.GetComponent<ProjectileStickOnImpact>());
+
+            scissorRButcheredPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
+
+            ProjectileController controller = scissorRButcheredPrefab.GetComponent<ProjectileController>();
+            if (!controller.ghostPrefab.GetComponent<ProjectileGhostController>())
+                controller.ghostPrefab.AddComponent<ProjectileGhostController>();
+            controller.ghostPrefab.GetComponent<ProjectileGhostController>().inheritScaleFromProjectile = false;
+            if (_assetBundle.LoadAsset<GameObject>("ScissorRightGhost") != null)
+                controller.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorRightGhost");
+            if (!controller.ghostPrefab.GetComponent<NetworkIdentity>())
+                controller.ghostPrefab.AddComponent<NetworkIdentity>();
             ProjectileHealOwnerOnDamageInflicted scissorHeal = scissorRButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
             scissorHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
             scissorRButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
-            scissorRButcheredPrefab = PrefabAPI.InstantiateClone(scissorRButcheredPrefab, "ScissorRButchered");
         }
         private static void CreateScissorL()
         {
@@ -566,15 +635,6 @@ namespace SeamstressMod.Survivors.Seamstress
             sphereCollider.material.staticFriction = 10000;
             sphereCollider.material.dynamicFriction = 10000;
             sphereCollider.radius = 0.1f;
-
-            ProjectileOverlapAttack attack = scissorLPrefab.AddComponent<ProjectileOverlapAttack>();
-            attack.damageCoefficient = 1f;
-            attack.impactEffect = scissorsHitImpactEffect;
-            attack.forceVector = Vector3.zero;
-            attack.overlapProcCoefficient = 1f;
-            attack.maximumOverlapTargets = 100;
-            attack.fireFrequency = 60f;
-            attack.resetInterval = -1;
 
             ProjectileImpactExplosion impactAlly = scissorLPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = 0f;
@@ -595,7 +655,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileProximityBeamController prox = scissorLPrefab.AddComponent<ProjectileProximityBeamController>();
             prox.attackFireCount = 1;
-            prox.attackInterval = 0.01f;
+            prox.inheritDamageType = true;
+            prox.attackInterval = 0.001f;
             prox.listClearInterval = 10f;
             prox.attackRange = 8f;
             prox.minAngleFilter = 0f;
@@ -635,11 +696,78 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private static void CreateEmpoweredScissorL()
         {
-            scissorLButcheredPrefab = scissorLPrefab;
+            scissorLButcheredPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorLButchered");
+
+            Rigidbody rigid = scissorLButcheredPrefab.GetComponent<Rigidbody>();
+            rigid.useGravity = true;
+            rigid.freezeRotation = true;
+
+            SphereCollider sphereCollider = scissorLButcheredPrefab.GetComponent<SphereCollider>();
+            sphereCollider.material.bounciness = 0;
+            sphereCollider.material.staticFriction = 10000;
+            sphereCollider.material.dynamicFriction = 10000;
+            sphereCollider.radius = 0.1f;
+
+            ProjectileImpactExplosion impactAlly = scissorLButcheredPrefab.GetComponent<ProjectileImpactExplosion>();
+            impactAlly.blastDamageCoefficient = 0f;
+            impactAlly.blastProcCoefficient = 0f;
+            impactAlly.destroyOnEnemy = false;
+            impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
+            impactAlly.lifetime = 16f;
+            impactAlly.lifetimeAfterImpact = 16f;
+
+            ProjectileController scissorController = scissorLButcheredPrefab.GetComponent<ProjectileController>();
+            scissorController.procCoefficient = 1f;
+
+            ProjectileDamage scissorDamage = scissorLButcheredPrefab.GetComponent<ProjectileDamage>();
+            scissorDamage.damageType = DamageType.Stun1s;
+
+            ProjectileSimple simple = scissorLButcheredPrefab.GetComponent<ProjectileSimple>();
+            simple.desiredForwardSpeed = 120f;
+
+            ProjectileProximityBeamController prox = scissorLButcheredPrefab.AddComponent<ProjectileProximityBeamController>();
+            prox.attackFireCount = 1;
+            prox.inheritDamageType = true;
+            prox.attackInterval = 0.001f;
+            prox.listClearInterval = 10f;
+            prox.attackRange = 8f;
+            prox.minAngleFilter = 0f;
+            prox.maxAngleFilter = 180;
+            prox.procCoefficient = 1f;
+            prox.damageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
+            prox.bounces = 0;
+            prox.lightningType = RoR2.Orbs.LightningOrb.LightningType.MageLightning;
+
+            scissorLButcheredPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
+
+            //changes team filter to only team
+            PickupFilter scissorPickup = scissorLButcheredPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilter>();
+            scissorPickup.myTeamFilter = scissorLButcheredPrefab.GetComponent<TeamFilter>();
+            scissorPickup.triggerEvents = scissorLButcheredPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
+            UnityEngine.Object.Destroy(scissorLButcheredPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
+
+            FuckImpact fuck = scissorLButcheredPrefab.AddComponent<FuckImpact>();
+            fuck.stickSoundString = scissorLButcheredPrefab.GetComponent<ProjectileStickOnImpact>().stickSoundString;
+            fuck.stickParticleSystem = scissorLButcheredPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
+            fuck.ignoreCharacters = true;
+            fuck.ignoreWorld = false;
+            fuck.stickEvent = scissorLButcheredPrefab.GetComponent<ProjectileStickOnImpact>().stickEvent;
+            fuck.alignNormals = true;
+            Object.Destroy(scissorLButcheredPrefab.GetComponent<ProjectileStickOnImpact>());
+
+            scissorLButcheredPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
+
+            ProjectileController controller = scissorLButcheredPrefab.GetComponent<ProjectileController>();
+            if (!controller.ghostPrefab.GetComponent<ProjectileGhostController>())
+                controller.ghostPrefab.AddComponent<ProjectileGhostController>();
+            controller.ghostPrefab.GetComponent<ProjectileGhostController>().inheritScaleFromProjectile = false;
+            if (_assetBundle.LoadAsset<GameObject>("ScissorLeftGhost") != null)
+                controller.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorLeftGhost");
+            if (!controller.ghostPrefab.GetComponent<NetworkIdentity>())
+                controller.ghostPrefab.AddComponent<NetworkIdentity>();
             ProjectileHealOwnerOnDamageInflicted scissorHeal = scissorLButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
             scissorHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
             scissorLButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
-            scissorLButcheredPrefab = PrefabAPI.InstantiateClone(scissorLButcheredPrefab, "ScissorLButchered");
         }
 
         #endregion projectiles

@@ -71,7 +71,7 @@ namespace SeamstressMod.Survivors.Seamstress
             #region Utility 
             Language.Add(prefix + "UTILITY_BLINK_NAME", "Glimpse of Corruption");
             Language.Add(prefix + "UTILITY_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> applying to enemies. Gain "
-                + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <style=cIsHealing>75% of healing</style> is converted into <color=#9B3737>Fiend Gauge</color>.");
+                + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <style=cIsHealing>99% of healing</style> is converted into <color=#9B3737>Fiend Gauge</color>.");
 
             Language.Add(prefix + "UTILITY_PARRY_NAME", "Glimpse of Purity");
             Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Briefly become <style=cIsUtility>Invulnerable</style>. If hit, dash forward dealing <style=cIsDamage>2x{100f * SeamstressStaticValues.parryDamage}% damage</style> applying . Gain " +

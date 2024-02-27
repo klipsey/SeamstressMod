@@ -39,42 +39,40 @@ namespace SeamstressMod.SkillStates
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
+            scissorHit = true;
             switch (swingIndex)
             {
                 case 0:
                     muzzleString = "SwingLeftSmall";
+                    if (!scissorRight)
+                    {
+                        moddedDamageType = DamageTypes.NoSword;
+                        scissorHit = false;
+                    }
                     break;
                 case 1:
                     muzzleString = "SwingRightSmall";
+                    if (!scissorLeft)
+                    {
+                        moddedDamageType = DamageTypes.NoSword;
+                        scissorHit = false;
+                    }
                     break;
-                case 2:damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
-                    moddedDamageType2 = DamageTypes.NoSword;
-                    hitboxGroupName = "Sword";
+                case 2:
+                    damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
+                    swingSoundString = "Play_bandit2_m2_impact";
                     swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                     muzzleString = "SwingCenterSmall";
+                    if (!scissorRight || !scissorLeft)
+                    {
+                        moddedDamageType = DamageTypes.NoSword;
+                        scissorHit = false;
+                    }
                     break;
-            }
-            scissorHit = true;
-            if (muzzleString == "SwingRightSmall" && !scissorLeft)
-            {
-                //change to remove the next states double hit instead
-                moddedDamageType = DamageTypes.NoSword;
-                scissorHit = false;
-            }
-            if (muzzleString == "SwingLeftSmall" && !scissorRight)
-            {
-                //change to remove the next states double hit instead
-                moddedDamageType = DamageTypes.NoSword;
-                scissorHit = false;
-            }
-            if (muzzleString == "SwingCenterSmall" && !scissorRight || !scissorLeft)
-            {
-                moddedDamageType = DamageTypes.NoSword;
-                scissorHit = false;
             }
             if (empowered)
             {
-                moddedDamageType = DamageTypes.ButcheredLifeSteal;
+                moddedDamageType2 = DamageTypes.ButcheredLifeSteal;
                 moddedDamageType3 = DamageTypes.CutDamage;
             }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;

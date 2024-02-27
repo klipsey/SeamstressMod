@@ -51,7 +51,7 @@ namespace SeamstressMod.Survivors.Seamstress
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
-            crosshair = Assets.LoadCrosshair("SimpleDot"),
+            crosshair = null,
             podPrefab = null,
             initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressSpawnState)),
 
@@ -114,6 +114,8 @@ namespace SeamstressMod.Survivors.Seamstress
         public override void InitializeCharacter()
         {
             SeamstressUnlockables.Init();
+
+            SeamstressCrosshair.Init(assetBundle);
 
             base.InitializeCharacter();
 
@@ -610,6 +612,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void AddHooks()
         {
+                        RoR2.UI.HUD.onHudTargetChangedGlobal += HUDSetup;
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
             On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
             On.RoR2.CharacterModel.UpdateOverlays += new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
@@ -737,6 +740,48 @@ namespace SeamstressMod.Survivors.Seamstress
                 if (stack > 0) mult += stack * 0.5f;
             }
             return mult;
+        }
+        internal static void HUDSetup(RoR2.UI.HUD hud)
+        {
+            if (hud.targetBodyObject && hud.targetMaster.bodyPrefab.name == "SeamstressBody")
+            {
+                if (!hud.targetMaster.hasAuthority) return;
+
+                Transform healthbarContainer = hud.transform.Find("MainContainer").Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster").Find("BarRoots").Find("LevelDisplayCluster");
+                if (!hud.transform.Find("MainContainer").Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster").Find("FiendGauge"))
+                {
+                    GameObject fiendGauge = GameObject.Instantiate(healthbarContainer.gameObject, hud.transform.Find("MainContainer").Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster"));
+                    fiendGauge.name = "FiendGauge";
+
+                    GameObject.DestroyImmediate(fiendGauge.transform.GetChild(0).gameObject);
+                    MonoBehaviour.Destroy(fiendGauge.GetComponentInChildren<LevelText>());
+                    MonoBehaviour.Destroy(fiendGauge.GetComponentInChildren<ExpBar>());
+
+                    FiendGauge fiendGaugeComponent = fiendGauge.AddComponent<FiendGauge>();
+                    fiendGaugeComponent.targetHUD = hud;
+                    fiendGaugeComponent.fillRectTransform = fiendGauge.transform.Find("ExpBarRoot").GetChild(0).GetChild(0).GetComponent<RectTransform>();
+
+                    fiendGauge.transform.Find("LevelDisplayRoot").Find("ValueText").gameObject.SetActive(false);
+                    fiendGauge.transform.Find("LevelDisplayRoot").Find("PrefixText").gameObject.SetActive(false);
+
+                    fiendGauge.transform.Find("ExpBarRoot").GetChild(0).GetComponent<Image>().enabled = true;
+
+                    fiendGauge.transform.Find("LevelDisplayRoot").GetComponent<RectTransform>().anchoredPosition = new Vector2(-12f, 0f);
+
+                    RectTransform rect = fiendGauge.GetComponent<RectTransform>();
+                    rect.anchorMax = new Vector2(1f, 1f);
+                    rect.anchoredPosition = new Vector2(740f, 430f);
+                    rect.localScale = new Vector2(0.5f, 0.5f);
+                }
+                if (!hud.transform.Find("MainContainer").Find("MainUIArea").Find("CrosshairCanvas").Find("SeamstressCrosshair"))
+                {
+                    GameObject seamstressCrosshair = GameObject.Instantiate(SeamstressCrosshair.seamstressCrosshair, hud.transform.Find("MainContainer").Find("MainUIArea").Find("CrosshairCanvas"));
+                    seamstressCrosshair.name = "SeamstressCrosshair";
+                    seamstressCrosshair.gameObject.GetComponent<HudElement>().targetBodyObject = hud.targetBodyObject;
+                    seamstressCrosshair.gameObject.GetComponent<HudElement>().targetCharacterBody = hud.targetBodyObject.GetComponent<CharacterBody>();
+
+                }
+            }
         }
     }
 }

@@ -31,7 +31,7 @@ namespace SeamstressMod.Survivors.Seamstress
         internal const float butcheredLifeSteal = 0.1f;
 
         //75% of healing is converted but i was too lazy oops
-        internal const float healConversion = 0.25f;
+        internal const float healConversion = 0.01f;
 
         internal const float needleGainInterval = 1f;
 
@@ -55,6 +55,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float scissorDamageCoefficient = 4f;
 
-        internal const float maxFiendGaugeCoefficient = 2.5f;
+        internal const float maxFiendGaugeCoefficient = 1f;
     }
 }

@@ -72,7 +72,7 @@ namespace SeamstressMod.SkillStates
             if (NetworkServer.active)
             {
                 snips = needleCount;
-                if (!characterBody.HasBuff(SeamstressBuffs.scissorLeftBuff)) noScissors = true;
+                if (!scissorRight || !scissorLeft) noScissors = true;
             }
             if(noScissors)
             {
