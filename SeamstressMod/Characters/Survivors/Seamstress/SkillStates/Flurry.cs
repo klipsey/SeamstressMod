@@ -24,7 +24,7 @@ namespace SeamstressMod.SkillStates
             pushForce = 300f;
             bonusForce = Vector3.zero;
             baseDuration = 1.1f - (1.1f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
-            baseScissorDuration = 2.2f - (2.2f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseScissorDuration = 2f - (2f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             moddedDamageType = DamageTypes.Empty;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
@@ -34,7 +34,7 @@ namespace SeamstressMod.SkillStates
             attackEndPercentTime = 0.4f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            earlyExitPercentTime = 0.6f;
+            earlyExitPercentTime = 0.5f;
             hitStopDuration = 0.05f;
             attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 3.5f;
@@ -42,7 +42,8 @@ namespace SeamstressMod.SkillStates
             swingSoundString = "Play_imp_attack";
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
+            swingEffectPrefab = SeamstressAssets.clipSlashEffect;
+            bonusSwingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeftSmall" : "SwingRightSmall";
             buffer = false;
             if (empowered)
@@ -66,7 +67,7 @@ namespace SeamstressMod.SkillStates
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();
-            Util.PlayAttackSpeedSound("Play_imp_overlord_attack2_tell", gameObject, duration * attackStartPercentTime);
+            Util.PlayAttackSpeedSound("Play_imp_attack", gameObject, duration * attackStartPercentTime);
         }
         public override void FixedUpdate()
         {

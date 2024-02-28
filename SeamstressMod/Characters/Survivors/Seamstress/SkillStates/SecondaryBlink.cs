@@ -44,8 +44,6 @@ namespace SeamstressMod.SkillStates
 
         public static float blastAttackProcCoefficient = 1f;
 
-        private float exhaustDuration = 6f;
-
         private Animator animator;
 
         private CharacterModel characterModel;
@@ -68,8 +66,11 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
             RefreshState();
-            this.stockMultiplier = base.skillLocator.secondary.stock;
-            base.skillLocator.secondary.stock = 0;
+            if(NetworkServer.active) this.stockMultiplier = characterBody.GetBuffCount(SeamstressBuffs.needles);
+            for(int i = characterBody.GetBuffCount(SeamstressBuffs.needles); i > 0; i--)
+            {
+                characterBody.RemoveBuff(SeamstressBuffs.needles);
+            }
             if (this.stockMultiplier > 10)
             {
                 this.baseDuration = 1f;
@@ -77,11 +78,11 @@ namespace SeamstressMod.SkillStates
             }
             else
             {
-                this.doThings = 0.5f * (this.stockMultiplier / base.skillLocator.secondary.maxStock);
+                this.doThings = 0.5f * (this.stockMultiplier / 5f);
                 this.baseDuration = this.stockMultiplier / 10;
             }
             this.exitDuration = (this.baseDuration / 2);
-            this.destinationAlertDuration = (baseDuration / 2);
+            this.destinationAlertDuration = (this.baseDuration / 2);
             if (this.doThings < 0.1f)
             {
                 this.doThings = 0.1f;

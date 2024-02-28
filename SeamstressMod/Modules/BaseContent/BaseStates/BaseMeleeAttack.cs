@@ -42,6 +42,7 @@ namespace SeamstressMod.Modules.BaseStates
         protected string muzzleString = "SwingCenter";
         protected string playbackRateParam = "Slash.playbackRate";
         protected GameObject swingEffectPrefab;
+        protected GameObject bonusSwingEffectPrefab;
         protected GameObject hitEffectPrefab;
         protected NetworkSoundEventIndex impactSound;
         protected bool buffer = false;
@@ -228,6 +229,7 @@ namespace SeamstressMod.Modules.BaseStates
                     if (!hasFired)
                     {
                         EnterAttack();
+                        swingEffectPrefab = bonusSwingEffectPrefab;
                         hasFired = true;
                     }
                     FireAttack();
@@ -236,6 +238,7 @@ namespace SeamstressMod.Modules.BaseStates
                 {
                     if (!hasFired2)
                     {
+                        hitStopDuration = 0.2f;
                         attack = new OverlapAttack();
                         attack.damageType = damageType;
                         attack.AddModdedDamageType(moddedDamageType);
@@ -271,6 +274,7 @@ namespace SeamstressMod.Modules.BaseStates
                         }
                         else if(muzzleString == "SwingCenterSmall")
                         {
+                            swingSoundString = "Play_bandit2_m2_slash";
                             muzzleString = "SwingCenter";
                             attack.hitBoxGroup = FindHitBoxGroup("SwordBig");
                         }

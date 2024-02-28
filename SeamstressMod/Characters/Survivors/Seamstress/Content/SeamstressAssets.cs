@@ -31,6 +31,10 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject scissorsSwingEffect;
 
+        internal static GameObject slashEffect;
+
+        internal static GameObject slashComboEffect;
+
         internal static GameObject blinkPrefab;
 
         internal static GameObject blinkDestinationPrefab;
@@ -210,6 +214,11 @@ namespace SeamstressMod.Survivors.Seamstress
             blinkDestinationPrefab.transform.GetChild(0).localScale = Vector3.one * 0.2f;
             blinkDestinationPrefab.transform.GetChild(1).localScale = Vector3.one * 0.2f;
 
+            slashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("SeamstressSlash");
+            slashEffect.AddComponent<NetworkIdentity>();
+            slashEffect.transform.localScale = new Vector3(0.5f, 1f, 0.5f);
+            SeamstressPlugin.Destroy(slashEffect.GetComponent<EffectComponent>());
+
             scissorsSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
             scissorsSwingEffect.AddComponent<NetworkIdentity>();
             scissorsSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
@@ -217,6 +226,7 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsSwingEffect.transform.GetChild(1).localScale = Vector3.one;
             var fard = scissorsSwingEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             fard.startLifetimeMultiplier = 1.8f;
+            UnityEngine.Object.Destroy(scissorsSwingEffect.GetComponent<EffectComponent>());
 
             scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing3");
             scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
@@ -244,13 +254,15 @@ namespace SeamstressMod.Survivors.Seamstress
 
             expungeEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("ExpungeEffect");
             expungeEffect.AddComponent<NetworkIdentity>();
+            expungeEffect.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercExposedBackdrop.mat").WaitForCompletion());
             material.SetColor("_TintColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
             expungeEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             expungeEffect.transform.GetChild(1).gameObject.SetActive(false);
             expungeEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
             expungeEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            expungeEffect.transform.GetChild(3).gameObject.transform.localScale = new Vector3(.1f, .1f, .1f);
+            fard = expungeEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystem>().main;
+            fard.cullingMode = ParticleSystemCullingMode.AlwaysSimulate;
             expungeEffect.transform.GetChild(4).gameObject.SetActive(false);
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSlashImpact.mat").WaitForCompletion());
             expungeEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
@@ -418,15 +430,16 @@ namespace SeamstressMod.Survivors.Seamstress
 
             CreateScissorR();
             Content.AddProjectilePrefab(scissorRPrefab);
-
+     
             CreateEmpoweredScissorR();
             Content.AddProjectilePrefab(scissorRButcheredPrefab);
-
+            
             CreateScissorL();
             Content.AddProjectilePrefab(scissorLPrefab);
 
             CreateEmpoweredScissorL();
             Content.AddProjectilePrefab(scissorLButcheredPrefab);
+            
         }
         private static void CreateNeedle()
         {
@@ -505,8 +518,8 @@ namespace SeamstressMod.Survivors.Seamstress
             sphereCollider.radius = 1f;
 
             ProjectileImpactExplosion impactAlly = scissorRPrefab.GetComponent<ProjectileImpactExplosion>();
-            impactAlly.blastDamageCoefficient = 0f;
-            impactAlly.blastProcCoefficient = 0f;
+            impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
+            impactAlly.blastProcCoefficient = 1f;
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
             impactAlly.lifetime = 16f;
@@ -525,7 +538,7 @@ namespace SeamstressMod.Survivors.Seamstress
             prox.attackFireCount = 1;
             prox.inheritDamageType = true;
             prox.attackInterval = 0.001f;
-            prox.listClearInterval = 10f;
+            prox.listClearInterval = 16f;
             prox.attackRange = 8f;
             prox.minAngleFilter = 0f;
             prox.maxAngleFilter = 180;
@@ -562,8 +575,9 @@ namespace SeamstressMod.Survivors.Seamstress
             ProjectileController controller = scissorRPrefab.GetComponent<ProjectileController>();
 
             scissorRGhost = _assetBundle.LoadAsset<GameObject>("ScissorRightGhost");
+            Modules.Assets.ConvertAllRenderersToHopooShader(scissorRGhost);
 
-            if(!scissorRGhost.GetComponent<EffectComponent>()) scissorRGhost.AddComponent<EffectComponent>();
+            if (!scissorRGhost.GetComponent<EffectComponent>()) scissorRGhost.AddComponent<EffectComponent>();
             scissorRGhost.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
             scissorRGhost.GetComponent<EffectComponent>().parentToReferencedTransform = true;
 
@@ -586,7 +600,6 @@ namespace SeamstressMod.Survivors.Seamstress
             ProjectileHealOwnerOnDamageInflicted scissorHeal = scissorRButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
             scissorHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
             scissorRButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
-            Log.Debug("EMPOWERED FAUKED");
         }
         private static void CreateScissorL()
         {
@@ -603,8 +616,8 @@ namespace SeamstressMod.Survivors.Seamstress
             sphereCollider.radius = 1f;
 
             ProjectileImpactExplosion impactAlly = scissorLPrefab.GetComponent<ProjectileImpactExplosion>();
-            impactAlly.blastDamageCoefficient = 0f;
-            impactAlly.blastProcCoefficient = 0f;
+            impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
+            impactAlly.blastProcCoefficient = 1f;
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
             impactAlly.lifetime = 16f;
@@ -623,7 +636,7 @@ namespace SeamstressMod.Survivors.Seamstress
             prox.attackFireCount = 1;
             prox.inheritDamageType = true;
             prox.attackInterval = 0.001f;
-            prox.listClearInterval = 10f;
+            prox.listClearInterval = 16f;
             prox.attackRange = 8f;
             prox.minAngleFilter = 0f;
             prox.maxAngleFilter = 180;
@@ -660,8 +673,9 @@ namespace SeamstressMod.Survivors.Seamstress
             ProjectileController controller = scissorLPrefab.GetComponent<ProjectileController>();
 
             scissorLGhost = _assetBundle.LoadAsset<GameObject>("ScissorLeftGhost");
+            Modules.Assets.ConvertAllRenderersToHopooShader(scissorLGhost);
 
-            if (!scissorLGhost.GetComponent<EffectComponent>()) scissorLGhost.AddComponent<EffectComponent>(); 
+            if (!scissorLGhost.GetComponent<EffectComponent>()) scissorLGhost.AddComponent<EffectComponent>();
             scissorLGhost.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
             scissorLGhost.GetComponent<EffectComponent>().parentToReferencedTransform = true;
 

@@ -48,14 +48,17 @@ namespace SeamstressMod.Survivors.Seamstress
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = false;
                     }
-
+                    EffectManager.SpawnEffect(SeamstressAssets.expungeEffect, new EffectData
+                    {
+                        origin = Util.GetCorePosition(base.gameObject),
+                        rotation = Quaternion.identity,
+                        scale = 1.5f,
+                    }, true);
                     triggerEvents?.Invoke();
                     if (healthComponent.body.GetBuffCount(SeamstressBuffs.needles) < 5) healthComponent.body.AddBuff(SeamstressBuffs.needles);
                     healthComponent.body.GetComponent<ScissorController>().RpcAddSpecialStock();
                     hasFired = true;
                 }
-                //else damage?
-                //the enemy dying destroys the needles
             }
         }
     }

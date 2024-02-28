@@ -45,16 +45,16 @@ namespace SeamstressMod.Survivors.Seamstress
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "Fiendish Corruption");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health or shield missing. ");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health or shield missing.");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
-            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>. " +
+            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.sentiencePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>. " +
               $" Every 3rd hit deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style> and enemies.");
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Flurry");
-            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.agilePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style> applying to enemies.");
+            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.sentiencePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style> applying to enemies.");
             #endregion
 
             #region Secondary
@@ -64,14 +64,14 @@ namespace SeamstressMod.Survivors.Seamstress
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
 
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
-            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", $"Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip up to 5 additional times based on <color=#9B3737>Needles</color> consumed. " +
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.sentiencePrefix +  $"Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip up to 5 additional times based on <color=#9B3737>Needles</color> consumed. " +
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
             #endregion
 
             #region Utility 
             Language.Add(prefix + "UTILITY_BLINK_NAME", "Glimpse of Corruption");
             Language.Add(prefix + "UTILITY_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> applying to enemies. Gain "
-                + Tokens.butcheredPrefix + ". While " + Tokens.butcheredPrefix + " <style=cIsHealing>99% of healing</style> is converted into <color=#9B3737>Fiend Gauge</color>.");
+                + Tokens.butcheredPrefix + ".");
 
             Language.Add(prefix + "UTILITY_PARRY_NAME", "Glimpse of Purity");
             Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Briefly become <style=cIsUtility>Invulnerable</style>. If hit, dash forward dealing <style=cIsDamage>2x{100f * SeamstressStaticValues.parryDamage}% damage</style> applying . Gain " +
@@ -80,6 +80,8 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Special
+            Language.Add(prefix + "SPECIAL_FIRE_NAME", "Skewer");
+            Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"");
             #endregion
 
             #region Achievements

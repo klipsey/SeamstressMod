@@ -30,7 +30,7 @@ namespace SeamstressMod.SkillStates
             attackEndPercentTime = 0.4f;
 
             //this is the point at which an attack can be interrupted by itself, continuing a combo
-            earlyExitPercentTime = 0.6f;
+            earlyExitPercentTime = 0.5f;
             hitStopDuration = 0.05f;
             attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 5f;
@@ -38,7 +38,8 @@ namespace SeamstressMod.SkillStates
             swingSoundString = "Play_imp_attack";
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
+            swingEffectPrefab = SeamstressAssets.clipSlashEffect;
+            bonusSwingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
             scissorHit = true;
             switch (swingIndex)
             {
@@ -60,8 +61,7 @@ namespace SeamstressMod.SkillStates
                     break;
                 case 2:
                     damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
-                    swingSoundString = "Play_bandit2_m2_impact";
-                    swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
+                    bonusSwingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                     muzzleString = "SwingCenterSmall";
                     if (!scissorRight || !scissorLeft)
                     {

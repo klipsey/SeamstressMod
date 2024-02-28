@@ -188,11 +188,11 @@ namespace SeamstressMod.Survivors.Seamstress
             if (!component && !ignoreWorld)
             {
                 gameObject = hitCollider.gameObject;
-                GetComponent<ProjectileProximityBeamController>().enabled = false;
                 networkhitHurtboxIndex = -2;
             }
             if (gameObject)
             {
+                base.GetComponent<ProjectileProximityBeamController>().enabled = false;
                 stickEvent.Invoke();
                 ParticleSystem[] array = stickParticleSystem;
                 for (int i = 0; i < array.Length; i++)
@@ -201,7 +201,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 Vector3 effectPos = this.transform.localPosition;
                 RaycastHit raycastHit;
-                if (Physics.Raycast(effectPos, Vector3.down, out raycastHit, 10f, LayerIndex.world.mask))
+                if (Physics.Raycast(effectPos, Vector3.one, out raycastHit, 10f, LayerIndex.world.mask))
                 {
                     effectPos = raycastHit.point;
                 }

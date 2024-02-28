@@ -252,7 +252,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "Clip",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword },
+                keywordTokens = new string[] { Tokens.sentienceRangeKeyword, Tokens.needleKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texStingerIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Clip)),
@@ -355,12 +355,12 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "ParrySeamstress",
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
+                keywordTokens = new string[] { Tokens.sentienceRangeKeyword, Tokens.butcheredKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Parry)),
                 activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
                 baseRechargeInterval = 12f,
                 baseMaxStock = 1,
@@ -391,7 +391,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "FireSeamstress",
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_FIRE_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_FIRE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
+                keywordTokens = new string[] { Tokens.sentienceKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.FireScissor)),
@@ -401,7 +401,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 baseRechargeInterval = 16f,
                 baseMaxStock = 2,
 
-                rechargeStock = 1,
+                rechargeStock = 2,
                 requiredStock = 1,
                 stockToConsume = 1,
 
@@ -520,7 +520,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             GameObject zap = null;
             if (self.lightningType == RoR2.Orbs.LightningOrb.LightningType.Count && self.attacker.GetComponent<CharacterBody>().baseNameToken == "KENKO_SEAMSTRESS_NAME")
-            { 
+            {
                 zap = LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/OrbEffects/BeamSphereOrbEffect");
                 zap.transform.GetChild(0).GetComponent<LineRenderer>().material.SetColor("_TintColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
                 self.duration = 0.1f;
@@ -624,10 +624,13 @@ namespace SeamstressMod.Survivors.Seamstress
                 amount *= SeamstressStaticValues.healConversion;
             }
             var res = orig(self, amount, procChainMask, nonRegen);
-            SeamstressController s = self.body.GetComponent<SeamstressController>();
-            if (self.body.TryGetComponent<SeamstressController>(out s) && self.body.HasBuff(SeamstressBuffs.butchered))
+            if(self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
-                s.FiendGaugeCalc((res / SeamstressStaticValues.healConversion) * (1 - SeamstressStaticValues.healConversion));
+                SeamstressController s = self.body.GetComponent<SeamstressController>();
+                if (self.body.TryGetComponent<SeamstressController>(out s) && self.body.HasBuff(SeamstressBuffs.butchered))
+                {
+                    s.FiendGaugeCalc((res / SeamstressStaticValues.healConversion) * (1 - SeamstressStaticValues.healConversion));
+                }
             }
             return res;
         }
@@ -635,10 +638,14 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             if(sender.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
-                SeamstressController s = sender.GetComponent<SeamstressController>();
-                if (sender.TryGetComponent<SeamstressController>(out s) && s.FiendGaugeAmount() > 0)
+                SeamstressController s;
+                if (sender.TryGetComponent<SeamstressController>(out s))
                 {
-                    args.baseMoveSpeedAdd += 2f;
+                    s = sender.GetComponent<SeamstressController>();
+                    if (s.FiendGaugeAmount() > 0)
+                    {
+                        args.baseMoveSpeedAdd += (2f * s.FiendGaugeAmountPercent());
+                    }
                 }
                 if (!sender.HasBuff(SeamstressBuffs.scissorLeftBuff))
                 {
@@ -650,7 +657,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     args.attackSpeedMultAdd += .1f;
                     args.baseMoveSpeedAdd += 1f;
                 }
-                if (sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) > 0)
+                if (sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
                 {
                     args.attackSpeedMultAdd += (.1f * sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
                     args.baseMoveSpeedAdd += (1f * sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
@@ -706,7 +713,6 @@ namespace SeamstressMod.Survivors.Seamstress
                     seamstressCrosshair.name = "SeamstressCrosshair";
                     seamstressCrosshair.gameObject.GetComponent<HudElement>().targetBodyObject = hud.targetBodyObject;
                     seamstressCrosshair.gameObject.GetComponent<HudElement>().targetCharacterBody = hud.targetBodyObject.GetComponent<CharacterBody>();
-
                 }
             }
         }

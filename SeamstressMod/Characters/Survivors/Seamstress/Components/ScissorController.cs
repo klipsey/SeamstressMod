@@ -37,7 +37,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 {
                     CmdUpdateScissors(scissorCount);
                 }
-                oldScissorCount = scissorCount; 
+                oldScissorCount = scissorCount;
             }
         }
 

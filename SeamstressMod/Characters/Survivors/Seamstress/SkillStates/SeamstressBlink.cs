@@ -68,6 +68,13 @@ namespace SeamstressMod.SkillStates
             if(characterMotor.isGrounded) base.characterMotor.velocity = Vector3.zero;
             base.characterDirection.forward = blinkVector;
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
+            Vector3 effectPos = Util.GetCorePosition(base.gameObject);
+            RaycastHit raycastHit;
+            if (Physics.Raycast(effectPos, Vector3.down, out raycastHit, 5f, LayerIndex.world.mask))
+            {
+                effectPos = raycastHit.point;
+            }
+            if(isGrounded) UnityEngine.Object.Instantiate(SeamstressAssets.clawsEffect, effectPos, Quaternion.identity);
             base.characterBody.SetAimTimer(0f);
         }
 
@@ -147,7 +154,7 @@ namespace SeamstressMod.SkillStates
                 }
                 if(base.isAuthority) 
                 {
-                    base.characterMotor.velocity *= 0.3f;
+                    base.characterMotor.velocity *= 0.6f;
                     SmallHop(base.characterMotor, 3f);
                 }
             }
