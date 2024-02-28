@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.Networking;
 using RoR2.Projectile;
 using RoR2;
+using static UnityEngine.SendMouseEvents;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -214,7 +215,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 {
                     origin = effectPos,
                     rotation = Quaternion.identity,
-                    color = Color.white,
+                    color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
                 }, true);
                 if (stickSoundString.Length > 0)
                 {

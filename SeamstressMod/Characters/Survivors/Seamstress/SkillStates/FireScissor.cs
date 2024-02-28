@@ -57,11 +57,11 @@ namespace SeamstressMod.SkillStates
 
             if (modelAnimator)
             {
-                /*
-                string animationStateName = ((chosenAnim == 2) ? "FireVoidspikesL" : "FireVoidspikesR");
-                PlayAnimation("Gesture, Additive", animationStateName, "FireVoidspikes.playbackRate", duration);
-                PlayAnimation("Gesture, Override", animationStateName, "FireVoidspikes.playbackRate", duration);
-                */
+
+                //string animationStateName = ((chosenAnim == 2) ? "FireVoidspikesL" : "FireVoidspikesR");
+                //PlayAnimation("Gesture, Override", animationStateName, "FireVoidspikes.playbackRate", duration);
+                PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
+
             }
             if (base.characterBody)
             {

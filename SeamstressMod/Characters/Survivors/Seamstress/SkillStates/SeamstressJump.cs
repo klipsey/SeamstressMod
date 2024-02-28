@@ -75,7 +75,7 @@ namespace SeamstressMod.SkillStates
                             Vector3 rhs = Vector3.Cross(Vector3.up, aimRay.direction);
                             Vector3 axis = Vector3.Cross(aimRay.direction, rhs);
 
-                            float currentSpread = 0f;
+                            float currentSpread = 20f;
                             float angle = 0f;
                             float num2 = 0f;
                             num2 = UnityEngine.Random.Range(1f + currentSpread, 1f + currentSpread) * 3f;   //Bandit is x2

@@ -18,10 +18,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float cutDotBossDamage = 0.005f;
 
-        internal const float weaveLeapDamageCoefficient = 2.3f;
-
-        internal const float weaveDamageCoefficient = 2.6f;
-
         internal const float blinkDamageCoefficient = 4f;
 
         internal const float cutDuration = 3f;

@@ -15,6 +15,7 @@ using UnityEngine.Networking;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
 using UnityEngine.UI;
 using SeamstressMod.SkillStates;
+using static UnityEngine.UI.Image;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -381,110 +382,6 @@ namespace SeamstressMod.Survivors.Seamstress
             });
 
             Skills.AddUtilitySkills(bodyPrefab, parrySeamstressSkillDef);
-            #region scrapped
-            /*
-            GenericSkill reapRecast = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "reapRecast", true);
-
-            SkillDef reapRecastSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "Expunge",
-                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_NAME",
-                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_EXPUNGE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.cutKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ReapRecast)),
-                activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseRechargeInterval = 1f,
-                baseMaxStock = 1,
-
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = true,
-                dontAllowPastMaxStocks = true,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-            });
-
-            Skills.AddSkillsToFamily(reapRecast.skillFamily, reapRecastSkillDef);
-
-            SkillDef weaveSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "Weave",
-                skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_WEAVE_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_WEAVE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.cutKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.WeaveLeap)),
-                activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
-
-                baseRechargeInterval = 6f,
-                baseMaxStock = 1,
-
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = false,
-                mustKeyPress = true,
-                beginSkillCooldownOnSkillEnd = false,
-
-                isCombatSkill = false,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = true,
-
-            });
-
-            Skills.AddUtilitySkills(bodyPrefab, weaveSkillDef);
-                        SkillDef sewSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "Sew",
-                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_SEW_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_SEW_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Sew)),
-                
-                activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseMaxStock = SeamstressStaticValues.maxNeedleAmount,
-                baseRechargeInterval = SeamstressStaticValues.needleGainInterval,
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = true,
-                dontAllowPastMaxStocks = false,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = false,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-            });
-
-            Skills.AddSecondarySkills(bodyPrefab, sewSkillDef);
-            */
-            #endregion
         }
 
         private void AddSpecialSkills()
@@ -612,11 +509,33 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void AddHooks()
         {
-                        RoR2.UI.HUD.onHudTargetChangedGlobal += HUDSetup;
+            RoR2.UI.HUD.onHudTargetChangedGlobal += HUDSetup;
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
             On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
             On.RoR2.CharacterModel.UpdateOverlays += new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
             On.RoR2.HealthComponent.TakeDamage += new On.RoR2.HealthComponent.hook_TakeDamage(HealthComponent_TakeDamage);
+            On.RoR2.Orbs.LightningOrb.Begin += new On.RoR2.Orbs.LightningOrb.hook_Begin(LightningOrb_Begin);
+        }
+        private void LightningOrb_Begin(On.RoR2.Orbs.LightningOrb.orig_Begin orig, RoR2.Orbs.LightningOrb self)
+        {
+            GameObject zap = null;
+            if (self.lightningType == RoR2.Orbs.LightningOrb.LightningType.Count && self.attacker.GetComponent<CharacterBody>().baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            { 
+                zap = LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/OrbEffects/BeamSphereOrbEffect");
+                zap.transform.GetChild(0).GetComponent<LineRenderer>().material.SetColor("_TintColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
+                self.duration = 0.1f;
+                EffectData effectData = new EffectData
+                {
+                    origin = self.origin,
+                    genericFloat = self.duration
+                };
+                effectData.SetHurtBoxReference(self.target);
+                EffectManager.SpawnEffect(zap, effectData, transmit: true);
+            }
+            else
+            {
+                orig.Invoke(self);
+            }
         }
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
@@ -714,20 +633,28 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
         {
-            SeamstressController s = sender.GetComponent<SeamstressController>();
-            if (sender.TryGetComponent<SeamstressController>(out s) && s.FiendGaugeAmount() > 0)
+            if(sender.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
-                args.baseMoveSpeedAdd += 2;
-            }
-            if (!sender.HasBuff(SeamstressBuffs.scissorLeftBuff))
-            {
-                args.attackSpeedMultAdd += .1f;
-                args.baseMoveSpeedAdd += 1;
-            }
-            if (!sender.HasBuff(SeamstressBuffs.scissorRightBuff))
-            {
-                args.attackSpeedMultAdd += .2f;
-                args.baseMoveSpeedAdd += 2;
+                SeamstressController s = sender.GetComponent<SeamstressController>();
+                if (sender.TryGetComponent<SeamstressController>(out s) && s.FiendGaugeAmount() > 0)
+                {
+                    args.baseMoveSpeedAdd += 2f;
+                }
+                if (!sender.HasBuff(SeamstressBuffs.scissorLeftBuff))
+                {
+                    args.attackSpeedMultAdd += .1f;
+                    args.baseMoveSpeedAdd += 1f;
+                }
+                if (!sender.HasBuff(SeamstressBuffs.scissorRightBuff))
+                {
+                    args.attackSpeedMultAdd += .1f;
+                    args.baseMoveSpeedAdd += 1f;
+                }
+                if (sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) > 0)
+                {
+                    args.attackSpeedMultAdd += (.1f * sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
+                    args.baseMoveSpeedAdd += (1f * sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
+                }
             }
         }
         public static float GetICBMDamageMult(CharacterBody body)

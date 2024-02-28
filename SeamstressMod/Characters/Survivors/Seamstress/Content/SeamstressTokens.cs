@@ -87,20 +87,6 @@ namespace SeamstressMod.Survivors.Seamstress
             Language.Add(Tokens.GetAchievementDescriptionToken(SeamstressMasteryAchievement.identifier), "As Seamstress, beat the game or obliterate on Monsoon.");
             #endregion
 
-            #region scrapped
-            /*
-            Language.Add(prefix + "UTILITY_WEAVE_NAME", "Woven Fate");
-            Language.Add(prefix + "UTILITY_WEAVE_DESCRIPTION", $"Leap in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveLeapDamageCoefficient}% damage</style>. " +
-            $"Recast in the air to dash dealing <style=cIsDamage>{100f * SeamstressStaticValues.weaveDamageCoefficient}% damage</style>. Apply " +  + " to enemies hit.");
-
-            Language.Add(prefix + "UTILITY_EXPUNGE_NAME", "Expunge");
-            Language.Add(prefix + "UTILITY_EXPUNGE_DESCRIPTION", Tokens.cutPrefix + ".  During " + Tokens.butcheredPrefix +  $" convert <style=cIsHealing>{100f * (1 - SeamstressStaticValues.healConversion)}% of healing</style> into damage for <color=#9B3737>Expunge</color>. Release stored <style=cIsHealing>healing</style> as a deadly blast of <style=cIsDamage>damage</style>.");
-            
-                        Language.Add(prefix + "SECONDARY_SEW_NAME", "Threaded Volley");
-            Language.Add(prefix + "SECONDARY_SEW_DESCRIPTION", $"Expel <color=#9B3737>Needles</color>. <color=#9B3737>Needles</color> pierce for <style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style> each. " +
-            $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
-             */
-            #endregion
             #endregion
         }
     }

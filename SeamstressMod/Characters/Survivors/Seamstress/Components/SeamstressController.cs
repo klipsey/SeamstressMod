@@ -86,44 +86,6 @@ namespace SeamstressMod.Survivors.Seamstress
             ButcheredSound();
             IsButchered();      
         }
-        #region scrapped
-        /*
-        private void LeapEnd()
-        {
-            if(skillLocator.utility.skillOverrides.Any() && leapLength <= 0f && !fuck && skillLocator.utility.skillDef == SeamstressAssets.weaveRecastSkillDef)
-            {
-                fuck = true;
-                leapLength = 2f;
-            }
-            else if(leapLength < 0f && (characterMotor.isGrounded || !skillLocator.utility.skillOverrides.Any()) && fuck)
-            {
-                fuck = false;
-                leapLength = 0f;
-                if (skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressAssets.weaveRecastSkillDef) skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.weaveRecastSkillDef, GenericSkill.SkillOverridePriority.Contextual);
-            }
-        }
-
-
-        private void ExhaustEnd()
-        {
-            if (skillLocator.secondary.skillOverrides.Any() && lockOutLength < 0f && skillLocator.secondary.skillDef == SeamstressAssets.lockOutSkillDef)
-            {
-                int holdStocks = skillLocator.secondary.stock;
-                Log.Debug("held stocks" + holdStocks);
-                skillLocator.secondary.UnsetSkillOverride(gameObject, SeamstressAssets.lockOutSkillDef, GenericSkill.SkillOverridePriority.Contextual);
-                if(holdStocks + skillLocator.secondary.stock > skillLocator.secondary.maxStock)
-                {
-                    skillLocator.secondary.stock = skillLocator.secondary.maxStock;
-                }
-                else
-                {
-                    skillLocator.secondary.stock += holdStocks;
-                }
-                lockOutLength = 0f;
-            }
-        }
-        */
-        #endregion
         public void FiendGaugeCalc(float healDamage)
         {
             if((fiendGauge + healDamage) < (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))
@@ -134,7 +96,6 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 fiendGauge = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
             }
-            Log.Debug(fiendGauge);
         }
         public float FiendGaugeAmount()
         {

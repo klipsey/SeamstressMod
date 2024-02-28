@@ -22,11 +22,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Modules.Content.AddEntityState(typeof(Exhaustion));
 
-            //Modules.Content.AddEntityState(typeof(WeaveLeap));
-            //Modules.Content.AddEntityState(typeof(Weave));
-            //Modules.Content.AddEntityState(typeof(ReapRecast));
-            //Modules.Content.AddEntityState(typeof(Sew));
-
             Modules.Content.AddEntityState(typeof(HealthCostBlink));
 
             Modules.Content.AddEntityState(typeof(Parry));
