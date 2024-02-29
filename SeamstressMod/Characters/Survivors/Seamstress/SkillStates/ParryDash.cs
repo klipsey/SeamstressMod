@@ -51,23 +51,24 @@ namespace SeamstressMod.SkillStates
             setDiffState = true;
             setState = new ParrySecondSlash();
             base.OnEnter();
-            if (setDiffState)
+            if (isGrounded)
             {
-                if (isGrounded)
+                float dashVector = 40f;
+                if (this.inputBank.moveVector != Vector3.zero)
                 {
-                    float dashVector = 40f;
-                    if (this.inputBank.moveVector != Vector3.zero) this.characterMotor.velocity += this.characterDirection.forward * dashVector;
-                    else
-                    {
-                        dashVector = 40f;
-                        this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
-                    }
-                }
-                else if (!isGrounded)
-                {
-                    float dashVector = 40f;
+                    SmallHop(this.characterMotor, 3f);
                     this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
                 }
+                else
+                {
+                    dashVector = 0f;
+                    this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
+                }
+            }
+            else if (!isGrounded)
+            {
+                float dashVector = 40f;
+                this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
             }
         }
         protected override void PlayAttackAnimation()

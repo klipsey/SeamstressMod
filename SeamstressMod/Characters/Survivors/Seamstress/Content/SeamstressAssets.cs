@@ -201,8 +201,8 @@ namespace SeamstressMod.Survivors.Seamstress
             blinkPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("BlinkStart");
             blinkPrefab.AddComponent<NetworkIdentity>();
             blinkPrefab.GetComponent<EffectComponent>().applyScale = true;
-            blinkPrefab.transform.GetChild(0).localScale = Vector3.one * 0.2f;
-            blinkPrefab.transform.GetChild(1).localScale = Vector3.one * 0.2f;
+            blinkPrefab.transform.GetChild(0).localScale = Vector3.one * 0.5f;
+            blinkPrefab.transform.GetChild(1).localScale = Vector3.one * 0.5f;
             Modules.Content.CreateAndAddEffectDef(blinkPrefab);
 
             smallBlinkPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/ImpBlinkEffect.prefab").WaitForCompletion().InstantiateClone("BlinkSmall");
@@ -482,7 +482,6 @@ namespace SeamstressMod.Survivors.Seamstress
             needleGhost.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(84f / 255f, 0f / 255f, 11f / 255f));
             needleGhost.transform.GetChild(3).gameObject.SetActive(false);
             needleGhost.transform.GetChild(4).localScale = new Vector3(.2f, .2f, .2f);
-            //REACTIVATE NEEDLE TRAILS!!!!!
             needleGhost.transform.GetChild(4).GetChild(0).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
             needleGhost.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
             needleGhost.transform.GetChild(4).GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
@@ -499,7 +498,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             needleButcheredPrefab = PrefabAPI.InstantiateClone(needlePrefab, "NeedleButchered");
             ProjectileHealOwnerOnDamageInflicted needleHeal = needleButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
+            needleHeal.fractionOfDamage = SeamstressStaticValues.needleLifeSteal;
             needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
         }
 
@@ -585,7 +584,7 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorRGhost.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
             scissorRGhost.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            if (!scissorRGhost.transform.Find("Spin")) travelEffect.transform.parent = scissorRGhost.transform;
+            if (!scissorRGhost.transform.Find("Spin")) travelEffect.transform.SetParent(scissorRGhost.transform);
 
             scissorRGhost = PrefabAPI.InstantiateClone(scissorRGhost, "scissorRGhost");
 
@@ -683,7 +682,7 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorLGhost.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
             scissorLGhost.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            if (!scissorLGhost.transform.Find("Spin")) travelEffect.transform.parent = scissorLGhost.transform;
+            if (!scissorLGhost.transform.Find("Spin")) travelEffect.transform.SetParent(scissorLGhost.transform);
 
             scissorLGhost = PrefabAPI.InstantiateClone(scissorLGhost, "scissorLGhost");
 

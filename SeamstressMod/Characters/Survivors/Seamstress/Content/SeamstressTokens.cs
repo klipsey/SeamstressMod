@@ -64,7 +64,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
 
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
-            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.sentiencePrefix +  $"Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip up to 5 additional times based on <color=#9B3737>Needles</color> consumed. " +
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.sentiencePrefix +  $". Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip up to 5 additional times based on <color=#9B3737>Needles</color> consumed. " +
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
             #endregion
 

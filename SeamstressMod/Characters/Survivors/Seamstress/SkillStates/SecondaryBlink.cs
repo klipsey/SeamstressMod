@@ -66,23 +66,26 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
             RefreshState();
-            if(NetworkServer.active) this.stockMultiplier = characterBody.GetBuffCount(SeamstressBuffs.needles);
-            for(int i = characterBody.GetBuffCount(SeamstressBuffs.needles); i > 0; i--)
+            if(NetworkServer.active)
             {
-                characterBody.RemoveBuff(SeamstressBuffs.needles);
+                this.stockMultiplier = characterBody.GetBuffCount(SeamstressBuffs.needles) + 1;
+                for (int i = characterBody.GetBuffCount(SeamstressBuffs.needles); i > 0; i--)
+                {
+                    characterBody.RemoveBuff(SeamstressBuffs.needles);
+                }
             }
-            if (this.stockMultiplier > 10)
+            if (this.stockMultiplier > 6)
             {
-                this.baseDuration = 1f;
-                this.doThings = 0.5f;
+                this.baseDuration = 0.5f;
+                this.doThings = 1f;
             }
             else
             {
-                this.doThings = 0.5f * (this.stockMultiplier / 5f);
-                this.baseDuration = this.stockMultiplier / 10;
+                this.doThings = 0.5f * (this.stockMultiplier / 3f);
+                this.baseDuration = (this.stockMultiplier / 12f);
             }
-            this.exitDuration = (this.baseDuration / 2);
-            this.destinationAlertDuration = (this.baseDuration / 2);
+            this.exitDuration = this.baseDuration;
+            this.destinationAlertDuration = this.baseDuration;
             if (this.doThings < 0.1f)
             {
                 this.doThings = 0.1f;
@@ -266,6 +269,10 @@ namespace SeamstressMod.SkillStates
 
         public override void OnExit()
         {
+            if (base.cameraTargetParams)
+            {
+                aimRequest.Dispose();
+            }
             base.OnExit();
             ExitCleanup();
         }

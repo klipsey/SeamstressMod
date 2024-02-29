@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
+using SeamstressMod.Modules;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -48,11 +49,11 @@ namespace SeamstressMod.Survivors.Seamstress
             GameObject attackerObject = damageReport.attacker.gameObject;
             if (NetworkServer.active)
             {
-                if (damageInfo.HasModdedDamageType(NoSword) && attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
+                if (damageInfo.HasModdedDamageType(NoSword) && attackerBody.GetBuffCount(SeamstressBuffs.needles) < (SeamstressStaticValues.maxNeedleAmount + attackerBody.skillLocator.secondary.stock - 1))
                 {
                     attackerBody.AddBuff(SeamstressBuffs.needles);
                 }
-                if(damageInfo.HasModdedDamageType(AddNeedlesDamage) && attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount)
+                if(damageInfo.HasModdedDamageType(AddNeedlesDamage) && attackerBody.GetBuffCount(SeamstressBuffs.needles) < (SeamstressStaticValues.maxNeedleAmount + attackerBody.skillLocator.secondary.stock - 1))
                 {
                     attackerBody.AddBuff(SeamstressBuffs.needles);
                 }

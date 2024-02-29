@@ -52,7 +52,7 @@ namespace SeamstressMod.Survivors.Seamstress
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
-            crosshair = null,
+            crosshair = Modules.Assets.LoadCrosshair("SimpleDot"),
             podPrefab = null,
             initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressSpawnState)),
 
@@ -510,11 +510,11 @@ namespace SeamstressMod.Survivors.Seamstress
         private void AddHooks()
         {
             RoR2.UI.HUD.onHudTargetChangedGlobal += HUDSetup;
-            R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
             On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
             On.RoR2.CharacterModel.UpdateOverlays += new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
             On.RoR2.HealthComponent.TakeDamage += new On.RoR2.HealthComponent.hook_TakeDamage(HealthComponent_TakeDamage);
             On.RoR2.Orbs.LightningOrb.Begin += new On.RoR2.Orbs.LightningOrb.hook_Begin(LightningOrb_Begin);
+            R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
         }
         private void LightningOrb_Begin(On.RoR2.Orbs.LightningOrb.orig_Begin orig, RoR2.Orbs.LightningOrb self)
         {

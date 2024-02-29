@@ -51,10 +51,14 @@ namespace SeamstressMod.SkillStates
                 if (isGrounded)
                 {
                     float dashVector = 40f;
-                    if (this.inputBank.moveVector != Vector3.zero) this.characterMotor.velocity += this.characterDirection.forward * dashVector;
+                    if (this.inputBank.moveVector != Vector3.zero)
+                    {
+                        SmallHop(this.characterMotor, 3f);
+                        this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
+                    }
                     else
                     {
-                        dashVector = 80f;
+                        dashVector = 0f;
                         this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
                     }
                 }
@@ -113,7 +117,7 @@ namespace SeamstressMod.SkillStates
                 EffectData effectData = new EffectData();
                 effectData.rotation = Util.QuaternionSafeLookRotation(inputBank.aimDirection);
                 effectData.origin = origin;
-                effectData.scale = 0.025f;
+                effectData.scale = 0.05f;
                 EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: true);
             }
         }

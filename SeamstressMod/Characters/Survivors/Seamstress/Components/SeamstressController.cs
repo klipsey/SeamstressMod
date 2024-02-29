@@ -103,7 +103,7 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         public float FiendGaugeAmountPercent()
         {
-            return (fiendGauge / healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient) * 100f;
+            return (fiendGauge / healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient);
         }
         private void IsButchered()
         {

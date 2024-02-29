@@ -33,7 +33,7 @@ namespace SeamstressMod.Modules
             "<style=cIsDamage>attack</style>.");
 
         public static string sentienceAttackKeyword = KeywordText("Sentient", $"When your " + sentiencePrefix + $" weapon is available hit for an additional strike " +
-            $"dealing <style=cIsDamage>{SeamstressStaticValues.scissorDamageCoefficient * 100}%</style> damage.");
+            $"dealing <style=cIsDamage>{SeamstressStaticValues.scissorSlashDamageCoefficient * 100}%</style> damage.");
 
         public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
 
