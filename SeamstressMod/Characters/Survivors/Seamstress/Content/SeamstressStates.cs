@@ -1,5 +1,5 @@
 ﻿using SeamstressMod.SkillStates;
-
+using SeamstressMod.Modules.BaseStates;
 namespace SeamstressMod.Survivors.Seamstress
 {
     public static class SeamstressStates
@@ -9,6 +9,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
             Modules.Content.AddEntityState(typeof(SeamstressSpawnState));
             Modules.Content.AddEntityState(typeof(SeamstressMainState));
+            Modules.Content.AddEntityState(typeof(BaseSeamstressSkillState));
+            Modules.Content.AddEntityState(typeof(BaseSeamstressState));
+            Modules.Content.AddEntityState(typeof(SeamstressJump));
             Modules.Content.AddEntityState(typeof(SeamstressBlink));
             Modules.Content.AddEntityState(typeof(SeamstressBlinkUp));
 

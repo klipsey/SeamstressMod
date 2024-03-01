@@ -30,7 +30,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 if (characterBody.skillLocator.special.stock != scissorCount)
                 {
-                    Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
+                    Util.PlaySound("Play_item_proc_novaonheal_spawn", base.gameObject);
                     scissorCount = characterBody.skillLocator.special.stock;
                 }
                 if(scissorCount != oldScissorCount) 

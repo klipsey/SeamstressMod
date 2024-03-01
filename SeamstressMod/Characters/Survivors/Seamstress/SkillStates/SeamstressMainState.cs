@@ -18,7 +18,7 @@ namespace SeamstressMod.SkillStates
         }
         public override void ProcessJump()
         {
-            if (this.hasCharacterMotor)
+            if (this.hasCharacterMotor && seamCon.blinkReady)
             {
                 bool hopooFeather = false;
                 bool waxQuail = false;
@@ -47,12 +47,7 @@ namespace SeamstressMod.SkillStates
                             horizontalBonus = (num2 + num3) / num3;
                         }
                     }
-
-                    if(seamCon.blinkReady)
-                    {
-                        GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
-                    }
-
+                    GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
                     if (hasModelAnimator)
                     {
                         int layerIndex = base.modelAnimator.GetLayerIndex("Body");
@@ -68,7 +63,6 @@ namespace SeamstressMod.SkillStates
                             }
                         }
                     }
-
                     if (hopooFeather)
                     {
                         EffectManager.SpawnEffect(LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/FeatherEffect"), new EffectData
@@ -93,11 +87,9 @@ namespace SeamstressMod.SkillStates
                             rotation = Util.QuaternionSafeLookRotation(base.characterMotor.velocity)
                         }, true);
                     }
+                    
 
-                    if (seamCon.blinkReady)
-                    {
-                        base.characterMotor.jumpCount++;
-                    }
+
                     #region For later? thank you rob
                     /*
                     if (this.animator)

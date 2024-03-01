@@ -38,8 +38,8 @@ namespace SeamstressMod.SkillStates
 
         public override void OnEnter()
         {
-            characterBody.GetComponent<ScissorController>().isRight = true;
             base.OnEnter();
+            characterBody.GetComponent<ScissorController>().isRight = true;
             duration = baseDuration / attackSpeedStat;
             modelAnimator = GetModelAnimator();
             if(scissorRight && scissorLeft)
@@ -81,14 +81,32 @@ namespace SeamstressMod.SkillStates
             {
                 if (chosenAnim == 2)
                 {
-                    if(empowered)projectilePrefab = SeamstressAssets.scissorLButcheredPrefab;
-                    else projectilePrefab = SeamstressAssets.scissorLPrefab;
+                    projectilePrefab = SeamstressAssets.scissorLPrefab;
+                    if (empowered)
+                    {
+                        projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = true;
+                        projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
+                    }
+                    else
+                    {
+                        projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = false;
+                        projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
+                    }
                     FireSpikeFan(GetAimRay(), "SwingRight");
                 }
                 if (chosenAnim == 1)
                 {
-                    if (empowered) projectilePrefab = SeamstressAssets.scissorRButcheredPrefab;
-                    else projectilePrefab = SeamstressAssets.scissorRPrefab;
+                    projectilePrefab = SeamstressAssets.scissorRPrefab;
+                    if (empowered)
+                    {
+                        projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = true;
+                        projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
+                    }
+                    else
+                    {
+                        projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = false;
+                        projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
+                    }
                     FireSpikeFan(GetAimRay(), "SwingLeft");
                 }
                 hasFired = true;

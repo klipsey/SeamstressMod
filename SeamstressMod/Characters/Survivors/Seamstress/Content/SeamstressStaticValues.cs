@@ -24,6 +24,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float reapHealthCost = 0.5f;
 
+        internal const float blinkCooldown = 0.5f;
+
         internal const float butcheredLifeSteal = 0.1f;
 
         internal const float needleLifeSteal = 0.5f;
@@ -53,6 +55,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float scissorDamageCoefficient = 4f;
 
-        internal const float maxFiendGaugeCoefficient = 1f;
+        internal const float maxFiendGaugeCoefficient = 2f;
     }
 }

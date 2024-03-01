@@ -40,6 +40,7 @@ namespace SeamstressMod.Survivors.Seamstress
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => SEAMSTRESS_PREFIX;
 
+        internal static GameObject characterPrefab;
         //store extra skills here
         
         public override BodyInfo bodyInfo => new BodyInfo
@@ -138,7 +139,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             AdditionalBodySetup();
 
-            
+            characterPrefab = this.bodyPrefab;
             AddHooks();
         }
 
@@ -147,6 +148,7 @@ namespace SeamstressMod.Survivors.Seamstress
             AddHitboxes();
             bodyPrefab.AddComponent<SeamstressController>();
             bodyPrefab.AddComponent<ScissorController>();
+            bodyPrefab.AddComponent<NeedleController>();
             //TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
@@ -677,11 +679,12 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         internal static void HUDSetup(RoR2.UI.HUD hud)
         {
-            if (hud.targetBodyObject && hud.targetMaster.bodyPrefab.name == "SeamstressBody")
+            if (hud.targetBodyObject && hud.targetMaster.bodyPrefab == characterPrefab)
             {
                 if (!hud.targetMaster.hasAuthority) return;
 
                 Transform healthbarContainer = hud.transform.Find("MainContainer").Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster").Find("BarRoots").Find("LevelDisplayCluster");
+
                 if (!hud.transform.Find("MainContainer").Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster").Find("FiendGauge"))
                 {
                     GameObject fiendGauge = GameObject.Instantiate(healthbarContainer.gameObject, hud.transform.Find("MainContainer").Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster"));
@@ -704,7 +707,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
                     RectTransform rect = fiendGauge.GetComponent<RectTransform>();
                     rect.anchorMax = new Vector2(1f, 1f);
-                    rect.anchoredPosition = new Vector2(740f, 430f);
+                    rect.localPosition = new Vector2(740f, 430f);
                     rect.localScale = new Vector2(0.5f, 0.5f);
                 }
                 if (!hud.transform.Find("MainContainer").Find("MainUIArea").Find("CrosshairCanvas").Find("SeamstressCrosshair"))

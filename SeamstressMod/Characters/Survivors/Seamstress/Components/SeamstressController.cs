@@ -2,10 +2,11 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using RoR2.EntityLogic;
+using UnityEngine.Networking;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
-    public class SeamstressController : MonoBehaviour
+    public class SeamstressController : NetworkBehaviour
     {
         private CharacterBody characterBody;
 
@@ -23,6 +24,10 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public float hopoopFeatherTimer;
 
+        public float blinkCd;
+
+        public bool blinkReady;
+
         private bool hasPlayed = false;
 
         private bool butchered = false;
@@ -35,14 +40,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private float bd = 0f;
 
-        private float rechargeScissorR = 0f;
-
-        private float rechargeScissorL = 0f;
-
-
         public bool fuckYou = false;
-
-        public bool blinkReady = true;
 
         public bool drainGauge;
         public void Awake()
@@ -55,20 +53,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public void FixedUpdate()
         {
             hopoopFeatherTimer -= Time.fixedDeltaTime;
-            #region Scrapped
-            /*
-            if (leapLength > 0f) 
-            {
-                leapLength -= Time.fixedDeltaTime;
-            }
-            if(lockOutLength > 0f)
-            {
-                lockOutLength -= Time.fixedDeltaTime;
-            }
-            */
-            //LeapEnd();
-            //ExhaustEnd();
-            #endregion
+            blinkCd -= Time.fixedDeltaTime;
             if (bd > 0f)
             {
                 bd -= Time.fixedDeltaTime;
@@ -82,9 +67,14 @@ namespace SeamstressMod.Survivors.Seamstress
                 drainGauge = false;
                 fiendGauge = 0f;
             }
+            Log.Debug("Fiend gauge " + fiendGauge);
             CalculateBonusDamage();
             ButcheredSound();
             IsButchered();      
+        }
+        public void RefreshBlink()
+        {
+            this.blinkReady = true;
         }
         public void FiendGaugeCalc(float healDamage)
         {
@@ -103,7 +93,7 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         public float FiendGaugeAmountPercent()
         {
-            return (fiendGauge / healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient);
+            return (fiendGauge / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient));
         }
         private void IsButchered()
         {
@@ -147,23 +137,6 @@ namespace SeamstressMod.Survivors.Seamstress
                 Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
                 //fire expunge at end of butchered
             }
-            /*
-            if(bd < 0f && !hasFired)
-            {
-                if (skillLocator.special == skillLocator.FindSkill("reapRecast"))
-                {
-                    if(skillLocator.special.ExecuteIfReady())
-                    {
-                        hasFired = true;
-                        butcheredConversion = characterBody.damage;
-                    }
-                }
-                else if(!fuckYou && skillLocator.special != skillLocator.FindSkill("reapRecast"))
-                {
-                    hasFired = true;
-                }
-            }
-            */
         }
         //butchered end sound
         private void ButcheredSound()

@@ -49,13 +49,13 @@ namespace SeamstressMod.Survivors.Seamstress
             GameObject attackerObject = damageReport.attacker.gameObject;
             if (NetworkServer.active)
             {
-                if (damageInfo.HasModdedDamageType(NoSword) && attackerBody.GetBuffCount(SeamstressBuffs.needles) < (SeamstressStaticValues.maxNeedleAmount + attackerBody.skillLocator.secondary.stock - 1))
+                if (damageInfo.HasModdedDamageType(NoSword))
                 {
-                    attackerBody.AddBuff(SeamstressBuffs.needles);
+                    attackerBody.GetComponent<NeedleController>().RpcAddNeedle();
                 }
-                if(damageInfo.HasModdedDamageType(AddNeedlesDamage) && attackerBody.GetBuffCount(SeamstressBuffs.needles) < (SeamstressStaticValues.maxNeedleAmount + attackerBody.skillLocator.secondary.stock - 1))
+                if(damageInfo.HasModdedDamageType(AddNeedlesDamage))
                 {
-                    attackerBody.AddBuff(SeamstressBuffs.needles);
+                    attackerBody.GetComponent<NeedleController>().RpcAddNeedle();
                 }
                 if (damageInfo.HasModdedDamageType(ButcheredLifeSteal))
                 {

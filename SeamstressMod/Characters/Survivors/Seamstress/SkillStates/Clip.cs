@@ -69,11 +69,8 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
             baseDuration = 0.5f - (0.5f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
-            if (NetworkServer.active)
-            {
-                snips = needleCount;
-                if (!scissorRight || !scissorLeft) noScissors = true;
-            }
+            snips = needleCount;
+            if (!scissorRight || !scissorLeft) noScissors = true;
             if(noScissors)
             {
                 hitBoxString = "Sword";
@@ -124,7 +121,7 @@ namespace SeamstressMod.SkillStates
                 FireAttack();
                 snips--;
                 snipInterval += secondSnip / 5f;
-                if (NetworkServer.active) characterBody.RemoveBuff(SeamstressBuffs.needles);
+                if (NetworkServer.active) characterBody.GetComponent<NeedleController>().RpcRemoveNeedle();
             }
             //if only 1 snip left, fire
             if(stopwatch > lastSnip && !hasFired2)

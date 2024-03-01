@@ -9,10 +9,8 @@ using UnityEngine.AddressableAssets;
 
 namespace SeamstressMod.SkillStates
 {
-    public class SeamstressJump : BaseSeamstressSkillState
+    public class SeamstressJump : BaseSeamstressState
     {
-        private float blinkCd;
-
         private bool hasNeedles;
         
         public float minSpread;
@@ -31,7 +29,8 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (NetworkServer.active) hasNeedles = characterBody.HasBuff(SeamstressBuffs.needles);
+            if (needleCount > 0) hasNeedles = true;
+            else hasNeedles = false;
             if (empowered)
             {
                 this.projectilePrefab = SeamstressAssets.needleButcheredPrefab;
@@ -40,14 +39,14 @@ namespace SeamstressMod.SkillStates
             {
                 this.projectilePrefab = SeamstressAssets.needlePrefab;
             }
-            if(blinkCd > 0) blinkCd -= Time.fixedDeltaTime;
-            if ((base.characterMotor.jumpCount < base.characterBody.maxJumpCount || hasNeedles) && (blinkCd <= 0 || !this.isGrounded)) this.seamCon.blinkReady = true;
+            Log.Debug("blinkCD: " + seamCon.blinkCd);
+            if ((base.characterMotor.jumpCount < base.characterBody.maxJumpCount || hasNeedles) && (this.seamCon.blinkCd <= 0 || !this.isGrounded)) this.seamCon.RefreshBlink();
             if (this.inputBank.jump.justPressed && this.isGrounded)
             {
                 if (this.seamCon.blinkReady)
                 {
                     this.seamCon.blinkReady = false;
-                    blinkCd = 0.5f;
+                    this.seamCon.blinkCd = SeamstressStaticValues.blinkCooldown;
                     if (this.inputBank.moveVector != Vector3.zero) this.BlinkForward();
                     else BlinkUp();
                     return;
@@ -58,10 +57,10 @@ namespace SeamstressMod.SkillStates
                 if (this.seamCon.blinkReady)
                 {
                     this.seamCon.blinkReady = false;
-                    blinkCd = 0.5f;
+                    this.seamCon.blinkCd = SeamstressStaticValues.blinkCooldown;
                     if(base.characterMotor.jumpCount == base.characterBody.maxJumpCount)
                     {
-                        if (NetworkServer.active) characterBody.RemoveBuff(SeamstressBuffs.needles);
+                        if (NetworkServer.active) GetComponent<NeedleController>().RpcRemoveNeedle();
                     }
                     if (base.isAuthority)
                     {

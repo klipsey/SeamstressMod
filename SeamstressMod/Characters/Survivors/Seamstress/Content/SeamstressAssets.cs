@@ -95,15 +95,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject scissorRPrefab;
 
-        internal static GameObject scissorRGhost;
-
-        internal static GameObject scissorRButcheredPrefab;
-
         internal static GameObject scissorLPrefab;
-
-        internal static GameObject scissorLGhost;
-
-        internal static GameObject scissorLButcheredPrefab;
         //extra
 
         public static SkillDef lockOutSkillDef;
@@ -430,16 +422,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
             CreateScissorR();
             Content.AddProjectilePrefab(scissorRPrefab);
-     
-            CreateEmpoweredScissorR();
-            Content.AddProjectilePrefab(scissorRButcheredPrefab);
             
             CreateScissorL();
             Content.AddProjectilePrefab(scissorLPrefab);
-
-            CreateEmpoweredScissorL();
-            Content.AddProjectilePrefab(scissorLButcheredPrefab);
-            
         }
         private static void CreateNeedle()
         {
@@ -546,6 +531,10 @@ namespace SeamstressMod.Survivors.Seamstress
             prox.bounces = 0;
             prox.lightningType = RoR2.Orbs.LightningOrb.LightningType.Count;
 
+            ProjectileHealOwnerOnDamageInflicted heal = scissorRPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
+            heal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
+            heal.enabled = false;
+
             scissorRPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
 
             //changes team filter to only team
@@ -572,33 +561,18 @@ namespace SeamstressMod.Survivors.Seamstress
             travelEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
 
             ProjectileController controller = scissorRPrefab.GetComponent<ProjectileController>();
+            if (_assetBundle.LoadAsset<GameObject>("ScissorRightGhost") != null)
+                controller.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorRightGhost");
 
-            scissorRGhost = _assetBundle.LoadAsset<GameObject>("ScissorRightGhost");
-            Modules.Assets.ConvertAllRenderersToHopooShader(scissorRGhost);
+            if (!controller.ghostPrefab.GetComponent<EffectComponent>()) controller.ghostPrefab.AddComponent<EffectComponent>();
+            controller.ghostPrefab.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
+            controller.ghostPrefab.GetComponent<EffectComponent>().parentToReferencedTransform = true;
 
-            if (!scissorRGhost.GetComponent<EffectComponent>()) scissorRGhost.AddComponent<EffectComponent>();
-            scissorRGhost.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
-            scissorRGhost.GetComponent<EffectComponent>().parentToReferencedTransform = true;
+            if(!controller.ghostPrefab.GetComponent<VFXAttributes>()) controller.ghostPrefab.AddComponent<VFXAttributes>();
+            controller.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
+            controller.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            if(!scissorRGhost.GetComponent<VFXAttributes>()) scissorRGhost.AddComponent<VFXAttributes>();
-            scissorRGhost.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
-            scissorRGhost.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
-
-            if (!scissorRGhost.transform.Find("Spin")) travelEffect.transform.SetParent(scissorRGhost.transform);
-
-            scissorRGhost = PrefabAPI.InstantiateClone(scissorRGhost, "scissorRGhost");
-
-            if (scissorRGhost != null) controller.ghostPrefab = scissorRGhost;
-            if (!controller.ghostPrefab.GetComponent<ProjectileGhostController>()) controller.ghostPrefab.AddComponent<ProjectileGhostController>();
-            controller.ghostPrefab.GetComponent<ProjectileGhostController>().inheritScaleFromProjectile = false;
-            if (!controller.ghostPrefab.GetComponent<NetworkIdentity>())controller.ghostPrefab.AddComponent<NetworkIdentity>();
-        }
-        private static void CreateEmpoweredScissorR()
-        {
-            scissorRButcheredPrefab = PrefabAPI.InstantiateClone(scissorRPrefab, "scissorRButchered");
-            ProjectileHealOwnerOnDamageInflicted scissorHeal = scissorRButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            scissorHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
-            scissorRButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
+            if (!controller.ghostPrefab.transform.Find("Spin")) travelEffect.transform.SetParent(controller.ghostPrefab.transform);
         }
         private static void CreateScissorL()
         {
@@ -644,6 +618,10 @@ namespace SeamstressMod.Survivors.Seamstress
             prox.bounces = 0;
             prox.lightningType = RoR2.Orbs.LightningOrb.LightningType.Count;
 
+            ProjectileHealOwnerOnDamageInflicted heal = scissorLPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
+            heal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
+            heal.enabled = false;
+
             scissorLPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
 
             //changes team filter to only team
@@ -670,35 +648,19 @@ namespace SeamstressMod.Survivors.Seamstress
             travelEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
 
             ProjectileController controller = scissorLPrefab.GetComponent<ProjectileController>();
+            if (_assetBundle.LoadAsset<GameObject>("ScissorLeftGhost") != null)
+                controller.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorLeftGhost");
 
-            scissorLGhost = _assetBundle.LoadAsset<GameObject>("ScissorLeftGhost");
-            Modules.Assets.ConvertAllRenderersToHopooShader(scissorLGhost);
+            if (!controller.ghostPrefab.GetComponent<EffectComponent>()) controller.ghostPrefab.AddComponent<EffectComponent>();
+            controller.ghostPrefab.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
+            controller.ghostPrefab.GetComponent<EffectComponent>().parentToReferencedTransform = true;
 
-            if (!scissorLGhost.GetComponent<EffectComponent>()) scissorLGhost.AddComponent<EffectComponent>();
-            scissorLGhost.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
-            scissorLGhost.GetComponent<EffectComponent>().parentToReferencedTransform = true;
+            if (!controller.ghostPrefab.GetComponent<VFXAttributes>()) controller.ghostPrefab.AddComponent<VFXAttributes>();
+            controller.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
+            controller.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            if (!scissorLGhost.GetComponent<VFXAttributes>()) scissorLGhost.AddComponent<VFXAttributes>();
-            scissorLGhost.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
-            scissorLGhost.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
-
-            if (!scissorLGhost.transform.Find("Spin")) travelEffect.transform.SetParent(scissorLGhost.transform);
-
-            scissorLGhost = PrefabAPI.InstantiateClone(scissorLGhost, "scissorLGhost");
-
-            if (scissorLGhost != null) controller.ghostPrefab = scissorLGhost;
-            if (!controller.ghostPrefab.GetComponent<ProjectileGhostController>()) controller.ghostPrefab.AddComponent<ProjectileGhostController>();
-            controller.ghostPrefab.GetComponent<ProjectileGhostController>().inheritScaleFromProjectile = false;
-            if (!controller.ghostPrefab.GetComponent<NetworkIdentity>()) controller.ghostPrefab.AddComponent<NetworkIdentity>();
+            if (!controller.ghostPrefab.transform.Find("Spin")) travelEffect.transform.SetParent(controller.ghostPrefab.transform);
         }
-        private static void CreateEmpoweredScissorL()
-        {
-            scissorLButcheredPrefab = PrefabAPI.InstantiateClone(scissorLPrefab, "scissorLButchered");
-            ProjectileHealOwnerOnDamageInflicted scissorHeal = scissorLButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            scissorHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
-            scissorLButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
-        }
-
         #endregion projectiles
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace SeamstressMod.Modules.BaseStates
 {
-    public abstract class BaseSeamstressSkillState : BaseSkillState
+    public abstract class BaseSeamstressState : BaseState
     {
         protected SeamstressController seamCon;
 
@@ -22,12 +22,12 @@ namespace SeamstressMod.Modules.BaseStates
 
         public override void OnEnter()
         {
-            RefreshState();
             base.OnEnter();
         }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            RefreshState();
         }
         protected void RefreshState()
         {

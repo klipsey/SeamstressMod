@@ -66,12 +66,12 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
             RefreshState();
-            if(NetworkServer.active)
+            this.stockMultiplier = needleCount;
+            if (NetworkServer.active)
             {
-                this.stockMultiplier = characterBody.GetBuffCount(SeamstressBuffs.needles) + 1;
-                for (int i = characterBody.GetBuffCount(SeamstressBuffs.needles); i > 0; i--)
+                for (int i = needleCount; i > 0; i--)
                 {
-                    characterBody.RemoveBuff(SeamstressBuffs.needles);
+                    characterBody.GetComponent<NeedleController>().RpcRemoveNeedle();
                 }
             }
             if (this.stockMultiplier > 6)

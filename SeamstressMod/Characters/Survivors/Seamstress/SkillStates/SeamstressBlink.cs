@@ -74,7 +74,6 @@ namespace SeamstressMod.SkillStates
             {
                 effectPos = raycastHit.point;
             }
-            if(isGrounded) UnityEngine.Object.Instantiate(SeamstressAssets.clawsEffect, effectPos, Quaternion.identity);
             base.characterBody.SetAimTimer(0f);
         }
 
@@ -162,7 +161,7 @@ namespace SeamstressMod.SkillStates
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Skill;
         }
         public override void OnSerialize(NetworkWriter writer)
         {

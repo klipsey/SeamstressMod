@@ -16,7 +16,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private bool hasFired;
 
-        private float pickupTimer = 2f;
+        private float pickupTimer = 1.25f;
 
         public void FixedUpdate()
         {
@@ -40,11 +40,11 @@ namespace SeamstressMod.Survivors.Seamstress
                 if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer < 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
                     string hi = base.gameObject.transform.GetParent().GetParent().name;
-                    if (hi == "ScissorR(Clone)" || hi == "ScissorRButchered(Clone)")
+                    if (hi == "ScissorR(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = true;
                     }
-                    else if (hi == "ScissorL(Clone)" || hi == "ScissorLButchered(Clone)")
+                    else if (hi == "ScissorL(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = false;
                     }
@@ -55,7 +55,7 @@ namespace SeamstressMod.Survivors.Seamstress
                         scale = 1.5f,
                     }, true);
                     triggerEvents?.Invoke();
-                    if (healthComponent.body.GetBuffCount(SeamstressBuffs.needles) < 5) healthComponent.body.AddBuff(SeamstressBuffs.needles);
+                    healthComponent.body.GetComponent<NeedleController>().RpcAddNeedle();
                     healthComponent.body.GetComponent<ScissorController>().RpcAddSpecialStock();
                     hasFired = true;
                 }
