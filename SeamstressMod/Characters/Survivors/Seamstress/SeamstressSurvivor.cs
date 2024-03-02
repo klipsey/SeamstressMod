@@ -517,6 +517,23 @@ namespace SeamstressMod.Survivors.Seamstress
             On.RoR2.HealthComponent.TakeDamage += new On.RoR2.HealthComponent.hook_TakeDamage(HealthComponent_TakeDamage);
             On.RoR2.Orbs.LightningOrb.Begin += new On.RoR2.Orbs.LightningOrb.hook_Begin(LightningOrb_Begin);
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+            On.RoR2.RigidbodyMotor.OnCollisionEnter += new On.RoR2.RigidbodyMotor.hook_OnCollisionEnter(CollideEffect);
+        }
+
+        private void CollideEffect(On.RoR2.RigidbodyMotor.orig_OnCollisionEnter orig, RoR2.RigidbodyMotor self, Collision collide)
+        {
+            Vector3 effectPos = self.transform.localPosition;
+            if(self.rigid.velocity.magnitude > 100f)
+            {
+                EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                {
+                    origin = effectPos,
+                    rotation = Quaternion.identity,
+                    color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
+                }, true);
+            }
+
+            orig.Invoke(self, collide);
         }
         private void LightningOrb_Begin(On.RoR2.Orbs.LightningOrb.orig_Begin orig, RoR2.Orbs.LightningOrb self)
         {

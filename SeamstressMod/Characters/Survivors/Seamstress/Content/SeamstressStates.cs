@@ -20,8 +20,8 @@ namespace SeamstressMod.Survivors.Seamstress
             Modules.Content.AddEntityState(typeof(Flurry));
 
             Modules.Content.AddEntityState(typeof(SecondaryBlink));
-
             Modules.Content.AddEntityState(typeof(Clip));
+            Modules.Content.AddEntityState(typeof(Telekinesis));
 
             Modules.Content.AddEntityState(typeof(Exhaustion));
 
