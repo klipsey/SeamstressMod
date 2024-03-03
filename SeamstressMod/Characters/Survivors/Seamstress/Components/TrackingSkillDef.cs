@@ -7,7 +7,7 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     [CreateAssetMenu(menuName = "RoR2/SkillDef/HuntressTrackingSkillDef")]
 
-    public class TrackingskillDef : SkillDef
+    public class TrackingSkillDef : SkillDef
     {
         protected class InstanceData : BaseSkillInstanceData
         {

@@ -149,6 +149,7 @@ namespace SeamstressMod.Survivors.Seamstress
             bodyPrefab.AddComponent<SeamstressController>();
             bodyPrefab.AddComponent<ScissorController>();
             bodyPrefab.AddComponent<NeedleController>();
+            bodyPrefab.AddComponent<Tracker>();
             //TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
@@ -314,6 +315,39 @@ namespace SeamstressMod.Survivors.Seamstress
             });
 
             Skills.AddSecondarySkills(bodyPrefab, planarShift);
+
+            TrackingSkillDef planarManipulation = Skills.CreateSkillDef<TrackingSkillDef>(new SkillDefInfo
+            {
+                skillName = "PlanarManipulation",
+                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANMAN_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANMAN_DESCRIPTION",
+                keywordTokens = new string[] {},
+                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Telekinesis)),
+
+                activationStateMachineName = "Weapon2",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseMaxStock = 1,
+                baseRechargeInterval = 6,
+                rechargeStock = 1,
+                requiredStock = 0,
+                stockToConsume = 0,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = false,
+                dontAllowPastMaxStocks = false,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
+
+            Skills.AddSecondarySkills(bodyPrefab, planarManipulation);
         }
 
         private void AddUtilitySkills()
@@ -518,19 +552,31 @@ namespace SeamstressMod.Survivors.Seamstress
             On.RoR2.Orbs.LightningOrb.Begin += new On.RoR2.Orbs.LightningOrb.hook_Begin(LightningOrb_Begin);
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
             On.RoR2.RigidbodyMotor.OnCollisionEnter += new On.RoR2.RigidbodyMotor.hook_OnCollisionEnter(CollideEffect);
+            On.RoR2.MapZone.TryZoneStart += new On.RoR2.MapZone.hook_TryZoneStart(DisableOOBCheck);
         }
 
+        private void DisableOOBCheck(On.RoR2.MapZone.orig_TryZoneStart orig, MapZone self, Collider other)
+        {
+            CharacterBody component = other.GetComponent<CharacterBody>();
+            if(!component.HasBuff(SeamstressBuffs.manipulated))
+            {
+                orig.Invoke(self, other);
+            }
+        }
         private void CollideEffect(On.RoR2.RigidbodyMotor.orig_OnCollisionEnter orig, RoR2.RigidbodyMotor self, Collision collide)
         {
-            Vector3 effectPos = self.transform.localPosition;
-            if(self.rigid.velocity.magnitude > 100f)
+            if(self.characterBody.HasBuff(SeamstressBuffs.manipulated))
             {
-                EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                Vector3 effectPos = self.transform.localPosition;
+                if (self.rigid.velocity.magnitude > 100f)
                 {
-                    origin = effectPos,
-                    rotation = Quaternion.identity,
-                    color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
-                }, true);
+                    EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                    {
+                        origin = effectPos,
+                        rotation = Quaternion.identity,
+                        color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
+                    }, true);
+                }
             }
 
             orig.Invoke(self, collide);

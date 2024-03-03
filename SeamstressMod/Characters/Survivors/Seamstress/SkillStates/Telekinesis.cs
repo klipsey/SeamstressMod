@@ -1,16 +1,16 @@
 ﻿using EntityStates;
-using EntityStates.SurvivorPod;
-using KinematicCharacterController;
+using R2API;
 using RoR2;
+using SeamstressMod.Modules.BaseStates;
 using SeamstressMod.Survivors.Seamstress;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UIElements;
+using UnityEngine.UIElements.UIR;
+
 
 namespace SeamstressMod.SkillStates
 {
-    public class Telekinesis : BaseSkillState
+    public class Telekinesis : BaseSeamstressSkillState
     {
         private float _maxGrabDistance = 40f;
 
@@ -19,8 +19,6 @@ namespace SeamstressMod.SkillStates
         private Transform _barrelPoint;
 
         private Rigidbody _grabbedObject;
-
-        private Rigidbody _previousObject;
 
         private float _pickDistance;
 
@@ -40,6 +38,14 @@ namespace SeamstressMod.SkillStates
 
         private Quaternion originalRotation;
 
+        private bool bodyHadGravity = true;
+
+        private bool bodyWasKinematic = true;
+
+        private CollisionDetectionMode collisionDetectionMode;
+
+        private CharacterGravityParameters gravParams;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -47,18 +53,19 @@ namespace SeamstressMod.SkillStates
             if (tracker)
             {
                 if (base.isAuthority) victim = tracker.GetTrackingTarget();
+                victim.healthComponent.body.gameObject.AddComponent<Grabbed>();
                 _grabbedObject = victim.healthComponent.GetComponent<Rigidbody>();
-                _previousObject = _grabbedObject;
-                victim.healthComponent.gameObject.layer = LayerIndex.fakeActor.intVal;
-                _grabbedObject.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-                CharacterMotor component = victim.healthComponent.body.gameObject.GetComponent<CharacterMotor>();
+                if(_grabbedObject)
+                {
+                    bodyHadGravity = _grabbedObject.useGravity;
+                    bodyWasKinematic = _grabbedObject.isKinematic;
+                    collisionDetectionMode = _grabbedObject.collisionDetectionMode;
+                }
+                CharacterMotor component = victim.healthComponent.GetComponent<CharacterMotor>();
                 if (component)
                 {
-                    component.Motor.ForceUnground();
-                    SmallHop(component, 2f);
-                    component.disableAirControlUntilCollision = true;
-                    component.velocity = Vector3.zero;
-                    component.rootMotion = Vector3.zero;
+                    bodyHadGravity = component.gravityParameters.CheckShouldUseGravity();
+                    gravParams = component.gravityParameters;
                 }
                 CharacterDirection component2 = victim.healthComponent.body.gameObject.GetComponent<CharacterDirection>();
                 if (component2)
@@ -78,9 +85,6 @@ namespace SeamstressMod.SkillStates
                         originalRotation = modelTransform.rotation;
                     }
                 }
-                _grabbedObject.useGravity = false;
-                _grabbedObject.freezeRotation = true;
-                _grabbedObject.isKinematic = false;
             }
 
             if (!_barrelPoint)
@@ -98,28 +102,19 @@ namespace SeamstressMod.SkillStates
         public override void Update()
         {
             base.Update();
-            if (inputBank.skill2.down)
-            {
-                Grab();
-            }
-            if (!inputBank.skill2.down || !victim.healthComponent.alive)
-            {
-                if (_grabbedObject)
-                {
-                    Release();
-                }
-                else if (base.isAuthority)
-                {
-                    outer.SetNextStateToMain();
-                }
-            }
 
-            _pickDistance = Mathf.Clamp(_pickDistance + Input.mouseScrollDelta.y * 10f, _minGrabDistance, _maxGrabDistance);
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            if (inputBank.skill2.down)
+            {
+                Grab();
+            }
+
+            _pickDistance = Mathf.Clamp(_pickDistance + Input.mouseScrollDelta.y * 10f, _minGrabDistance, _maxGrabDistance);
+
             StartAimMode();
             if (_grabbedObject != null)
             {
@@ -127,18 +122,42 @@ namespace SeamstressMod.SkillStates
                 _pickTargetPosition = ray.origin + ray.direction * _pickDistance;// + _pickOffset;
                 var forceDir = _pickTargetPosition - GetTargetRootPosition();
                 _pickForce = forceDir / Time.fixedDeltaTime * 0.3f / Mathf.Clamp(_grabbedObject.mass, 60f, 120f);
-                if (Util.HasEffectiveAuthority(victim.healthComponent.body.gameObject))
+                CharacterMotor component = victim.healthComponent.body.gameObject.GetComponent<CharacterMotor>();
+                Rigidbody component2 = victim.healthComponent.body.gameObject.GetComponent<Rigidbody>();
+                if(component.isGrounded) component.Motor.ForceUnground();
+                if (component && component.velocity.magnitude < 200)
                 {
-                    CharacterMotor component = victim.healthComponent.body.gameObject.GetComponent<CharacterMotor>();
-                    if (component)
+                    component.velocity += _pickForce;
+                }
+                else if (component2 && component2.velocity.magnitude < 200)
+                {
+                    component2.velocity += _pickForce;
+                }
+                else if(component)
+                {
+                    component.velocity = Vector3.ClampMagnitude(component.velocity, 200);
+                }
+                else if(component2)
+                {
+                    component2.velocity = Vector3.ClampMagnitude(component2.velocity, 200);
+                }
+                if (!inputBank.skill2.down || !victim.healthComponent.alive)
+                {
+                    if (_grabbedObject)
                     {
-                        component.rootMotion += _pickForce;
-                        return;
+                        if (component)
+                        {
+                            component.velocity += _pickForce;
+                        }
+                        if (component2)
+                        {
+                            component2.velocity += _pickForce;
+                        }
+                        Release();
                     }
-                    Rigidbody component2 = victim.healthComponent.body.gameObject.GetComponent<Rigidbody>();
-                    if ((bool)component2)
+                    else if (base.isAuthority)
                     {
-                        component2.velocity += _pickForce;
+                        outer.SetNextStateToMain();
                     }
                 }
             }
@@ -158,13 +177,36 @@ namespace SeamstressMod.SkillStates
         }
         private void Grab()
         {
-            //_pickOffset = victim.healthComponent.GetComponent<Rigidbody>().worldCenterOfMass - victim.transform.position;
-            _pickDistance = (victim.transform.position - _barrelPoint.transform.position).magnitude;
+            var ray = base.inputBank.GetAimRay();
+            if(Physics.Raycast(ray, out RaycastHit hit, _maxGrabDistance) && hit.rigidbody == victim.healthComponent.GetComponent<Rigidbody>())
+            {
+                //_pickOffset = victim.healthComponent.GetComponent<Rigidbody>().worldCenterOfMass - hit.point;
+                _pickDistance = hit.distance;
+                _grabbedObject.isKinematic = false;
+                _grabbedObject.useGravity = false;
+                _grabbedObject.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            }
+            CharacterMotor component = victim.healthComponent.body.gameObject.GetComponent<CharacterMotor>();
+            if (component)
+            {
+                component.disableAirControlUntilCollision = true;
+                component.gravityParameters = new CharacterGravityParameters
+                {
+                    environmentalAntiGravityGranterCount = 0,
+                    antiGravityNeutralizerCount = 0,
+                    channeledAntiGravityGranterCount = 0
+                };
+            }
         }
 
         private void Release()
         {
-            _grabbedObject.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            CharacterMotor component = victim.healthComponent.body.gameObject.GetComponent<CharacterMotor>();
+            if (component)
+            {
+                component.useGravity = bodyHadGravity;
+                component.gravityParameters = gravParams;
+            }
             CharacterDirection component2 = victim.healthComponent.body.gameObject.GetComponent<CharacterDirection>();
             if (component2)
             {
@@ -179,12 +221,11 @@ namespace SeamstressMod.SkillStates
             {
                 this.modelTransform.rotation = this.originalRotation;
             }
-            _grabbedObject.useGravity = _previousObject.useGravity;
-            _grabbedObject.freezeRotation = _previousObject.freezeRotation;
-            _grabbedObject.isKinematic = _previousObject.isKinematic;
-            _grabbedObject.gameObject.layer = _previousObject.gameObject.layer;
+            _grabbedObject.collisionDetectionMode = collisionDetectionMode;
+            _grabbedObject.useGravity = bodyHadGravity;
+            _grabbedObject.isKinematic = bodyWasKinematic;
+            GameObject.Destroy(victim.healthComponent.body.gameObject.GetComponent<Grabbed>());
             _grabbedObject = null;
-            _previousObject = null;
             if (base.isAuthority) outer.SetNextStateToMain();
         }
 

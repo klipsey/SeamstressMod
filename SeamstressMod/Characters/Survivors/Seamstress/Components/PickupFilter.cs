@@ -39,7 +39,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 TeamComponent component2 = healthComponent.GetComponent<TeamComponent>();
                 if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer < 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
-                    string hi = base.gameObject.transform.GetParent().GetParent().name;
+                    string hi = base.gameObject.transform.root.name;
                     if (hi == "ScissorR(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = true;

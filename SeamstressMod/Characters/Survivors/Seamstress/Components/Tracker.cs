@@ -30,6 +30,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private readonly BullseyeSearch search = new BullseyeSearch();
 
+        private readonly BullseyeSearch scissorSearch = new BullseyeSearch();
         private void Awake()
         {
             indicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/HuntressTrackingIndicator"));
@@ -59,6 +60,10 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void FixedUpdate()
         {
+            if (characterBody.skillLocator.secondary.skillNameToken != SeamstressSurvivor.SEAMSTRESS_PREFIX + "SECONDARY_PLANMAN_NAME")
+            {
+                this.enabled = false;
+            }
             trackerUpdateStopwatch += Time.fixedDeltaTime;
             if (trackerUpdateStopwatch >= 1f / trackerUpdateFrequency)
             {
@@ -82,6 +87,25 @@ namespace SeamstressMod.Survivors.Seamstress
             search.RefreshCandidates();
             search.FilterOutGameObject(base.gameObject);
             trackingTarget = search.GetResults().FirstOrDefault();
+
+            scissorSearch.teamMaskFilter = TeamMask.AllExcept(teamComponent.teamIndex);
+            scissorSearch.filterByLoS = true;
+            scissorSearch.searchOrigin = aimRay.origin;
+            scissorSearch.searchDirection = aimRay.direction;
+            scissorSearch.sortMode = BullseyeSearch.SortMode.Distance;
+            scissorSearch.maxDistanceFilter = maxTrackingDistance;
+            scissorSearch.maxAngleFilter = maxTrackingAngle;
+            scissorSearch.RefreshCandidates();
+            scissorSearch.FilterOutGameObject(base.gameObject);
+
+            if(scissorSearch.GetResults().FirstOrDefault().transform.root.name == "ScissorR(Clone)" || scissorSearch.GetResults().FirstOrDefault().transform.root.name == "ScissorL(Clone)")
+            {
+                trackingTarget = scissorSearch.GetResults().FirstOrDefault();
+            }
+            else
+            {
+                trackingTarget = search.GetResults().FirstOrDefault();
+            }
         }
     }
 
