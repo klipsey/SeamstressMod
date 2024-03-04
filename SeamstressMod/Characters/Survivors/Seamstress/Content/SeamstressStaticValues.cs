@@ -56,5 +56,9 @@ namespace SeamstressMod.Survivors.Seamstress
         internal const float scissorDamageCoefficient = 4f;
 
         internal const float maxFiendGaugeCoefficient = 2f;
+
+        internal const float telekinesisDamageCoefficient = 0.3f;
+
+        internal const bool funny = true;
     }
 }

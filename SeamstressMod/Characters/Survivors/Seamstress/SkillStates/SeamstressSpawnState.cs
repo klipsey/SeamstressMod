@@ -26,8 +26,6 @@ namespace SeamstressMod.SkillStates
             if (base.fixedAge > 0.56f && !this.check)
             {
                 this.check = true;
-
-                EffectManager.SimpleMuzzleFlash(EntityStates.ImpMonster.SpawnState.spawnEffectPrefab, this.gameObject, "Chest", false);
                 Util.PlaySound("Play_imp_overlord_spawn", this.gameObject);
 
                 Transform modelTransform = this.GetModelTransform();

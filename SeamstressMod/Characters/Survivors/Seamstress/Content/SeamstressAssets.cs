@@ -59,7 +59,14 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject reapEndEffect;
 
-        internal static GameObject stitchConsumeEffectPrefab;
+        //internal static GameObject stitchConsumeEffectPrefab;
+
+        internal static GameObject sewn1;
+
+        internal static GameObject sewn2;
+
+        internal static GameObject sewn3;
+
         //Materials
         internal static Material destealthMaterial;
 
@@ -97,6 +104,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject scissorLPrefab;
         //extra
+
+        [ColorUsage(true, true)]
+        internal static Color white;
 
         public static SkillDef lockOutSkillDef;
         public static void Init(AssetBundle assetBundle)
@@ -160,6 +170,25 @@ namespace SeamstressMod.Survivors.Seamstress
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             stitchEffect.AddComponent<NetworkIdentity>();
             stitchEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
+
+            white = new Color(Color.white.r * 3f, Color.white.g * 3f, Color.white.b * 3f);
+            sewn1 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack1Effect.prefab").WaitForCompletion().InstantiateClone("Sewn1");
+            sewn1.AddComponent<NetworkIdentity>();
+            sewn1.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
+            sewn1.transform.GetChild(0).localScale *= 2;
+
+            sewn2 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack2Effect.prefab").WaitForCompletion().InstantiateClone("Sewn2");
+            sewn2.AddComponent<NetworkIdentity>();
+            sewn2.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
+            sewn2.transform.GetChild(0).GetChild(1).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
+            sewn2.transform.GetChild(0).localScale *= 2;
+
+            sewn3 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack3Effect.prefab").WaitForCompletion().InstantiateClone("Sewn3");
+            sewn3.AddComponent<NetworkIdentity>();
+            sewn3.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
+            sewn3.transform.GetChild(0).GetChild(1).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
+            sewn3.transform.GetChild(0).GetChild(2).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
+            sewn3.transform.GetChild(0).localScale *= 2;
 
             clawsEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/WIPImpEffect.prefab").WaitForCompletion().InstantiateClone("ClawsEffect");
             clawsEffect.AddComponent<NetworkIdentity>();
@@ -364,7 +393,7 @@ namespace SeamstressMod.Survivors.Seamstress
             newEffect.transform.Find("Spikes, Small").gameObject.SetActive(false);
 
             newEffect.transform.Find("PP").gameObject.SetActive(false);
-            newEffect.transform.Find("Point light").gameObject.SetActive(false);;
+            newEffect.transform.Find("Point light").gameObject.SetActive(false);
             newEffect.transform.Find("Flash Lines").GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matOpaqueDustLargeDirectional.mat").WaitForCompletion();
 
             newEffect.transform.GetChild(3).GetComponent<ParticleSystemRenderer>().material = bloodMat;
@@ -500,6 +529,7 @@ namespace SeamstressMod.Survivors.Seamstress
             sphereCollider.material.staticFriction = 10000;
             sphereCollider.material.dynamicFriction = 10000;
             sphereCollider.radius = 1f;
+            sphereCollider.enabled = false;
 
             ProjectileImpactExplosion impactAlly = scissorRPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
@@ -587,6 +617,7 @@ namespace SeamstressMod.Survivors.Seamstress
             sphereCollider.material.staticFriction = 10000;
             sphereCollider.material.dynamicFriction = 10000;
             sphereCollider.radius = 1f;
+            sphereCollider.enabled = false;
 
             ProjectileImpactExplosion impactAlly = scissorLPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;

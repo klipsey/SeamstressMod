@@ -143,6 +143,8 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 Detach();
             }
+            Collider component = GetComponent<Collider>();
+            component.enabled = false;
         }
 
         [Server]

@@ -34,7 +34,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 return;
             }
             HealthComponent healthComponent = component.healthComponent;
-            if ((bool)healthComponent)
+            if (healthComponent)
             {
                 TeamComponent component2 = healthComponent.GetComponent<TeamComponent>();
                 if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer < 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")

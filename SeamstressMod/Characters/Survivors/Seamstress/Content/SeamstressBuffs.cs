@@ -21,6 +21,8 @@ namespace SeamstressMod.Survivors.Seamstress
         public static BuffDef parrySuccess;
 
         public static BuffDef manipulated;
+
+        public static BuffDef manipulatedCd;
         public static void Init(AssetBundle assetBundle)
         {
             butchered = Modules.Content.CreateAndAddBuff("ButcheredBuff", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Bandit2/texBuffSuperBleedingIcon.tif").WaitForCompletion(), 
@@ -37,9 +39,11 @@ namespace SeamstressMod.Survivors.Seamstress
                 new Color(155f / 255f, 55f / 255f, 55f / 255f), false, false, false);
             parrySuccess = Modules.Content.CreateAndAddBuff("ParryEndBuff", LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
                 Color.red, false, false, false);
-            manipulated = Modules.Content.CreateAndAddBuff("CutBleed", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/EliteLunar/texBuffAffixLunar.tif").WaitForCompletion(),
-                new Color(155f / 255f, 55f / 255f, 55f / 255f), true, false, false);
+            manipulated = Modules.Content.CreateAndAddBuff("Manipulated", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/EliteLunar/texBuffAffixLunar.tif").WaitForCompletion(),
+                new Color(155f / 255f, 55f / 255f, 55f / 255f), false, false, false);
 
+            manipulatedCd = Modules.Content.CreateAndAddBuff("ManipulatedCd", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/EliteLunar/texBuffAffixLunar.tif").WaitForCompletion(),
+                Color.gray, false, false, true);
         }
     }
 }

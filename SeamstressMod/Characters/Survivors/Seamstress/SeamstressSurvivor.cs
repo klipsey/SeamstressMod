@@ -146,10 +146,14 @@ namespace SeamstressMod.Survivors.Seamstress
         private void AdditionalBodySetup()
         {
             AddHitboxes();
+            bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.manipulatedCd);
+            bool tempAdd2(CharacterBody body) => body.HasBuff(SeamstressBuffs.manipulated);
             bodyPrefab.AddComponent<SeamstressController>();
             bodyPrefab.AddComponent<ScissorController>();
             bodyPrefab.AddComponent<NeedleController>();
             bodyPrefab.AddComponent<Tracker>();
+            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn1, tempAdd);
+            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn2, tempAdd2);
             //TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
@@ -330,7 +334,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 6,
+                baseRechargeInterval = 0.5f,
                 rechargeStock = 1,
                 requiredStock = 0,
                 stockToConsume = 0,
@@ -551,35 +555,16 @@ namespace SeamstressMod.Survivors.Seamstress
             On.RoR2.HealthComponent.TakeDamage += new On.RoR2.HealthComponent.hook_TakeDamage(HealthComponent_TakeDamage);
             On.RoR2.Orbs.LightningOrb.Begin += new On.RoR2.Orbs.LightningOrb.hook_Begin(LightningOrb_Begin);
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
-            On.RoR2.RigidbodyMotor.OnCollisionEnter += new On.RoR2.RigidbodyMotor.hook_OnCollisionEnter(CollideEffect);
             On.RoR2.MapZone.TryZoneStart += new On.RoR2.MapZone.hook_TryZoneStart(DisableOOBCheck);
         }
 
         private void DisableOOBCheck(On.RoR2.MapZone.orig_TryZoneStart orig, MapZone self, Collider other)
         {
-            CharacterBody component = other.GetComponent<CharacterBody>();
+            CharacterBody component = other.gameObject.GetComponent<CharacterBody>();
             if(!component.HasBuff(SeamstressBuffs.manipulated))
             {
                 orig.Invoke(self, other);
             }
-        }
-        private void CollideEffect(On.RoR2.RigidbodyMotor.orig_OnCollisionEnter orig, RoR2.RigidbodyMotor self, Collision collide)
-        {
-            if(self.characterBody.HasBuff(SeamstressBuffs.manipulated))
-            {
-                Vector3 effectPos = self.transform.localPosition;
-                if (self.rigid.velocity.magnitude > 100f)
-                {
-                    EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
-                    {
-                        origin = effectPos,
-                        rotation = Quaternion.identity,
-                        color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
-                    }, true);
-                }
-            }
-
-            orig.Invoke(self, collide);
         }
         private void LightningOrb_Begin(On.RoR2.Orbs.LightningOrb.orig_Begin orig, RoR2.Orbs.LightningOrb self)
         {

@@ -6,45 +6,75 @@ using SeamstressMod.Survivors.Seamstress;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements.UIR;
+using static UnityEngine.ParticleSystem.PlaybackState;
 
 
 namespace SeamstressMod.SkillStates
 {
     public class Telekinesis : BaseSeamstressSkillState
     {
+        public class DetonateOnImpact : MonoBehaviour
+        {
+            public Telekinesis telekinesis;
+            private void OnCollisionEnter(UnityEngine.Collision collision)
+            {
+                float num = Mathf.Max(telekinesis.victimBody.moveSpeed, telekinesis.victimBody.baseMoveSpeed) * (telekinesis.victimRigid.mass / 10);
+                float magnitude = collision.relativeVelocity.magnitude;
+                if (collision.gameObject.layer == LayerIndex.world.intVal || collision.gameObject.layer == LayerIndex.entityPrecise.intVal || collision.gameObject.layer == LayerIndex.defaultLayer.intVal && magnitude >= num)
+                {
+                    telekinesis.detonateNextFrame = true;
+                }
+            }
+        }
+        private Transform _barrelPoint;
+
+        private Vector3 _pickTargetPosition;
+
+        private Vector3 _pickOffset;
+
+        private HurtBox victim;
+
+        private Rigidbody scissor;
+
+        private Tracker tracker;
+
+        private CharacterMotor victimMotor;
+
+        private RigidbodyMotor victimRigidMotor;
+
+        private Rigidbody victimRigid;
+
+        private Rigidbody tempRigidbody;
+
+        private SphereCollider tempSphereCollider;
+
+        private CharacterBody victimBody;
+
+        private CollisionDetectionMode collisionDetectionMode;
+
         private float _maxGrabDistance = 40f;
 
         private float _minGrabDistance = 1f;
 
-        private Transform _barrelPoint;
-
-        private Rigidbody _grabbedObject;
-
         private float _pickDistance;
 
-        private Vector3 _pickOffset;
+        private float radius = 30f;
 
-        private Vector3 _pickTargetPosition;
+        private float damping = 0.1f;
 
-        private Vector3 _pickForce;
+        private float forceMagnitude = -1500;
 
-        private HurtBox victim;
+        private float forceCoefficientAtEdge = 0.25f;
 
-        private Tracker tracker;
+        private float bonusDamage;
 
-        private bool modelLocatorStartedDisabled;
+        private float hitStopwatch;
 
-        private Transform modelTransform;
+        private float previousMass;
 
-        private Quaternion originalRotation;
+        public bool detonateNextFrame;
 
-        private bool bodyHadGravity = true;
-
-        private bool bodyWasKinematic = true;
-
-        private CollisionDetectionMode collisionDetectionMode;
-
-        private CharacterGravityParameters gravParams;
+        private bool bodyCouldTakeImpactDamage;
 
         public override void OnEnter()
         {
@@ -52,183 +82,205 @@ namespace SeamstressMod.SkillStates
             tracker = GetComponent<Tracker>();
             if (tracker)
             {
-                if (base.isAuthority) victim = tracker.GetTrackingTarget();
-                victim.healthComponent.body.gameObject.AddComponent<Grabbed>();
-                _grabbedObject = victim.healthComponent.GetComponent<Rigidbody>();
-                if(_grabbedObject)
+                if (base.isAuthority)
                 {
-                    bodyHadGravity = _grabbedObject.useGravity;
-                    bodyWasKinematic = _grabbedObject.isKinematic;
-                    collisionDetectionMode = _grabbedObject.collisionDetectionMode;
+                    victim = tracker.GetTrackingTarget();
+                    scissor = tracker.GetRigidbody();
                 }
-                CharacterMotor component = victim.healthComponent.GetComponent<CharacterMotor>();
-                if (component)
+                if(scissor != null)
                 {
-                    bodyHadGravity = component.gravityParameters.CheckShouldUseGravity();
-                    gravParams = component.gravityParameters;
+
                 }
-                CharacterDirection component2 = victim.healthComponent.body.gameObject.GetComponent<CharacterDirection>();
-                if (component2)
+                else
                 {
-                    component2.enabled = false;
+                    DefaultVictim();
                 }
-                ModelLocator modelLocator = victim.healthComponent.body.gameObject.GetComponent<ModelLocator>();
-                if (modelLocator)
+                if (NetworkServer.active)
                 {
-                    if (!modelLocator.enabled)
-                    {
-                        modelLocatorStartedDisabled = true;
-                    }
-                    if (modelLocator.modelTransform)
-                    {
-                        modelTransform = modelLocator.modelTransform;
-                        originalRotation = modelTransform.rotation;
-                    }
+                    if (!victimBody.HasBuff(SeamstressBuffs.manipulated)) victimBody.AddBuff(SeamstressBuffs.manipulated);
                 }
             }
-
             if (!_barrelPoint)
             {
                 _barrelPoint = transform;
             }
         }
 
+        private void DefaultVictim()
+        {
+            victimBody = victim.healthComponent.body;
+            victimMotor = victimBody.characterMotor;
+            victimRigid = victimBody.rigidbody;
+            victimRigidMotor = victimBody.gameObject.GetComponent<RigidbodyMotor>();
+            _pickDistance = (victim.transform.position - base.inputBank.aimOrigin).magnitude;
+            _pickOffset = victimBody.coreTransform.position - victim.transform.position;
+            if (NetworkServer.active && victimBody)
+            {
+                victimBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+            }
+            if (victimMotor)
+            {
+                victimMotor.onMovementHit += DoSplashDamage;
+                victimMotor.disableAirControlUntilCollision = true;
+            }
+            else
+            {
+                if (!victimRigid)
+                {
+                    victimRigid = victimBody.gameObject.AddComponent<Rigidbody>();
+                    victimRigid.mass = 100f;
+                    tempRigidbody = victimRigid;
+                    tempSphereCollider = victimBody.gameObject.AddComponent<SphereCollider>();
+                }
+                if (victimBody.gameObject.GetComponent<DetonateOnImpact>() != null) GameObject.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
+                victimBody.gameObject.AddComponent<DetonateOnImpact>();
+                victimBody.gameObject.GetComponent<DetonateOnImpact>().telekinesis = this;
+                if (victimRigidMotor)
+                {
+                    bodyCouldTakeImpactDamage = victimRigidMotor.canTakeImpactDamage;
+                    victimRigidMotor.canTakeImpactDamage = false;
+                    victimRigidMotor.enabled = false;
+                }
+            }
+            if (victimRigid)
+            {
+                collisionDetectionMode = victimRigid.collisionDetectionMode;
+                victimRigid.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            }
+            if (SeamstressStaticValues.funny)
+            {
+                if (victimMotor)
+                {
+                    previousMass = victimMotor.mass;
+                    victimMotor.mass = Mathf.Clamp(victimMotor.mass, 60f, 120f);
+                }
+                else if (victimRigid)
+                {
+                    previousMass = victimRigid.mass;
+                    victimRigid.mass = Mathf.Clamp(victimRigid.mass, 60f, 120f);
+                }
+            }
+        }
         public override void OnExit()
         {
-            skillLocator.secondary.DeductStock(1);
+            if(victimBody)
+            {
+                if (NetworkServer.active)
+                {
+                    if(victimBody.HasBuff(SeamstressBuffs.manipulated))
+                    {
+                        victimBody.RemoveBuff(SeamstressBuffs.manipulated);
+                        victimBody.AddTimedBuff(SeamstressBuffs.manipulatedCd, 7f);
+                    }
+                }
+                if(victimBody.gameObject.GetComponent<DetonateOnImpactThrown>() != null) GameObject.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpactThrown>());
+                DetonateOnImpactThrown thrown = victimBody.gameObject.AddComponent<DetonateOnImpactThrown>();
+                thrown.victim = victim;
+                thrown.attacker = base.gameObject;
+                thrown.tempRigidbody = tempRigidbody;
+                thrown.tempSphereCollider = tempSphereCollider;
+                thrown.bodyCouldTakeImpactDamage = bodyCouldTakeImpactDamage;
+                thrown.coll = collisionDetectionMode;
+                thrown.previousMass = previousMass;
+                skillLocator.secondary.DeductStock(1);
+                if (victimBody.gameObject.GetComponent<DetonateOnImpact>() != null)
+                {
+                    GameObject.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
+                }
+                if (victimMotor)
+                {
+                    victimMotor.disableAirControlUntilCollision = true;
+                    victimMotor.onMovementHit -= DoSplashDamage;
+                }
+            }
             base.OnExit();
         }
-
         public override void Update()
         {
             base.Update();
+            if (inputBank.skill2.justReleased || !victim.healthComponent.alive || base.fixedAge >= 7f)
+            {
+                outer.SetNextStateToMain();
+            }
 
+            _pickDistance = Mathf.Clamp(_pickDistance + Input.mouseScrollDelta.y, _minGrabDistance, _maxGrabDistance);
         }
-
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (inputBank.skill2.down)
-            {
-                Grab();
-            }
-
-            _pickDistance = Mathf.Clamp(_pickDistance + Input.mouseScrollDelta.y * 10f, _minGrabDistance, _maxGrabDistance);
-
             StartAimMode();
-            if (_grabbedObject != null)
-            {
-                var ray = base.inputBank.GetAimRay();
-                _pickTargetPosition = ray.origin + ray.direction * _pickDistance;// + _pickOffset;
-                var forceDir = _pickTargetPosition - GetTargetRootPosition();
-                _pickForce = forceDir / Time.fixedDeltaTime * 0.3f / Mathf.Clamp(_grabbedObject.mass, 60f, 120f);
-                CharacterMotor component = victim.healthComponent.body.gameObject.GetComponent<CharacterMotor>();
-                Rigidbody component2 = victim.healthComponent.body.gameObject.GetComponent<Rigidbody>();
-                if(component.isGrounded) component.Motor.ForceUnground();
-                if (component && component.velocity.magnitude < 200)
-                {
-                    component.velocity += _pickForce;
-                }
-                else if (component2 && component2.velocity.magnitude < 200)
-                {
-                    component2.velocity += _pickForce;
-                }
-                else if(component)
-                {
-                    component.velocity = Vector3.ClampMagnitude(component.velocity, 200);
-                }
-                else if(component2)
-                {
-                    component2.velocity = Vector3.ClampMagnitude(component2.velocity, 200);
-                }
-                if (!inputBank.skill2.down || !victim.healthComponent.alive)
-                {
-                    if (_grabbedObject)
-                    {
-                        if (component)
-                        {
-                            component.velocity += _pickForce;
-                        }
-                        if (component2)
-                        {
-                            component2.velocity += _pickForce;
-                        }
-                        Release();
-                    }
-                    else if (base.isAuthority)
-                    {
-                        outer.SetNextStateToMain();
-                    }
-                }
-            }
-        }
-        private Vector3 GetTargetRootPosition()
-        {
-            if (victim)
-            {
-                Vector3 result = victim.gameObject.transform.position;
-                if ((bool)victim.healthComponent)
-                {
-                    result = victim.healthComponent.body.corePosition;
-                }
-                return result;
-            }
-            return base.transform.position;
-        }
-        private void Grab()
-        {
-            var ray = base.inputBank.GetAimRay();
-            if(Physics.Raycast(ray, out RaycastHit hit, _maxGrabDistance) && hit.rigidbody == victim.healthComponent.GetComponent<Rigidbody>())
-            {
-                //_pickOffset = victim.healthComponent.GetComponent<Rigidbody>().worldCenterOfMass - hit.point;
-                _pickDistance = hit.distance;
-                _grabbedObject.isKinematic = false;
-                _grabbedObject.useGravity = false;
-                _grabbedObject.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-            }
-            CharacterMotor component = victim.healthComponent.body.gameObject.GetComponent<CharacterMotor>();
-            if (component)
-            {
-                component.disableAirControlUntilCollision = true;
-                component.gravityParameters = new CharacterGravityParameters
-                {
-                    environmentalAntiGravityGranterCount = 0,
-                    antiGravityNeutralizerCount = 0,
-                    channeledAntiGravityGranterCount = 0
-                };
-            }
-        }
+            hitStopwatch += Time.deltaTime;
 
-        private void Release()
-        {
-            CharacterMotor component = victim.healthComponent.body.gameObject.GetComponent<CharacterMotor>();
-            if (component)
+            if (victimRigid != null || victimMotor != null)
             {
-                component.useGravity = bodyHadGravity;
-                component.gravityParameters = gravParams;
-            }
-            CharacterDirection component2 = victim.healthComponent.body.gameObject.GetComponent<CharacterDirection>();
-            if (component2)
-            {
-                component2.enabled = true;
-            }
-            ModelLocator modelLocator = victim.healthComponent.body.gameObject.GetComponent<ModelLocator>();
-            if (modelLocator && !modelLocatorStartedDisabled)
-            {
-                modelLocator.enabled = true;
-            }
-            if (this.modelTransform)
-            {
-                this.modelTransform.rotation = this.originalRotation;
-            }
-            _grabbedObject.collisionDetectionMode = collisionDetectionMode;
-            _grabbedObject.useGravity = bodyHadGravity;
-            _grabbedObject.isKinematic = bodyWasKinematic;
-            GameObject.Destroy(victim.healthComponent.body.gameObject.GetComponent<Grabbed>());
-            _grabbedObject = null;
-            if (base.isAuthority) outer.SetNextStateToMain();
-        }
+                if (victimMotor)
+                {
+                    victimMotor.disableAirControlUntilCollision = true;
+                    if (victimMotor.isGrounded) victimMotor.Motor.ForceUnground();
+                }
+                if (NetworkServer.active)
+                {
+                    var ray = base.inputBank.GetAimRay();
+                    _pickTargetPosition = ray.origin + ray.direction * _pickDistance + _pickOffset;
+                    var forceDir = victim.transform.position - _pickTargetPosition;
+                    float num = 1f - Mathf.Clamp(forceDir.magnitude / radius, 0f, 1f - forceCoefficientAtEdge);
+                    forceDir = forceDir.normalized * forceMagnitude * (1f - num);
+                    Vector3 vector2 = Vector3.zero;
+                    float num2 = 0f;
+                    if (victimMotor)
+                    {
+                        vector2 = victimMotor.velocity;
+                        num2 = victimMotor.mass;
+                    }
+                    else if (victimRigid)
+                    {
+                        vector2 = victimRigid.velocity;
+                        num2 = victimRigid.mass;
+                    }
+                    else vector2.y += Physics.gravity.y * Time.fixedDeltaTime;
+                    victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * Mathf.Clamp(num2, 60f, 120f) * num, alwaysApply: true);
+                }
 
+                if(victimMotor != null) bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat) + victim.healthComponent.fullCombinedHealth * 0.2f, SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullCombinedHealth * 0.7f);
+                else bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat), SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullHealth * 0.5f);
+                if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonateNextFrame && hitStopwatch > 0.75f)
+                {
+                    EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                    {
+                        origin = victimBody.footPosition,
+                        rotation = Quaternion.identity,
+                        color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
+                    }, true);
+                    CharacterBody component = base.gameObject.GetComponent<CharacterBody>();
+                    float num = component.damage;
+                    BlastAttack blastAttack = new BlastAttack();
+                    blastAttack.position = victimBody.footPosition;
+                    blastAttack.baseDamage = bonusDamage;
+                    blastAttack.baseForce = 0f;
+                    blastAttack.bonusForce = Vector3.zero;
+                    blastAttack.radius = 10f;
+                    blastAttack.attacker = base.gameObject;
+                    blastAttack.inflictor = base.gameObject;
+                    blastAttack.teamIndex = component.teamComponent.teamIndex;
+                    blastAttack.crit = component.RollCrit();
+                    blastAttack.procChainMask = default(ProcChainMask);
+                    blastAttack.procCoefficient = 1f;
+                    blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
+                    blastAttack.damageColorIndex = DamageColorIndex.Default;
+                    blastAttack.damageType = DamageType.Stun1s;
+                    blastAttack.attackerFiltering = AttackerFiltering.Default;
+                    blastAttack.Fire();
+                    detonateNextFrame = false;
+                    hitStopwatch = 0f;
+                }
+            }
+        }
+        private void DoSplashDamage(ref CharacterMotor.MovementHitInfo movementHitInfo)
+        {
+            float num = Mathf.Max(victimBody.moveSpeed, victimBody.baseMoveSpeed) * 6f;
+            float magnitude = movementHitInfo.velocity.magnitude;
+            if (magnitude >= num) detonateNextFrame = true;
+        }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
             return InterruptPriority.PrioritySkill;

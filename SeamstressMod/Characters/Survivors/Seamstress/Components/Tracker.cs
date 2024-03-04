@@ -18,6 +18,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private HurtBox trackingTarget;
 
+        private Rigidbody rigidbody;
+
         private CharacterBody characterBody;
 
         private TeamComponent teamComponent;
@@ -30,7 +32,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private readonly BullseyeSearch search = new BullseyeSearch();
 
-        private readonly BullseyeSearch scissorSearch = new BullseyeSearch();
         private void Awake()
         {
             indicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/HuntressTrackingIndicator"));
@@ -45,9 +46,29 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public HurtBox GetTrackingTarget()
         {
-            return trackingTarget;
+            if (trackingTarget != null)
+            {
+                if(!trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd))
+                {
+                    return trackingTarget;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else return trackingTarget;
         }
 
+        public Rigidbody GetRigidbody() 
+        {
+            if (rigidbody != null)
+            {
+                if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)") return rigidbody;
+                else return null;
+            }
+            else return rigidbody;
+        }
         private void OnEnable()
         {
             indicator.active = true;
@@ -71,7 +92,22 @@ namespace SeamstressMod.Survivors.Seamstress
                 _ = trackingTarget;
                 Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
                 SearchForTarget(aimRay);
-                indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                SearchForScissors(aimRay);
+                if(rigidbody != null)
+                {
+                    if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)")
+                    {
+                        indicator.targetTransform = (trackingTarget ? rigidbody.transform : null);
+                    }
+                    else
+                    {
+                        indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                    }
+                }
+                else
+                {
+                    indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                }
             }
         }
 
@@ -87,27 +123,19 @@ namespace SeamstressMod.Survivors.Seamstress
             search.RefreshCandidates();
             search.FilterOutGameObject(base.gameObject);
             trackingTarget = search.GetResults().FirstOrDefault();
+        }
 
-            scissorSearch.teamMaskFilter = TeamMask.AllExcept(teamComponent.teamIndex);
-            scissorSearch.filterByLoS = true;
-            scissorSearch.searchOrigin = aimRay.origin;
-            scissorSearch.searchDirection = aimRay.direction;
-            scissorSearch.sortMode = BullseyeSearch.SortMode.Distance;
-            scissorSearch.maxDistanceFilter = maxTrackingDistance;
-            scissorSearch.maxAngleFilter = maxTrackingAngle;
-            scissorSearch.RefreshCandidates();
-            scissorSearch.FilterOutGameObject(base.gameObject);
-
-            if(scissorSearch.GetResults().FirstOrDefault().transform.root.name == "ScissorR(Clone)" || scissorSearch.GetResults().FirstOrDefault().transform.root.name == "ScissorL(Clone)")
+        private void SearchForScissors(Ray aimRay)
+        {
+            if (Physics.Raycast(aimRay, out RaycastHit hit, maxTrackingDistance) && hit.rigidbody)
             {
-                trackingTarget = scissorSearch.GetResults().FirstOrDefault();
+                rigidbody = hit.rigidbody;
             }
             else
             {
-                trackingTarget = search.GetResults().FirstOrDefault();
+                rigidbody = null;
             }
         }
     }
-
 }
 
