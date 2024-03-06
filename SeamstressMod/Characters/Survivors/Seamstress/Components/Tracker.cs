@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 using RoR2;
+using UnityEngine.Networking;
 
 namespace SeamstressMod.Survivors.Seamstress
 
@@ -30,11 +31,16 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private Indicator indicator;
 
+        private Indicator indicator2;
+
+        private bool onCooldown;
+
         private readonly BullseyeSearch search = new BullseyeSearch();
 
         private void Awake()
         {
-            indicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/HuntressTrackingIndicator"));
+            indicator = new Indicator(base.gameObject, SeamstressAssets.trackingTelekinesis);
+            indicator2 = new Indicator(base.gameObject, SeamstressAssets.notTrackingTelekinesis);
         }
 
         private void Start()
@@ -71,12 +77,23 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void OnEnable()
         {
-            indicator.active = true;
+            if (trackingTarget != null) onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
+            if (onCooldown)
+            {
+                indicator2.active = true;
+                indicator.active = false;
+            }
+            else
+            {
+                indicator2.active = false;//FUUFUCK
+                indicator.active = true;
+            }
         }
 
         private void OnDisable()
         {
             indicator.active = false;
+            indicator2.active = false;
         }
 
         private void FixedUpdate()
@@ -93,7 +110,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
                 SearchForTarget(aimRay);
                 SearchForScissors(aimRay);
-                if(rigidbody != null)
+                if (rigidbody != null)
                 {
                     if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)")
                     {
@@ -101,6 +118,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     }
                     else
                     {
+                        if(NetworkServer.active) 
                         indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
                     }
                 }

@@ -9,13 +9,7 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     public class DetonateOnImpactThrown : MonoBehaviour
     {
-        public HurtBox victim;
-
         public GameObject attacker;
-
-        public Rigidbody tempRigidbody;
-
-        public SphereCollider tempSphereCollider;
 
         private CharacterBody victimBody;
 
@@ -33,37 +27,46 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public float previousMass;
 
-        private void OnAwake()
+        public bool theyDidNotHaveRigid;
+
+        private void Awake()
         {
-            victimBody = victim.healthComponent.body;
+            victimBody = base.gameObject.GetComponent<CharacterBody>();
             victimMotor = victimBody.characterMotor;
-            victimRigidMotor = victimBody.gameObject.GetComponent<RigidbodyMotor>();
-            victimRigid = victim.gameObject.GetComponent<Rigidbody>();
-            if (victimMotor)
+            victimRigid = victimBody.rigidbody;
+            victimRigidMotor = base.GetComponent<RigidbodyMotor>();
+            if (victimMotor != null)
             {
+                victimMotor.disableAirControlUntilCollision = true;
                 victimMotor.onMovementHit += DoSplashDamage;
             }
+        }
+
+        private void Start()
+        {
+            stopwatch = 0f;
         }
         private void FixedUpdate()
         {
             stopwatch += Time.fixedDeltaTime;
             if(stopwatch > 5f)
             {
-                Object.Destroy(this);
+                EndGrab();
             }
         }
         private void OnCollisionEnter(UnityEngine.Collision collision)
         {
-            if(!victimMotor)
+            Log.Debug(attacker.name);
+            if (victimMotor == null)
             {
                 if (collision.gameObject.layer == LayerIndex.world.intVal || collision.gameObject.layer == LayerIndex.entityPrecise.intVal || collision.gameObject.layer == LayerIndex.defaultLayer.intVal)
                 {
-                    float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage, victim.healthComponent.fullHealth * 0.5f); ;
+                    float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage, victimBody.healthComponent.fullHealth * 0.7f); ;
                     EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
-                        color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
+                        color = SeamstressAssets.coolRed,
                     }, true);
                     CharacterBody component = attacker.GetComponent<CharacterBody>();
                     float num = component.damage;
@@ -91,12 +94,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private void DoSplashDamage(ref CharacterMotor.MovementHitInfo movementHitInfo)
         {
-            float bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage, victim.healthComponent.fullHealth * 0.5f); ;
+            Log.Debug(attacker.name);
+            float bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage, victimBody.healthComponent.fullHealth * 0.7f); ;
             EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
             {
                 origin = victimBody.footPosition,
                 rotation = Quaternion.identity,
-                color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
+                color = SeamstressAssets.coolRed,
             }, true);
             CharacterBody component = attacker.GetComponent<CharacterBody>();
             float num = component.damage;
@@ -123,34 +127,34 @@ namespace SeamstressMod.Survivors.Seamstress
         
         private void EndGrab()
         {
-            if (victimRigidMotor)
+            if (victimRigidMotor != null)
             {
                 victimRigidMotor.canTakeImpactDamage = bodyCouldTakeImpactDamage;
                 victimRigidMotor.enabled = true;
             }
-            if (tempRigidbody)
+            if (theyDidNotHaveRigid)
             {
-                GameObject.Destroy(tempRigidbody);
+                GameObject.Destroy(base.gameObject.GetComponent<Rigidbody>());
+                GameObject.Destroy(base.gameObject.GetComponent<SphereCollider>());
             }
-            if (tempSphereCollider)
-            {
-                GameObject.Destroy(tempSphereCollider);
-            }
-            if (NetworkServer.active && victimBody)
+            if (NetworkServer.active && victimBody != null)
             {
                 victimBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
             }
-            victimRigid.collisionDetectionMode = coll;
-            if(SeamstressStaticValues.funny)
+            if (coll != victimRigid.collisionDetectionMode )
             {
-                if (victimMotor)
+                victimRigid.collisionDetectionMode = coll;
+            }
+            if (SeamstressStaticValues.funny)
+            {
+                if (victimMotor != null && victimMotor.mass != previousMass)
                 {
-                    previousMass = victimMotor.mass;
+                    victimMotor.mass = previousMass;
                     victimMotor.mass = Mathf.Clamp(victimMotor.mass, 60f, 120f);
                 }
-                else if (victimRigid)
+                else if (victimRigid != null && victimRigid.mass != previousMass)
                 {
-                    previousMass = victimRigid.mass;
+                    victimRigid.mass = previousMass;
                     victimRigid.mass = Mathf.Clamp(victimRigid.mass, 60f, 120f);
                 }
             }

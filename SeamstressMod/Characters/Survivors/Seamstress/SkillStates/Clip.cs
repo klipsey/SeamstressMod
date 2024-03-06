@@ -184,7 +184,7 @@ namespace SeamstressMod.SkillStates
         {
             if (!supaEffect)
             {
-                Log.Debug("Error, no effect?");
+                Log.Error("Error, no effect?");
                 return;
             }
             Transform transform = FindModelChild("SwingCenter");

@@ -148,12 +148,13 @@ namespace SeamstressMod.Survivors.Seamstress
             AddHitboxes();
             bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.manipulatedCd);
             bool tempAdd2(CharacterBody body) => body.HasBuff(SeamstressBuffs.manipulated);
+            float pee(CharacterBody body) => 2f * body.radius;
             bodyPrefab.AddComponent<SeamstressController>();
             bodyPrefab.AddComponent<ScissorController>();
             bodyPrefab.AddComponent<NeedleController>();
             bodyPrefab.AddComponent<Tracker>();
-            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn1, tempAdd);
-            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn2, tempAdd2);
+            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn1, pee, tempAdd);
+            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn3, pee, tempAdd2);
             //TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
@@ -572,7 +573,7 @@ namespace SeamstressMod.Survivors.Seamstress
             if (self.lightningType == RoR2.Orbs.LightningOrb.LightningType.Count && self.attacker.GetComponent<CharacterBody>().baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
                 zap = LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/OrbEffects/BeamSphereOrbEffect");
-                zap.transform.GetChild(0).GetComponent<LineRenderer>().material.SetColor("_TintColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
+                zap.transform.GetChild(0).GetComponent<LineRenderer>().material.SetColor("_TintColor", SeamstressAssets.coolRed);
                 self.duration = 0.1f;
                 EffectData effectData = new EffectData
                 {

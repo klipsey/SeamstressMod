@@ -67,6 +67,10 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject sewn3;
 
+        internal static GameObject trackingTelekinesis;
+
+        internal static GameObject notTrackingTelekinesis;
+
         //Materials
         internal static Material destealthMaterial;
 
@@ -94,6 +98,10 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static Sprite specialEmp;
 
+        internal static Sprite grab;
+
+        internal static Sprite noGrab;
+
         private static AssetBundle _assetBundle;
         //projectiles
         internal static GameObject needlePrefab;
@@ -104,9 +112,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject scissorLPrefab;
         //extra
-
-        [ColorUsage(true, true)]
-        internal static Color white;
+        internal static Color coolRed = coolRed;
 
         public static SkillDef lockOutSkillDef;
         public static void Init(AssetBundle assetBundle)
@@ -169,26 +175,37 @@ namespace SeamstressMod.Survivors.Seamstress
 
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             stitchEffect.AddComponent<NetworkIdentity>();
-            stitchEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
+            stitchEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", coolRed);
 
-            white = new Color(Color.white.r * 3f, Color.white.g * 3f, Color.white.b * 3f);
-            sewn1 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack1Effect.prefab").WaitForCompletion().InstantiateClone("Sewn1");
+            sewn1 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack3Effect.prefab").WaitForCompletion().InstantiateClone("SewnNo");
             sewn1.AddComponent<NetworkIdentity>();
-            sewn1.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
-            sewn1.transform.GetChild(0).localScale *= 2;
+            sewn1.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", coolRed);
+            sewn1.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].DisableKeyword("_RemapTex");
+            sewn1.transform.GetChild(0).GetChild(1).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", coolRed);
+            sewn1.transform.GetChild(0).GetChild(1).gameObject.GetComponent<MeshRenderer>().materials[0].DisableKeyword("_RemapTex");
+            sewn1.transform.GetChild(0).GetChild(2).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", coolRed);
+            sewn1.transform.GetChild(0).GetChild(2).gameObject.GetComponent<MeshRenderer>().materials[0].DisableKeyword("_RemapTex");
 
-            sewn2 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack2Effect.prefab").WaitForCompletion().InstantiateClone("Sewn2");
-            sewn2.AddComponent<NetworkIdentity>();
-            sewn2.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
-            sewn2.transform.GetChild(0).GetChild(1).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
-            sewn2.transform.GetChild(0).localScale *= 2;
-
-            sewn3 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack3Effect.prefab").WaitForCompletion().InstantiateClone("Sewn3");
+            sewn3 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack3Effect.prefab").WaitForCompletion().InstantiateClone("SewnYes");
             sewn3.AddComponent<NetworkIdentity>();
-            sewn3.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
-            sewn3.transform.GetChild(0).GetChild(1).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
-            sewn3.transform.GetChild(0).GetChild(2).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", white);
-            sewn3.transform.GetChild(0).localScale *= 2;
+
+            trackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("SeamstressTracker");
+            Material component = Addressables.LoadAssetAsync<Material>("RoR2/Base/UI/matUIOverbrighten2x.mat").WaitForCompletion();
+            Object.DestroyImmediate(trackingTelekinesis.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
+            SpriteRenderer balls = trackingTelekinesis.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
+            balls.SetMaterial(component);
+            grab = _assetBundle.LoadAsset<Sprite>("Grab");
+            balls.sprite = grab;
+            Log.Debug("gyugjretrgrgghj");
+            trackingTelekinesis.transform.GetChild(1).gameObject.SetActive(false);
+
+            notTrackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("SeamstressTracker2");
+            Object.DestroyImmediate(notTrackingTelekinesis.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
+            SpriteRenderer balls2 = notTrackingTelekinesis.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
+            balls2.SetMaterial(component);
+            noGrab = _assetBundle.LoadAsset<Sprite>("NoGrab");
+            balls2.sprite = noGrab;
+            notTrackingTelekinesis.transform.GetChild(1).gameObject.SetActive(false);
 
             clawsEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/WIPImpEffect.prefab").WaitForCompletion().InstantiateClone("ClawsEffect");
             clawsEffect.AddComponent<NetworkIdentity>();
@@ -200,14 +217,14 @@ namespace SeamstressMod.Survivors.Seamstress
             stitchTempEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercExposeEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffectPrefab");
             stitchTempEffectPrefab.AddComponent<NetworkIdentity>();
             stitchTempEffectPrefab.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
-            stitchTempEffectPrefab.transform.GetChild(0).GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
+            stitchTempEffectPrefab.transform.GetChild(0).GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", coolRed);
 
 
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
             stitchConsumeEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercExposeConsumeEffect.prefab").WaitForCompletion().InstantiateClone("StitchConsumeEffect");
             stitchConsumeEffectPrefab.AddComponent<NetworkIdentity>();
             stitchConsumeEffectPrefab.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
-            stitchConsumeEffectPrefab.transform.GetChild(0).GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
+            stitchConsumeEffectPrefab.transform.GetChild(0).GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", coolRed);
             stitchConsumeEffectPrefab.transform.GetChild(0).GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
             stitchConsumeEffectPrefab.GetComponent<EffectComponent>().soundName = "Play_imp_overlord_teleport_end";
             Modules.Content.CreateAndAddEffectDef(stitchConsumeEffectPrefab);
@@ -277,7 +294,7 @@ namespace SeamstressMod.Survivors.Seamstress
             expungeEffect.AddComponent<NetworkIdentity>();
             expungeEffect.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercExposedBackdrop.mat").WaitForCompletion());
-            material.SetColor("_TintColor", new Color(84f / 255f, 0f / 255f, 11f / 255f));
+            material.SetColor("_TintColor", coolRed);
             expungeEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             expungeEffect.transform.GetChild(1).gameObject.SetActive(false);
             expungeEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
@@ -493,7 +510,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleGhost.transform.GetChild(0).gameObject.SetActive(false);
             needleGhost.transform.GetChild(1).gameObject.SetActive(false);
             needleGhost.transform.GetChild(2).localScale = new Vector3(0.2f, 0.2f, 1.66f);
-            needleGhost.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(84f / 255f, 0f / 255f, 11f / 255f));
+            needleGhost.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", coolRed);
             needleGhost.transform.GetChild(3).gameObject.SetActive(false);
             needleGhost.transform.GetChild(4).localScale = new Vector3(.2f, .2f, .2f);
             needleGhost.transform.GetChild(4).GetChild(0).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);

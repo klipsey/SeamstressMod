@@ -67,7 +67,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 drainGauge = false;
                 fiendGauge = 0f;
             }
-            Log.Debug("Fiend gauge " + fiendGauge);
+            //Log.Debug("Fiend gauge " + fiendGauge);
             CalculateBonusDamage();
             ButcheredSound();
             IsButchered();      

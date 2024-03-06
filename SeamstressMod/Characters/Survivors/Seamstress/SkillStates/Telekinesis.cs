@@ -76,6 +76,8 @@ namespace SeamstressMod.SkillStates
 
         private bool bodyCouldTakeImpactDamage;
 
+        private bool theyDidNotHaveRigid;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -131,6 +133,7 @@ namespace SeamstressMod.SkillStates
                     victimRigid.mass = 100f;
                     tempRigidbody = victimRigid;
                     tempSphereCollider = victimBody.gameObject.AddComponent<SphereCollider>();
+                    theyDidNotHaveRigid = true;
                 }
                 if (victimBody.gameObject.GetComponent<DetonateOnImpact>() != null) GameObject.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
                 victimBody.gameObject.AddComponent<DetonateOnImpact>();
@@ -170,19 +173,9 @@ namespace SeamstressMod.SkillStates
                     if(victimBody.HasBuff(SeamstressBuffs.manipulated))
                     {
                         victimBody.RemoveBuff(SeamstressBuffs.manipulated);
-                        victimBody.AddTimedBuff(SeamstressBuffs.manipulatedCd, 7f);
+                        victimBody.AddTimedBuff(SeamstressBuffs.manipulatedCd, Mathf.Min(6f, Mathf.Max(0.5f, 6f * base.characterBody.skillLocator.secondary.cooldownScale - base.characterBody.skillLocator.secondary.flatCooldownReduction)));
                     }
                 }
-                if(victimBody.gameObject.GetComponent<DetonateOnImpactThrown>() != null) GameObject.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpactThrown>());
-                DetonateOnImpactThrown thrown = victimBody.gameObject.AddComponent<DetonateOnImpactThrown>();
-                thrown.victim = victim;
-                thrown.attacker = base.gameObject;
-                thrown.tempRigidbody = tempRigidbody;
-                thrown.tempSphereCollider = tempSphereCollider;
-                thrown.bodyCouldTakeImpactDamage = bodyCouldTakeImpactDamage;
-                thrown.coll = collisionDetectionMode;
-                thrown.previousMass = previousMass;
-                skillLocator.secondary.DeductStock(1);
                 if (victimBody.gameObject.GetComponent<DetonateOnImpact>() != null)
                 {
                     GameObject.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
@@ -192,6 +185,14 @@ namespace SeamstressMod.SkillStates
                     victimMotor.disableAirControlUntilCollision = true;
                     victimMotor.onMovementHit -= DoSplashDamage;
                 }
+                if (victimBody.gameObject.GetComponent<DetonateOnImpactThrown>() != null) GameObject.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpactThrown>());
+                DetonateOnImpactThrown thrown = victimBody.gameObject.AddComponent<DetonateOnImpactThrown>();
+                thrown.attacker = base.gameObject;
+                thrown.theyDidNotHaveRigid = theyDidNotHaveRigid;
+                thrown.bodyCouldTakeImpactDamage = bodyCouldTakeImpactDamage;
+                thrown.coll = collisionDetectionMode;
+                thrown.previousMass = previousMass;
+                skillLocator.secondary.DeductStock(1);
             }
             base.OnExit();
         }
@@ -249,7 +250,7 @@ namespace SeamstressMod.SkillStates
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
-                        color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
+                        color = SeamstressAssets.coolRed,
                     }, true);
                     CharacterBody component = base.gameObject.GetComponent<CharacterBody>();
                     float num = component.damage;

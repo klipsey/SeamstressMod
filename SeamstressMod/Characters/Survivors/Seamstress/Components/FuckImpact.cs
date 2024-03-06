@@ -217,7 +217,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 {
                     origin = effectPos,
                     rotation = Quaternion.identity,
-                    color = new Color(84f / 255f, 0f / 255f, 11f / 255f),
+                    color = SeamstressAssets.coolRed,
                 }, true);
                 if (stickSoundString.Length > 0)
                 {

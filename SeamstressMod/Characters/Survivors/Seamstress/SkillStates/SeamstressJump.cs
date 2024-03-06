@@ -39,7 +39,7 @@ namespace SeamstressMod.SkillStates
             {
                 this.projectilePrefab = SeamstressAssets.needlePrefab;
             }
-            Log.Debug("blinkCD: " + seamCon.blinkCd);
+            //Log.Debug("blinkCD: " + seamCon.blinkCd);
             if ((base.characterMotor.jumpCount < base.characterBody.maxJumpCount || hasNeedles) && (this.seamCon.blinkCd <= 0 || !this.isGrounded)) this.seamCon.RefreshBlink();
             if (this.inputBank.jump.justPressed && this.isGrounded)
             {
