@@ -70,24 +70,15 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             if (rigidbody != null)
             {
-                if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)") return rigidbody;
+                if (rigidbody.gameObject.transform.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.name == "ScissorL(Clone)") return rigidbody;
                 else return null;
             }
             else return rigidbody;
         }
         private void OnEnable()
         {
-            if (trackingTarget != null) onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
-            if (onCooldown)
-            {
-                indicator2.active = true;
-                indicator.active = false;
-            }
-            else
-            {
-                indicator2.active = false;//FUUFUCK
-                indicator.active = true;
-            }
+            indicator.active = true;
+            indicator2.active = true;
         }
 
         private void OnDisable()
@@ -110,21 +101,48 @@ namespace SeamstressMod.Survivors.Seamstress
                 Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
                 SearchForTarget(aimRay);
                 SearchForScissors(aimRay);
+                if (NetworkServer.active && trackingTarget != null)
+                {
+                    if(rigidbody != null)
+                    {
+                        if (rigidbody.gameObject.transform.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.name == "ScissorL(Clone)") onCooldown = false;
+                        else onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
+                    }
+                    else onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
+                }
                 if (rigidbody != null)
                 {
-                    if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)")
+                    if (rigidbody.gameObject.transform.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.name == "ScissorL(Clone)")
                     {
-                        indicator.targetTransform = (trackingTarget ? rigidbody.transform : null);
+                        indicator.targetTransform = (rigidbody ? rigidbody.transform : null);
+                        onCooldown = false;
                     }
                     else
                     {
-                        if(NetworkServer.active) 
-                        indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                        if (onCooldown)
+                        {
+                            indicator2.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                            indicator.targetTransform = null;
+                        }
+                        else
+                        {
+                            indicator2.targetTransform = null;
+                            indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                        }
                     }
                 }
                 else
                 {
-                    indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                    if (onCooldown)
+                    {
+                        indicator2.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                        indicator.targetTransform = null;
+                    }
+                    else
+                    {
+                        indicator2.targetTransform = null;
+                        indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                    }
                 }
             }
         }

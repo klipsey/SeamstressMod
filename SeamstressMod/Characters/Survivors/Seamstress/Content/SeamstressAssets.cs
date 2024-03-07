@@ -198,14 +198,26 @@ namespace SeamstressMod.Survivors.Seamstress
             balls.sprite = grab;
             Log.Debug("gyugjretrgrgghj");
             trackingTelekinesis.transform.GetChild(1).gameObject.SetActive(false);
+            Sprite sprite = Addressables.LoadAssetAsync<Sprite>("texCrosshair2").WaitForCompletion();
+            Material component2 = Addressables.LoadAssetAsync<Material>("Sprites-Default").WaitForCompletion();
+            Object.DestroyImmediate(trackingTelekinesis.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>());
+            SpriteRenderer balls2 = trackingTelekinesis.transform.GetChild(2).gameObject.AddComponent<SpriteRenderer>();
+            balls.SetMaterial(component2);
+            balls.sprite = sprite;
+            balls.color = coolRed;
 
             notTrackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("SeamstressTracker2");
             Object.DestroyImmediate(notTrackingTelekinesis.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
-            SpriteRenderer balls2 = notTrackingTelekinesis.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
+            SpriteRenderer balls3 = notTrackingTelekinesis.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
             balls2.SetMaterial(component);
             noGrab = _assetBundle.LoadAsset<Sprite>("NoGrab");
             balls2.sprite = noGrab;
             notTrackingTelekinesis.transform.GetChild(1).gameObject.SetActive(false);
+            Object.DestroyImmediate(notTrackingTelekinesis.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>());
+            SpriteRenderer balls4 = notTrackingTelekinesis.transform.GetChild(2).gameObject.AddComponent<SpriteRenderer>();
+            balls4.SetMaterial(component2);
+            balls4.sprite = sprite;
+            balls4.color = Color.gray;
 
             clawsEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/WIPImpEffect.prefab").WaitForCompletion().InstantiateClone("ClawsEffect");
             clawsEffect.AddComponent<NetworkIdentity>();
