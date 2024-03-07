@@ -6,10 +6,6 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using R2API;
 using RoR2.UI;
-using RoR2.Skills;
-using UnityEngine.Events;
-using HarmonyLib;
-using UnityEngine.UI;
 
 namespace SeamstressMod.Survivors.Seamstress
 {

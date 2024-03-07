@@ -64,6 +64,8 @@ namespace SeamstressMod.SkillStates
 
         private bool noScissors;
 
+        private bool inAir;
+
         private Vector3 storedVelocity;
         public override void OnEnter()
         {
@@ -81,7 +83,7 @@ namespace SeamstressMod.SkillStates
             secondSnip = duration * 0.4f;
             snipInterval = 0;
             lastSnip = duration - firstSnip;
-
+            if(!characterMotor.isGrounded) inAir = true;
             StartAimMode(0.5f + duration, false);
             PlayAttackAnimation();
         }

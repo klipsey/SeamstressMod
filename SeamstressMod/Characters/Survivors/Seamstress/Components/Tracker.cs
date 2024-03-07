@@ -98,24 +98,25 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 trackerUpdateStopwatch -= 1f / trackerUpdateFrequency;
                 _ = trackingTarget;
+                _ = rigidbody;
                 Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
                 SearchForTarget(aimRay);
                 SearchForScissors(aimRay);
-                if (NetworkServer.active && trackingTarget != null)
+                if (NetworkServer.active)
                 {
                     if(rigidbody != null)
                     {
-                        if (rigidbody.gameObject.transform.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.name == "ScissorL(Clone)") onCooldown = false;
-                        else onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
+                        if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)") onCooldown = false;
+                        else if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)" && rigidbody.gameObject.GetComponent<NoMoreGrabs>() != null) onCooldown = true;
+                        else if(trackingTarget != null) onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
                     }
-                    else onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
+                    else if(trackingTarget != null) onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
                 }
                 if (rigidbody != null)
                 {
-                    if (rigidbody.gameObject.transform.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.name == "ScissorL(Clone)")
+                    if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)")
                     {
-                        indicator.targetTransform = (rigidbody ? rigidbody.transform : null);
-                        onCooldown = false;
+                        indicator2.targetTransform = (rigidbody ? rigidbody.transform : null);
                     }
                     else
                     {
@@ -126,8 +127,8 @@ namespace SeamstressMod.Survivors.Seamstress
                         }
                         else
                         {
-                            indicator2.targetTransform = null;
                             indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                            indicator2.targetTransform = null;
                         }
                     }
                 }
@@ -140,8 +141,8 @@ namespace SeamstressMod.Survivors.Seamstress
                     }
                     else
                     {
-                        indicator2.targetTransform = null;
                         indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                        indicator2.targetTransform = null;
                     }
                 }
             }
