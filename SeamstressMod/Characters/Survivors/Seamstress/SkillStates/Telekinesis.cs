@@ -87,16 +87,8 @@ namespace SeamstressMod.SkillStates
                 if (base.isAuthority)
                 {
                     victim = tracker.GetTrackingTarget();
-                    scissor = tracker.GetRigidbody();
                 }
-                if(scissor != null)
-                {
-
-                }
-                else
-                {
-                    DefaultVictim();
-                }
+                DefaultVictim();
                 if (NetworkServer.active)
                 {
                     if (!victimBody.HasBuff(SeamstressBuffs.manipulated)) victimBody.AddBuff(SeamstressBuffs.manipulated);

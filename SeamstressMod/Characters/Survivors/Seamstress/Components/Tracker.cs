@@ -19,8 +19,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private HurtBox trackingTarget;
 
-        private Rigidbody rigidbody;
-
         private CharacterBody characterBody;
 
         private TeamComponent teamComponent;
@@ -65,16 +63,6 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             else return trackingTarget;
         }
-
-        public Rigidbody GetRigidbody() 
-        {
-            if (rigidbody != null)
-            {
-                if (rigidbody.gameObject.transform.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.name == "ScissorL(Clone)") return rigidbody;
-                else return null;
-            }
-            else return rigidbody;
-        }
         private void OnEnable()
         {
             indicator.active = true;
@@ -98,41 +86,8 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 trackerUpdateStopwatch -= 1f / trackerUpdateFrequency;
                 _ = trackingTarget;
-                _ = rigidbody;
                 Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
                 SearchForTarget(aimRay);
-                SearchForScissors(aimRay);
-                if (NetworkServer.active)
-                {
-                    if(rigidbody != null)
-                    {
-                        if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)") onCooldown = false;
-                        else if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)" && rigidbody.gameObject.GetComponent<NoMoreGrabs>() != null) onCooldown = true;
-                        else if(trackingTarget != null) onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
-                    }
-                    else if(trackingTarget != null) onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
-                }
-                if (rigidbody != null)
-                {
-                    if (rigidbody.gameObject.transform.root.name == "ScissorR(Clone)" || rigidbody.gameObject.transform.root.name == "ScissorL(Clone)")
-                    {
-                        indicator2.targetTransform = (rigidbody ? rigidbody.transform : null);
-                    }
-                    else
-                    {
-                        if (onCooldown)
-                        {
-                            indicator2.targetTransform = (trackingTarget ? trackingTarget.transform : null);
-                            indicator.targetTransform = null;
-                        }
-                        else
-                        {
-                            indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
-                            indicator2.targetTransform = null;
-                        }
-                    }
-                }
-                else
                 {
                     if (onCooldown)
                     {
@@ -160,18 +115,6 @@ namespace SeamstressMod.Survivors.Seamstress
             search.RefreshCandidates();
             search.FilterOutGameObject(base.gameObject);
             trackingTarget = search.GetResults().FirstOrDefault();
-        }
-
-        private void SearchForScissors(Ray aimRay)
-        {
-            if (Physics.Raycast(aimRay, out RaycastHit hit, maxTrackingDistance) && hit.rigidbody)
-            {
-                rigidbody = hit.rigidbody;
-            }
-            else
-            {
-                rigidbody = null;
-            }
         }
     }
 }
