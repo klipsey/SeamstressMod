@@ -17,7 +17,7 @@ namespace SeamstressMod.SkillStates
 {
     public class Clip : BaseSeamstressSkillState
     {
-        public static GameObject supaEffect = SeamstressAssets.clipSlashEffect;
+        private GameObject supaEffect = SeamstressAssets.clipSlashEffect;
 
         private GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
 
@@ -59,8 +59,6 @@ namespace SeamstressMod.SkillStates
         private bool hasFired;
 
         private bool hasFired2;
-
-        private bool iAmAwesome;
 
         private bool noScissors;
 
@@ -108,11 +106,13 @@ namespace SeamstressMod.SkillStates
             }
             if (stopwatch > firstSnip && !hasFired) 
             {
-                hasFired = true;
-                if(!noScissors)
+                if (inAir && base.isAuthority)
                 {
-                    iAmAwesome = true;
+                    supaEffect = SeamstressAssets.wideSlashEffect;
+                    float dashVector = 25f;
+                    base.characterMotor.velocity += base.GetAimRay().direction * dashVector;
                 }
+                hasFired = true;
                 EnterAttack();
                 FireAttack();
             }
@@ -129,10 +129,6 @@ namespace SeamstressMod.SkillStates
             if(stopwatch > lastSnip && !hasFired2)
             {
                 hasFired2 = true;
-                if (!noScissors)
-                {
-                    iAmAwesome = true;
-                }
                 EnterAttack();
                 FireAttack();
             }
@@ -193,11 +189,9 @@ namespace SeamstressMod.SkillStates
             Transform transform2 = FindModelChild("SwingCharCenter");
             if (transform)
             {
-                if (empowered || iAmAwesome)
+                if (noScissors || inAir)
                 {
-                    UnityEngine.Object.Instantiate(SeamstressAssets.scissorsComboSwingEffect, transform);
                     UnityEngine.Object.Instantiate(supaEffect, transform2);
-                    iAmAwesome = false;
                 }
                 else
                 {

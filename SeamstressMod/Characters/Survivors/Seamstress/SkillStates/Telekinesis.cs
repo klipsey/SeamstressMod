@@ -6,6 +6,7 @@ using SeamstressMod.Survivors.Seamstress;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements.UIR;
+using static RoR2.CharacterMotor;
 using static UnityEngine.ParticleSystem.PlaybackState;
 
 
@@ -18,7 +19,8 @@ namespace SeamstressMod.SkillStates
             public Telekinesis telekinesis;
             private void OnCollisionEnter(UnityEngine.Collision collision)
             {
-                float num = Mathf.Max(telekinesis.victimBody.moveSpeed, telekinesis.victimBody.baseMoveSpeed) * (telekinesis.victimRigid.mass / 10);
+                float massCalc = (telekinesis.victimMotor ? telekinesis.victimMotor.mass : telekinesis.victimRigid.mass) / 10f;
+                float num = 60f / massCalc;
                 float magnitude = collision.relativeVelocity.magnitude;
                 if (collision.gameObject.layer == LayerIndex.world.intVal || collision.gameObject.layer == LayerIndex.entityPrecise.intVal || collision.gameObject.layer == LayerIndex.defaultLayer.intVal && magnitude >= num)
                 {
@@ -33,8 +35,6 @@ namespace SeamstressMod.SkillStates
         private Vector3 _pickOffset;
 
         private HurtBox victim;
-
-        private Rigidbody scissor;
 
         private Tracker tracker;
 
@@ -231,18 +231,24 @@ namespace SeamstressMod.SkillStates
                         num2 = victimRigid.mass;
                     }
                     else vector2.y += Physics.gravity.y * Time.fixedDeltaTime;
-                    victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * Mathf.Clamp(num2, 60f, 120f) * num, alwaysApply: true);
+                    if (SeamstressStaticValues.funny) num2 = Mathf.Clamp(num2, 60f, 120f);
+                    victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * Mathf.Max(num2, 100f) * num, alwaysApply: true, disableAirControlUntilCollision: true);
                 }
 
                 if(victimMotor != null) bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat) + victim.healthComponent.fullCombinedHealth * 0.2f, SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullCombinedHealth * 0.7f);
                 else bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat), SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullHealth * 0.5f);
-                if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonateNextFrame && hitStopwatch > 0.75f)
+                if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonateNextFrame)
                 {
                     EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
                         color = SeamstressAssets.coolRed,
+                    }, true);
+                    EffectManager.SpawnEffect(SeamstressAssets.slamEffect, new EffectData
+                    {
+                        origin = victimBody.footPosition,
+                        rotation = Quaternion.identity,
                     }, true);
                     CharacterBody component = base.gameObject.GetComponent<CharacterBody>();
                     float num = component.damage;
@@ -270,9 +276,10 @@ namespace SeamstressMod.SkillStates
         }
         private void DoSplashDamage(ref CharacterMotor.MovementHitInfo movementHitInfo)
         {
-            float num = Mathf.Max(victimBody.moveSpeed, victimBody.baseMoveSpeed) * 6f;
+            float massCalc = (victimMotor ? victimMotor.mass : victimRigid.mass) / 10f; 
+            float num = 60f / massCalc;
             float magnitude = movementHitInfo.velocity.magnitude;
-            if (magnitude >= num) detonateNextFrame = true;
+            if (magnitude >= num && hitStopwatch > 0.75) detonateNextFrame = true;
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {

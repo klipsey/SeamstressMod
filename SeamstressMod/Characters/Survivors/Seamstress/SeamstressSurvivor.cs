@@ -7,15 +7,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static RoR2.MasterSpawnSlotController;
 using RoR2.UI;
 using R2API;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
-using static UnityEngine.UIElements.UxmlAttributeDescription;
 using UnityEngine.UI;
 using SeamstressMod.SkillStates;
-using static UnityEngine.UI.Image;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -195,27 +192,55 @@ namespace SeamstressMod.Survivors.Seamstress
             Prefabs.AddEntityStateMachine(bodyPrefab, "Jump", typeof(SkillStates.SeamstressJump), typeof(SkillStates.SeamstressJump));
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
-            Prefabs.AddEntityStateMachine(bodyPrefab, "Blink");
         }
 
         #region skills
         public override void InitializeSkills()
         {
             Skills.CreateSkillFamilies(bodyPrefab);
-            AddPassiveSkill(bodyPrefab);
+            AddPassiveSkills(bodyPrefab);
             AddPrimarySkills();
             AddSecondarySkills();
             AddUtilitySkills();
             AddSpecialSkills();
         }
 
-        private void AddPassiveSkill(GameObject bodyPrefab)
+        private void AddPassiveSkills(GameObject bodyPrefab)
         {
+            SeamstressBlinkPassive passive = bodyPrefab.AddComponent<SeamstressBlinkPassive>();
+
             SkillLocator skillLocator = bodyPrefab.GetComponent<SkillLocator>();
-            skillLocator.passiveSkill.enabled = true;
+
+            skillLocator.passiveSkill.enabled = false;
             skillLocator.passiveSkill.skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME";
             skillLocator.passiveSkill.skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_DESCRIPTION";
             skillLocator.passiveSkill.icon = assetBundle.LoadAsset<Sprite>("texSpecialIcon");
+
+            passive.blinkPassive = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME",
+                skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME",
+                skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_DESCRIPTION",
+                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Idle)),
+                activationStateMachineName = "",
+                baseMaxStock = 1,
+                baseRechargeInterval = 0f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Any,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = false,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = false,
+                rechargeStock = 1,
+                requiredStock = 2,
+                stockToConsume = 1
+            });
+
+            Modules.Skills.AddPassiveSkills(passive.passiveSkillSlot.skillFamily, passive.blinkPassive);
         }
 
         private void AddPrimarySkills()

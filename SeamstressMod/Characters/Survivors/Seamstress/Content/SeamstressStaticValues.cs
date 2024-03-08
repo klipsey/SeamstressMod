@@ -59,6 +59,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float telekinesisDamageCoefficient = 0.3f;
 
-        internal const bool funny = true;
+        internal const bool funny = false;
     }
 }

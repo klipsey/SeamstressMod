@@ -23,7 +23,7 @@ namespace SeamstressMod.SkillStates
 
         public float duration = 0.2f;
 
-        public float speedCoefficient = 30f;
+        public float speedCoefficient;
 
         public static string beginSoundString = "Play_imp_attack_blink";
 
@@ -39,6 +39,7 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
             Util.PlaySound(beginSoundString, base.gameObject);
+            base.PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", duration);
             modelTransform = GetModelTransform();
             if (modelTransform)
             {
@@ -66,15 +67,11 @@ namespace SeamstressMod.SkillStates
                 blinkVector = base.inputBank.aimDirection;
             }
             if(characterMotor.isGrounded) base.characterMotor.velocity = Vector3.zero;
-            base.characterDirection.forward = blinkVector;
+            base.characterDirection.moveVector = blinkVector;
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
-            Vector3 effectPos = Util.GetCorePosition(base.gameObject);
-            RaycastHit raycastHit;
-            if (Physics.Raycast(effectPos, Vector3.down, out raycastHit, 5f, LayerIndex.world.mask))
-            {
-                effectPos = raycastHit.point;
-            }
-            base.characterBody.SetAimTimer(0f);
+            speedCoefficient = 0.3f * characterBody.jumpPower * Mathf.Clamp(characterBody.moveSpeed, 1f, 5f);
+            base.gameObject.layer = LayerIndex.fakeActor.intVal;
+            base.characterMotor.Motor.RebuildCollidableLayers();
         }
 
         protected virtual Vector3 GetBlinkVector()
@@ -108,9 +105,10 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (base.characterMotor && base.characterDirection)
+            if (base.characterMotor && base.characterDirection && base.isAuthority)
             {
-                base.characterMotor.rootMotion += blinkVector * (speedCoefficient * Time.fixedDeltaTime);
+                base.characterMotor.Motor.ForceUnground();
+                base.characterMotor.velocity = blinkVector * speedCoefficient;
             }
             if (base.fixedAge >= duration && base.isAuthority)
             {
@@ -119,6 +117,8 @@ namespace SeamstressMod.SkillStates
         }
         public override void OnExit()
         {
+            base.gameObject.layer = LayerIndex.defaultLayer.intVal;
+            base.characterMotor.Motor.RebuildCollidableLayers();
             if (!outer.destroying)
             {
                 CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
@@ -143,25 +143,16 @@ namespace SeamstressMod.SkillStates
                     int hurtBoxesDeactivatorCounter = hurtBoxGroup.hurtBoxesDeactivatorCounter - 1;
                     hurtBoxGroup.hurtBoxesDeactivatorCounter = hurtBoxesDeactivatorCounter;
                 }
-                if (base.characterMotor)
-                {
-                    base.characterMotor.disableAirControlUntilCollision = false;
-                }
                 if(base.cameraTargetParams)
                 {
                     request.Dispose();
-                }
-                if(base.isAuthority) 
-                {
-                    base.characterMotor.velocity *= 0.6f;
-                    SmallHop(base.characterMotor, 3f);
                 }
             }
             base.OnExit();
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.Skill;
+            return InterruptPriority.Pain;
         }
         public override void OnSerialize(NetworkWriter writer)
         {

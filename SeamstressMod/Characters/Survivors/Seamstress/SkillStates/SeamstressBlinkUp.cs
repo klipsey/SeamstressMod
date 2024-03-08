@@ -39,6 +39,7 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
             Util.PlaySound(beginSoundString, base.gameObject);
+            base.PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", duration);
             modelTransform = GetModelTransform();
             if (modelTransform)
             {
@@ -60,10 +61,10 @@ namespace SeamstressMod.SkillStates
             {
                 request = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
-            if (characterMotor.isGrounded) base.characterMotor.velocity = Vector3.zero;
-            base.characterDirection.forward = blinkVector;
+            base.characterMotor.velocity = Vector3.zero;
+            base.characterDirection.moveVector = blinkVector;
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
-            base.characterBody.SetAimTimer(0f);
+            speedCoefficient = 0.3f * characterBody.jumpPower * 4f;
         }
         protected void CreateBlinkEffect(Vector3 origin)
         {
@@ -84,9 +85,10 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (base.characterMotor && base.characterDirection)
+            if (base.characterMotor && base.characterDirection && base.isAuthority)
             {
-                base.characterMotor.rootMotion += blinkVector * (speedCoefficient * Time.fixedDeltaTime);
+                base.characterMotor.Motor.ForceUnground();
+                base.characterMotor.velocity = blinkVector * speedCoefficient;
             }
             if (base.fixedAge >= duration && base.isAuthority)
             {
@@ -127,13 +129,12 @@ namespace SeamstressMod.SkillStates
                 {
                     request.Dispose();
                 }
-                if(base.isAuthority) SmallHop(base.characterMotor, 3f);
             }
             base.OnExit();
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Pain;
         }
         public override void OnSerialize(NetworkWriter writer)
         {

@@ -39,7 +39,7 @@ namespace SeamstressMod.SkillStates
             swingSoundString = "Play_imp_attack";
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = SeamstressAssets.parrySlashEffect;
+            swingEffectPrefab = SeamstressAssets.wideSlashEffect;
             muzzleString = "SwingCenter";
             if (empowered)
             {

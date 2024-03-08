@@ -50,8 +50,6 @@ namespace SeamstressMod.SkillStates
 
         private HurtBoxGroup hurtboxGroup;
 
-        private ChildLocator childLocator;
-
         private Transform modelTransform;
 
         private GameObject blinkDestinationInstance;
@@ -103,7 +101,6 @@ namespace SeamstressMod.SkillStates
                 this.animator = this.modelTransform.GetComponent<Animator>();
                 this.characterModel = this.modelTransform.GetComponent<CharacterModel>();
                 this.hurtboxGroup = this.modelTransform.GetComponent<HurtBoxGroup>();
-                this.childLocator = this.modelTransform.GetComponent<ChildLocator>();
             }
             if (disappearWhileBlinking)
             {

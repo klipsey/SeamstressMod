@@ -88,17 +88,19 @@ namespace SeamstressMod.Survivors.Seamstress
                 _ = trackingTarget;
                 Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
                 SearchForTarget(aimRay);
+                if (NetworkServer.active)
                 {
-                    if (onCooldown)
-                    {
-                        indicator2.targetTransform = (trackingTarget ? trackingTarget.transform : null);
-                        indicator.targetTransform = null;
-                    }
-                    else
-                    {
-                        indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
-                        indicator2.targetTransform = null;
-                    }
+                    if (trackingTarget != null) onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
+                }
+                if (onCooldown)
+                {
+                    indicator2.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                    indicator.targetTransform = null;
+                }
+                else
+                {
+                    indicator.targetTransform = (trackingTarget ? trackingTarget.transform : null);
+                    indicator2.targetTransform = null;
                 }
             }
         }

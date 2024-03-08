@@ -102,11 +102,11 @@ namespace SeamstressMod.SkillStates
         }
         private void BlinkForward()
         {
-            EntityStateMachine.FindByCustomName(this.gameObject, "Blink").SetInterruptState(new SeamstressBlink(), InterruptPriority.Any);
+            EntityStateMachine.FindByCustomName(this.gameObject, "Body").SetInterruptState(new SeamstressBlink(), InterruptPriority.Any);
         }
         private void BlinkUp()
         {
-            EntityStateMachine.FindByCustomName(this.gameObject, "Blink").SetInterruptState(new SeamstressBlinkUp(), InterruptPriority.Any);
+            EntityStateMachine.FindByCustomName(this.gameObject, "Body").SetInterruptState(new SeamstressBlinkUp(), InterruptPriority.Any);
         }
     }
 }
