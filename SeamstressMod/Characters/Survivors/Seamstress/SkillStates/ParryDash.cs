@@ -1,117 +1,176 @@
-﻿using RoR2;
+﻿using SeamstressMod.Modules.BaseStates;
+using SeamstressMod.Survivors.Seamstress;
+using RoR2;
 using UnityEngine;
 using R2API;
-using SeamstressMod.Survivors.Seamstress;
-using SeamstressMod.Modules.BaseStates;
-using System;
-using static UnityEngine.ParticleSystem.PlaybackState;
+using UnityEngine.Networking;
+using TMPro;
 using EntityStates;
+using static R2API.DamageAPI;
 
 
 namespace SeamstressMod.SkillStates
 {
-    public class ParryDash : BaseMeleeAttack
+    public class ParryDash : BaseSeamstressSkillState
     {
-        private GameObject swingEffectInstance;
+        public static GameObject supaPrefab = SeamstressAssets.blinkPrefab;
+
+        public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+        public bool hasHit { get; private set; }
+
+        public static float speedCoefficient = 100f;
+
+        public static float damageCoefficient = SeamstressStaticValues.parryDamageCoefficient;
+
+        public static float hitPauseDuration = 0.075f;
+
+        private Vector3 dashVector;
+
+        private OverlapAttack overlapAttack;
+
+        private ChildLocator childLocator;
+
+        private Transform modelTransform;
+
+        private CameraTargetParams.AimRequest aimRequest;
+
+        private float stopwatch;
+
+        private float dashDuration;
+
+        private bool isDashing;
+
+        private bool inHitPause;
+
+        private float hitPauseTimer;
+
+        private bool noScissors;
+
+        private string hitSound;
+
+        private string hitBox;
+
+
         public override void OnEnter()
         {
-            RefreshState();
-            hitboxGroupName = "Weave";
-            damageType = DamageType.Generic;
-            damageTotal = SeamstressStaticValues.parryDamage;
-            procCoefficient = 1f;
-            pushForce = 200f;
-            bonusForce = Vector3.zero;
-            baseDuration = 0.2f - (0.2f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
-            moddedDamageType = DamageTypes.NoSword;
-            moddedDamageType2 = DamageTypes.Empty;
-            moddedDamageType3 = DamageTypes.Empty;
-            //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
-            //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
-            attackStartPercentTime = 0f;
-            attackEndPercentTime = 1f;
-
-            //this is the point at which an attack can be interrupted by itself, continuing a combo
-            earlyExitPercentTime = 1f;
-            hitStopDuration = 0.2f;
-            attackRecoil = 2 / attackSpeedStat;
-            hitHopVelocity = 3.5f;
-            swingSoundString = "Play_imp_attack";
-            hitSoundString = "";
-            hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = SeamstressAssets.wideSlashEffect;
-            muzzleString = "SwingCenter";
-            if (empowered)
-            {
-                moddedDamageType2 = DamageTypes.CutDamage;
-                moddedDamageType3 = DamageTypes.ButcheredLifeSteal;
-            }
-            if (!characterBody.HasBuff(SeamstressBuffs.scissorLeftBuff)) moddedDamageType = DamageTypes.NoSword;
-            impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
-            setDiffState = true;
-            setState = new ParrySecondSlash();
+            inDash = true;
+            dashDuration = 0.3f;
             base.OnEnter();
-            if (isGrounded)
+            RefreshState();
+            modelTransform = GetModelTransform();
+            childLocator = modelTransform.GetComponent<ChildLocator>();
+            if (base.cameraTargetParams)
             {
-                float dashVector = 40f;
-                if (this.inputBank.moveVector != Vector3.zero)
+                aimRequest = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
+            }
+            //PlayAnimation("FullBody, Override", "AssaulterPrep", "AssaulterPrep.playbackRate", dashPrepDuration);
+            dashVector = inputBank.aimDirection;
+
+            if (!scissorRight && !scissorLeft) noScissors = true;
+            if (noScissors) hitBox = "Weave";
+            else hitBox = "WeaveBig";
+            overlapAttack = InitMeleeOverlap(0, hitEffectPrefab, modelTransform, hitBox);
+            overlapAttack.AddModdedDamageType(DamageTypes.PullDamage);
+            overlapAttack.damageType = DamageType.Stun1s;
+            Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
+            hitSound = "Play_imp_overlord_impact";
+            PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration);
+        }
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            characterDirection.forward = dashVector;
+            if (!isDashing)
+            {
+                isDashing = true;
+                dashVector = inputBank.aimDirection;
+                CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
+                //PlayCrossfade("FullBody, Override", "AssaulterLoop", 0.1f);
+                gameObject.layer = LayerIndex.fakeActor.intVal;
+                base.characterMotor.Motor.RebuildCollidableLayers();
+            }
+            if (!isDashing)
+            {
+                stopwatch += Time.fixedDeltaTime;
+            }
+            else if (base.isAuthority)
+            {
+                if (!inHitPause)
                 {
-                    SmallHop(this.characterMotor, 3f);
-                    this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
+                    bool num = overlapAttack.Fire();
+                    stopwatch += Time.fixedDeltaTime;
+                    if (num)
+                    {
+                        if (!hasHit)
+                        {
+                            Util.PlaySound(hitSound, gameObject);
+                            hasHit = true;
+                            dashDuration *= 0.75f;
+                        }
+                        inHitPause = true;
+                        hitPauseTimer = hitPauseDuration / attackSpeedStat;
+                    }
+                    base.characterMotor.rootMotion += dashVector * speedCoefficient * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    dashVector = 0f;
-                    this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
+                    hitPauseTimer -= Time.fixedDeltaTime;
+                    if (hitPauseTimer < 0f)
+                    {
+                        inHitPause = false;
+                    }
                 }
             }
-            else if (!isGrounded)
+            if (stopwatch >= dashDuration / attackSpeedStat && base.isAuthority)
             {
-                float dashVector = 40f;
-                this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
+                outer.SetNextStateToMain();
             }
         }
-        protected override void PlayAttackAnimation()
+        private void CreateBlinkEffect(Vector3 origin)
         {
-            PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", this.duration + (0.9f / attackSpeedStat), 0.1f * (this.duration + (0.9f / attackSpeedStat)));
-        }
-        protected override void FireAttack()
-        {
-            if (base.isAuthority)
+            if (supaPrefab)
             {
-                Vector3 direction = GetAimRay().direction;
-                direction.y = Mathf.Max(direction.y, direction.y * 0.5f);
-                FindModelChild("SwingPivot").rotation = Util.QuaternionSafeLookRotation(direction);
+                EffectData effectData = new EffectData();
+                effectData.rotation = Util.QuaternionSafeLookRotation(dashVector);
+                effectData.origin = origin;
+                effectData.scale = 0.1f;
+                EffectManager.SpawnEffect(supaPrefab, effectData, transmit: true);
             }
-            base.FireAttack();
-        }
-        protected override void PlaySwingEffect()
-        {
-            if (!this.swingEffectPrefab)
-            {
-                return;
-            }
-            Transform transform = FindModelChild(this.muzzleString);
-            if (transform)
-            {
-                this.swingEffectInstance = UnityEngine.Object.Instantiate<GameObject>(this.swingEffectPrefab, transform);
-                ScaleParticleSystemDuration scale = this.swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
-                if (scale) scale.newDuration = scale.initialDuration + (scale.initialDuration * (earlyExitPercentTime - attackStartPercentTime));
-            }
-        }
-        public override InterruptPriority GetMinimumInterruptPriority()
-        {
-            return InterruptPriority.Death;
-        }
-        protected override void OnHitEnemyAuthority()
-        {
-            base.OnHitEnemyAuthority();
         }
         public override void OnExit()
         {
+            gameObject.layer = LayerIndex.defaultLayer.intVal;
+            base.characterMotor.Motor.RebuildCollidableLayers();
+            if (!empowered) Util.PlaySound("Play_item_proc_whip", gameObject);
+            if (base.isAuthority)
+            {
+                base.characterMotor.disableAirControlUntilCollision = false;
+                base.characterMotor.airControl = 0.25f;
+                base.characterMotor.velocity *= 0.3f;
+                SmallHop(base.characterMotor, 3f);
+            }
+            aimRequest?.Dispose();
+            inDash = false;
+            RefreshState();
+            //PlayAnimation("FullBody, Override", "EvisLoopExit");
             base.OnExit();
         }
 
-    }
+        public override void OnSerialize(NetworkWriter writer)
+        {
+            base.OnSerialize(writer);
+            writer.Write(dashVector);
+        }
 
+        public override void OnDeserialize(NetworkReader reader)
+        {
+            base.OnDeserialize(reader);
+            dashVector = reader.ReadVector3();
+        }
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.PrioritySkill;
+        }
+
+    }
 }

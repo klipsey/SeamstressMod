@@ -60,6 +60,36 @@ Transform:
   m_Father: {fileID: 4844476405519019665}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 60, y: 90, z: 270}
+--- !u!1 &336731971480726152
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8045316421581032935}
+  m_Layer: 0
+  m_Name: WeaveHitboxBig
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8045316421581032935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336731971480726152}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 9, y: 9, z: 9}
+  m_Children: []
+  m_Father: {fileID: 7117658819414063285}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &802035008734920530
 GameObject:
   m_ObjectHideFlags: 0
@@ -85,7 +115,7 @@ Transform:
   m_GameObject: {fileID: 802035008734920530}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 8, z: 8}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children: []
   m_Father: {fileID: 7117658819414063285}
   m_RootOrder: 0
@@ -208,6 +238,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3842811139091685536}
+  - {fileID: 8045316421581032935}
   m_Father: {fileID: 8315140139193319990}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 13.508, z: 0}
@@ -399,7 +430,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5759912551305007785}
-  m_LocalRotation: {x: 0.68999594, y: 0.1546146, z: 0.15461457, w: -0.68999594}
+  m_LocalRotation: {x: 0.68999654, y: 0.15461183, z: 0.15461183, w: -0.68999654}
   m_LocalPosition: {x: 0, y: 0, z: 7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1491,7 +1522,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000000014901266, y: 0.55616724, z: 0.000000089407074}
+  m_ConnectedAnchor: {x: -0.000000044703796, y: 0.5561672, z: 0.000000089407074}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1754,7 +1785,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000004674076, y: 0.1623916, z: 0.00000008940697}
+  m_ConnectedAnchor: {x: -0.00000009458746, y: 0.1623916, z: 0.00000020861626}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -2395,6 +2426,8 @@ MonoBehaviour:
     transform: {fileID: 5110548034363352585}
   - name: SwingCenterSmall
     transform: {fileID: 6509039874488993875}
+  - name: WeaveHitboxBig
+    transform: {fileID: 8045316421581032935}
 --- !u!114 &7238953315125949139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3320,7 +3353,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.06969022, y: 0.3882977, z: 0.00867443}
+  m_ConnectedAnchor: {x: -0.069690175, y: 0.38829783, z: 0.008674519}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:

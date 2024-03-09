@@ -32,8 +32,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private bool butchered = false;
 
-        private bool hasFired = false;
-
+        public bool isDashing;
         //private float leapLength = 0f;
 
         //public float lockOutLength = 0f;
@@ -102,7 +101,6 @@ namespace SeamstressMod.Survivors.Seamstress
                 drainGauge = false;
                 bd = SeamstressStaticValues.butcheredDuration;
                 butchered = true;
-                hasFired = false;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {

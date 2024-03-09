@@ -170,12 +170,14 @@ namespace SeamstressMod.Survivors.Seamstress
             hitBoxTransform = childLocator.FindChild("WeaveHitbox");
             Prefabs.SetupHitBoxGroup(characterModelObject, "Weave", hitBoxTransform);
 
+            hitBoxTransform = childLocator.FindChild("WeaveHitboxBig");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "WeaveBig", hitBoxTransform);
+
             hitBoxTransform = childLocator.FindChild("RightScissorHitbox");
             Prefabs.SetupHitBoxGroup(characterModelObject, "Right", hitBoxTransform);
 
             hitBoxTransform = childLocator.FindChild("LeftScissorHitbox");
             Prefabs.SetupHitBoxGroup(characterModelObject, "Left", hitBoxTransform);
-
         }
 
         public override void InitializeEntityStateMachines() 
@@ -189,7 +191,7 @@ namespace SeamstressMod.Survivors.Seamstress
             //the main "body" state machine has some special properties
             Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(SkillStates.SeamstressMainState), typeof(EntityStates.SpawnTeleporterState));
 
-            Prefabs.AddEntityStateMachine(bodyPrefab, "Jump", typeof(SkillStates.SeamstressJump), typeof(SkillStates.SeamstressJump));
+            Prefabs.AddEntityStateMachine(bodyPrefab, "Passive", typeof(SkillStates.SeamstressJump), typeof(SkillStates.SeamstressJump));
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
         }
@@ -197,24 +199,22 @@ namespace SeamstressMod.Survivors.Seamstress
         #region skills
         public override void InitializeSkills()
         {
+            bodyPrefab.AddComponent<SeamstressBlinkPassive>();
             Skills.CreateSkillFamilies(bodyPrefab);
-            AddPassiveSkills(bodyPrefab);
+            AddPassiveSkills();
             AddPrimarySkills();
             AddSecondarySkills();
             AddUtilitySkills();
             AddSpecialSkills();
         }
 
-        private void AddPassiveSkills(GameObject bodyPrefab)
+        private void AddPassiveSkills()
         {
-            SeamstressBlinkPassive passive = bodyPrefab.AddComponent<SeamstressBlinkPassive>();
+            SeamstressBlinkPassive passive = bodyPrefab.GetComponent<SeamstressBlinkPassive>();
 
             SkillLocator skillLocator = bodyPrefab.GetComponent<SkillLocator>();
 
             skillLocator.passiveSkill.enabled = false;
-            skillLocator.passiveSkill.skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME";
-            skillLocator.passiveSkill.skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_DESCRIPTION";
-            skillLocator.passiveSkill.icon = assetBundle.LoadAsset<Sprite>("texSpecialIcon");
 
             passive.blinkPassive = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
@@ -582,8 +582,21 @@ namespace SeamstressMod.Survivors.Seamstress
             On.RoR2.Orbs.LightningOrb.Begin += new On.RoR2.Orbs.LightningOrb.hook_Begin(LightningOrb_Begin);
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
             On.RoR2.MapZone.TryZoneStart += new On.RoR2.MapZone.hook_TryZoneStart(DisableOOBCheck);
-        }
 
+            On.RoR2.UI.LoadoutPanelController.Rebuild += LoadoutPanelController_Rebuild;
+        }
+        private static void LoadoutPanelController_Rebuild(On.RoR2.UI.LoadoutPanelController.orig_Rebuild orig, LoadoutPanelController self)
+        {
+            orig(self);
+
+            if (self.currentDisplayData.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
+            {
+                foreach (LanguageTextMeshController i in self.gameObject.GetComponentsInChildren<LanguageTextMeshController>())
+                {
+                    if (i && i.token == "LOADOUT_SKILL_MISC") i.token = "Passive";
+                }
+            }
+        }
         private void DisableOOBCheck(On.RoR2.MapZone.orig_TryZoneStart orig, MapZone self, Collider other)
         {
             CharacterBody component = other.gameObject.GetComponent<CharacterBody>();
@@ -646,7 +659,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     {
                         victimBody.AddBuff(SeamstressBuffs.parrySuccess);
                     }
-                    victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryDuration + 0.5f);
+                    victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
                 }
                 else
                 {

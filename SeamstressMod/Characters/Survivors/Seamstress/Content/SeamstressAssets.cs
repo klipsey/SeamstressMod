@@ -386,17 +386,16 @@ namespace SeamstressMod.Survivors.Seamstress
             sewEffect.transform.GetChild(2).localScale = Vector3.one * 1f;
             sewEffect.transform.GetChild(2).GetComponent<ParticleSystemRenderer>().material = material;
 
-            impDash = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercAssaulterEffect.prefab").WaitForCompletion().InstantiateClone("ImpDash");
+            impDash = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressBlinkEffect.prefab").WaitForCompletion().InstantiateClone("ImpDash");
             impDash.AddComponent<NetworkIdentity>();
             material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
-            material.SetColor("_TintColor", theRed);
-            impDash.transform.GetChild(5).gameObject.SetActive(false);
-            impDash.transform.GetChild(6).gameObject.SetActive(false);
-            impDash.transform.GetChild(9).gameObject.GetComponent<TrailRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            impDash.transform.GetChild(10).GetChild(0).gameObject.GetComponent<TrailRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            impDash.transform.GetChild(10).GetChild(1).gameObject.GetComponent<TrailRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            impDash.transform.GetChild(10).GetChild(2).gameObject.GetComponent<TrailRenderer>().material = material;
-            impDash.transform.GetChild(10).GetChild(3).gameObject.GetComponent<TrailRenderer>().material = material;
+            impDash.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            impDash.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+            impDash.transform.GetChild(0).GetChild(2).gameObject.SetActive(false);
+            impDash.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
+            impDash.transform.GetChild(0).GetChild(4).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            impDash.transform.GetChild(0).GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            Content.CreateAndAddEffectDef(impDash);
 
             reapEndEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("ReapEnd");
             reapEndEffect.AddComponent<NetworkIdentity>();

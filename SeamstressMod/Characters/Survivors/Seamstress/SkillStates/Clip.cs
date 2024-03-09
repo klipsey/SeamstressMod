@@ -7,11 +7,7 @@ using SeamstressMod.Modules.BaseStates;
 using System;
 using EntityStates;
 using UnityEngine.Networking;
-using IL.RoR2.ConVar;
-using static R2API.DamageAPI;
-using IL.RoR2.UI;
-using static EntityStates.BaseState;
-using UnityEngine.UIElements;
+
 
 namespace SeamstressMod.SkillStates
 {
@@ -187,11 +183,17 @@ namespace SeamstressMod.SkillStates
             }
             Transform transform = FindModelChild("SwingCenter");
             Transform transform2 = FindModelChild("SwingCharCenter");
-            if (transform)
+            if (transform || transform2)
             {
-                if (noScissors || inAir)
+                if (noScissors)
                 {
                     UnityEngine.Object.Instantiate(supaEffect, transform2);
+                }
+                else if(inAir)
+                {
+                    Transform transformAir = FindModelChild("SwingCharCenter");
+                    transformAir.localRotation = new Quaternion(transformAir.localRotation.x, 43.737f, transformAir.localRotation.z, transformAir.localRotation.w);
+                    UnityEngine.Object.Instantiate(supaEffect, transformAir);
                 }
                 else
                 {

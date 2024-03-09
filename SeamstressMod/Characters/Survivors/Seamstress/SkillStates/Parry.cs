@@ -16,11 +16,11 @@ namespace SeamstressMod.SkillStates
 
         public static string enterSoundString = "Play_bandit2_m2_impact";
 
-        public static float duration = SeamstressStaticValues.parryDuration;
+        public static float duration = SeamstressStaticValues.parryWindow;
 
-        public static float attackDelay = SeamstressStaticValues.parryDuration;
+        public static float attackDelay = SeamstressStaticValues.parryWindow;
 
-        public static float invulnDuration = SeamstressStaticValues.parryDuration * 1.25f;
+        public static float invulnDuration = SeamstressStaticValues.parryWindow * 1.25f;
 
         public override void OnEnter()
         {
@@ -46,27 +46,6 @@ namespace SeamstressMod.SkillStates
             }
             else if(base.isAuthority && base.fixedAge >= duration && !num)
             {
-                blinkPrefab = SeamstressAssets.smallBlinkPrefab;
-                CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
-                if (isGrounded)
-                {
-                    float dashVector = 40f;
-                    if (this.inputBank.moveVector != Vector3.zero)
-                    {
-                        SmallHop(this.characterMotor, 3f);
-                        this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
-                    }
-                    else
-                    {
-                        dashVector = 0f;
-                        this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
-                    }
-                }
-                else if (!isGrounded)
-                {
-                    float dashVector = 40f;
-                    this.characterMotor.velocity += this.GetAimRay().direction * dashVector;
-                }
                 skillLocator.special.rechargeStopwatch += 0.5f * skillLocator.special.cooldownRemaining;
                 outer.SetNextStateToMain();
             }
@@ -99,7 +78,6 @@ namespace SeamstressMod.SkillStates
             {
                 return;
             }
-            CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
             characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
             SeamstressController s = characterBody.GetComponent<SeamstressController>();
             s.fuckYou = false;
@@ -107,18 +85,6 @@ namespace SeamstressMod.SkillStates
             if (parrySoundDef)
             {
                 EffectManager.SimpleSoundEffect(parrySoundDef.index, base.characterBody.corePosition, transmit: true);
-            }
-        }
-
-        private void CreateBlinkEffect(Vector3 origin)
-        {
-            if (blinkPrefab)
-            {
-                EffectData effectData = new EffectData();
-                effectData.rotation = Util.QuaternionSafeLookRotation(inputBank.aimDirection);
-                effectData.origin = origin;
-                effectData.scale = 0.05f;
-                EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: true);
             }
         }
 

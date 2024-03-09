@@ -41,7 +41,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float passiveScaling = 0.1f;
 
-        internal const float parryDamage = 3.5f;
+        internal const float parryDamageCoefficient = 3.5f;
 
         internal const float needleDamageCoefficient = 1f;
 
@@ -51,7 +51,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float needleProcCoefficient = 0.7f;
 
-        internal const float parryDuration = 0.4f;
+        internal const float parryWindow = 0.4f;
 
         internal const float scissorDamageCoefficient = 4f;
 

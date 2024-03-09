@@ -4,6 +4,7 @@ using R2API;
 using RoR2;
 using RoR2.Projectile;
 using SeamstressMod.Modules;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType AddNeedlesDamage;
         public static DamageAPI.ModdedDamageType ButcheredLifeSteal;
         public static DamageAPI.ModdedDamageType ClipLifeSteal;
+        public static DamageAPI.ModdedDamageType PullDamage;
         internal static void Init()
         {
             Empty = DamageAPI.ReserveDamageType();
@@ -29,12 +31,25 @@ namespace SeamstressMod.Survivors.Seamstress
             AddNeedlesDamage = DamageAPI.ReserveDamageType();
             ButcheredLifeSteal = DamageAPI.ReserveDamageType();
             ClipLifeSteal = DamageAPI.ReserveDamageType();
+            PullDamage = DamageAPI.ReserveDamageType();
             Hook();
         }
         private static void Hook()
         {
             GlobalEventManager.onServerDamageDealt += GlobalEventManager_onServerDamageDealt;
+            On.RoR2.GlobalEventManager.OnHitEnemy += new On.RoR2.GlobalEventManager.hook_OnHitEnemy(GlobalEventManager_OnHitEnemy);
         }
+        private static void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
+        {
+            orig.Invoke(self, damageInfo, victim);
+            CharacterBody victimBody = victim.GetComponent<CharacterBody>();
+            if(damageInfo.HasModdedDamageType(PullDamage))
+            {
+                PullComponent victimPull = victim.AddComponent<PullComponent>();
+                victimPull.attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
+            }
+        }
+
         private static void GlobalEventManager_onServerDamageDealt(DamageReport damageReport)
         {
             DamageInfo damageInfo = damageReport.damageInfo;

@@ -74,7 +74,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 + Tokens.butcheredPrefix + ".");
 
             Language.Add(prefix + "UTILITY_PARRY_NAME", "Glimpse of Purity");
-            Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Briefly become <style=cIsUtility>Invulnerable</style>. If hit, dash forward dealing <style=cIsDamage>2x{100f * SeamstressStaticValues.parryDamage}% damage</style> applying . Gain " +
+            Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Briefly become <style=cIsUtility>Invulnerable</style>. If hit, dash forward dealing <style=cIsDamage>2x{100f * SeamstressStaticValues.parryDamageCoefficient}% damage</style> applying . Gain " +
                Tokens.butcheredPrefix + $". During " + Tokens.butcheredPrefix + $", gain base damage as if your health was at <style=cIsHealth>50%</style>. Missing refunds <style=cIsUtility>50%</style> of the cooldown.");
 
             #endregion

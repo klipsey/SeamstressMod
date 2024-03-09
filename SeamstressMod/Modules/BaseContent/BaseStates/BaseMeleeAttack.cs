@@ -256,7 +256,6 @@ namespace SeamstressMod.Modules.BaseStates
                         attack.hitBoxGroup = FindHitBoxGroup(hitboxGroupName);
                         attack.isCrit = RollCrit();
                         attack.impactSound = impactSound;
-                        attack.damageType = DamageType.Stun1s;
                         attack.damage = SeamstressStaticValues.scissorDamageCoefficient * base.damageStat;
                         if(attack.HasModdedDamageType(DamageTypes.NoSword)) attack.RemoveModdedDamageType(DamageTypes.NoSword);
                         attack.pushAwayForce = 600f;

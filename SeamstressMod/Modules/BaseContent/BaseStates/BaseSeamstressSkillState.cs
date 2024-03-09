@@ -20,6 +20,8 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected bool empowered;
 
+        protected bool inDash;
+
         public override void OnEnter()
         {
             RefreshState();
@@ -41,6 +43,7 @@ namespace SeamstressMod.Modules.BaseStates
             if (seamCon)
             {
                 empowered = characterBody.HasBuff(SeamstressBuffs.butchered);
+                seamCon.isDashing = inDash;
             }
         }
     }
