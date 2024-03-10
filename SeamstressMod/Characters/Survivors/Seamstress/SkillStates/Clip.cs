@@ -97,7 +97,7 @@ namespace SeamstressMod.SkillStates
                 if (inAir && base.isAuthority)
                 {
                     Vector3 velocity = base.characterDirection.forward * moveSpeedStat * Mathf.Lerp(3, 1f, base.age / duration);
-                    velocity.y = base.characterMotor.velocity.y;
+                    velocity.y = 0f;
                     base.characterMotor.velocity = velocity;
                 }
             }

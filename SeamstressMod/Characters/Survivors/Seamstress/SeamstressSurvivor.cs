@@ -394,7 +394,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 12f,
+                baseRechargeInterval = 8f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -428,7 +428,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
-                baseRechargeInterval = 12f,
+                baseRechargeInterval = 8f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -676,6 +676,10 @@ namespace SeamstressMod.Survivors.Seamstress
                 else
                 {
                     orig.Invoke(self, damageInfo);
+                }
+                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+                {
+                    victimBody.RecalculateStats();
                 }
             }
         }

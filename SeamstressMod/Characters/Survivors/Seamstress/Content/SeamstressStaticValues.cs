@@ -37,7 +37,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const int maxNeedleAmount = 5;
 
-        internal const float butcheredDuration = 10f;
+        internal const float butcheredDuration = 6f;
 
         internal const float passiveScaling = 0.1f;
 
