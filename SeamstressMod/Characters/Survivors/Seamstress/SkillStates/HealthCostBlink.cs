@@ -29,6 +29,7 @@ namespace SeamstressMod.SkillStates
             this.split = true;
             GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, 1f, 1f, false);
             base.OnEnter();
+            seamCon.snapBackPosition = base.characterBody.corePosition;
         }
         public override void FixedUpdate()
         {
@@ -40,24 +41,9 @@ namespace SeamstressMod.SkillStates
             {
                 if (NetworkServer.active && healthComponent && healthCostFraction >= Mathf.Epsilon)
                 {
-                    float currentBarrier = healthComponent.barrier;
-                    float currentShield = healthComponent.shield;
-                    DamageInfo damageInfo = new DamageInfo();
-                    damageInfo.damage = (healthComponent.health * healthCostFraction) + healthComponent.shield + healthComponent.barrier;
-                    damageInfo.position = characterBody.corePosition;
-                    damageInfo.force = Vector3.zero;
-                    damageInfo.damageColorIndex = DamageColorIndex.Default;
-                    damageInfo.crit = false;
-                    damageInfo.attacker = null;
-                    damageInfo.inflictor = null;
-                    damageInfo.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock;
-                    damageInfo.procCoefficient = 0f;
-                    healthComponent.TakeDamage(damageInfo);
-                    healthComponent.AddBarrier(currentBarrier);
-                    healthComponent.shield = currentShield;
                     SeamstressController s = characterBody.GetComponent<SeamstressController>();
                     s.fuckYou = false;
-                    characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
+                    DotController.InflictDot(characterBody.gameObject, characterBody.gameObject, Dots.ButcheredDot, SeamstressStaticValues.butcheredDuration, 1, 1u);
                 }
                 if (blastAttackDamageCoefficient > 0f && base.isAuthority)
                 {
@@ -81,6 +67,7 @@ namespace SeamstressMod.SkillStates
                     blastAttack.Fire();
                 }
             }
+            skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressAssets.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
             base.OnExit();
         }
         public override InterruptPriority GetMinimumInterruptPriority()

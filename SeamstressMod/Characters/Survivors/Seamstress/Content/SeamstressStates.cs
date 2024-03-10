@@ -26,6 +26,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Modules.Content.AddEntityState(typeof(Exhaustion));
 
             Modules.Content.AddEntityState(typeof(HealthCostBlink));
+            Modules.Content.AddEntityState(typeof(Snapback));
 
             Modules.Content.AddEntityState(typeof(Parry));
             Modules.Content.AddEntityState(typeof(ParryDash));

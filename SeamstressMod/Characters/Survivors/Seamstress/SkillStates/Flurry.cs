@@ -12,8 +12,6 @@ namespace SeamstressMod.SkillStates
     public class Flurry : BaseMeleeAttack
     {
         private GameObject swingEffectInstance;
-
-        private GameObject chargeEffectInstance;
         public override void OnEnter()
         {
             RefreshState();
@@ -72,7 +70,6 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (base.fixedAge > attackStartPercentTime) Destroy(chargeEffectInstance);
         }
         protected override void FireAttack()
         {

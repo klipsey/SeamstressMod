@@ -312,7 +312,7 @@ namespace SeamstressMod.Survivors.Seamstress
             });
 
             Skills.AddSecondarySkills(bodyPrefab, Clip);
-
+            /*
             SkillDef planarShift = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "PlanarShift",
@@ -345,7 +345,7 @@ namespace SeamstressMod.Survivors.Seamstress
             });
 
             Skills.AddSecondarySkills(bodyPrefab, planarShift);
-
+            */
             TrackingSkillDef planarManipulation = Skills.CreateSkillDef<TrackingSkillDef>(new SkillDefInfo
             {
                 skillName = "PlanarManipulation",
@@ -652,14 +652,26 @@ namespace SeamstressMod.Survivors.Seamstress
                         DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                     }
                 }
-                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && victimBody.HasBuff(SeamstressBuffs.parryStart))
+                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && victimBody.HasBuff(SeamstressBuffs.parryStart) || victimBody.HasBuff(SeamstressBuffs.butchered))
                 {
-                    victimBody.RemoveBuff(SeamstressBuffs.parryStart);
-                    if (!victimBody.HasBuff(SeamstressBuffs.parrySuccess))
+                    if(victimBody.HasBuff(SeamstressBuffs.parryStart))
                     {
-                        victimBody.AddBuff(SeamstressBuffs.parrySuccess);
+                        victimBody.RemoveBuff(SeamstressBuffs.parryStart);
+                        if (!victimBody.HasBuff(SeamstressBuffs.parrySuccess))
+                        {
+                            victimBody.AddBuff(SeamstressBuffs.parrySuccess);
+                        }
+                        victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
                     }
-                    victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
+                    else if(victimBody.HasBuff(SeamstressBuffs.butchered) && damageInfo.dotIndex != Dots.ButcheredDot)
+                    {
+                        SeamstressController s = victimBody.gameObject.GetComponent<SeamstressController>();
+                        s.FiendGaugeCalc(-damageInfo.damage);
+                    }
+                    else
+                    {
+                        orig.Invoke(self, damageInfo);
+                    }
                 }
                 else
                 {

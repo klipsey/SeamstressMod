@@ -6,6 +6,7 @@ using System.Text;
 using static R2API.DotAPI;
 using static RoR2.DotController;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -15,20 +16,21 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public static DotController.DotIndex SeamstressBossDot;
 
-        public static bool visualTracker = false;
-
-        public static GameObject stitchDot;
+        public static DotController.DotIndex ButcheredDot;
 
         public static CustomDotBehaviour behave1;
 
         public static CustomDotBehaviour behave2;
+
+        public static CustomDotBehaviour butcheredBehaviour;
 
         public static CustomDotVisual visual;
         internal static void Init()
         {
             behave1 = DelegateBehave;
             behave2 = DelegateBehave2;
-            visual = stitchVisual;
+            butcheredBehaviour = DelegateBehave3;
+            visual = StitchVisual;
             RegisterDots();
         }
         public static void DelegateBehave(RoR2.DotController self,  RoR2.DotController.DotStack dotStack)
@@ -47,24 +49,53 @@ namespace SeamstressMod.Survivors.Seamstress
                 dotStack.damageType = DamageType.DoT;
             }
         }
+        public static void DelegateBehave3(RoR2.DotController self, RoR2.DotController.DotStack dotStack)
+        {
+            if (dotStack.dotIndex == ButcheredDot)
+            {
+                float currentBarrier = self.victimBody.healthComponent.barrier;
+                float currentShield = self.victimBody.healthComponent.shield;
+                dotStack.damage = Math.Max(1f, ((self.victimBody.healthComponent.fullCombinedHealth * 0.1f) + self.victimBody.healthComponent.shield + self.victimBody.healthComponent.barrier));
+                dotStack.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT;
+                self.victimBody.healthComponent.AddBarrier(currentBarrier);
+                self.victimBody.healthComponent.shield = currentShield;
+            }
+        }
+        public class BleedController : MonoBehaviour
+        {
+            private Transform bleedPosition;
 
-        public static void stitchVisual(RoR2.DotController self)
+            private GameObject stitchDot;
+
+            private CharacterBody characterBody;
+            private void Awake()
+            {
+                bleedPosition = transform;
+                characterBody = GetComponent<CharacterBody>();
+            }
+            private void FixedUpdate()
+            {
+                if (!NetworkServer.active) return;
+                if(characterBody.HasBuff(SeamstressBuffs.butchered) || characterBody.HasBuff(SeamstressBuffs.cutBleed))
+                {
+                    if (!stitchDot) stitchDot = UnityEngine.Object.Instantiate(SeamstressAssets.stitchEffect, bleedPosition);
+                }
+                else if (!characterBody.HasBuff(SeamstressBuffs.butchered) ||! characterBody.HasBuff(SeamstressBuffs.cutBleed))
+                {
+                    UnityEngine.Object.Destroy(stitchDot);
+                    stitchDot = null;
+                    UnityEngine.Object.Destroy(this);
+                }
+            }
+        }
+        public static void StitchVisual(RoR2.DotController self)
         {
             if (!self.victimBody)
             {
                 return;
             }
-            self.transform.position = self.victimBody.corePosition;
-            if (self.victimBody.HasBuff(SeamstressBuffs.cutBleed) && !visualTracker)
-            {
-                visualTracker = true;
-                stitchDot = UnityEngine.Object.Instantiate(SeamstressAssets.stitchEffect, self.transform);
-            }
-            else if(!self.victimBody.HasBuff(SeamstressBuffs.cutBleed) && visualTracker)
-            {
-                UnityEngine.Object.Destroy(stitchDot);
-                stitchDot = null;
-            }
+            BleedController component = self.victimBody.gameObject.GetComponent<BleedController>();
+            if (component == null) self.victimBody.gameObject.AddComponent<BleedController>();
         }
         public static void RegisterDots()
         {
@@ -85,6 +116,15 @@ namespace SeamstressMod.Survivors.Seamstress
                 associatedBuff = SeamstressBuffs.cutBleed,
                 resetTimerOnAdd = false,
             }, (CustomDotBehaviour)behave2, (CustomDotVisual)visual);
+
+            ButcheredDot = DotAPI.RegisterDotDef(new DotController.DotDef
+            {
+                interval = 0.2f,
+                damageCoefficient = 0f,
+                damageColorIndex = DamageColorIndex.SuperBleed,
+                associatedBuff = SeamstressBuffs.butchered,
+                resetTimerOnAdd = true,
+            }, (CustomDotBehaviour)butcheredBehaviour, (CustomDotVisual)visual);
         }
     }
 }

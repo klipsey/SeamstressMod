@@ -13,8 +13,6 @@ namespace SeamstressMod.SkillStates
 {
     public class ParryDash : BaseSeamstressSkillState
     {
-        public static GameObject supaPrefab = SeamstressAssets.blinkPrefab;
-
         public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
         public bool hasHit { get; private set; }
 
@@ -84,7 +82,8 @@ namespace SeamstressMod.SkillStates
             {
                 isDashing = true;
                 dashVector = inputBank.aimDirection;
-                CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
+                seamCon.heldDashVector = dashVector;
+                seamCon.heldOrigin = Util.GetCorePosition(base.gameObject);
                 //PlayCrossfade("FullBody, Override", "AssaulterLoop", 0.1f);
                 gameObject.layer = LayerIndex.fakeActor.intVal;
                 base.characterMotor.Motor.RebuildCollidableLayers();
@@ -126,19 +125,9 @@ namespace SeamstressMod.SkillStates
                 outer.SetNextStateToMain();
             }
         }
-        private void CreateBlinkEffect(Vector3 origin)
-        {
-            if (supaPrefab)
-            {
-                EffectData effectData = new EffectData();
-                effectData.rotation = Util.QuaternionSafeLookRotation(dashVector);
-                effectData.origin = origin;
-                effectData.scale = 0.1f;
-                EffectManager.SpawnEffect(supaPrefab, effectData, transmit: true);
-            }
-        }
         public override void OnExit()
         {
+            seamCon.StartDashEffectTimer();
             gameObject.layer = LayerIndex.defaultLayer.intVal;
             base.characterMotor.Motor.RebuildCollidableLayers();
             if (!empowered) Util.PlaySound("Play_item_proc_whip", gameObject);

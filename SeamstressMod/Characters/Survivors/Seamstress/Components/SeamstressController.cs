@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using RoR2.EntityLogic;
 using UnityEngine.Networking;
+using System.Linq;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -18,9 +19,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private GameObject endReap = SeamstressAssets.reapEndEffect;
 
+        public static GameObject supaPrefab = SeamstressAssets.blinkPrefab;
+
         private float fiendGauge = 0f;
 
         private float drainAmount;
+
+        private float dashStopwatch;
 
         public float hopoopFeatherTimer;
 
@@ -30,18 +35,30 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private bool hasPlayed = false;
 
+        private bool hasPlayedEffect = true;
+
         private bool butchered = false;
 
         public bool isDashing;
+
+        public Vector3 heldDashVector;
+
+        public Vector3 heldOrigin;
+
+        public Vector3 snapBackPosition;
         //private float leapLength = 0f;
 
         //public float lockOutLength = 0f;
 
-        private float bd = 0f;
+        private float butcheredDuration = 0f;
+
+        private float cooldownRefund;
 
         public bool fuckYou = false;
 
         public bool drainGauge;
+
+        private bool refunded;
         public void Awake()
         {
             characterBody = base.GetComponent<CharacterBody>();
@@ -53,23 +70,52 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             hopoopFeatherTimer -= Time.fixedDeltaTime;
             blinkCd -= Time.fixedDeltaTime;
-            if (bd > 0f)
-            {
-                bd -= Time.fixedDeltaTime;
-            }
+            if (butcheredDuration > 0f) butcheredDuration -= Time.fixedDeltaTime;
+            if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
             if (drainGauge && fiendGauge > 0)
             {
                 fiendGauge -= drainAmount;
+                if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 4, default, false);
             }
             else if (fiendGauge < 0)
             {
                 drainGauge = false;
                 fiendGauge = 0f;
             }
+            if (skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressAssets.snapBackSkillDef)
+            {
+                cooldownRefund += Time.fixedDeltaTime;
+                refunded = false;
+            }
+            else if(!refunded && !skillLocator.utility.skillOverrides.Any())
+            {
+                skillLocator.utility.rechargeStopwatch += cooldownRefund;
+                cooldownRefund = 0f;
+                refunded = true;
+            }
             //Log.Debug("Fiend gauge " + fiendGauge);
+            CreateBlinkEffect(heldOrigin);
             CalculateBonusDamage();
             ButcheredSound();
-            IsButchered();      
+            IsButchered();
+        }
+
+        private void CreateBlinkEffect(Vector3 origin)
+        {
+            if (supaPrefab && !hasPlayedEffect && dashStopwatch < 0)
+            {
+                EffectData effectData = new EffectData();
+                effectData.rotation = Util.QuaternionSafeLookRotation(heldDashVector);
+                effectData.origin = origin;
+                effectData.scale = 1f;
+                EffectManager.SpawnEffect(supaPrefab, effectData, transmit: true);
+                hasPlayedEffect = true;
+            }
+        }
+        public void StartDashEffectTimer()
+        {
+            dashStopwatch = 0.75f;
+            hasPlayedEffect = false;
         }
         public void RefreshBlink()
         {
@@ -99,7 +145,7 @@ namespace SeamstressMod.Survivors.Seamstress
             if (fuckYou && !butchered)
             {
                 drainGauge = false;
-                bd = SeamstressStaticValues.butcheredDuration;
+                butcheredDuration = SeamstressStaticValues.butcheredDuration;
                 butchered = true;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
@@ -131,6 +177,10 @@ namespace SeamstressMod.Survivors.Seamstress
                 temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                 temporaryOverlay.animateShaderAlpha = true;
                 }
+                if(skillLocator.utility.skillDef == SeamstressAssets.snapBackSkillDef)
+                {
+                    skillLocator.utility.ExecuteIfReady();
+                }
                 UnityEngine.Object.Instantiate<GameObject>(endReap, characterBody.modelLocator.transform);
                 Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
                 //fire expunge at end of butchered
@@ -141,7 +191,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             if (fuckYou)
             {
-                if (bd < 2f && !hasPlayed)
+                if (butcheredDuration < 2f && !hasPlayed)
                 {
                     Util.PlaySound("Play_nullifier_impact", characterBody.gameObject);
                     hasPlayed = true;

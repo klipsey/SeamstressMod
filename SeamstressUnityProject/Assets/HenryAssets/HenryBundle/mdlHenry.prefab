@@ -377,6 +377,36 @@ CapsuleCollider:
   m_Height: 1.8346863
   m_Direction: 1
   m_Center: {x: 0, y: -0.22852182, z: 0}
+--- !u!1 &4401718249925421117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 463518921796830389}
+  m_Layer: 0
+  m_Name: SwingCharAirCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &463518921796830389
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4401718249925421117}
+  m_LocalRotation: {x: 0.6835726, y: -0.1809105, z: -0.18091033, w: -0.68357253}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.65121, y: 0.65121, z: 0.65121}
+  m_Children: []
+  m_Father: {fileID: 4844476405519019665}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 270, y: 0, z: 29.647001}
 --- !u!1 &4735786425572373389
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,6 +1000,7 @@ Transform:
   - {fileID: 8265431048965573029}
   - {fileID: 5110548034363352585}
   - {fileID: 6509039874488993875}
+  - {fileID: 463518921796830389}
   m_Father: {fileID: 8315140139193319990}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2428,6 +2459,8 @@ MonoBehaviour:
     transform: {fileID: 6509039874488993875}
   - name: WeaveHitboxBig
     transform: {fileID: 8045316421581032935}
+  - name: SwingCharAirCenter
+    transform: {fileID: 463518921796830389}
 --- !u!114 &7238953315125949139
 MonoBehaviour:
   m_ObjectHideFlags: 0

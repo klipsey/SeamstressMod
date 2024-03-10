@@ -50,6 +50,8 @@ namespace SeamstressMod.SkillStates
 
         private CharacterBody victimBody;
 
+        private AnimationCurve pullSuitabilityCurve = new AnimationCurve();
+
         private CollisionDetectionMode collisionDetectionMode;
 
         private float _maxGrabDistance = 40f;
@@ -81,6 +83,8 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+            pullSuitabilityCurve.AddKey(0, 1);
+            pullSuitabilityCurve.AddKey(2000, 0);
             tracker = GetComponent<Tracker>();
             if (tracker)
             {
@@ -232,7 +236,8 @@ namespace SeamstressMod.SkillStates
                     }
                     else vector2.y += Physics.gravity.y * Time.fixedDeltaTime;
                     if (SeamstressStaticValues.funny) num2 = Mathf.Clamp(num2, 60f, 120f);
-                    victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * Mathf.Max(num2, 100f) * num, alwaysApply: true, disableAirControlUntilCollision: true);
+                    float num3 = pullSuitabilityCurve.Evaluate(num2);
+                    victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * (num3 * Mathf.Max(num2, 100f)) * num, alwaysApply: true, disableAirControlUntilCollision: true);
                 }
 
                 if(victimMotor != null) bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat) + victim.healthComponent.fullCombinedHealth * 0.2f, SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullCombinedHealth * 0.7f);
@@ -276,10 +281,9 @@ namespace SeamstressMod.SkillStates
         }
         private void DoSplashDamage(ref CharacterMotor.MovementHitInfo movementHitInfo)
         {
-            float massCalc = (victimMotor ? victimMotor.mass : victimRigid.mass) / 10f; 
-            float num = 60f / massCalc;
-            float magnitude = movementHitInfo.velocity.magnitude;
-            if (magnitude >= num && hitStopwatch > 0.75) detonateNextFrame = true;
+            float num = Mathf.Abs(movementHitInfo.velocity.magnitude);
+            float num2 = Mathf.Max(num - (characterBody.baseMoveSpeed + 70f), 0f);
+            if (num2 > 0 && hitStopwatch > 0.75) detonateNextFrame = true;
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {

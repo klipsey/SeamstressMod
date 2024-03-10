@@ -15,8 +15,9 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     public static class SeamstressAssets
     {
-        internal static Color theRed = new Color(155f / 255f, 55f / 255f, 55f / 255f);
         //effects
+        internal static GameObject pullShit;
+
         internal static GameObject wideSlashEffect;
 
         internal static GameObject clipSlashEffect;
@@ -62,8 +63,6 @@ namespace SeamstressMod.Survivors.Seamstress
         //internal static GameObject stitchConsumeEffectPrefab;
 
         internal static GameObject sewn1;
-
-        internal static GameObject sewn2;
 
         internal static GameObject sewn3;
 
@@ -116,7 +115,11 @@ namespace SeamstressMod.Survivors.Seamstress
         //extra
         internal static Color coolRed = new Color(84f / 255f, 0f / 255f, 11f / 255f);
 
+        internal static Color theRed = new Color(155f / 255f, 55f / 255f, 55f / 255f);
+
         public static SkillDef lockOutSkillDef;
+
+        public static SkillDef snapBackSkillDef;
         public static void Init(AssetBundle assetBundle)
         {
 
@@ -160,6 +163,37 @@ namespace SeamstressMod.Survivors.Seamstress
                 cancelSprintingOnActivation = false,
                 forceSprintDuringState = false,
             });
+
+            snapBackSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "SnapBack",
+                skillNameToken = "SnapBack",
+                skillDescriptionToken = "Snapback to core",
+                keywordTokens = new string[] { },
+                skillIcon = utilityEmp,
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Snapback)),
+                activationStateMachineName = "Body",
+                interruptPriority = EntityStates.InterruptPriority.Pain,
+
+                baseRechargeInterval = 0f,
+                baseMaxStock = 1,
+
+                rechargeStock = 0,
+                requiredStock = 0,
+                stockToConsume = 0,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = true,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = false,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
         }
 
 
@@ -190,6 +224,13 @@ namespace SeamstressMod.Survivors.Seamstress
             sewn3.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", coolRed);
             sewn3.transform.GetChild(0).GetChild(1).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", coolRed);
             sewn3.transform.GetChild(0).GetChild(2).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", coolRed);
+
+            pullShit = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureTracer.prefab").WaitForCompletion().InstantiateClone("De");
+            pullShit.AddComponent<NetworkIdentity>();
+            pullShit.transform.gameObject.GetComponent<EffectComponent>().soundName = "Play_huntress_R_snipe_shoot";
+            pullShit.transform.GetChild(2).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", coolRed);
+            pullShit.transform.GetChild(3).gameObject.GetComponent<LineRenderer>().material.SetColor("_TintColor", coolRed);
+            Modules.Content.CreateAndAddEffectDef(pullShit);
 
             trackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("SeamstressTracker");
             Material component = Addressables.LoadAssetAsync<Material>("RoR2/Base/UI/matUIOverbrighten2x.mat").WaitForCompletion();
@@ -297,10 +338,10 @@ namespace SeamstressMod.Survivors.Seamstress
 
             wideSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressWideSwordSwing");
             wideSlashEffect.AddComponent<NetworkIdentity>();
+            wideSlashEffect.transform.GetChild(0).localScale *= 1f;
             wideSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
             var sex = wideSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             sex.startLifetimeMultiplier = 0.6f;
-            wideSlashEffect.transform.GetChild(0).localScale = Vector3.one * 2f;
             Object.Destroy(wideSlashEffect.GetComponent<EffectComponent>());
 
             expungeEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("ExpungeEffect");

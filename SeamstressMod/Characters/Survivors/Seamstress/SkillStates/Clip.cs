@@ -94,6 +94,12 @@ namespace SeamstressMod.SkillStates
             if (!inHitPause)
             {
                 stopwatch += Time.fixedDeltaTime;
+                if (inAir && base.isAuthority)
+                {
+                    Vector3 velocity = base.characterDirection.forward * moveSpeedStat * Mathf.Lerp(3, 1f, base.age / duration);
+                    velocity.y = base.characterMotor.velocity.y;
+                    base.characterMotor.velocity = velocity;
+                }
             }
             else
             {
@@ -102,12 +108,6 @@ namespace SeamstressMod.SkillStates
             }
             if (stopwatch > firstSnip && !hasFired) 
             {
-                if (inAir && base.isAuthority)
-                {
-                    supaEffect = SeamstressAssets.wideSlashEffect;
-                    float dashVector = 25f;
-                    base.characterMotor.velocity += base.GetAimRay().direction * dashVector;
-                }
                 hasFired = true;
                 EnterAttack();
                 FireAttack();
@@ -191,9 +191,8 @@ namespace SeamstressMod.SkillStates
                 }
                 else if(inAir)
                 {
-                    Transform transformAir = FindModelChild("SwingCharCenter");
-                    transformAir.localRotation = new Quaternion(transformAir.localRotation.x, 43.737f, transformAir.localRotation.z, transformAir.localRotation.w);
-                    UnityEngine.Object.Instantiate(supaEffect, transformAir);
+                    Transform transformAir = FindModelChild("SwingCharAirCenter");
+                    UnityEngine.Object.Instantiate(SeamstressAssets.wideSlashEffect, transformAir);
                 }
                 else
                 {
