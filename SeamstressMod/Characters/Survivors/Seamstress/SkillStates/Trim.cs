@@ -63,6 +63,8 @@ namespace SeamstressMod.SkillStates
                     damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
                     bonusSwingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                     muzzleString = "SwingCenterSmall";
+                    earlyExitPercentTime = 0.75f;
+                    attackEndPercentTime = 0.65f;
                     if (!scissorRight || !scissorLeft)
                     {
                         moddedDamageType = DamageTypes.NoSword;

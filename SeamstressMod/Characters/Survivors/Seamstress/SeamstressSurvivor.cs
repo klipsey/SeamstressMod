@@ -187,7 +187,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Prefabs.ClearEntityStateMachines(bodyPrefab);
 
             //if you set up a custom main characterstate, set it up here
-                //don't forget to register custom entitystates in your HenryStates.cs
+            //don't forget to register custom entitystates in your HenryStates.cs
             //the main "body" state machine has some special properties
             Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(SkillStates.SeamstressMainState), typeof(EntityStates.SpawnTeleporterState));
 
@@ -691,7 +691,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 return;
             }
             SeamstressController s = self.body.GetComponent<SeamstressController>();
-            if (self.body.HasBuff(SeamstressBuffs.butchered) && s.fuckYou == false)
+            if (self.body.HasBuff(SeamstressBuffs.butchered) && s.inButchered == false)
             {
                 if(self.gameObject.GetComponent<TemporaryOverlay>() != null)
                 {
@@ -704,11 +704,11 @@ namespace SeamstressMod.Survivors.Seamstress
                 temporaryOverlay.destroyComponentOnEnd = true;
                 temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
                 temporaryOverlay.AddToCharacerModel(self);
-                s.fuckYou = true;
+                s.inButchered = true;
             }
-            else if(!self.body.HasBuff(SeamstressBuffs.butchered) && s.fuckYou == true)
+            else if(!self.body.HasBuff(SeamstressBuffs.butchered) && s.inButchered == true)
             {
-                s.fuckYou = false;
+                s.inButchered = false;
             }
             if(self.body.HasBuff(SeamstressBuffs.parryStart))
             {

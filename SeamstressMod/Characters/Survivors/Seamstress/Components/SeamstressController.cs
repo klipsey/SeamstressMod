@@ -54,7 +54,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private float cooldownRefund;
 
-        public bool fuckYou = false;
+        public bool inButchered = false;
 
         public bool drainGauge;
 
@@ -142,7 +142,7 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void IsButchered()
         {
-            if (fuckYou && !butchered)
+            if (inButchered && !butchered)
             {
                 drainGauge = false;
                 butcheredDuration = SeamstressStaticValues.butcheredDuration;
@@ -161,7 +161,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     #endregion
                 }
             }
-            else if (!fuckYou && butchered)
+            else if (!inButchered && butchered)
             {
                 butchered = false;
                 drainGauge = true;
@@ -189,7 +189,7 @@ namespace SeamstressMod.Survivors.Seamstress
         //butchered end sound
         private void ButcheredSound()
         {
-            if (fuckYou)
+            if (inButchered)
             {
                 if (butcheredDuration < 2f && !hasPlayed)
                 {
@@ -204,7 +204,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
             float fakeHealthMissing = (healthComponent.fullHealth) * 0.5f;
-            if(fuckYou && skillLocator.utility.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") characterBody.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
+            if(inButchered && skillLocator.utility.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") characterBody.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
             else characterBody.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
     }

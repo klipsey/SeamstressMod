@@ -32,6 +32,9 @@ namespace SeamstressMod.Survivors.Seamstress
             Modules.Content.AddEntityState(typeof(ParryDash));
 
             Modules.Content.AddEntityState(typeof(FireScissor));
+
+            Modules.Content.AddEntityState(typeof(HeartSpawnState));
+            Modules.Content.AddEntityState(typeof(HeartStandBy));
         }
     }
 }

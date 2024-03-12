@@ -80,7 +80,7 @@ namespace SeamstressMod.SkillStates
             }
             characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
             SeamstressController s = characterBody.GetComponent<SeamstressController>();
-            s.fuckYou = false;
+            s.inButchered = false;
             CleanBuffsServer();
             if (parrySoundDef)
             {

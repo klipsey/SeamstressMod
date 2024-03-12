@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using RoR2.CharacterAI;
 using UnityEngine;
 using SeamstressMod.Modules;
 using RoR2.Projectile;
@@ -10,6 +11,8 @@ using UnityEngine.Rendering.PostProcessing;
 using TMPro;
 using ThreeEyedGames;
 using UnityEngine.UIElements;
+using static RoR2.Skills.ComboSkillDef;
+using EntityStates.AffixEarthHealer;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -72,6 +75,11 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject slamEffect;
 
+        internal static GameObject heartMdl;
+
+        internal static GameObject chainToHeart;
+
+        internal static GameObject heartPrefab;
         //Materials
         internal static Material destealthMaterial;
 
@@ -132,6 +140,8 @@ namespace SeamstressMod.Survivors.Seamstress
             CreateEffects();
 
             CreateProjectiles();
+
+            CreateHeart();
 
             lockOutSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
@@ -195,8 +205,58 @@ namespace SeamstressMod.Survivors.Seamstress
                 forceSprintDuringState = false,
             });
         }
+        #region heart
+        private static void CreateHeart()
+        {
+            
+            heartMdl = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion().transform.GetChild(0).GetChild(0).gameObject.InstantiateClone("HeartMdl");
+            heartMdl.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0].SetColor("_EmissionColor", coolRed);
+            heartMdl.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0].SetColor("_MainColor", coolRed);
+            Object.DestroyImmediate(heartMdl.GetComponent<CharacterModel>());
+            Object.DestroyImmediate(heartMdl.GetComponent<HurtBoxGroup>());
+            Object.DestroyImmediate(heartMdl.transform.GetChild(2).gameObject);
+            heartMdl.transform.GetChild(2).GetChild(0).gameObject.GetComponent<Light>().color = theRed;
+            heartMdl.transform.GetChild(2).GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Junk/Common/VFX/matBloodParticle.mat").WaitForCompletion();
+            heartMdl.transform.GetChild(2).GetChild(2).gameObject.SetActive(false);
+            var fard = heartMdl.transform.GetChild(2).GetChild(3).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startColor = theRed;
+            fard = heartMdl.transform.GetChild(2).GetChild(4).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startColor = theRed;
+            fard = heartMdl.transform.GetChild(2).GetChild(5).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startColor = coolRed;
+            heartMdl.transform.GetChild(2).GetChild(6).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
+            Material chains = Addressables.LoadAssetAsync<Material>("RoR2/Base/BounceNearby/matHookTrailAdditive.mat").WaitForCompletion();
+            chains.SetColor("_TintColor", coolRed);
+            chainToHeart = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/EntangleOrbEffect.prefab").WaitForCompletion().InstantiateClone("HeartChains");
+            chainToHeart.AddComponent<NetworkIdentity>();
+            Object.DestroyImmediate(chainToHeart.transform.GetChild(0).GetChild(0).gameObject);
+            chainToHeart.transform.GetChild(0).GetComponent<LineRenderer>().materials[0] = chains;
+            chainToHeart.transform.GetChild(0).GetComponent<LineRenderer>().materials[1] = chains;
+            heartPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/TreebotFlower2.prefab").WaitForCompletion().InstantiateClone("HeartPrefab");
+            CleanChildren(heartPrefab.transform.GetChild(0));
+            heartMdl.transform.SetParent(heartPrefab.transform.GetChild(0));
+            heartPrefab.gameObject.GetComponent<ProjectileDamage>().enabled = false;
+            EntityStateMachine[] machines = heartPrefab.GetComponents<EntityStateMachine>();
 
-
+            for (int i = machines.Length - 1; i >= 0; i--)
+            {
+                UnityEngine.Object.DestroyImmediate(machines[i]);
+            }
+            Prefabs.AddMainEntityStateMachine(heartPrefab, "Main", typeof(SkillStates.HeartStandBy), typeof(SkillStates.HeartSpawnState));
+        }
+        private static void CleanChildren(Transform startingTrans)
+        {
+            for (int num = startingTrans.childCount - 1; num >= 0; num--)
+            {
+                if (startingTrans.GetChild(num).childCount > 0)
+                {
+                    CleanChildren(startingTrans.GetChild(num));
+                }
+                Object.DestroyImmediate(startingTrans.GetChild(num).gameObject);
+                Log.Debug("Success!");
+            }
+        }
+        #endregion
         #region effects
         private static void CreateEffects()
         {
@@ -248,23 +308,27 @@ namespace SeamstressMod.Survivors.Seamstress
             balls2.sprite = sprite;
             balls2.color = coolRed;
 
-            notTrackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("SeamstressTracker2");
+            notTrackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("SeamstressTracker");
+            component = Addressables.LoadAssetAsync<Material>("RoR2/Base/UI/matUIOverbrighten2x.mat").WaitForCompletion();
             Object.DestroyImmediate(notTrackingTelekinesis.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
-            SpriteRenderer balls3 = notTrackingTelekinesis.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
-            balls3.SetMaterial(component);
-            noGrab = _assetBundle.LoadAsset<Sprite>("NoGrab");
-            balls3.sprite = noGrab;
+            balls = notTrackingTelekinesis.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
+            balls.SetMaterial(component);
+            grab = _assetBundle.LoadAsset<Sprite>("NoGrab");
+            balls.sprite = grab;
             notTrackingTelekinesis.transform.GetChild(1).gameObject.SetActive(false);
+            sprite = Addressables.LoadAssetAsync<Sprite>("texCrosshair2").WaitForCompletion();
+            component2 = Addressables.LoadAssetAsync<Material>("Sprites-Default").WaitForCompletion();
             Object.DestroyImmediate(notTrackingTelekinesis.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>());
-            SpriteRenderer balls4 = notTrackingTelekinesis.transform.GetChild(2).gameObject.AddComponent<SpriteRenderer>();
-            balls4.SetMaterial(component2);
-            balls4.sprite = sprite;
-            balls4.color = Color.gray;
+            balls2 = notTrackingTelekinesis.transform.GetChild(2).gameObject.AddComponent<SpriteRenderer>();
+            balls2.SetMaterial(component2);
+            balls2.sprite = sprite;
+            balls2.color = coolRed;
 
             clawsEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/WIPImpEffect.prefab").WaitForCompletion().InstantiateClone("ClawsEffect");
             clawsEffect.AddComponent<NetworkIdentity>();
             var claws = clawsEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             claws.startLifetimeMultiplier = 0.5f;
+
             #region scrapped
             /*
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/DeathMark/matDeathMarkSkull.mat").WaitForCompletion()); 
@@ -376,6 +440,8 @@ namespace SeamstressMod.Survivors.Seamstress
 
             expungeSlashEffect3 = expungeSlashEffect.InstantiateClone("ExpungeSlash3");
             expungeSlashEffect.transform.GetChild(0).localRotation = new Quaternion(90f, 180f, 180f, expungeSlashEffect.transform.GetChild(0).localRotation.w);
+
+
 
             //final hit
             /*

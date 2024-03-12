@@ -8,6 +8,7 @@ using R2API;
 using UnityEngine.Networking;
 using EntityStates;
 using UnityEngine.Networking.Match;
+using RoR2.Projectile;
 
 namespace SeamstressMod.SkillStates
 {
@@ -23,13 +24,23 @@ namespace SeamstressMod.SkillStates
 
         public static float blastAttackProcCoefficient = 1f;
 
+        public static GameObject projectilePrefab = SeamstressAssets.heartPrefab;
         public override void OnEnter()
         {
             this.blinkPrefab = SeamstressAssets.blinkPrefab;
             this.split = true;
-            GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, 1f, 1f, false);
             base.OnEnter();
+            GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, 1f, 1f, false);
             seamCon.snapBackPosition = base.characterBody.corePosition;
+            Vector3 position = base.characterBody.corePosition;
+            GameObject obj = UnityEngine.Object.Instantiate(projectilePrefab, position, Quaternion.identity);
+            ProjectileController component = obj.GetComponent<ProjectileController>();
+            if (component)
+            {
+                component.Networkowner = base.gameObject;
+            }
+            obj.GetComponent<TeamFilter>().teamIndex = GetComponent<TeamComponent>().teamIndex;
+            NetworkServer.Spawn(obj);
         }
         public override void FixedUpdate()
         {
@@ -42,7 +53,7 @@ namespace SeamstressMod.SkillStates
                 if (NetworkServer.active && healthComponent && healthCostFraction >= Mathf.Epsilon)
                 {
                     SeamstressController s = characterBody.GetComponent<SeamstressController>();
-                    s.fuckYou = false;
+                    s.inButchered = false;
                     DotController.InflictDot(characterBody.gameObject, characterBody.gameObject, Dots.ButcheredDot, SeamstressStaticValues.butcheredDuration, 1, 1u);
                 }
                 if (blastAttackDamageCoefficient > 0f && base.isAuthority)
