@@ -13,13 +13,8 @@ namespace SeamstressMod.SkillStates
 {
     public class HeartStandBy : BaseState
     {
+        public static GameObject chain = SeamstressAssets.chainToHeart;
         public static AnimationCurve yankSuitabilityCurve;
-
-        public static string exitSoundString = "Play_item_proc_bounceChain";
-
-        public static GameObject enterEffectPrefab;
-
-        public static GameObject exitEffectPrefab = SeamstressAssets.clawsEffect;
 
         private CharacterBody ownerBody;
 
@@ -29,15 +24,15 @@ namespace SeamstressMod.SkillStates
 
         private TeamIndex teamIndex = TeamIndex.None;
 
-        private bool isOwnerButchered;
-
         private float snapBackDelay = 1f;
 
-        private float delay = 1f;
+        private float delay = 0f;
 
+        private bool splat;
         public override void OnEnter()
         {
             base.OnEnter();
+            splat = false;
             ProjectileController component = GetComponent<ProjectileController>();
             if ((bool)component)
             {
@@ -45,10 +40,7 @@ namespace SeamstressMod.SkillStates
                 teamIndex = component.teamFilter.teamIndex;
             }
             PlayAnimation("Base", "SpawnToIdle");
-            if ((bool)enterEffectPrefab)
-            {
-                EffectManager.SimpleEffect(enterEffectPrefab, base.transform.position, base.transform.rotation, transmit: false);
-            }
+            Util.PlaySound("Play_treeBot_R_yank", owner);
             seamCon = owner.GetComponent<SeamstressController>();
         }
 
@@ -58,41 +50,36 @@ namespace SeamstressMod.SkillStates
             if (NetworkServer.active)
             {
                 delay -= Time.fixedDeltaTime;
-                if (seamCon.inButchered && delay <= 0f)
+                if (seamCon.inButchered && delay <= 0)
                 {
                     delay += 0.5f;
                     ChainUpdate();
                 }
-                else if (!seamCon.inButchered)
+                else if (!seamCon.inButchered && base.fixedAge > 1f)
                 {
+                    if (!splat)
+                    {
+                        splat = true;
+                        ChainUpdate(1f);
+                    }
                     snapBackDelay -= Time.fixedDeltaTime;
                     if(snapBackDelay <= 0f) EntityState.Destroy(base.gameObject);
                 }
             }
         }
 
-        private void ChainUpdate()
+        private void ChainUpdate(float num = 0.4f)
         {
             Vector3 position = base.transform.position;
-            HurtBox hurtBox = owner.GetComponent<HurtBox>();
-            if(ownerBody == null || ownerBody.baseNameToken != "KENKO_SEAMSTRESS_NAME")
+            EffectData effectData = new EffectData
             {
-                ownerBody = owner.GetComponent<CharacterBody>();
-                HurtBox hurtBoxReference = hurtBox;
-                HurtBoxGroup hurtBoxGroup = hurtBox.hurtBoxGroup;
-                for (int j = 0; (float)j < Mathf.Min(4f, ownerBody.radius * 2f); j++)
-                {
-                    EffectData effectData = new EffectData
-                    {
-                        scale = 1f,
-                        origin = position,
-                        genericBool = seamCon.inButchered,
-                    };
-                    effectData.SetHurtBoxReference(hurtBoxReference);
-                    EffectManager.SpawnEffect(LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/OrbEffects/EntangleOrbEffect"), effectData, transmit: true);
-                    hurtBoxReference = hurtBoxGroup.hurtBoxes[Random.Range(0, hurtBoxGroup.hurtBoxes.Length)];
-                }
-            }
+                scale = 1f,
+                origin = position,
+                genericFloat = num,
+                genericBool = seamCon.inButchered,
+            };
+            effectData.SetHurtBoxReference(owner);
+            EffectManager.SpawnEffect(chain, effectData, transmit: true);
         }
 
         public override void OnExit()
@@ -100,22 +87,6 @@ namespace SeamstressMod.SkillStates
             if (ownerBody != null)
             {
                 ownerBody = null;
-            }
-            Util.PlaySound(exitSoundString, base.gameObject);
-            if ((bool)exitEffectPrefab)
-            {
-                Vector3 effectPos = this.transform.localPosition;
-                RaycastHit raycastHit;
-                if (Physics.Raycast(effectPos, Vector3.one, out raycastHit, 10f, LayerIndex.world.mask))
-                {
-                    effectPos = raycastHit.point;
-                }
-                EffectManager.SpawnEffect(exitEffectPrefab, new EffectData
-                {
-                    origin = effectPos,
-                    rotation = Quaternion.identity,
-                    color = SeamstressAssets.coolRed,
-                }, true);
             }
             base.OnExit();
         }

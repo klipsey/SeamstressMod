@@ -13,7 +13,7 @@ namespace SeamstressMod.SkillStates
 {
     public class HeartSpawnState : BaseState
     {
-        public static float duration = 0.5f;
+        public static float duration = 0.01f;
 
         public static string enterSoundString = "Play_bleedOnCritAndExplode_impact";
 

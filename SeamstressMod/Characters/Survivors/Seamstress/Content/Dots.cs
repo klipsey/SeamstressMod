@@ -55,7 +55,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 float currentBarrier = self.victimBody.healthComponent.barrier;
                 float currentShield = self.victimBody.healthComponent.shield;
-                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.health * 0.025f + self.victimBody.healthComponent.shield + self.victimBody.healthComponent.barrier));
+                dotStack.damage = Math.Max(1f, (self.victimBody.healthComponent.health * 0.03f + self.victimBody.healthComponent.shield + self.victimBody.healthComponent.barrier));
                 dotStack.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT;
                 self.victimBody.healthComponent.AddBarrier(currentBarrier);
                 self.victimBody.healthComponent.shield = currentShield;

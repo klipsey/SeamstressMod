@@ -667,6 +667,12 @@ namespace SeamstressMod.Survivors.Seamstress
                     {
                         SeamstressController s = victimBody.gameObject.GetComponent<SeamstressController>();
                         s.FiendGaugeCalc(-damageInfo.damage);
+                        float num = s.FiendGaugeAmount() - damageInfo.damage;
+                        if (num < 0)
+                        {
+                            damageInfo.damage = (-1 * num);
+                            orig.Invoke(self, damageInfo);
+                        }
                     }
                     else
                     {

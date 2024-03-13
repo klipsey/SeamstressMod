@@ -13,6 +13,9 @@ namespace SeamstressMod.SkillStates
 {
     public class Snapback : BaseSeamstressSkillState
     {
+
+        public static string exitSoundString = "Play_item_proc_bounceChain";
+
         private CameraTargetParams.AimRequest aimRequest;
 
         private Vector3 snapPosition;
@@ -33,6 +36,7 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+            Util.PlaySound(exitSoundString, base.gameObject);
             Util.CleanseBody(base.characterBody, false, false, false, true, false, false);
             CalculateSnapDestination();
             this.modelTransform = GetModelTransform();

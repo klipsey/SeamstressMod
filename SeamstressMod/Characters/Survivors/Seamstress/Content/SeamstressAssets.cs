@@ -13,15 +13,20 @@ using ThreeEyedGames;
 using UnityEngine.UIElements;
 using static RoR2.Skills.ComboSkillDef;
 using EntityStates.AffixEarthHealer;
+using SeamstressMod.SkillStates;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
     public static class SeamstressAssets
     {
+        internal static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
+        internal static Material commandoMat;
         //effects
         internal static GameObject pullShit;
 
         internal static GameObject wideSlashEffect;
+
+        internal static GameObject splat;
 
         internal static GameObject clipSlashEffect;
 
@@ -210,31 +215,54 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             
             heartMdl = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion().transform.GetChild(0).GetChild(0).gameObject.InstantiateClone("HeartMdl");
-            heartMdl.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0].SetColor("_EmissionColor", coolRed);
-            heartMdl.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0].SetColor("_MainColor", coolRed);
+            heartMdl.transform.localScale /= 3f;
+            Material eatMyButt = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/EliteEarth/AffixEarthCore.mat").WaitForCompletion();
+            eatMyButt.SetColor("_Color", coolRed);
+            eatMyButt.SetColor("_EmColor", coolRed);
+            Material[] explodeAndDie = new Material[1];
+            explodeAndDie[0] = eatMyButt;
+            heartMdl.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials = explodeAndDie;
             Object.DestroyImmediate(heartMdl.GetComponent<CharacterModel>());
             Object.DestroyImmediate(heartMdl.GetComponent<HurtBoxGroup>());
             Object.DestroyImmediate(heartMdl.transform.GetChild(2).gameObject);
+            heartMdl.transform.GetChild(2).localScale = new Vector3(1.5f, 1.5f, 1.5f);
             heartMdl.transform.GetChild(2).GetChild(0).gameObject.GetComponent<Light>().color = theRed;
+            heartMdl.transform.GetChild(2).GetChild(0).gameObject.GetComponent<Light>().range = 2f;
+            heartMdl.transform.GetChild(2).GetChild(0).gameObject.GetComponent<LightIntensityCurve>().timeMax = SeamstressStaticValues.butcheredDuration;
             heartMdl.transform.GetChild(2).GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Junk/Common/VFX/matBloodParticle.mat").WaitForCompletion();
+            var fard = heartMdl.transform.GetChild(2).GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+            fard.duration = SeamstressStaticValues.butcheredDuration;
             heartMdl.transform.GetChild(2).GetChild(2).gameObject.SetActive(false);
-            var fard = heartMdl.transform.GetChild(2).GetChild(3).gameObject.GetComponent<ParticleSystem>().main;
-            fard.startColor = theRed;
+            heartMdl.transform.GetChild(2).GetChild(3).gameObject.SetActive(false);
             fard = heartMdl.transform.GetChild(2).GetChild(4).gameObject.GetComponent<ParticleSystem>().main;
             fard.startColor = theRed;
+            fard.duration = SeamstressStaticValues.butcheredDuration;
             fard = heartMdl.transform.GetChild(2).GetChild(5).gameObject.GetComponent<ParticleSystem>().main;
             fard.startColor = coolRed;
+            fard.duration = SeamstressStaticValues.butcheredDuration;
             heartMdl.transform.GetChild(2).GetChild(6).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
-            Material chains = Addressables.LoadAssetAsync<Material>("RoR2/Base/BounceNearby/matHookTrailAdditive.mat").WaitForCompletion();
+            fard = heartMdl.transform.GetChild(2).GetChild(6).gameObject.GetComponent<ParticleSystem>().main;
+            fard.duration = SeamstressStaticValues.butcheredDuration;
+            Material chains = Addressables.LoadAssetAsync<Material>("RoR2/Base/Gravekeeper/matGravekeeperHookChain.mat").WaitForCompletion();
             chains.SetColor("_TintColor", coolRed);
+            Material[] ballsackTickler = new Material[2];
+            ballsackTickler[0] = chains;
+            ballsackTickler[1] = chains;
             chainToHeart = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/EntangleOrbEffect.prefab").WaitForCompletion().InstantiateClone("HeartChains");
-            chainToHeart.AddComponent<NetworkIdentity>();
-            Object.DestroyImmediate(chainToHeart.transform.GetChild(0).GetChild(0).gameObject);
-            chainToHeart.transform.GetChild(0).GetComponent<LineRenderer>().materials[0] = chains;
-            chainToHeart.transform.GetChild(0).GetComponent<LineRenderer>().materials[1] = chains;
+            chainToHeart.transform.GetChild(0).GetComponent<LineRenderer>().materials = ballsackTickler;
+            chainToHeart.transform.localScale *= 0.5f;
+            chainToHeart.transform.GetChild(0).GetChild(0).gameObject.GetComponent <ParticleSystemRenderer>().mesh = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ElementalRings/PickupFireRing.prefab").WaitForCompletion().transform.GetChild(0).gameObject.GetComponent<MeshFilter>().mesh;
+            chainToHeart.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Gravekeeper/matGravekeeperHookChain.mat").WaitForCompletion();
+            Object.Destroy(chainToHeart.gameObject.GetComponent<AkEvent>());
+            Object.Destroy(chainToHeart.gameObject.GetComponent<AkGameObj>());
+            Content.CreateAndAddEffectDef(chainToHeart);
             heartPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/TreebotFlower2.prefab").WaitForCompletion().InstantiateClone("HeartPrefab");
+            heartPrefab.transform.localRotation = Quaternion.identity;
             CleanChildren(heartPrefab.transform.GetChild(0));
+            heartPrefab.transform.GetChild(0).localRotation = new Quaternion(6.643471e-24f, 4.689353e-39f, 2.914701e-43f, Quaternion.identity.w);
+            heartPrefab.transform.localPosition = Vector3.zero;
             heartMdl.transform.SetParent(heartPrefab.transform.GetChild(0));
+            heartPrefab.gameObject.GetComponent<ModelLocator>().modelTransform = heartPrefab.transform.GetChild(0).GetChild(0);
             heartPrefab.gameObject.GetComponent<ProjectileDamage>().enabled = false;
             EntityStateMachine[] machines = heartPrefab.GetComponents<EntityStateMachine>();
 
@@ -244,6 +272,7 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             Prefabs.AddMainEntityStateMachine(heartPrefab, "Main", typeof(SkillStates.HeartStandBy), typeof(SkillStates.HeartSpawnState));
         }
+
         private static void CleanChildren(Transform startingTrans)
         {
             for (int num = startingTrans.childCount - 1; num >= 0; num--)
@@ -253,7 +282,6 @@ namespace SeamstressMod.Survivors.Seamstress
                     CleanChildren(startingTrans.GetChild(num));
                 }
                 Object.DestroyImmediate(startingTrans.GetChild(num).gameObject);
-                Log.Debug("Success!");
             }
         }
         #endregion
@@ -519,6 +547,27 @@ namespace SeamstressMod.Survivors.Seamstress
             reapEndEffect.transform.GetChild(6).gameObject.SetActive(false);
 
             genericImpactExplosionEffect = CreateImpactExplosionEffect("SeamstressScissorImpact", Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matBloodGeneric.mat").WaitForCompletion(), 2);
+            splat = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Brother/BrotherSlamImpact.prefab").WaitForCompletion().InstantiateClone("Splat", true);
+            splat.AddComponent<NetworkIdentity>();
+            splat.transform.GetChild(0).gameObject.SetActive(false);
+            splat.transform.GetChild(1).gameObject.SetActive(false);
+            splat.transform.GetChild(2).gameObject.SetActive(false);
+            splat.transform.GetChild(3).gameObject.SetActive(false);
+            splat.transform.GetChild(4).gameObject.SetActive(false);
+            splat.transform.GetChild(5).gameObject.SetActive(false);
+            splat.transform.GetChild(6).gameObject.SetActive(false);
+            splat.transform.GetChild(7).gameObject.SetActive(false);
+            splat.transform.GetChild(8).gameObject.SetActive(false);
+            splat.transform.GetChild(9).gameObject.SetActive(false);
+            splat.transform.GetChild(10).gameObject.SetActive(false);
+            splat.transform.Find("Decal").GetComponent<Decal>().Material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDecal.mat").WaitForCompletion();
+            splat.transform.Find("Decal").GetComponent<AnimateShaderAlpha>().timeMax = 10f;
+            splat.transform.GetChild(12).gameObject.SetActive(false);
+            splat.transform.GetChild(13).gameObject.SetActive(false);
+            splat.transform.GetChild(14).gameObject.SetActive(false);
+            splat.transform.GetChild(15).gameObject.SetActive(false);
+            splat.transform.localScale = Vector3.one;
+            Content.CreateAndAddEffectDef(splat);
 
             slamEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossGroundSlam.prefab").WaitForCompletion().InstantiateClone("SeamstressSlamEffect");
             slamEffect.AddComponent<NetworkIdentity>();

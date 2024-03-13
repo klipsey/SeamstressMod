@@ -26,7 +26,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float blinkCooldown = 0.5f;
 
-        internal const float butcheredLifeSteal = 0.1f;
+        internal const float butcheredLifeSteal = 0.25f;
 
         internal const float needleLifeSteal = 0.5f;
 

@@ -30,17 +30,34 @@ namespace SeamstressMod.SkillStates
             this.blinkPrefab = SeamstressAssets.blinkPrefab;
             this.split = true;
             base.OnEnter();
+            Vector3 effectPos = this.transform.localPosition;
+            RaycastHit raycastHit;
+            if (Physics.Raycast(effectPos, Vector3.one, out raycastHit, 10f, LayerIndex.world.mask))
+            {
+                effectPos = raycastHit.point;
+            }
+            EffectManager.SpawnEffect(SeamstressAssets.splat, new EffectData
+            {
+                origin = effectPos,
+                rotation = Quaternion.identity,
+                color = SeamstressAssets.coolRed,
+            }, true);
             GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, 1f, 1f, false);
             seamCon.snapBackPosition = base.characterBody.corePosition;
+
             Vector3 position = base.characterBody.corePosition;
             GameObject obj = UnityEngine.Object.Instantiate(projectilePrefab, position, Quaternion.identity);
             ProjectileController component = obj.GetComponent<ProjectileController>();
             if (component)
             {
+                component.owner = base.gameObject;
                 component.Networkowner = base.gameObject;
             }
-            obj.GetComponent<TeamFilter>().teamIndex = GetComponent<TeamComponent>().teamIndex;
-            NetworkServer.Spawn(obj);
+            obj.GetComponent<TeamFilter>().teamIndex = base.GetComponent<TeamComponent>().teamIndex;
+            if(NetworkServer.active)
+            {
+                NetworkServer.Spawn(obj);
+            }
         }
         public override void FixedUpdate()
         {
