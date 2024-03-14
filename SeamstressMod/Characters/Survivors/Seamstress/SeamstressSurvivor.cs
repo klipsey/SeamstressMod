@@ -699,10 +699,6 @@ namespace SeamstressMod.Survivors.Seamstress
             SeamstressController s = self.body.GetComponent<SeamstressController>();
             if (self.body.HasBuff(SeamstressBuffs.butchered) && s.inButchered == false)
             {
-                if(self.gameObject.GetComponent<TemporaryOverlay>() != null)
-                {
-                    UnityEngine.Object.Destroy(self.gameObject.GetComponent<TemporaryOverlay>());
-                }
                 TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
                 temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
                 temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
@@ -715,6 +711,10 @@ namespace SeamstressMod.Survivors.Seamstress
             else if(!self.body.HasBuff(SeamstressBuffs.butchered) && s.inButchered == true)
             {
                 s.inButchered = false;
+                if (self.gameObject.GetComponent<TemporaryOverlay>() != null)
+                {
+                    UnityEngine.Object.Destroy(self.gameObject.GetComponent<TemporaryOverlay>());
+                }
             }
             if(self.body.HasBuff(SeamstressBuffs.parryStart))
             {

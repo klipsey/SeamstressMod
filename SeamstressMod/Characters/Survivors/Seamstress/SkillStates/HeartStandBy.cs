@@ -14,6 +14,7 @@ namespace SeamstressMod.SkillStates
     public class HeartStandBy : BaseState
     {
         public static GameObject chain = SeamstressAssets.chainToHeart;
+        
         public static AnimationCurve yankSuitabilityCurve;
 
         private CharacterBody ownerBody;
@@ -26,7 +27,7 @@ namespace SeamstressMod.SkillStates
 
         private float snapBackDelay = 1f;
 
-        private float delay = 0f;
+        private bool hasFired;
 
         private bool splat;
         public override void OnEnter()
@@ -42,6 +43,8 @@ namespace SeamstressMod.SkillStates
             PlayAnimation("Base", "SpawnToIdle");
             Util.PlaySound("Play_treeBot_R_yank", owner);
             seamCon = owner.GetComponent<SeamstressController>();
+            chain.GetComponent<DestroyOnCondition>().enabled = true;
+            chain.GetComponent<DestroyOnCondition>().seamCon = this.seamCon;
         }
 
         public override void FixedUpdate()
@@ -49,17 +52,17 @@ namespace SeamstressMod.SkillStates
             base.FixedUpdate();
             if (NetworkServer.active)
             {
-                delay -= Time.fixedDeltaTime;
-                if (seamCon.inButchered && delay <= 0)
+                if (seamCon.inButchered && !hasFired)
                 {
-                    delay += 0.5f;
-                    ChainUpdate();
+                    ChainUpdate(SeamstressStaticValues.butcheredDuration);
+                    hasFired = true;
                 }
-                else if (!seamCon.inButchered && base.fixedAge > 1f)
+                if (!seamCon.inButchered && base.fixedAge > 1f)
                 {
                     if (!splat)
                     {
                         splat = true;
+                        chain.GetComponent<DestroyOnCondition>().enabled = false;
                         ChainUpdate(1f);
                     }
                     snapBackDelay -= Time.fixedDeltaTime;
@@ -68,7 +71,7 @@ namespace SeamstressMod.SkillStates
             }
         }
 
-        private void ChainUpdate(float num = 0.4f)
+        private void ChainUpdate(float num)
         {
             Vector3 position = base.transform.position;
             EffectData effectData = new EffectData
@@ -76,7 +79,6 @@ namespace SeamstressMod.SkillStates
                 scale = 1f,
                 origin = position,
                 genericFloat = num,
-                genericBool = seamCon.inButchered,
             };
             effectData.SetHurtBoxReference(owner);
             EffectManager.SpawnEffect(chain, effectData, transmit: true);

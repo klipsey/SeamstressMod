@@ -57,7 +57,6 @@ namespace SeamstressMod.SkillStates
                 aimRequest = base.cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
             skillLocator.utility.UnsetSkillOverride(base.gameObject, SeamstressAssets.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
-
         }
         private void SetPosition(Vector3 newPosition)
         {

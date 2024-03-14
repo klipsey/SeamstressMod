@@ -12,6 +12,8 @@ namespace SeamstressMod.Survivors.Seamstress
     {
         public TeamFilter myTeamFilter;
 
+        public static GameObject boomEffect = SeamstressAssets.blinkPrefab;
+
         public UnityEvent triggerEvents;
 
         private bool hasFired;
@@ -48,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = false;
                     }
-                    EffectManager.SpawnEffect(SeamstressAssets.expungeEffect, new EffectData
+                    EffectManager.SpawnEffect(boomEffect, new EffectData
                     {
                         origin = Util.GetCorePosition(base.gameObject),
                         rotation = Quaternion.identity,

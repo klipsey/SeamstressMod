@@ -64,7 +64,7 @@ namespace SeamstressMod.SkillStates
             base.characterMotor.velocity = Vector3.zero;
             base.characterDirection.moveVector = blinkVector;
             CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
-            speedCoefficient = 0.3f * characterBody.jumpPower * 4f;
+            speedCoefficient = 0.3f * characterBody.jumpPower * 3f;
         }
         protected void CreateBlinkEffect(Vector3 origin)
         {

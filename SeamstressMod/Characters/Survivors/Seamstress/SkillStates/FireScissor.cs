@@ -20,7 +20,7 @@ namespace SeamstressMod.SkillStates
 
         public static float procCoefficient = 1f;
 
-        public static GameObject swordFiringPrefab = SeamstressAssets.expungeEffect;
+        public static GameObject swordFiringPrefab = SeamstressAssets.blinkPrefab;
 
         public static GameObject hitEffectPrefab;
 
