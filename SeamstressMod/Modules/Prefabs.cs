@@ -150,7 +150,6 @@ namespace SeamstressMod.Modules
             bodyComponent._defaultCrosshairPrefab = bodyInfo.crosshair;
             bodyComponent.hideCrosshair = false;
             bodyComponent.preferredPodPrefab = bodyInfo.podPrefab;
-            bodyComponent.preferredInitialStateType = bodyInfo.initialStateType;
 
             //stats
             bodyComponent.baseMaxHealth = bodyInfo.maxHealth;
@@ -452,7 +451,7 @@ namespace SeamstressMod.Modules
             mainHurtbox.indexInGroup = 0;
 
             if (headHurtbox)
-            {
+            {      
                 hurtBoxGroup.hurtBoxes = new HurtBox[]
                 {
                     mainHurtbox,
@@ -608,18 +607,18 @@ namespace SeamstressMod.Modules
             }
 
             NetworkStateMachine networkMachine = bodyPrefab.GetComponent<NetworkStateMachine>();
-            networkMachine.stateMachines = new EntityStateMachine[0];
+            networkMachine.stateMachines = Array.Empty<EntityStateMachine>();
 
             CharacterDeathBehavior deathBehavior = bodyPrefab.GetComponent<CharacterDeathBehavior>();
             if (deathBehavior)
             {
-                deathBehavior.idleStateMachine = new EntityStateMachine[0];
+                deathBehavior.idleStateMachine = Array.Empty<EntityStateMachine>();
             }
 
             SetStateOnHurt setStateOnHurt = bodyPrefab.GetComponent<SetStateOnHurt>();
             if (setStateOnHurt)
             {
-                setStateOnHurt.idleStateMachine = setStateOnHurt.idleStateMachine = new EntityStateMachine[0];
+                setStateOnHurt.idleStateMachine = Array.Empty<EntityStateMachine>();
             }
         }
 

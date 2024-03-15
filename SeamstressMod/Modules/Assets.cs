@@ -45,9 +45,10 @@ namespace SeamstressMod.Modules
             return assetBundle;
 
         }
+
         internal static GameObject CloneTracer(string originalTracerName, string newTracerName)
         {
-            if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName) == null) 
+            if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName) == null)
                 return null;
 
             GameObject newTracer = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName), newTracerName, true);
@@ -68,9 +69,26 @@ namespace SeamstressMod.Modules
         {
             if (!objectToConvert) return;
 
-            foreach (Renderer i in objectToConvert.GetComponentsInChildren<Renderer>())
+            foreach (MeshRenderer i in objectToConvert.GetComponentsInChildren<MeshRenderer>())
             {
-                i?.sharedMaterial?.ConvertDefaultShaderToHopoo();
+                if (i)
+                {
+                    if (i.sharedMaterial)
+                    {
+                        i.sharedMaterial.ConvertDefaultShaderToHopoo();
+                    }
+                }
+            }
+
+            foreach (SkinnedMeshRenderer i in objectToConvert.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                if (i)
+                {
+                    if (i.sharedMaterial)
+                    {
+                        i.sharedMaterial.ConvertDefaultShaderToHopoo();
+                    }
+                }
             }
         }
 
@@ -124,13 +142,12 @@ namespace SeamstressMod.Modules
             if (!ghostPrefab.GetComponent<ProjectileGhostController>()) ghostPrefab.AddComponent<ProjectileGhostController>();
 
             Modules.Assets.ConvertAllRenderersToHopooShader(ghostPrefab);
-            
+
             return ghostPrefab;
         }
 
         internal static GameObject CloneProjectilePrefab(string prefabName, string newPrefabName)
         {
-
             GameObject newPrefab = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/" + prefabName), newPrefabName);
             return newPrefab;
         }
@@ -138,7 +155,7 @@ namespace SeamstressMod.Modules
         internal static GameObject LoadAndAddProjectilePrefab(this AssetBundle assetBundle, string newPrefabName)
         {
             GameObject newPrefab = assetBundle.LoadAsset<GameObject>(newPrefabName);
-            if(newPrefab == null)
+            if (newPrefab == null)
             {
                 Log.ErrorAssetBundle(newPrefabName, assetBundle.name);
                 return null;
