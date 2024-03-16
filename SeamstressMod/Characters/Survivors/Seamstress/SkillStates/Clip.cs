@@ -13,9 +13,13 @@ namespace SeamstressMod.SkillStates
 {
     public class Clip : BaseSeamstressSkillState
     {
-        private GameObject supaEffect = SeamstressAssets.clipSlashEffect;
+        public static GameObject supaEffect = SeamstressAssets.clipSlashEffect;
 
-        private GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+        public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+
+        public static GameObject swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
+
+        public static GameObject wideEffectPrefab = SeamstressAssets.wideSlashEffect;
 
         protected Animator animator;
 
@@ -40,7 +44,9 @@ namespace SeamstressMod.SkillStates
 
         private int snips;
 
-        private float baseDuration = 0.5f;
+        private int alternateSwings = 0;
+
+        private float baseDuration = 0.75f;
 
         private float duration;
 
@@ -64,7 +70,7 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            baseDuration = 0.5f - (0.5f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseDuration = 0.75f - (0.5f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             snips = needleCount;
             if (!scissorRight || !scissorLeft) noScissors = true;
             if(noScissors)
@@ -78,7 +84,7 @@ namespace SeamstressMod.SkillStates
             snipInterval = 0;
             lastSnip = duration - firstSnip;
             if(!characterMotor.isGrounded) inAir = true;
-            StartAimMode(0.5f + duration, false);
+            StartAimMode(duration, false);
             PlayAttackAnimation();
         }
         public override void FixedUpdate()
@@ -181,23 +187,32 @@ namespace SeamstressMod.SkillStates
                 Log.Error("Error, no effect?");
                 return;
             }
-            Transform transform = FindModelChild("SwingCenter");
-            Transform transform2 = FindModelChild("SwingCharCenter");
-            if (transform || transform2)
+            Transform bigSnip = FindModelChild("SwingCenter");
+            Transform smallSlash = FindModelChild("SwingRightSmall");
+            Transform smallSlash2 = FindModelChild("SwingLeftSmall");
+            Transform bipSnipAir = FindModelChild("SwingCharAirCenter");
+            Transform bigSnipAir2 = FindModelChild("SwingCharAirCenter2");
+            if (bigSnip && smallSlash && smallSlash2 && bigSnip && bigSnipAir2) //lol
             {
                 if (noScissors)
                 {
-                    UnityEngine.Object.Instantiate(supaEffect, transform2);
+                    if (hasFired && !hasFired2) UnityEngine.Object.Instantiate(supaEffect, smallSlash);
+                    if (hasFired2)
+                    {
+                        UnityEngine.Object.Instantiate(supaEffect, smallSlash2);
+                    }
                 }
                 else if(inAir)
                 {
-                    Transform transformAir = FindModelChild("SwingCharAirCenter");
-                    UnityEngine.Object.Instantiate(SeamstressAssets.wideSlashEffect, transformAir);
+                    if(hasFired && !hasFired2) UnityEngine.Object.Instantiate(wideEffectPrefab, bipSnipAir);
+                    if (hasFired2)
+                    {
+                        UnityEngine.Object.Instantiate(wideEffectPrefab, bigSnipAir2);
+                    }
                 }
                 else
                 {
-                    UnityEngine.Object.Instantiate(SeamstressAssets.scissorsSwingEffect, transform);
-                    UnityEngine.Object.Instantiate(supaEffect, transform2);
+                    UnityEngine.Object.Instantiate(swingEffectPrefab, bigSnip);
                 }
             }
         }

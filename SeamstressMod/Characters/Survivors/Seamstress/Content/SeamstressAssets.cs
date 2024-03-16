@@ -27,15 +27,11 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject wideSlashEffect;
 
+        internal static GameObject uppercutEffect;
+
         internal static GameObject splat;
 
         internal static GameObject clipSlashEffect;
-
-        internal static GameObject expungeSlashEffect;
-
-        internal static GameObject expungeSlashEffect2;
-
-        internal static GameObject expungeSlashEffect3;
 
         internal static GameObject clipSwingEffect;
 
@@ -64,8 +60,6 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static GameObject impDash;
 
         internal static GameObject smallBlinkPrefab;
-
-        internal static GameObject expungeEffect;
 
         internal static GameObject reapEndEffect;
 
@@ -215,7 +209,7 @@ namespace SeamstressMod.Survivors.Seamstress
         private static void CreateHeart()
         {
             
-            heartMdl = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion().transform.GetChild(0).GetChild(0).gameObject.InstantiateClone("HeartMdl");
+            heartMdl = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion().transform.GetChild(0).GetChild(0).gameObject.InstantiateClone("HeartMdl", false);
             heartMdl.transform.localScale /= 3f;
             Material eatMyButt = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/EliteEarth/AffixEarthCore.mat").WaitForCompletion();
             eatMyButt.SetColor("_Color", coolRed);
@@ -250,6 +244,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Material[] ballsackTickler = new Material[1];
             ballsackTickler[0] = chains;
             chainToHeart = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/EntangleOrbEffect.prefab").WaitForCompletion().InstantiateClone("HeartChains");
+            chainToHeart.AddComponent<NetworkIdentity>();
             chainToHeart.AddComponent<DestroyOnCondition>();
             chainToHeart.transform.GetChild(0).GetComponent<LineRenderer>().materials = ballsackTickler;
             chainToHeart.transform.GetChild(0).GetComponent<LineRenderer>().startColor = Color.red;
@@ -325,7 +320,7 @@ namespace SeamstressMod.Survivors.Seamstress
             pullShit.transform.GetChild(3).gameObject.GetComponent<LineRenderer>().material.SetColor("_TintColor", coolRed);
             Modules.Content.CreateAndAddEffectDef(pullShit);
 
-            trackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("SeamstressTracker");
+            trackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("SeamstressTracker", false);
             Material component = Addressables.LoadAssetAsync<Material>("RoR2/Base/UI/matUIOverbrighten2x.mat").WaitForCompletion();
             Object.DestroyImmediate(trackingTelekinesis.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
             SpriteRenderer balls = trackingTelekinesis.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
@@ -333,15 +328,15 @@ namespace SeamstressMod.Survivors.Seamstress
             grab = _assetBundle.LoadAsset<Sprite>("Grab");
             balls.sprite = grab;
             trackingTelekinesis.transform.GetChild(1).gameObject.SetActive(false);
-            Sprite sprite = Addressables.LoadAssetAsync<Sprite>("texCrosshair2").WaitForCompletion();
-            Material component2 = Addressables.LoadAssetAsync<Material>("Sprites-Default").WaitForCompletion();
+            Sprite sprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/UI/texCrosshair2.png").WaitForCompletion();
+            Material component2 = trackingTelekinesis.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().material;
             Object.DestroyImmediate(trackingTelekinesis.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>());
             SpriteRenderer balls2 = trackingTelekinesis.transform.GetChild(2).gameObject.AddComponent<SpriteRenderer>();
             balls2.SetMaterial(component2);
             balls2.sprite = sprite;
             balls2.color = coolRed;
 
-            notTrackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("SeamstressTracker");
+            notTrackingTelekinesis = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Huntress/HuntressTrackingIndicator.prefab").WaitForCompletion().InstantiateClone("NotSeamstressTracker", false);
             component = Addressables.LoadAssetAsync<Material>("RoR2/Base/UI/matUIOverbrighten2x.mat").WaitForCompletion();
             Object.DestroyImmediate(notTrackingTelekinesis.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
             balls = notTrackingTelekinesis.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
@@ -349,8 +344,8 @@ namespace SeamstressMod.Survivors.Seamstress
             grab = _assetBundle.LoadAsset<Sprite>("NoGrab");
             balls.sprite = grab;
             notTrackingTelekinesis.transform.GetChild(1).gameObject.SetActive(false);
-            sprite = Addressables.LoadAssetAsync<Sprite>("texCrosshair2").WaitForCompletion();
-            component2 = Addressables.LoadAssetAsync<Material>("Sprites-Default").WaitForCompletion();
+            sprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/UI/texCrosshair2.png").WaitForCompletion();
+            component2 = notTrackingTelekinesis.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().material;
             Object.DestroyImmediate(notTrackingTelekinesis.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>());
             balls2 = notTrackingTelekinesis.transform.GetChild(2).gameObject.AddComponent<SpriteRenderer>();
             balls2.SetMaterial(component2);
@@ -411,81 +406,41 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsSwingEffect.AddComponent<NetworkIdentity>();
             scissorsSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
             scissorsSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();//Assets.LoadEffect("HenrySwordSwingEffect", true);
-            scissorsSwingEffect.transform.GetChild(1).localScale = Vector3.one;
             var fard = scissorsSwingEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             fard.startLifetimeMultiplier = 1.8f;
-            UnityEngine.Object.Destroy(scissorsSwingEffect.GetComponent<EffectComponent>());
 
             scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing3");
             scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
             scissorsComboSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
             scissorsComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
             scissorsComboSwingEffect.transform.GetChild(1).localScale = new Vector3(1f, 1.5f, 1.5f);
-            UnityEngine.Object.Destroy(scissorsComboSwingEffect.GetComponent<EffectComponent>());
 
             clipSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ClipSwing");
             clipSlashEffect.AddComponent<NetworkIdentity>();
             clipSlashEffect.transform.GetChild(0).gameObject.SetActive(false);
             Material material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
             clipSlashEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
-            clipSlashEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 0.5f);
+            clipSlashEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 0.75f, 0.5f);
             fard = clipSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
-            fard.startLifetimeMultiplier = 1.8f;
+            fard.startLifetimeMultiplier = 0.6f;
 
             wideSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressWideSwordSwing");
             wideSlashEffect.AddComponent<NetworkIdentity>();
-            wideSlashEffect.transform.GetChild(0).localScale *= 1f;
+            wideSlashEffect.transform.GetChild(0).localScale *= 1.5f;
             wideSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
             var sex = wideSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             sex.startLifetimeMultiplier = 0.6f;
+            sex.startRotation3D = false;
             Object.Destroy(wideSlashEffect.GetComponent<EffectComponent>());
 
-            expungeEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("ExpungeEffect");
-            expungeEffect.AddComponent<NetworkIdentity>();
-            expungeEffect.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
-            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matMercExposedBackdrop.mat").WaitForCompletion());
-            material.SetColor("_TintColor", coolRed);
-            expungeEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
-            expungeEffect.transform.GetChild(1).gameObject.SetActive(false);
-            expungeEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            expungeEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            expungeEffect.transform.GetChild(3).localScale *= 0.25f;
-            expungeEffect.transform.GetChild(4).gameObject.SetActive(false);
-            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSlashImpact.mat").WaitForCompletion());
-            expungeEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
-            expungeEffect.transform.GetChild(5).gameObject.transform.localScale = new Vector3(.1f, .1f, .1f);
-            expungeEffect.transform.GetChild(6).gameObject.SetActive(false);
-            Content.CreateAndAddEffectDef(expungeEffect);
-
-            expungeSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("ExpungeSlash");
-            expungeSlashEffect.AddComponent<NetworkIdentity>();
-            expungeSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
-            expungeSlashEffect.transform.GetChild(0).localRotation = new Quaternion(0f, 90f, 90f, expungeSlashEffect.transform.GetChild(0).localRotation.w);
-            expungeSlashEffect.transform.GetChild(0).localScale = Vector3.one * 2.5f;
-            fard = expungeSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
-            fard.startLifetimeMultiplier = 0.6f;
-            SeamstressPlugin.Destroy(expungeSlashEffect.GetComponent<EffectComponent>());
-
-            expungeSlashEffect2 = expungeSlashEffect.InstantiateClone("ExpungeSlash2");
-            expungeSlashEffect.transform.GetChild(0).localRotation = new Quaternion(0f, 180f, 180f, expungeSlashEffect.transform.GetChild(0).localRotation.w);
-
-            expungeSlashEffect3 = expungeSlashEffect.InstantiateClone("ExpungeSlash3");
-            expungeSlashEffect.transform.GetChild(0).localRotation = new Quaternion(90f, 180f, 180f, expungeSlashEffect.transform.GetChild(0).localRotation.w);
-
-
-
-            //final hit
-            /*
-            scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing4");
-            scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
-            scissorsComboSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
-            //ParticleSystem.MainModule main2 = scissorsComboSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
-            //main2.startLifetimeMultiplier = 0.1f;
-            scissorsComboSwingEffect.transform.GetChild(1).localScale = Vector3.one * 1.0f;
-            UnityEngine.Object.Destroy(scissorsComboSwingEffect.GetComponent<EffectComponent>());
-            */
-
-            //final hit 
+            uppercutEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressUppercut");
+            uppercutEffect.AddComponent<NetworkIdentity>();
+            uppercutEffect.transform.GetChild(0).localScale *= 2f;
+            uppercutEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
+            sex = uppercutEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            sex.startLifetimeMultiplier = 0.6f;
+            sex.startRotation3D = false;
+            Object.Destroy(uppercutEffect.GetComponent<EffectComponent>());
 
             scissorsHitImpactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMerc.prefab").WaitForCompletion().InstantiateClone("ScissorImpact", false);
             scissorsHitImpactEffect.AddComponent<NetworkIdentity>();
@@ -548,6 +503,7 @@ namespace SeamstressMod.Survivors.Seamstress
             material.SetColor("_TintColor", Color.red);
             reapEndEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             reapEndEffect.transform.GetChild(6).gameObject.SetActive(false);
+            Object.Destroy(reapEndEffect.GetComponent<EffectComponent>());
 
             genericImpactExplosionEffect = CreateImpactExplosionEffect("SeamstressScissorImpact", Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matBloodGeneric.mat").WaitForCompletion(), 2);
             splat = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Brother/BrotherSlamImpact.prefab").WaitForCompletion().InstantiateClone("Splat", true);
@@ -688,8 +644,8 @@ namespace SeamstressMod.Survivors.Seamstress
             needleGhost.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpClaw.mat").WaitForCompletion();
             needleGhost.transform.GetChild(3).gameObject.SetActive(false);
             needleGhost.transform.GetChild(4).localScale = new Vector3(.2f, .2f, .2f);
-            needleGhost.transform.GetChild(4).GetChild(0).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
-            needleGhost.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
+            needleGhost.transform.GetChild(4).GetChild(0).gameObject.GetComponent<TrailRenderer>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
+            needleGhost.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
             needleGhost.transform.GetChild(4).GetChild(3).gameObject.SetActive(false);
             needleGhost = PrefabAPI.InstantiateClone(needleGhost, "NeedleGhost");
             if (needleGhost)
@@ -777,18 +733,14 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
 
             GameObject travelEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.transform.GetChild(4).gameObject.InstantiateClone("Spin", false);
-            travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
-            travelEffect.transform.GetChild(1).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
+            travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
+            travelEffect.transform.GetChild(1).gameObject.GetComponent<TrailRenderer>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
             travelEffect.transform.GetChild(2).gameObject.SetActive(false);
             travelEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
 
             ProjectileController controller = scissorRPrefab.GetComponent<ProjectileController>();
             if (_assetBundle.LoadAsset<GameObject>("ScissorRightGhost") != null)
                 controller.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorRightGhost");
-
-            if (!controller.ghostPrefab.GetComponent<EffectComponent>()) controller.ghostPrefab.AddComponent<EffectComponent>();
-            controller.ghostPrefab.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
-            controller.ghostPrefab.GetComponent<EffectComponent>().parentToReferencedTransform = true;
 
             if(!controller.ghostPrefab.GetComponent<VFXAttributes>()) controller.ghostPrefab.AddComponent<VFXAttributes>();
             controller.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
@@ -865,18 +817,14 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
 
             GameObject travelEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.transform.GetChild(4).gameObject.InstantiateClone("Spin", false);
-            travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
-            travelEffect.transform.GetChild(1).gameObject.GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.red);
+            travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
+            travelEffect.transform.GetChild(1).gameObject.GetComponent<TrailRenderer>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
             travelEffect.transform.GetChild(2).gameObject.SetActive(false);
             travelEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
 
             ProjectileController controller = scissorLPrefab.GetComponent<ProjectileController>();
             if (_assetBundle.LoadAsset<GameObject>("ScissorLeftGhost") != null)
                 controller.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorLeftGhost");
-
-            if (!controller.ghostPrefab.GetComponent<EffectComponent>()) controller.ghostPrefab.AddComponent<EffectComponent>();
-            controller.ghostPrefab.GetComponent<EffectComponent>().positionAtReferencedTransform = true;
-            controller.ghostPrefab.GetComponent<EffectComponent>().parentToReferencedTransform = true;
 
             if (!controller.ghostPrefab.GetComponent<VFXAttributes>()) controller.ghostPrefab.AddComponent<VFXAttributes>();
             controller.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;

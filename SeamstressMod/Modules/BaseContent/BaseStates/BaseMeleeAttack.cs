@@ -263,12 +263,12 @@ namespace SeamstressMod.Modules.BaseStates
                         swingSoundString = "Play_moonBrother_swing_horizontal";
                         if (muzzleString == "SwingLeftSmall")
                         {
-                            attack.hitBoxGroup = FindHitBoxGroup("Right");
+                            attack.hitBoxGroup = FindHitBoxGroup("Left");
                             muzzleString = "SwingLeft";
                         }
                         else if(muzzleString == "SwingRightSmall")
                         {
-                            attack.hitBoxGroup = FindHitBoxGroup("Left");
+                            attack.hitBoxGroup = FindHitBoxGroup("Right");
                             muzzleString = "SwingRight";
                         }
                         else if(muzzleString == "SwingCenterSmall")

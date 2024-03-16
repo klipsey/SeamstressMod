@@ -20,7 +20,7 @@ namespace SeamstressMod.SkillStates
 
         public static float procCoefficient = 1f;
 
-        public static GameObject swordFiringPrefab = SeamstressAssets.blinkPrefab;
+        public static GameObject scissorFiringPrefab = SeamstressAssets.blinkPrefab;
 
         public static GameObject hitEffectPrefab;
 
@@ -39,6 +39,7 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+            Util.PlaySound("Play_item_lunar_specialReplace_explode", base.gameObject);
             characterBody.GetComponent<ScissorController>().isRight = true;
             duration = baseDuration / attackSpeedStat;
             modelAnimator = GetModelAnimator();
@@ -92,7 +93,7 @@ namespace SeamstressMod.SkillStates
                         projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = false;
                         projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
                     }
-                    FireSpikeFan(GetAimRay(), "SwingRight");
+                    Fire(GetAimRay(), "SwingRight");
                 }
                 if (chosenAnim == 1)
                 {
@@ -107,7 +108,7 @@ namespace SeamstressMod.SkillStates
                         projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = false;
                         projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
                     }
-                    FireSpikeFan(GetAimRay(), "SwingLeft");
+                    Fire(GetAimRay(), "SwingLeft");
                 }
                 hasFired = true;
             }
@@ -117,7 +118,7 @@ namespace SeamstressMod.SkillStates
             }
         }
 
-        private void FireSpikeFan(Ray aimRay, string muzzleName)
+        private void Fire(Ray aimRay, string muzzleName)
         {
             Util.PlaySound(attackSoundString, base.gameObject);
             Transform transform = FindModelChild(muzzleName);
@@ -126,8 +127,8 @@ namespace SeamstressMod.SkillStates
                 EffectData effectData = new EffectData();
                 effectData.rotation = transform.rotation;
                 effectData.origin = transform.position;
-                effectData.scale = 1f;
-                EffectManager.SpawnEffect(swordFiringPrefab, effectData, transmit: true);
+                effectData.scale = 0.25f;
+                EffectManager.SpawnEffect(scissorFiringPrefab, effectData, transmit: true);
             }
             if (base.isAuthority)
             {

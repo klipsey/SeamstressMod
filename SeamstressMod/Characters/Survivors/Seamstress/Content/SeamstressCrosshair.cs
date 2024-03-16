@@ -22,7 +22,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private static void CreateCrosshair()
         {
-            seamstressCrosshair = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mage/MageCrosshair.prefab").WaitForCompletion().InstantiateClone("SeamCrosshair");
+            seamstressCrosshair = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mage/MageCrosshair.prefab").WaitForCompletion().InstantiateClone("SeamCrosshair", false);
             seamstressCrosshair.transform.GetChild(5).GetChild(0).gameObject.GetComponent<RectTransform>().position = new Vector2(-24f, -20f);
             seamstressCrosshair.transform.GetChild(5).GetChild(0).gameObject.GetComponent<RectTransform>().localScale *= 0.5f;
             seamstressCrosshair.transform.GetChild(5).GetChild(1).gameObject.GetComponent<RectTransform>().position = new Vector2(-12f, -20f);
@@ -31,7 +31,7 @@ namespace SeamstressMod.Survivors.Seamstress
             seamstressCrosshair.transform.GetChild(5).GetChild(2).gameObject.GetComponent<RectTransform>().localScale *= 0.5f;
             seamstressCrosshair.transform.GetChild(5).GetChild(3).gameObject.GetComponent<RectTransform>().position = new Vector2(12f, -20f);
             seamstressCrosshair.transform.GetChild(5).GetChild(3).gameObject.GetComponent<RectTransform>().localScale *= 0.5f;
-            GameObject stock5 = seamstressCrosshair.transform.GetChild(5).GetChild(3).gameObject.InstantiateClone("Stock, 5");
+            GameObject stock5 = seamstressCrosshair.transform.GetChild(5).GetChild(3).gameObject.InstantiateClone("Stock, 5", false);
             stock5.transform.SetParent(seamstressCrosshair.transform.GetChild(5));
             seamstressCrosshair.transform.GetChild(5).GetChild(4).gameObject.GetComponent<RectTransform>().position = new Vector2(24f, -20f);
             NeedleCrosshairController cross = seamstressCrosshair.gameObject.AddComponent<NeedleCrosshairController>();

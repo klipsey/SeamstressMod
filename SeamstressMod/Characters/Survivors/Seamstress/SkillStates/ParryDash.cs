@@ -160,6 +160,5 @@ namespace SeamstressMod.SkillStates
         {
             return InterruptPriority.PrioritySkill;
         }
-
     }
 }

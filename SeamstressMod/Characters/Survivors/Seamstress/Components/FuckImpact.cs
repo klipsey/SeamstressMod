@@ -207,7 +207,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 {
                     effectPos = raycastHit.point;
                 }
-                EffectManager.SpawnEffect(SeamstressAssets.expungeEffect, new EffectData
+                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, new EffectData
                 {
                     origin = effectPos,
                     rotation = Quaternion.identity,

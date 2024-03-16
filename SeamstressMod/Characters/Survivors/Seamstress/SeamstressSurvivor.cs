@@ -39,7 +39,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static GameObject characterPrefab;
         //store extra skills here
-        
+
         public override BodyInfo bodyInfo => new BodyInfo
         {
             bodyName = bodyName,
@@ -67,7 +67,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public override CustomRendererInfo[] customRendererInfos => new CustomRendererInfo[]
         {
-            
+
                 new CustomRendererInfo
                 {
                     childName = "SwordModel",
@@ -81,11 +81,11 @@ namespace SeamstressMod.Survivors.Seamstress
                 {
                     childName = "Model",
                 }
-            
+
         };
 
         public override UnlockableDef characterUnlockableDef => SeamstressUnlockables.characterUnlockableDef;
-        
+
         public override ItemDisplaysBase itemDisplays => new SeamstressItemDisplays();
 
         //set in base classes
@@ -97,7 +97,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public override GameObject displayPrefab { get; protected set; }
 
         public override void Initialize()
-        { 
+        {
 
             //uncomment if you have multiple characters
             //ConfigEntry<bool> characterEnabled = Config.CharacterEnableConfig("Survivors", "Henry");
@@ -106,7 +106,7 @@ namespace SeamstressMod.Survivors.Seamstress
             //    return;
 
             //need the character unlockable before you initialize the survivordef
-            
+
             base.Initialize();
         }
 
@@ -180,7 +180,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Prefabs.SetupHitBoxGroup(characterModelObject, "Left", hitBoxTransform);
         }
 
-        public override void InitializeEntityStateMachines() 
+        public override void InitializeEntityStateMachines()
         {
             //clear existing state machines from your cloned body (probably commando)
             //omit all this if you want to just keep theirs
@@ -351,7 +351,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "PlanarManipulation",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANMAN_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANMAN_DESCRIPTION",
-                keywordTokens = new string[] {},
+                keywordTokens = new string[] { },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Telekinesis)),
@@ -390,7 +390,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HealthCostBlink)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HealthCostDash)),
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
@@ -600,7 +600,7 @@ namespace SeamstressMod.Survivors.Seamstress
         private void DisableOOBCheck(On.RoR2.MapZone.orig_TryZoneStart orig, MapZone self, Collider other)
         {
             CharacterBody component = other.gameObject.GetComponent<CharacterBody>();
-            if(!component.HasBuff(SeamstressBuffs.manipulated))
+            if (!component.HasBuff(SeamstressBuffs.manipulated))
             {
                 orig.Invoke(self, other);
             }
@@ -628,7 +628,7 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            if(!NetworkServer.active)
+            if (!NetworkServer.active)
             {
                 return;
             }
@@ -654,7 +654,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && victimBody.HasBuff(SeamstressBuffs.parryStart) || victimBody.HasBuff(SeamstressBuffs.butchered))
                 {
-                    if(victimBody.HasBuff(SeamstressBuffs.parryStart))
+                    if (victimBody.HasBuff(SeamstressBuffs.parryStart))
                     {
                         victimBody.RemoveBuff(SeamstressBuffs.parryStart);
                         if (!victimBody.HasBuff(SeamstressBuffs.parrySuccess))
@@ -663,7 +663,7 @@ namespace SeamstressMod.Survivors.Seamstress
                         }
                         victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
                     }
-                    else if(victimBody.HasBuff(SeamstressBuffs.butchered) && damageInfo.dotIndex != Dots.ButcheredDot)
+                    else if (victimBody.HasBuff(SeamstressBuffs.butchered) && damageInfo.dotIndex != Dots.ButcheredDot)
                     {
                         SeamstressController s = victimBody.gameObject.GetComponent<SeamstressController>();
                         s.FiendGaugeCalc(-damageInfo.damage);
@@ -708,7 +708,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 temporaryOverlay.AddToCharacerModel(self);
                 s.inButchered = true;
             }
-            else if(!self.body.HasBuff(SeamstressBuffs.butchered) && s.inButchered == true)
+            else if (!self.body.HasBuff(SeamstressBuffs.butchered) && s.inButchered == true)
             {
                 s.inButchered = false;
                 if (self.gameObject.GetComponent<TemporaryOverlay>() != null)
@@ -716,7 +716,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     UnityEngine.Object.Destroy(self.gameObject.GetComponent<TemporaryOverlay>());
                 }
             }
-            if(self.body.HasBuff(SeamstressBuffs.parryStart))
+            if (self.body.HasBuff(SeamstressBuffs.parryStart))
             {
                 TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
                 temporaryOverlay.duration = 0.4f;
@@ -735,7 +735,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 amount *= SeamstressStaticValues.healConversion;
             }
             var res = orig(self, amount, procChainMask, nonRegen);
-            if(self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if (self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
                 SeamstressController s = self.body.GetComponent<SeamstressController>();
                 if (self.body.TryGetComponent<SeamstressController>(out s) && self.body.HasBuff(SeamstressBuffs.butchered))
@@ -747,7 +747,7 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if(sender.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if (sender.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
                 SeamstressController s;
                 if (sender.TryGetComponent<SeamstressController>(out s))
