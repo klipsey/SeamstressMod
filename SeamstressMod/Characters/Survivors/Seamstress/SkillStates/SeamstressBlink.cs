@@ -21,9 +21,9 @@ namespace SeamstressMod.SkillStates
 
         protected Vector3 blinkVector;
 
-        public float duration = 0.2f;
+        public static float duration = 0.2f;
 
-        public float speedCoefficient;
+        private float speedCoefficient;
 
         public static string beginSoundString = "Play_imp_attack_blink";
 

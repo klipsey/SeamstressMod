@@ -28,7 +28,7 @@ namespace SeamstressMod.SkillStates
                     float horizontalBonus = 1f;
                     float verticalBonus = 1f;
 
-                    if (base.characterMotor.jumpCount >= base.characterBody.baseJumpCount)
+                    if (base.characterMotor.jumpCount >= 1)
                     {
                         this.seamCon.hopoopFeatherTimer = 0.1f;
                         hopooFeather = true;
@@ -53,7 +53,7 @@ namespace SeamstressMod.SkillStates
                         int layerIndex = base.modelAnimator.GetLayerIndex("Body");
                         if (layerIndex >= 0)
                         {
-                            if (base.characterMotor.jumpCount == 0 || base.characterBody.baseJumpCount == 1)
+                            if (base.characterMotor.jumpCount == 0)
                             {
                                 base.modelAnimator.CrossFadeInFixedTime("Jump", smoothingParameters.intoJumpTransitionTime, layerIndex);
                             }
@@ -87,8 +87,8 @@ namespace SeamstressMod.SkillStates
                             rotation = Util.QuaternionSafeLookRotation(base.characterMotor.velocity)
                         }, true);
                     }
-                    
 
+                    base.characterMotor.jumpCount++;
 
                     #region For later? thank you rob
                     /*
