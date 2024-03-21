@@ -146,7 +146,7 @@ namespace SeamstressMod.SkillStates
                 collisionDetectionMode = victimRigid.collisionDetectionMode;
                 victimRigid.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             }
-            if (SeamstressStaticValues.funny)
+            if (SeamstressConfig.funny.Value)
             {
                 if (victimMotor)
                 {
@@ -169,7 +169,7 @@ namespace SeamstressMod.SkillStates
                     if(victimBody.HasBuff(SeamstressBuffs.manipulated))
                     {
                         victimBody.RemoveBuff(SeamstressBuffs.manipulated);
-                        victimBody.AddTimedBuff(SeamstressBuffs.manipulatedCd, Mathf.Min(6f, Mathf.Max(0.5f, 6f * base.characterBody.skillLocator.secondary.cooldownScale - base.characterBody.skillLocator.secondary.flatCooldownReduction)));
+                        victimBody.AddTimedBuff(SeamstressBuffs.manipulatedCd, Mathf.Min(SeamstressStaticValues.telekinesisCooldown, Mathf.Max(0.5f, SeamstressStaticValues.telekinesisCooldown * base.characterBody.skillLocator.secondary.cooldownScale - base.characterBody.skillLocator.secondary.flatCooldownReduction)));
                     }
                 }
                 if (victimBody.gameObject.GetComponent<DetonateOnImpact>() != null)
@@ -235,7 +235,7 @@ namespace SeamstressMod.SkillStates
                         num2 = victimRigid.mass;
                     }
                     else vector2.y += Physics.gravity.y * Time.fixedDeltaTime;
-                    if (SeamstressStaticValues.funny) num2 = Mathf.Clamp(num2, 60f, 120f);
+                    if (SeamstressConfig.funny.Value) num2 = Mathf.Clamp(num2, 60f, 120f);
                     float num3 = pullSuitabilityCurve.Evaluate(num2);
                     victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * (num3 * Mathf.Max(num2, 100f)) * num, alwaysApply: true, disableAirControlUntilCollision: true);
                 }
@@ -272,6 +272,11 @@ namespace SeamstressMod.SkillStates
                     blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                     blastAttack.damageColorIndex = DamageColorIndex.Default;
                     blastAttack.damageType = DamageType.Stun1s;
+                    if(butchered)
+                    {
+                        blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
+                        blastAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                    }
                     blastAttack.attackerFiltering = AttackerFiltering.Default;
                     blastAttack.Fire();
                     detonateNextFrame = false;

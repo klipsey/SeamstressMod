@@ -4,10 +4,13 @@ using UnityEngine;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
-    public class SeamstressBlinkPassive : MonoBehaviour
+    public class SeamstressPassive : MonoBehaviour
     {
         public SkillDef blinkPassive;
+        public SkillDef impGauge;
+
         public GenericSkill passiveSkillSlot;
+        public GenericSkill impGaugeSkillSlot;
 
         public bool isBlink
         {

@@ -18,7 +18,7 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected int needleCount;
 
-        protected bool empowered;
+        protected bool butchered;
 
         protected bool inDash;
 
@@ -33,16 +33,20 @@ namespace SeamstressMod.Modules.BaseStates
         }
         protected void RefreshState()
         {
+            if(NetworkServer.active)
+            {
             needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles);
             scissorRight = characterBody.HasBuff(SeamstressBuffs.scissorRightBuff);
             scissorLeft = characterBody.HasBuff(SeamstressBuffs.scissorLeftBuff);
+            }
+
             if (!seamCon)
             {
                 seamCon = base.GetComponent<SeamstressController>();
             }
             if (seamCon)
             {
-                empowered = characterBody.HasBuff(SeamstressBuffs.butchered);
+                butchered = seamCon.inButchered;
                 seamCon.isDashing = inDash;
             }
         }

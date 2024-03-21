@@ -6,7 +6,7 @@ using TMPro;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
-    public class FiendGauge : MonoBehaviour
+    public class ImpGauge : MonoBehaviour
     {
         public HUD targetHUD;
         public SeamstressController target;
@@ -50,7 +50,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             if (this.fillRectTransform)
             {
-                float fill = Util.Remap(this.target.FiendGaugeAmountPercent() * 100, 0f, 100f, 0f, 1f);
+                float fill = Util.Remap(this.target.ImpGaugeAmountPercent() * 100, 0f, 100f, 0f, 1f);
                 this.fillRectTransform.anchorMin = new Vector2(0f, 0f);
                 this.fillRectTransform.anchorMax = new Vector2(fill, 1f);
                 this.fillRectTransform.sizeDelta = new Vector2(1f, 1f);

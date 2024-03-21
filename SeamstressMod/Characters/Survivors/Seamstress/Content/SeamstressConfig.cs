@@ -5,7 +5,7 @@ namespace SeamstressMod.Survivors.Seamstress
 {
     public static class SeamstressConfig
     {
-        public static ConfigEntry<bool> someConfigBool;
+        public static ConfigEntry<bool> funny;
         public static ConfigEntry<float> someConfigFloat;
         public static ConfigEntry<float> someConfigFloatWithCustomRange;
 
@@ -14,15 +14,15 @@ namespace SeamstressMod.Survivors.Seamstress
             string section = "Seamstress";
 
             //add more here or else you're cringe
-            someConfigBool = Config.BindAndOptions(
+            funny = Config.BindAndOptions(
                 section,
-                "someConfigBool",
-                true,
-                "this creates a bool config, and a checkbox option in risk of options");
+                "Pickup Big Enemies",
+                false,
+                "Allows you to pickup bigger enemies for fun.");
 
             someConfigFloat = Config.BindAndOptions(
                 section,
-                "someConfigfloat",
+                "Nothing. For now...",
                 5f);//blank description will default to just the name
 
             someConfigFloatWithCustomRange = Config.BindAndOptions(
@@ -31,7 +31,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 5f,
                 0,
                 50,
-                "if a custom range is not passed in, a float will default to a slider with range 0-20. risk of options only has sliders");
+                "Nothing. For now...");
         }
     }
 }

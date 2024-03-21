@@ -71,8 +71,8 @@ namespace SeamstressMod.SkillStates
             {
                 snapPosition = seamCon.snapBackPosition;
                 currentPosition = base.characterBody.corePosition;
-                duration = (currentPosition - snapPosition).magnitude / 10f;
-                duration = Mathf.Clamp(duration, 0.2f, 1f);
+                duration = (currentPosition - snapPosition).magnitude;
+                duration = Util.Remap(duration, 0f, 100f, 0.2f, 1f);
                 base.characterDirection.forward = snapPosition;
             }
         }

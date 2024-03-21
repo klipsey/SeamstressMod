@@ -159,7 +159,7 @@ namespace SeamstressMod.Modules.BaseStates
 
         private void EnterAttack()
         {
-            Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
+            Util.PlayAttackSpeedSound(swingSoundString, base.gameObject, attackSpeedStat);
             PlaySwingEffect();
             if (buffer == true)
             {

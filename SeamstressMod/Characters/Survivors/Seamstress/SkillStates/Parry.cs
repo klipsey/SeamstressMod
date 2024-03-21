@@ -46,7 +46,7 @@ namespace SeamstressMod.SkillStates
             }
             else if(base.isAuthority && base.fixedAge >= duration && !num)
             {
-                skillLocator.special.rechargeStopwatch += 0.5f * skillLocator.special.cooldownRemaining;
+                skillLocator.utility.rechargeStopwatch += 0.5f * skillLocator.utility.cooldownRemaining;
                 outer.SetNextStateToMain();
             }
         }

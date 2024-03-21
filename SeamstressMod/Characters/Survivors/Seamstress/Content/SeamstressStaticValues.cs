@@ -10,7 +10,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float trimThirdDamageCoefficient = 1.3f;
 
-        internal const float flurryDamageCoefficient = 1.15f;
+        internal const float flurryDamageCoefficient = 1.2f;
 
         internal const float scissorSlashDamageCoefficient = 2f;
 
@@ -26,10 +26,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float blinkCooldown = 0.5f;
 
-        internal const float butcheredLifeSteal = 0.25f;
+        internal const float butcheredLifeSteal = 0.15f;
 
-        internal const float needleLifeSteal = 0.5f;
-
+        internal const float clipLifeSteal = 0.25f;
         //75% of healing is converted but i was too lazy oops
         internal const float healConversion = 0.01f;
 
@@ -39,9 +38,9 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float butcheredDuration = 6f;
 
-        internal const float passiveScaling = 0.1f;
+        internal const float passiveScaling = 0.075f;
 
-        internal const float parryDamageCoefficient = 10f;
+        internal const float parryDamageCoefficient = 4f;
 
         internal const float needleDamageCoefficient = 1f;
 
@@ -59,6 +58,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float telekinesisDamageCoefficient = 0.3f;
 
-        internal const bool funny = false;
+        internal const float telekinesisCooldown = 6f;
     }
 }

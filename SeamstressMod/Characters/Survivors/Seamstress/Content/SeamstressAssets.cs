@@ -435,7 +435,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
             uppercutEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressUppercut");
             uppercutEffect.AddComponent<NetworkIdentity>();
-            uppercutEffect.transform.GetChild(0).localScale *= 2f;
             uppercutEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();
             sex = uppercutEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             sex.startLifetimeMultiplier = 0.6f;
@@ -648,6 +647,7 @@ namespace SeamstressMod.Survivors.Seamstress
             needleGhost.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
             needleGhost.transform.GetChild(4).GetChild(3).gameObject.SetActive(false);
             needleGhost = PrefabAPI.InstantiateClone(needleGhost, "NeedleGhost");
+            Object.Destroy(needleGhost.GetComponent<EffectComponent>());
             if (needleGhost)
                 needleController.ghostPrefab = needleGhost;
             if (!needleController.ghostPrefab.GetComponent<NetworkIdentity>())
@@ -660,7 +660,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             needleButcheredPrefab = PrefabAPI.InstantiateClone(needlePrefab, "NeedleButchered");
             ProjectileHealOwnerOnDamageInflicted needleHeal = needleButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = SeamstressStaticValues.needleLifeSteal;
+            needleHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
             needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
         }
 
@@ -680,7 +680,7 @@ namespace SeamstressMod.Survivors.Seamstress
             sphereCollider.enabled = false;
 
             ProjectileImpactExplosion impactAlly = scissorRPrefab.GetComponent<ProjectileImpactExplosion>();
-            impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
+            impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorSlashDamageCoefficient;
             impactAlly.blastProcCoefficient = 1f;
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
@@ -695,23 +695,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileSimple simple = scissorRPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
-
-            ProjectileProximityBeamController prox = scissorRPrefab.AddComponent<ProjectileProximityBeamController>();
-            prox.attackFireCount = 1;
-            prox.inheritDamageType = true;
-            prox.attackInterval = 0.001f;
-            prox.listClearInterval = 16f;
-            prox.attackRange = 8f;
-            prox.minAngleFilter = 0f;
-            prox.maxAngleFilter = 180;
-            prox.procCoefficient = 1f;
-            prox.damageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
-            prox.bounces = 0;
-            prox.lightningType = RoR2.Orbs.LightningOrb.LightningType.Count;
-
-            ProjectileHealOwnerOnDamageInflicted heal = scissorRPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            heal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
-            heal.enabled = false;
 
             scissorRPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
 
@@ -764,7 +747,7 @@ namespace SeamstressMod.Survivors.Seamstress
             sphereCollider.enabled = false;
 
             ProjectileImpactExplosion impactAlly = scissorLPrefab.GetComponent<ProjectileImpactExplosion>();
-            impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
+            impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorSlashDamageCoefficient;
             impactAlly.blastProcCoefficient = 1f;
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
@@ -779,23 +762,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
             ProjectileSimple simple = scissorLPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
-
-            ProjectileProximityBeamController prox = scissorLPrefab.AddComponent<ProjectileProximityBeamController>();
-            prox.attackFireCount = 1;
-            prox.inheritDamageType = true;
-            prox.attackInterval = 0.001f;
-            prox.listClearInterval = 16f;
-            prox.attackRange = 8f;
-            prox.minAngleFilter = 0f;
-            prox.maxAngleFilter = 180;
-            prox.procCoefficient = 1f;
-            prox.damageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
-            prox.bounces = 0;
-            prox.lightningType = RoR2.Orbs.LightningOrb.LightningType.Count;
-
-            ProjectileHealOwnerOnDamageInflicted heal = scissorLPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            heal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
-            heal.enabled = false;
 
             scissorLPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
 

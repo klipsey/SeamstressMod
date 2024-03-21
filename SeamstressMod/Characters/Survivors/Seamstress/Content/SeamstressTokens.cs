@@ -23,11 +23,11 @@ namespace SeamstressMod.Survivors.Seamstress
             string prefix = SeamstressSurvivor.SEAMSTRESS_PREFIX;
 
             string desc = "Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
-             + "< ! > Trimming Slashes is a consistent way to apply Cut while Butchered is inactive." + Environment.NewLine + Environment.NewLine
-             + "< ! > Woven Fate is your main mobility. Use the recast to reposition your self after you leap." + Environment.NewLine + Environment.NewLine
-             + "< ! > Glimpse of Corruption can give you incredible damage through Butchered but use it carefully, you could preemptively end your run." + Environment.NewLine + Environment.NewLine
-             + "< ! > Don't forget to heal during Butchered, it can give you incredible burst damage with Expunge." + Environment.NewLine + Environment.NewLine
-             + "< ! > Use Threaded Volley to fire your needles for devestating group damage and healing." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Needles are a great source of extra damage. Use them wisely for damage and mobility." + Environment.NewLine + Environment.NewLine
+             + "< ! > Make sure not to use Clip in a sticky situation. Having backup Needles might just save you." + Environment.NewLine + Environment.NewLine
+             + "< ! > Fill your Fiend Gauge as soon as you can while Butchered. The stats and health it provides can halt a quick death." + Environment.NewLine + Environment.NewLine
+             + "< ! > Glimpse of Corruption is a great way to boost your damage but be wary of where you leave your heart." + Environment.NewLine + Environment.NewLine
+             + "< ! > Use and retrieve your Sentient weapon often to keep up a balance of damage and mobility." + Environment.NewLine + Environment.NewLine;
 
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
@@ -44,19 +44,25 @@ namespace SeamstressMod.Survivors.Seamstress
             #endregion
 
             #region Passive
-            Language.Add(prefix + "PASSIVE_NAME", "Fiendish Corruption");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1</style> health or shield missing.");
+            Language.Add(prefix + "PASSIVE_NAME", "Primal Impstincts");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling}</style> base damage for every <style=cIsHealth>1 health missing</style>. " +
+                $"Jumping is replaced with <color=#9B3737>Blinking</color>. <color=#9B3737>Blinking</color> in the air consumes and fires a <color=#9B3737>Needle</color> that deals " +
+                $"<style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style>.");
+
+            Language.Add(prefix + "GAUGE_NAME", "Imp Gauge");
+            Language.Add(prefix + "GAUGE_DESCRIPTION", $"During " + Tokens.butcheredPrefix + $", <style=cIsHealing>99% of healing</style> is converted into <color=#9B3737>Imp Gauge</color> boosting <style=cIsDamage>Attack Speed</style> and " +
+            $"<style=cIsUtility>Movement Speed</style>. <color=#9B3737>Imp Gauge</color> acts as bonus <style=cIsHealth>health</style>. <style=cIsHealing>Heal</style> for up to <style=cIsHealth>25% of your max health</style> when " + Tokens.butcheredPrefix + " ends.");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
             Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.sentiencePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>. " +
-              $" Every 3rd hit deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style> and enemies.");
+              $" Every 3rd hit deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style>.");
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Flurry");
-            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.sentiencePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style> applying to enemies.");
+            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.sentiencePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>.");
             #endregion
-
+            
             #region Secondary
             Language.Add(prefix + "SECONDARY_PLANARSHIFT_NAME", "Planar Shift");
             Language.Add(prefix + "SECONDARY_PLANARSHIFT_DESCRIPTION", $"Consume all <color=#9B3737>Needles</color>. Temporarily shift and reappear dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewAltDamageCoefficient}% damage</style>" +
@@ -66,22 +72,29 @@ namespace SeamstressMod.Survivors.Seamstress
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
             Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.sentiencePrefix +  $". Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip up to 5 additional times based on <color=#9B3737>Needles</color> consumed. " +
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.butcheredLifeSteal}% of the damage dealt</style>.");
+
+            Language.Add(prefix + "SECONDARY_PLANMAN_NAME", "Planar Manipulation");
+            Language.Add(prefix + "SECONDARY_PLANMAN_DESCRIPTION", $"<color=#9B3737>Manipulate</color>. Slamming enemies at high speeds deals <style=cIsDamage>{100f * SeamstressStaticValues.telekinesisDamageCoefficient}% damage</style> in an area. " +
+                $"<style=cIsUtility>{SeamstressStaticValues.telekinesisCooldown}</style> second cooldown on the same target.");
+
             #endregion
 
             #region Utility 
-            Language.Add(prefix + "UTILITY_BLINK_NAME", "Glimpse of Corruption");
-            Language.Add(prefix + "UTILITY_BLINK_DESCRIPTION", Tokens.halfHealthPrefix + $". Blink in a direction dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> applying to enemies. Gain "
-                + Tokens.butcheredPrefix + ".");
+            Language.Add(prefix + "UTILITY_HEARTDASH_NAME", "Glimpse of Corruption");
+            Language.Add(prefix + "UTILITY_HEARTDASH_DESCRIPTION", $"Tear out your <color=#9B3737>Heart</color> causing you to <color=#9B3737>Hemorrhage</color> and gain " + Tokens.butcheredPrefix + $". Dash forward dealing <style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style> " +
+                $"knocking enemies into the air. Recasting or taking damage that exceeds <color=#9B3737>Imp Gauge</color> removes <style=cIsUtility>Butchered</style> and returns you to your <color=#9B3737>Heart</color>.");
 
             Language.Add(prefix + "UTILITY_PARRY_NAME", "Glimpse of Purity");
-            Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Briefly become <style=cIsUtility>Invulnerable</style>. If hit, dash forward dealing <style=cIsDamage>2x{100f * SeamstressStaticValues.parryDamageCoefficient}% damage</style> applying . Gain " +
-               Tokens.butcheredPrefix + $". During " + Tokens.butcheredPrefix + $", gain base damage as if your health was at <style=cIsHealth>50%</style>. Missing refunds <style=cIsUtility>50%</style> of the cooldown.");
+            Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Briefly become <style=cIsUtility>Invulnerable</style>. If hit, dash forward dealing <style=cIsDamage>{100f * SeamstressStaticValues.parryDamageCoefficient}% damage</style> after a delay. Gain " +
+               Tokens.butcheredPrefix + $". During " + Tokens.butcheredPrefix + $", gain base damage as if you had <style=cIsHealth>50% health</style>. Missing the hit window refunds <style=cIsUtility>50%</style> of the cooldown.");
 
             #endregion
 
             #region Special
             Language.Add(prefix + "SPECIAL_FIRE_NAME", "Skewer");
-            Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"");
+            Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"Fire your " + Tokens.sentiencePrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style> to enemies. " +
+                $"Picking up your " + Tokens.sentiencePrefix + $" weapon deals <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style> in an area. " +
+                $"Gain <style=cIsUtility>Attack Speed</style> and <style=cIsUtility>Movement Speed</style> for each weapon missing.");
             #endregion
 
             #region Achievements

@@ -11,7 +11,6 @@ namespace SeamstressMod.SkillStates
 {   
     public class Flurry : BaseMeleeAttack
     {
-        private GameObject swingEffectInstance;
         public override void OnEnter()
         {
             RefreshState();
@@ -21,8 +20,8 @@ namespace SeamstressMod.SkillStates
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
-            baseDuration = 1.1f - (1.1f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
-            baseScissorDuration = 2f - (2f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseDuration = 1.1f - (1.1f * (0.5f * (seamCon.ImpGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseScissorDuration = 2f - (2f * (0.5f * (seamCon.ImpGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             moddedDamageType = DamageTypes.Empty;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
@@ -44,7 +43,7 @@ namespace SeamstressMod.SkillStates
             bonusSwingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeftSmall" : "SwingRightSmall";
             buffer = false;
-            if (empowered)
+            if (butchered)
             {
                 moddedDamageType2 = DamageTypes.CutDamage;
                 moddedDamageType3 = DamageTypes.ButcheredLifeSteal;
@@ -65,7 +64,6 @@ namespace SeamstressMod.SkillStates
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 
             base.OnEnter();
-            Util.PlayAttackSpeedSound("Play_imp_attack", gameObject, duration * attackStartPercentTime);
         }
         public override void FixedUpdate()
         {

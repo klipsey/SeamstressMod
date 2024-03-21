@@ -12,34 +12,30 @@ namespace SeamstressMod.Modules
 
         public const string needlePrefix = "<color=#9B3737>Needle</color>";
 
-        public const string halfHealthPrefix = "<style=cIsHealth>50% HP</style>";
-
-        public const string healthCostPrefix = "<style=cIsHealth>X% of your current health</style>";
-
         public const string butcheredPrefix = "<style=cIsUtility>Butchered</style>";
 
-        public static string cutKeyword = KeywordText("Cut", $"Bleed enemies for <style=cIsDamage>1%</style> (<style=cIsDamage>0.5%</style> against bosses) of the " +
+        public static string cutKeyword = KeywordText("Cut", $"Enemies bleed for <style=cIsDamage>1%</style> (<style=cIsDamage>0.5%</style> against bosses) of the " +
             $"enemies missing <style=cIsHealth>health</style> per second for {SeamstressStaticValues.cutDuration} seconds.");
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 
-        public static string needleKeyword = KeywordText("Needle", $" Gain <color=#9B3737>Needles</color> by picking up your " 
-            + sentiencePrefix + " weapon or when landing attacks with <color=#9B3737>Sentience</color> without your " + sentiencePrefix + " weapon.");
+        public static string needleKeyword = KeywordText("Needle", $"Gain <color=#9B3737>Needles</color> by picking up your " 
+            + sentiencePrefix + " weapon or when landing <color=#9B3737>Sentient</color> attacks without your weapon.");
 
-        public static string sentienceKeyword = KeywordText("Sentient", "Your <color=#9B3737>Sentient</color> weapon. Gain <style=cIsDamage>attack speed</style> and " +
-            "<style=cIsUtility>movement speed</style> for each stock missing. Handle with caution.");
+        public static string manipulateKeyword = KeywordText("Manipulate", $"Deal bonus damage to an enemy based on their velocity and <style=cIsHealth>max health</style>.");
+
+        public static string hemorrhageKeyword = KeywordText("Hemorrhage", "You are bleeding out.");
+
+        public static string sentienceKeyword = KeywordText("Sentient", "Your <color=#9B3737>Sentient</color> weapon. Gain <style=cIsDamage>Attack Speed</style> and " +
+            "<style=cIsUtility>Movement Speed</style> for each stock missing. Handle with caution.");
 
         public static string sentienceRangeKeyword = KeywordText("Sentient", "When your " + sentiencePrefix + " weapon is available increase the range of this " +
-            "<style=cIsDamage>attack</style>.");
+            "attack.");
 
         public static string sentienceAttackKeyword = KeywordText("Sentient", $"When your " + sentiencePrefix + $" weapon is available hit for an additional strike " +
-            $"dealing <style=cIsDamage>{SeamstressStaticValues.scissorSlashDamageCoefficient * 100}%</style> damage.");
+            $"dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}%</style> damage.");
 
-        public static string healthCostKeyword = KeywordText("X% HP", "The skill costs " + healthCostPrefix + ".");
-
-        public static string butcheredKeyword = KeywordText("Butchered", "Grant all skills an additional <style=cIsHealing>10% lifesteal</style> and grant every ability " + cutPrefix +
-            ". <style=cIsHealing>99% of healing</style> is converted into <color=#9B3737>Fiend Gauge</color> boosting <style=cIsDamage>attack speed</style> and " +
-            "<style=cIsUtility>movement speed</style>.");
+        public static string butcheredKeyword = KeywordText("Butchered", $"Grant all skills an additional <style=cIsHealing>{100f * SeamstressStaticValues.butcheredLifeSteal}% lifesteal</style> and " + cutPrefix + ".");
         public static string DamageText(string text)
         {
             return $"<style=cIsDamage>{text}</style>";

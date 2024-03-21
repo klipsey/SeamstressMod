@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using RoR2.Projectile;
 using RoR2;
 using static UnityEngine.SendMouseEvents;
+using R2API;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -166,6 +167,25 @@ namespace SeamstressMod.Survivors.Seamstress
             if (base.enabled)
             {
                 TrySticking(impactInfo.collider, impactInfo.estimatedImpactNormal);
+                BlastAttack impactAttack = new BlastAttack();
+                GameObject owner = base.gameObject.GetComponent<ProjectileController>().owner;
+                impactAttack.attacker = owner;
+                impactAttack.inflictor = owner;
+                impactAttack.teamIndex = TeamComponent.GetObjectTeam(owner);
+                impactAttack.baseDamage = SeamstressStaticValues.scissorDamageCoefficient * owner.GetComponent<CharacterBody>().damage;
+                impactAttack.baseForce = 600f;
+                impactAttack.position = base.transform.position;
+                impactAttack.procCoefficient = 1f;
+                impactAttack.radius = 6f;
+                impactAttack.damageType = DamageType.Stun1s;
+                if (owner.GetComponent<SeamstressController>().inButchered)
+                {
+                    impactAttack.AddModdedDamageType(DamageTypes.CutDamage);
+                    impactAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                }
+                impactAttack.falloffModel = BlastAttack.FalloffModel.None;
+                impactAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
+                impactAttack.Fire();
             }
         }
 
@@ -194,7 +214,6 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             if (gameObject)
             {
-                base.GetComponent<ProjectileProximityBeamController>().enabled = false;
                 stickEvent.Invoke();
                 ParticleSystem[] array = stickParticleSystem;
                 for (int i = 0; i < array.Length; i++)

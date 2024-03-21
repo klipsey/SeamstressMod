@@ -37,8 +37,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         private bool hasPlayedEffect = true;
 
-        private bool butchered = false;
-
         public bool isDashing;
 
         public Vector3 heldDashVector;
@@ -56,9 +54,11 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public bool inButchered = false;
 
+        public bool runButchered;
+
         public bool drainGauge;
 
-        private bool refunded;
+        private bool hasRefunded;
         public void Awake()
         {
             characterBody = base.GetComponent<CharacterBody>();
@@ -72,34 +72,43 @@ namespace SeamstressMod.Survivors.Seamstress
             blinkCd -= Time.fixedDeltaTime;
             if (butcheredDuration > 0f) butcheredDuration -= Time.fixedDeltaTime;
             if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
-            if (drainGauge && fiendGauge > 0)
-            {
-                fiendGauge -= drainAmount;
-                if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 4, default, false);
-            }
-            else if (fiendGauge < 0)
-            {
-                drainGauge = false;
-                fiendGauge = 0f;
-            }
-            if (skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressAssets.snapBackSkillDef)
-            {
-                cooldownRefund += Time.fixedDeltaTime;
-                refunded = false;
-            }
-            else if(!refunded && !skillLocator.utility.skillOverrides.Any())
-            {
-                skillLocator.utility.rechargeStopwatch += cooldownRefund;
-                cooldownRefund = 0f;
-                refunded = true;
-            }
-            //Log.Debug("Fiend gauge " + fiendGauge);
+            RefundUtil();
+            DrainGauge();
             CreateBlinkEffect(heldOrigin);
             CalculateBonusDamage();
             ButcheredSound();
             IsButchered();
         }
-
+        private void RefundUtil()
+        {
+            if (!hasRefunded && skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressAssets.snapBackSkillDef)
+            {
+                cooldownRefund += Time.fixedDeltaTime;
+                hasRefunded = true;
+            }
+            else if (hasRefunded && !skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillName == "HeartDashSeamstress")
+            {
+                skillLocator.utility.rechargeStopwatch += cooldownRefund;
+                cooldownRefund = 0f;
+                hasRefunded = false;
+            }
+        }
+        private void DrainGauge()
+        {
+            if (drainGauge)
+            {
+                if (fiendGauge > 0f)
+                {
+                    fiendGauge -= drainAmount;
+                    if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 8, default, false);
+                }
+                else if (fiendGauge < 0f)
+                {
+                    drainGauge = false;
+                    fiendGauge = 0f;
+                }
+            }
+        }
         private void CreateBlinkEffect(Vector3 origin)
         {
             if (supaPrefab && !hasPlayedEffect && dashStopwatch < 0)
@@ -121,7 +130,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             this.blinkReady = true;
         }
-        public void FiendGaugeCalc(float healDamage)
+        public void ImpGaugeCalc(float healDamage)
         {
             if((fiendGauge + healDamage) < (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))
             {
@@ -132,21 +141,20 @@ namespace SeamstressMod.Survivors.Seamstress
                 fiendGauge = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
             }
         }
-        public float FiendGaugeAmount()
+        public float ImpGaugeAmount()
         {
             return fiendGauge;
         }
-        public float FiendGaugeAmountPercent()
+        public float ImpGaugeAmountPercent()
         {
             return (fiendGauge / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient));
         }
         private void IsButchered()
         {
-            if (inButchered && !butchered)
+            if (inButchered && !runButchered)
             {
                 drainGauge = false;
                 butcheredDuration = SeamstressStaticValues.butcheredDuration;
-                butchered = true;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -160,12 +168,12 @@ namespace SeamstressMod.Survivors.Seamstress
                     temporaryOverlay.animateShaderAlpha = true;
                     #endregion
                 }
+                runButchered = true;
             }
-            else if (!inButchered && butchered)
+            else if (!inButchered && runButchered)
             {
-                butchered = false;
-                drainGauge = true;
                 drainAmount = healthComponent.fullHealth / 125;
+                drainGauge = true;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -183,7 +191,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 UnityEngine.Object.Instantiate<GameObject>(endReap, characterBody.modelLocator.transform);
                 Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
-                //fire expunge at end of butchered
+                runButchered = false;
             }
         }
         //butchered end sound

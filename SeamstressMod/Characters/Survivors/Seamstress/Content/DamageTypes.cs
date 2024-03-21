@@ -19,7 +19,6 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType Empty;
         public static DamageAPI.ModdedDamageType CutDamage;
         public static DamageAPI.ModdedDamageType NoSword;
-        public static DamageAPI.ModdedDamageType AddNeedlesDamage;
         public static DamageAPI.ModdedDamageType ButcheredLifeSteal;
         public static DamageAPI.ModdedDamageType ClipLifeSteal;
         public static DamageAPI.ModdedDamageType PullDamage;
@@ -28,7 +27,6 @@ namespace SeamstressMod.Survivors.Seamstress
             Empty = DamageAPI.ReserveDamageType();
             CutDamage = DamageAPI.ReserveDamageType();
             NoSword = DamageAPI.ReserveDamageType();
-            AddNeedlesDamage = DamageAPI.ReserveDamageType();
             ButcheredLifeSteal = DamageAPI.ReserveDamageType();
             ClipLifeSteal = DamageAPI.ReserveDamageType();
             PullDamage = DamageAPI.ReserveDamageType();
@@ -66,11 +64,8 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 if (damageInfo.HasModdedDamageType(NoSword))
                 {
-                    attackerBody.GetComponent<NeedleController>().RpcAddNeedle();
-                }
-                if(damageInfo.HasModdedDamageType(AddNeedlesDamage))
-                {
-                    attackerBody.GetComponent<NeedleController>().RpcAddNeedle();
+                    Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
+                    if (attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) attackerBody.AddBuff(SeamstressBuffs.needles);
                 }
                 if (damageInfo.HasModdedDamageType(ButcheredLifeSteal))
                 {
@@ -78,7 +73,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
                 if (damageInfo.HasModdedDamageType(ClipLifeSteal))
                 {
-                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.butcheredLifeSteal, default(ProcChainMask), true);
+                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.clipLifeSteal, default(ProcChainMask), true);
                 }
             }
         }

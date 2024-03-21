@@ -1,3 +1,6 @@
+# 0.2.0
+- Full Rework
+- No Networking
 # 0.1.10
 - Flurry is stronger but slower
 - NETWORKING FIXED AGAIN

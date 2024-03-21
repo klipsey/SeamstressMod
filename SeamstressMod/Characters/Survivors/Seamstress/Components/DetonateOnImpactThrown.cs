@@ -5,6 +5,7 @@ using RoR2.UI;
 using TMPro;
 using UnityEngine.Networking;
 using static RoR2.CharacterMotor;
+using R2API;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -77,6 +78,7 @@ namespace SeamstressMod.Survivors.Seamstress
                         rotation = Quaternion.identity,
                     }, true);
                     CharacterBody component = attacker.GetComponent<CharacterBody>();
+                    SeamstressController seamCon = attacker.GetComponent<SeamstressController>();
                     float num2 = component.damage;
                     BlastAttack blastAttack = new BlastAttack();
                     blastAttack.position = victimBody.footPosition;
@@ -93,6 +95,11 @@ namespace SeamstressMod.Survivors.Seamstress
                     blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                     blastAttack.damageColorIndex = DamageColorIndex.Default;
                     blastAttack.damageType = DamageType.Stun1s;
+                    if (seamCon.inButchered)
+                    {
+                        blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
+                        blastAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                    }
                     blastAttack.attackerFiltering = AttackerFiltering.Default;
                     blastAttack.Fire();
                 }
@@ -115,6 +122,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     color = SeamstressAssets.coolRed,
                 }, true);
                 CharacterBody component = attacker.GetComponent<CharacterBody>();
+                SeamstressController seamCon = attacker.GetComponent<SeamstressController>();
                 float num2 = component.damage;
                 BlastAttack blastAttack = new BlastAttack();
                 blastAttack.position = victimBody.footPosition;
@@ -131,6 +139,11 @@ namespace SeamstressMod.Survivors.Seamstress
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                 blastAttack.damageColorIndex = DamageColorIndex.Default;
                 blastAttack.damageType = DamageType.Stun1s;
+                if(seamCon.inButchered)
+                {
+                    blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
+                    blastAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                }
                 blastAttack.attackerFiltering = AttackerFiltering.Default;
                 blastAttack.Fire();
                 victimMotor.onMovementHit -= DoSplashDamage;
@@ -158,7 +171,7 @@ namespace SeamstressMod.Survivors.Seamstress
             {
                 victimRigid.collisionDetectionMode = coll;
             }
-            if (SeamstressStaticValues.funny)
+            if (SeamstressConfig.funny.Value)
             {
                 if (victimMotor != null && victimMotor.mass != previousMass)
                 {

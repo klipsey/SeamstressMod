@@ -25,7 +25,7 @@ namespace SeamstressMod.SkillStates
 
         private TeamIndex teamIndex = TeamIndex.None;
 
-        private float snapBackDelay = 1f;
+        private float snapBackDelay;
 
         private bool hasFired;
 
@@ -43,6 +43,7 @@ namespace SeamstressMod.SkillStates
             PlayAnimation("Base", "SpawnToIdle");
             Util.PlaySound("Play_treeBot_R_yank", owner);
             seamCon = owner.GetComponent<SeamstressController>();
+            ownerBody = owner.GetComponent<CharacterBody>();
             chain.GetComponent<DestroyOnCondition>().enabled = true;
             chain.GetComponent<DestroyOnCondition>().seamCon = this.seamCon;
         }
@@ -62,8 +63,10 @@ namespace SeamstressMod.SkillStates
                     if (!splat)
                     {
                         splat = true;
+                        snapBackDelay = (ownerBody.corePosition - base.transform.position).magnitude / 10f;
+                        snapBackDelay = Mathf.Clamp(snapBackDelay, 0.2f, 1f);
                         chain.GetComponent<DestroyOnCondition>().enabled = false;
-                        ChainUpdate(1f);
+                        ChainUpdate(snapBackDelay);
                     }
                     snapBackDelay -= Time.fixedDeltaTime;
                     if(snapBackDelay <= 0f) EntityState.Destroy(base.gameObject);

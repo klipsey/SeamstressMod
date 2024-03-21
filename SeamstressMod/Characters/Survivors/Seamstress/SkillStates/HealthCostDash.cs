@@ -58,13 +58,11 @@ namespace SeamstressMod.SkillStates
             attack.procCoefficient = 1f;
             attack.teamIndex = base.GetTeam();
             attack.isCrit = base.RollCrit();
-            attack.forceVector = Vector3.up;
-            attack.pushAwayForce = 800f;
+            attack.forceVector = Vector3.up * 3000f;
             attack.damage = damageCoefficient * damageStat;
             attack.hitBoxGroup = FindHitBoxGroup(hitBoxString);
             attack.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-
-            if (empowered)
+            if (butchered)
             {
                 attack.AddModdedDamageType(DamageTypes.CutDamage);
                 attack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
@@ -143,6 +141,13 @@ namespace SeamstressMod.SkillStates
 
                 if (base.fixedAge >= baseDuration)
                 {
+                    EffectData effectData = new EffectData()
+                    {
+                        origin = base.characterBody.corePosition,
+                        rotation = Util.QuaternionSafeLookRotation(dashVector),
+                        scale = 3f
+                    };
+                    EffectManager.SpawnEffect(SeamstressAssets.impDash, effectData, false);
                     this.outer.SetNextStateToMain();
                 }
             }

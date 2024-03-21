@@ -25,6 +25,7 @@ namespace SeamstressMod.SkillStates
 
         private OverlapAttack overlapAttack;
         private DamageType damageType = DamageType.Generic;
+        private DamageAPI.ModdedDamageType moddedDamageType3 = DamageTypes.Empty;
         private DamageAPI.ModdedDamageType moddedDamageType2 = DamageTypes.ButcheredLifeSteal;
         private DamageAPI.ModdedDamageType moddedDamageType = DamageTypes.CutDamage;
         private float damageCoefficient = SeamstressStaticValues.clipDamageCoefficient;
@@ -70,22 +71,27 @@ namespace SeamstressMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            baseDuration = 0.75f - (0.5f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseDuration = 0.75f - (0.5f * (0.5f * (seamCon.ImpGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             snips = needleCount;
-            if (!scissorRight || !scissorLeft) noScissors = true;
+            if (!scissorRight || !scissorLeft)
+            {
+                moddedDamageType3 = DamageTypes.NoSword;
+                noScissors = true;
+            }
             if(noScissors)
             {
                 hitBoxString = "Sword";
             }
             animator = GetModelAnimator();
             duration = baseDuration / attackSpeedStat;
-            firstSnip = duration * 0.2f; //0.1 - 0.2 0.2 0.4 - 0.5
+            firstSnip = duration * 0.2f;
             secondSnip = duration * 0.4f;
             snipInterval = 0;
             lastSnip = duration - firstSnip;
             if(!characterMotor.isGrounded) inAir = true;
             StartAimMode(duration, false);
             PlayAttackAnimation();
+            if(inAir) SmallHop(base.characterMotor, 6f);
         }
         public override void FixedUpdate()
         {
@@ -102,8 +108,8 @@ namespace SeamstressMod.SkillStates
                 stopwatch += Time.fixedDeltaTime;
                 if (inAir && base.isAuthority)
                 {
-                    Vector3 velocity = base.characterDirection.forward * moveSpeedStat * Mathf.Lerp(3, 1f, base.age / duration);
-                    velocity.y = 0f;
+                    Vector3 velocity = base.characterDirection.forward * moveSpeedStat * Mathf.Lerp(3f, 1f, base.age / duration);
+                    velocity.y = base.characterMotor.velocity.y;
                     base.characterMotor.velocity = velocity;
                 }
             }
@@ -112,29 +118,30 @@ namespace SeamstressMod.SkillStates
                 if (base.characterMotor) base.characterMotor.velocity = Vector3.zero;
                 if (animator) animator.SetFloat(playbackRateParam, 0f);
             }
-            if (stopwatch > firstSnip && !hasFired) 
+            if (stopwatch >= firstSnip && !hasFired) 
             {
                 hasFired = true;
                 EnterAttack();
                 FireAttack();
             }
             //if equal to 2-4 snips snip until 1 snip left
-            if (stopwatch > secondSnip + snipInterval && snipInterval < secondSnip && snips > 0)
+            if (stopwatch >= secondSnip + snipInterval && snipInterval <= secondSnip && snips > 0)
             {
                 EnterAttack();
                 FireAttack();
                 snips--;
                 snipInterval += secondSnip / 5f;
-                if (NetworkServer.active) characterBody.GetComponent<NeedleController>().RpcRemoveNeedle();
+                Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
+                if (NetworkServer.active) characterBody.RemoveBuff(SeamstressBuffs.needles);
             }
             //if only 1 snip left, fire
-            if(stopwatch > lastSnip && !hasFired2)
+            if(stopwatch >= lastSnip && !hasFired2)
             {
                 hasFired2 = true;
                 EnterAttack();
                 FireAttack();
             }
-            if (stopwatch > duration && snips == 0 && base.isAuthority) 
+            if (stopwatch >= duration && snips == 0 && base.isAuthority) 
             {
                 outer.SetNextStateToMain();
             }
@@ -190,24 +197,48 @@ namespace SeamstressMod.SkillStates
             Transform bigSnip = FindModelChild("SwingCenter");
             Transform smallSlash = FindModelChild("SwingRightSmall");
             Transform smallSlash2 = FindModelChild("SwingLeftSmall");
-            Transform bipSnipAir = FindModelChild("SwingCharAirCenter");
+            Transform bigSnipAir = FindModelChild("SwingCharAirCenter");
             Transform bigSnipAir2 = FindModelChild("SwingCharAirCenter2");
-            if (bigSnip && smallSlash && smallSlash2 && bigSnip && bigSnipAir2) //lol
+            if (bigSnip && smallSlash && smallSlash2 && bigSnip && bigSnipAir && bigSnipAir2) //lol
             {
                 if (noScissors)
                 {
-                    if (hasFired && !hasFired2) UnityEngine.Object.Instantiate(supaEffect, smallSlash);
-                    if (hasFired2)
+                    if (hasFired && !hasFired2)
+                    {
+                        if (alternateSwings == 0)
+                        {
+                            UnityEngine.Object.Instantiate(supaEffect, smallSlash);
+                            alternateSwings = 1;
+                        }
+                        else if (alternateSwings == 1)
+                        {
+                            UnityEngine.Object.Instantiate(supaEffect, smallSlash2);
+                            alternateSwings = 0;
+                        }
+                    }
+                    else if (hasFired2)
                     {
                         UnityEngine.Object.Instantiate(supaEffect, smallSlash2);
                     }
                 }
                 else if(inAir)
                 {
-                    if(hasFired && !hasFired2) UnityEngine.Object.Instantiate(wideEffectPrefab, bipSnipAir);
-                    if (hasFired2)
+                    if (hasFired && !hasFired2)
                     {
-                        UnityEngine.Object.Instantiate(wideEffectPrefab, bigSnipAir2);
+                        if (alternateSwings == 0)
+                        {
+                            UnityEngine.Object.Instantiate(wideEffectPrefab, bigSnipAir2);
+                            alternateSwings = 1;
+                        }
+                        else if(alternateSwings == 1)
+                        {
+                            UnityEngine.Object.Instantiate(wideEffectPrefab, bigSnipAir);
+                            alternateSwings = 0;
+                        }
+                    }
+                    else if (hasFired2)
+                    {
+                        UnityEngine.Object.Instantiate(wideEffectPrefab, bigSnipAir);
                     }
                 }
                 else
@@ -222,12 +253,13 @@ namespace SeamstressMod.SkillStates
 
             overlapAttack = new OverlapAttack();
             overlapAttack.damageType = damageType;
-            if (empowered)
+            if (butchered)
             {
                 overlapAttack.AddModdedDamageType(moddedDamageType2);
                 overlapAttack.AddModdedDamageType(moddedDamageType);
             }
             overlapAttack.AddModdedDamageType(DamageTypes.ClipLifeSteal);
+            overlapAttack.AddModdedDamageType(moddedDamageType3);
             overlapAttack.attacker = gameObject;
             overlapAttack.inflictor = gameObject;
             overlapAttack.teamIndex = GetTeam();

@@ -19,8 +19,8 @@ namespace SeamstressMod.SkillStates
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
-            baseDuration = 1.1f - (1.1f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
-            baseScissorDuration = 1.8f - (1.8f * (0.5f * (seamCon.FiendGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseDuration = 1.1f - (1.1f * (0.5f * (seamCon.ImpGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
+            baseScissorDuration = 1.8f - (1.8f * (0.5f * (seamCon.ImpGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             moddedDamageType = DamageTypes.Empty;
             moddedDamageType2 = DamageTypes.Empty;
             moddedDamageType3 = DamageTypes.Empty;
@@ -72,7 +72,7 @@ namespace SeamstressMod.SkillStates
                     }
                     break;
             }
-            if (empowered)
+            if (butchered)
             {
                 moddedDamageType2 = DamageTypes.ButcheredLifeSteal;
                 moddedDamageType3 = DamageTypes.CutDamage;

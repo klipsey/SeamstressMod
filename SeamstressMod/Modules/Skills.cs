@@ -33,10 +33,11 @@ namespace SeamstressMod.Modules
 
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();
 
-            SeamstressBlinkPassive passive = targetPrefab.GetComponent<SeamstressBlinkPassive>();
+            SeamstressPassive passive = targetPrefab.GetComponent<SeamstressPassive>();
             if (passive)
             {
                 passive.passiveSkillSlot = CreateGenericSkillWithSkillFamily(targetPrefab, "Passive");
+                passive.impGaugeSkillSlot = CreateGenericSkillWithSkillFamily(targetPrefab, "Passive2");
             }
             for (int i = 0; i < slots.Length; i++)
             {

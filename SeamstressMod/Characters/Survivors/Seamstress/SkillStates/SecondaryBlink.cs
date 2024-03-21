@@ -69,7 +69,8 @@ namespace SeamstressMod.SkillStates
             {
                 for (int i = needleCount; i > 0; i--)
                 {
-                    characterBody.GetComponent<NeedleController>().RpcRemoveNeedle();
+                    Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
+                    characterBody.RemoveBuff(SeamstressBuffs.needles);
                 }
             }
             if (this.stockMultiplier > 6)
@@ -213,7 +214,7 @@ namespace SeamstressMod.SkillStates
                 blastAttack.procCoefficient = blastAttackProcCoefficient;
                 blastAttack.radius = blastAttackRadius;
                 blastAttack.damageType = DamageType.Stun1s;
-                if (empowered)
+                if (butchered)
                 {
                     blastAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
                     blastAttack.AddModdedDamageType(DamageTypes.CutDamage);

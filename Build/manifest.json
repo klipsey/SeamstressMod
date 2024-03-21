@@ -1,9 +1,9 @@
 {
     "name": "Seamstress",
-    "author": "kenko",
-    "version_number": "0.1.10",
+    "author": "tsuyoikenko",
+    "version_number": "0.2.0",
     "website_url": "",
-    "description": "Adds the Seamstress, a highly mobile survivor based around managing health for damage. Multiplayer compatible. BETA. MODEL WIP",
+    "description": "Adds the Seamstress, a highly mobile survivor based around managing health for damage. NOT NETWORKED. MODEL AND ICONS WIP",
     "dependencies": [
         "bbepis-BepInExPack-5.4.1905",
         "RiskofThunder-R2API_Core-5.0.3",

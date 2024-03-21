@@ -60,7 +60,8 @@ namespace SeamstressMod.SkillStates
                     this.seamCon.blinkCd = SeamstressStaticValues.blinkCooldown;
                     if(base.characterMotor.jumpCount == base.characterBody.maxJumpCount)
                     {
-                        if (NetworkServer.active) GetComponent<NeedleController>().RpcRemoveNeedle();
+                        Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
+                        if (NetworkServer.active) characterBody.RemoveBuff(SeamstressBuffs.needles);
                     }
                     if (base.isAuthority)
                     {

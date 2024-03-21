@@ -36,6 +36,7 @@ namespace SeamstressMod.SkillStates
 
         private bool hasFired;
 
+        private string fireString;
         public override void OnEnter()
         {
             base.OnEnter();
@@ -83,33 +84,22 @@ namespace SeamstressMod.SkillStates
                 if (chosenAnim == 2)
                 {
                     projectilePrefab = SeamstressAssets.scissorLPrefab;
-                    if (empowered)
-                    {
-                        projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = true;
-                        projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
-                    }
-                    else
-                    {
-                        projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = false;
-                        projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
-                    }
-                    Fire(GetAimRay(), "SwingRight");
+                    fireString = "SwingRight";
                 }
                 if (chosenAnim == 1)
                 {
                     projectilePrefab = SeamstressAssets.scissorRPrefab;
-                    if (empowered)
-                    {
-                        projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = true;
-                        projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
-                    }
-                    else
-                    {
-                        projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().enabled = false;
-                        projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
-                    }
-                    Fire(GetAimRay(), "SwingLeft");
+                    fireString = "SwingLeft";
                 }
+                if (butchered)
+                {
+                    projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
+                }
+                else
+                {
+                    projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
+                }
+                Fire(GetAimRay(), fireString);
                 hasFired = true;
             }
             if (base.fixedAge >= duration && base.isAuthority)

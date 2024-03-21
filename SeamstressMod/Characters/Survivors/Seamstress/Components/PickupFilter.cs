@@ -57,7 +57,8 @@ namespace SeamstressMod.Survivors.Seamstress
                         scale = 1.5f,
                     }, true);
                     triggerEvents?.Invoke();
-                    healthComponent.body.GetComponent<NeedleController>().RpcAddNeedle();
+                    Util.PlaySound("Play_bandit2_m2_alt_throw", base.gameObject);
+                    if(healthComponent.body.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) healthComponent.body.AddBuff(SeamstressBuffs.needles);
                     healthComponent.body.GetComponent<ScissorController>().RpcAddSpecialStock();
                     hasFired = true;
                 }

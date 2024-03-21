@@ -1,59 +1,62 @@
 # Seamstress
 - BETA
-- Currently working on animations. Model not imported.
-- Multiplayer Compatible?
+- Currently working on animations. Model not imported. Not Networked.
 
 ## Model Previews
-[![](https://media.discordapp.net/attachments/1119077461783748652/1208268440691810384/image.png?ex=65e2aaac&is=65d035ac&hm=0beb47c04ac3b6e61801ad9c2e0c3a890c2817218bedc9ce4cee85b5d7b45b32&=&format=webp&quality=lossless)]()
-[![](https://media.discordapp.net/attachments/1119077461783748652/1199057179555147867/image.png?ex=65c12805&is=65aeb305&hm=16dd05509565282af7206b459201067aba79c29c71e97357cae699ad6e791e08&=&format=webp&quality=lossless&width=402&height=676)]()
+[![](https://i.postimg.cc/gJ7r3rwH/seamstress.png)]()
+---
+[![](https://i.postimg.cc/zD9FrGdh/Seamstress-MADISON.png)]()
+[![](https://i.postimg.cc/d0yJgnDr/raven.png)]()
 
 # Overview
-Seamstress is a mobile survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. 
+Seamstress is a mobile survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. Managing her needles, weapons, and health are all apart of her complex kit.
 
 # Skills
-Passive: **Stitched Heart**
+Passive: **Primal Impstincts**
 ---
-- Gain base damage for every 1 health missing. 
+- Gain base damage for every 1 health missing Jumping is replaced with Blinking. Blinking in the air consumes and fires a Needle. 
 
-Primary: **Trimming Slashes**
+Passive: **Imp Gauge**
 ---
-- Agile. Slash in front for damage. Every third hit applies Stitches and deals bonus damage.
+- During Butchered 99% of healing is converted into Imp Gauge boosting Attack Speed and Movement Speed. Imp Gauge acts as bonus health. Heal for up to 25% of your max health when Butchered ends.
 
-Primary: **Unrelenting Flurry**
+Primary: **Trim**
 ---
-- Agile. Slash in front for damage. Heal for 10% of damage dealt. 
+- Agile. Slash in front for damage. Every third hit deals bonus damage.
 
-Secondary: **Threaded Volley**
+Primary: **Flurry**
 ---
-- Expels Needles. Hold up to ten before autofiring. Gain Needles from Stitch or kills.
+- Agile. Slash in front for damage. 
 
-Secondary: **Planar Shift**
+Secondary: **Clip**
 ---
-- Temporarily shift and reappear dealing Needlesxdamage to surrounding enemies. Heal for some of the damage dealt. Consume all Needles.
+- Sentient. Consume all Needles. Snip for damage. Snip up to 5 additional times based on Needles consumed. Heal for some of damage dealt.
 
-Utility: **Woven Fate** 
+Secondary: **Planar Manipulation**
 ---
-- Leap in a direction dealing damage. Recast in the air to dash dealing damage to enemies. Both casts apply Stitches.
+- Manipulate. Slamming enemies at high speeds deals damage in an area. Seperate cooldown on the same target.
 
-Special: **Glimpse of Corruption**
+Utility: **Glimpse of Corruption** 
 ---
-- 50% HP. Blink in a direction dealing massive damage applying Sitches at the destination. Gain Butchered. While Butchered Planar Shift becomes Expunge.
+- Tear out your Heart causing you to Hemorrhage and gain Butchered. Dash forward dealing damage that knocks enemies into the air. Recasting or taking damage that exceeds Imp Gauge removes Butchered and returns you to your Heart.
 
-**Expunge**
+Utility: **Glimpse of Purity** 
 ---
-- Cut. Expunge stored healing during Butchered as damage in an area.
+- Briefly become Invulnerable. If hit, dash forward dealing damage after a delay. Gain Butchered. During Butchered, gain base damage as if you had 50% health. Missing the hit window refunds 50% of the cooldown.
 
-Special: **Glimpse of Purity**
+Special: **Skewer**
 ---
-- Briefly enter a stance becoming Invulnerable. If hit, deal damage nearby applying Stitches. Also gain Butchered. During Butchered, gain base damage as if your health was at 50%.
+- Fire your Sentient weapon dealing damage to enemies. Picking up your Sentient weapon deals damage in an area. Gain Attack Speed and Movement Speed for each weapon missing.
+
+# Keywords
 
 **Needles**:
 ---
-- Pierce for damage and heal for a percentage of damage dealt.
+- Gain Needles by picking up your Sentient weapon or when landing Sentient attacks without your weapon.
 
-**Stitch** 
+**Manipulate** 
 ---
-- Deal damage to tear open Stitches and apply Cut. Gain a Needle.
+- Deal bonus damage to an enemy based on their velocity and max health.
 
 **Cut** 
 ---
@@ -61,13 +64,19 @@ Special: **Glimpse of Purity**
 
 **Butchered**
 ---
-- Gain movement speed and grant every ability Cut. During Butchered, convert % of healing into damage for Expunge.
+- Grant all skills an additional lifesteal and Cut.
+
+**Sentient**
+---
+- EFFECT VARIES ON SKILL. When your Sentient weapon is available increase the range of this attack. When your Sentient weapon is available hit for an additional strike. Gain Attack Speed and Movement Speed for each Sentient weapon missing.
 
 Please play my mod. I need to find bugs.
-Contact me on the modding discord server: https://discord.gg/A9wNKWE9Ww https://discord.com/channels/562704639141740588/1195084430876872866 @tsuyoikenko
+Contact me on Discord: https://discord.gg/3NaMEsvYeD
 
 # Credits 
 tsuyoikenko - Code and (eventually) the base model/animations.
+
+hkryu - Icon and art https://www.instagram.com/hkryu_/ https://twitter.com/___hkryu
 
 TheTimeSweeper - Incredible new Henry template and responsible for fixing like half my bugs.
 
