@@ -270,7 +270,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     "Trim",
                     SEAMSTRESS_PREFIX + "PRIMARY_TRIM_NAME",
                     SEAMSTRESS_PREFIX + "PRIMARY_TRIM_DESCRIPTION",
-                    assetBundle.LoadAsset<Sprite>("texTrimIcon"),
+                    assetBundle.LoadAsset<Sprite>("texFlurryIcon"),
                     new EntityStates.SerializableEntityStateType(typeof(SkillStates.Trim)),
                     "Weapon"
                 ));
@@ -304,7 +304,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.sentienceRangeKeyword, Tokens.needleKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texStingerIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texClipIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Clip)),
 
