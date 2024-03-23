@@ -39,7 +39,7 @@ namespace SeamstressMod.Modules
 
         internal static void PopulateDisplays()
         {
-            PopulateFromBody("MercBody");
+            PopulateFromBody("LoaderBody");
 
             //if you have any custom item displays to add here I would be very impressed
         }

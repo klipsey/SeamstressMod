@@ -157,26 +157,17 @@ namespace SeamstressMod.Survivors.Seamstress
         }
         public void AddHitboxes()
         {
-            ChildLocator childLocator = characterModelObject.GetComponent<ChildLocator>();
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Sword", "SwordHitbox");
 
-            //example of how to create a hitbox
-            Transform hitBoxTransform = childLocator.FindChild("SwordHitbox");
-            Prefabs.SetupHitBoxGroup(characterModelObject, "Sword", hitBoxTransform);
+            Prefabs.SetupHitBoxGroup(characterModelObject, "SwordBig", "SwordHitboxBig");
 
-            hitBoxTransform = childLocator.FindChild("SwordHitboxBig");
-            Prefabs.SetupHitBoxGroup(characterModelObject, "SwordBig", hitBoxTransform);
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Weave", "WeaveHitbox");
 
-            hitBoxTransform = childLocator.FindChild("WeaveHitbox");
-            Prefabs.SetupHitBoxGroup(characterModelObject, "Weave", hitBoxTransform);
+            Prefabs.SetupHitBoxGroup(characterModelObject, "WeaveBig", "WeaveHitboxBig");
 
-            hitBoxTransform = childLocator.FindChild("WeaveHitboxBig");
-            Prefabs.SetupHitBoxGroup(characterModelObject, "WeaveBig", hitBoxTransform);
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Right", "RightScissorHitbox");
 
-            hitBoxTransform = childLocator.FindChild("RightScissorHitbox");
-            Prefabs.SetupHitBoxGroup(characterModelObject, "Right", hitBoxTransform);
-
-            hitBoxTransform = childLocator.FindChild("LeftScissorHitbox");
-            Prefabs.SetupHitBoxGroup(characterModelObject, "Left", hitBoxTransform);
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Left", "LeftScissorHitbox");
         }
 
         public override void InitializeEntityStateMachines()
