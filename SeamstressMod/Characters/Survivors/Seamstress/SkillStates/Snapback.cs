@@ -106,6 +106,11 @@ namespace SeamstressMod.SkillStates
             {
                 aimRequest.Dispose();
             }
+            if (NetworkServer.active)
+            {
+                if(needleCount < 5) base.characterBody.AddBuff(SeamstressBuffs.needles);
+            }
+
             base.OnExit();
         }
         public override InterruptPriority GetMinimumInterruptPriority()

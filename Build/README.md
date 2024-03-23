@@ -12,13 +12,13 @@
 Seamstress is a mobile survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. Managing her needles, weapons, and health are all apart of her complex kit.
 
 # Skills
-Passive: **Primal Impstincts**
+Passive: **Imp Touched Heart**
 ---
-- Gain base damage for every 1 health missing Jumping is replaced with Blinking. Blinking in the air consumes and fires a Needle. 
+- Gain base damage for every 1 health missing Jumping is replaced with Blinking. Needles can be consumed to Blink in the air. Blinking in the air fires a Needle.
 
-Passive: **Imp Gauge**
+Passive: **It Hungers**
 ---
-- During Butchered 99% of healing is converted into Imp Gauge boosting Attack Speed and Movement Speed. Imp Gauge acts as bonus health. Heal for up to 25% of your max health when Butchered ends.
+- During Butchered 99% of healing is converted into a gauge boosting Attack Speed and Movement Speed. The gauge acts as bonus health. Heal for up to 25% of your max health when Butchered ends.
 
 Primary: **Trim**
 ---
@@ -38,7 +38,7 @@ Secondary: **Planar Manipulation**
 
 Utility: **Glimpse of Corruption** 
 ---
-- Tear out your Heart causing you to Hemorrhage and gain Butchered. Dash forward dealing damage that knocks enemies into the air. Recasting or taking damage that exceeds Imp Gauge removes Butchered and returns you to your Heart.
+- Tear out your Heart causing you to Hemorrhage and gain Butchered. Dash forward dealing damage that knocks enemies into the air. Recasting or taking damage that exceeds It Hungers gauge removes Butchered and returns you to your Heart.
 
 Utility: **Glimpse of Purity** 
 ---
@@ -64,7 +64,7 @@ Special: **Skewer**
 
 **Butchered**
 ---
-- Grant all skills an additional lifesteal and Cut.
+- Grant all skills additional lifesteal and Cut.
 
 **Sentient**
 ---

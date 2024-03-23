@@ -1,5 +1,13 @@
+# 0.2.2
+- Icons
+- Wording
+# 0.2.1
+- Fixed hopoo feather interaction to not just spam needles and fly
+- Fixed crash during load? -report if it still happens
+- Renamed Imp Gauge to It Hungers
+- Renamed Primal Instincts to Imp Touched Heart
 # 0.2.0
-- Full Rework
+- Full Rework   
 - No Networking
 # 0.1.10
 - Flurry is stronger but slower

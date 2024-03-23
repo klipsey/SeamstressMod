@@ -220,7 +220,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME",
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "PASSIVE_DESCRIPTION",
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texImpTouchedIcon"),
                 keywordTokens = new string[] { Tokens.needleKeyword },
                 activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Idle)),
                 activationStateMachineName = "",
@@ -247,7 +247,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = SeamstressSurvivor.SEAMSTRESS_PREFIX + "GAUGE_NAME",
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "GAUGE_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "GAUGE_DESCRIPTION",
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texItHungersIcon"),
                 keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
                 activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Idle)),
                 activationStateMachineName = "",
@@ -279,7 +279,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     "Trim",
                     SEAMSTRESS_PREFIX + "PRIMARY_TRIM_NAME",
                     SEAMSTRESS_PREFIX + "PRIMARY_TRIM_DESCRIPTION",
-                    assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                    assetBundle.LoadAsset<Sprite>("texTrimIcon"),
                     new EntityStates.SerializableEntityStateType(typeof(SkillStates.Trim)),
                     "Weapon"
                 ));
@@ -294,7 +294,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     "Flurry",
                     SEAMSTRESS_PREFIX + "PRIMARY_FLURRY_NAME",
                     SEAMSTRESS_PREFIX + "PRIMARY_FLURRY_DESCRIPTION",
-                    assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                    assetBundle.LoadAsset<Sprite>("texFlurryIcon"),
                     new EntityStates.SerializableEntityStateType(typeof(SkillStates.Flurry)),
                     "Weapon"
                 ));
