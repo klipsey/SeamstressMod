@@ -618,7 +618,14 @@ namespace SeamstressMod.Survivors.Seamstress
         private void DisableOOBCheck(On.RoR2.MapZone.orig_TryZoneStart orig, MapZone self, Collider other)
         {
             CharacterBody component = other.gameObject.GetComponent<CharacterBody>();
-            if (!component.HasBuff(SeamstressBuffs.manipulated))
+            if(component.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            {
+                if (!component.HasBuff(SeamstressBuffs.manipulated))
+                {
+                    orig.Invoke(self, other);
+                }
+            }
+            else
             {
                 orig.Invoke(self, other);
             }

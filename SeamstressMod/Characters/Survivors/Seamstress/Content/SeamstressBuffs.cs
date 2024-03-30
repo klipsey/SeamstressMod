@@ -41,7 +41,6 @@ namespace SeamstressMod.Survivors.Seamstress
                 Color.red, false, false, false);
             manipulated = Modules.Content.CreateAndAddBuff("Manipulated", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/EliteLunar/texBuffAffixLunar.tif").WaitForCompletion(),
                 new Color(155f / 255f, 55f / 255f, 55f / 255f), false, false, false);
-
             manipulatedCd = Modules.Content.CreateAndAddBuff("ManipulatedCd", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/EliteLunar/texBuffAffixLunar.tif").WaitForCompletion(),
                 Color.gray, false, false, true);
         }
