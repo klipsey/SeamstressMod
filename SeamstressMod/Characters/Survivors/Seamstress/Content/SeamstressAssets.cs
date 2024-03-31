@@ -93,19 +93,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static NetworkSoundEventDef parrySuccessSoundEvent;
         //icons
-        internal static Sprite primary;
-
-        internal static Sprite primaryEmp;
-
-        internal static Sprite secondary;
-
-        internal static Sprite utilityEmp;
-
-        internal static Sprite secondaryDisabled;
-
-        internal static Sprite special;
-
-        internal static Sprite specialEmp;
 
         internal static Sprite grab;
 
@@ -125,8 +112,6 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static Color theRed = new Color(155f / 255f, 55f / 255f, 55f / 255f);
 
-        public static SkillDef lockOutSkillDef;
-
         public static SkillDef snapBackSkillDef;
         public static void Init(AssetBundle assetBundle)
         {
@@ -143,44 +128,13 @@ namespace SeamstressMod.Survivors.Seamstress
 
             CreateHeart();
 
-            lockOutSkillDef = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "LockOut",
-                skillNameToken = "Exhausted",
-                skillDescriptionToken = "Recharging",
-                keywordTokens = new string[] { },
-                skillIcon = secondaryDisabled,
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Exhaustion)),
-                activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.Any,
-
-                baseRechargeInterval = 0f,
-                baseMaxStock = 10,
-
-                rechargeStock = 0,
-                requiredStock = 999999999,
-                stockToConsume = 0,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = false,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = false,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-            });
-
             snapBackSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "SnapBack",
                 skillNameToken = "SnapBack",
                 skillDescriptionToken = "Snapback to core",
                 keywordTokens = new string[] { },
-                skillIcon = utilityEmp,
+                skillIcon = assetBundle.LoadAsset<Sprite>("texImpTouchedIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Snapback)),
                 activationStateMachineName = "Body",
@@ -288,14 +242,6 @@ namespace SeamstressMod.Survivors.Seamstress
         #region effects
         private static void CreateEffects()
         {
-            primary = _assetBundle.LoadAsset<Sprite>("texPrimaryIcon");
-            secondary = _assetBundle.LoadAsset<Sprite>("texSecondaryIcon");
-            special = _assetBundle.LoadAsset<Sprite>("texSpecialIcon");
-
-            primaryEmp = _assetBundle.LoadAsset<Sprite>("texStingerIcon");
-            secondaryDisabled = _assetBundle.LoadAsset<Sprite>("texBazookaOutIcon");
-            utilityEmp = _assetBundle.LoadAsset<Sprite>("texPistolIcon");
-            specialEmp = _assetBundle.LoadAsset<Sprite>("texScepterSpecialIcon");
 
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             stitchEffect.AddComponent<NetworkIdentity>();

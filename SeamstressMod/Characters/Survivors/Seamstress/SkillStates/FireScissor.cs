@@ -32,7 +32,7 @@ namespace SeamstressMod.SkillStates
 
         private float duration;
 
-        private int chosenAnim = -1;
+        private int chosenAnim = 2;
 
         private bool hasFired;
 
@@ -41,23 +41,27 @@ namespace SeamstressMod.SkillStates
         {
             base.OnEnter();
             Util.PlaySound("Play_item_lunar_specialReplace_explode", base.gameObject);
-            characterBody.GetComponent<ScissorController>().isRight = true;
+            this.characterBody.GetComponent<ScissorController>().isRight = true;
             duration = baseDuration / attackSpeedStat;
-            modelAnimator = GetModelAnimator();
-            if(scissorRight && scissorLeft)
+            this.modelAnimator = GetModelAnimator();
+            if(this.scissorRight && this.scissorLeft)
             {
-                chosenAnim = 2;
+                this.chosenAnim = 2;
             }    
-            else if(scissorRight && !scissorLeft)
+            else if(this.scissorRight && !this.scissorLeft)
             {
-                chosenAnim = 1;
+                this.chosenAnim = 1;
             }
-            else if(scissorLeft && !scissorRight) 
+            else if(this.scissorLeft && !this.scissorRight) 
             {
-                chosenAnim = 2;
+                this.chosenAnim = 2;
+            }
+            else
+            {
+                this.chosenAnim = 2;
             }
 
-            if (modelAnimator)
+            if (this.modelAnimator)
             {
 
                 //string animationStateName = ((chosenAnim == 2) ? "FireVoidspikesL" : "FireVoidspikesR");
@@ -79,19 +83,19 @@ namespace SeamstressMod.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (modelAnimator && !hasFired)
+            if (this.modelAnimator && !hasFired)
             {
-                if (chosenAnim == 2)
+                if (this.chosenAnim == 2)
                 {
-                    projectilePrefab = SeamstressAssets.scissorLPrefab;
-                    fireString = "SwingRight";
+                    this.projectilePrefab = SeamstressAssets.scissorLPrefab;
+                    this.fireString = "SwingRight";
                 }
-                if (chosenAnim == 1)
+                else if (this.chosenAnim == 1)
                 {
-                    projectilePrefab = SeamstressAssets.scissorRPrefab;
-                    fireString = "SwingLeft";
+                    this.projectilePrefab = SeamstressAssets.scissorRPrefab;
+                    this.fireString = "SwingLeft";
                 }
-                if (butchered)
+                if (this.butchered)
                 {
                     projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
                 }

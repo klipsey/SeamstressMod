@@ -1,3 +1,5 @@
+# 0.2.3
+- Added all icons
 # 0.2.2
 - Icons
 - Wording

@@ -5,6 +5,7 @@ using RoR2.Audio;
 using RoR2.Skills;
 using SeamstressMod.Survivors.Seamstress;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -17,9 +18,7 @@ namespace SeamstressMod.Modules.BaseStates
         protected string hitboxGroupName = "Sword";
 
         protected DamageType damageType = DamageType.Generic;
-        protected DamageAPI.ModdedDamageType moddedDamageType = DamageTypes.Empty;
-        protected DamageAPI.ModdedDamageType moddedDamageType2 = DamageTypes.Empty;
-        protected DamageAPI.ModdedDamageType moddedDamageType3 = DamageTypes.Empty;
+        protected List<DamageAPI.ModdedDamageType> moddedDamageTypeHolder = new List<DamageAPI.ModdedDamageType>();
         protected bool isFlatDamage = false;
         protected float damageTotal = 3.5f;
         protected float procCoefficient = 1f;
@@ -75,9 +74,11 @@ namespace SeamstressMod.Modules.BaseStates
 
             attack = new OverlapAttack();
             attack.damageType = damageType;
-            attack.AddModdedDamageType(moddedDamageType);
-            attack.AddModdedDamageType(moddedDamageType2);
-            attack.AddModdedDamageType(moddedDamageType3);
+            foreach(DamageAPI.ModdedDamageType i in moddedDamageTypeHolder)
+            {
+                attack.AddModdedDamageType(i);
+            }
+            moddedDamageTypeHolder.Clear();
             attack.attacker = gameObject;
             attack.inflictor = gameObject;
             attack.teamIndex = GetTeam();
@@ -241,9 +242,11 @@ namespace SeamstressMod.Modules.BaseStates
                         hitStopDuration = 0.2f;
                         attack = new OverlapAttack();
                         attack.damageType = damageType;
-                        attack.AddModdedDamageType(moddedDamageType);
-                        attack.AddModdedDamageType(moddedDamageType2);
-                        attack.AddModdedDamageType(moddedDamageType3);
+                        foreach(DamageAPI.ModdedDamageType i in moddedDamageTypeHolder)
+                        {
+                            attack.AddModdedDamageType(i);
+                        }
+                        moddedDamageTypeHolder.Clear();
                         attack.attacker = gameObject;
                         attack.inflictor = gameObject;
                         attack.teamIndex = GetTeam();

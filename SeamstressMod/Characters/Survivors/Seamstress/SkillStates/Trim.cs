@@ -4,6 +4,7 @@ using R2API;
 using SeamstressMod.Survivors.Seamstress;
 using SeamstressMod.Modules.BaseStates;
 using System;
+using static R2API.DamageAPI;
 
 
 namespace SeamstressMod.SkillStates
@@ -21,9 +22,6 @@ namespace SeamstressMod.SkillStates
             bonusForce = Vector3.zero;
             baseDuration = 1.1f - (1.1f * (0.5f * (seamCon.ImpGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
             baseScissorDuration = 1.8f - (1.8f * (0.5f * (seamCon.ImpGaugeAmount() / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient))));
-            moddedDamageType = DamageTypes.Empty;
-            moddedDamageType2 = DamageTypes.Empty;
-            moddedDamageType3 = DamageTypes.Empty;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             attackStartPercentTime = 0.2f;
@@ -47,7 +45,7 @@ namespace SeamstressMod.SkillStates
                     muzzleString = "SwingLeftSmall";
                     if (!scissorRight)
                     {
-                        moddedDamageType = DamageTypes.NoSword;
+                        moddedDamageTypeHolder.Add(DamageTypes.NoSword);
                         scissorHit = false;
                     }
                     break;
@@ -55,7 +53,7 @@ namespace SeamstressMod.SkillStates
                     muzzleString = "SwingRightSmall";
                     if (!scissorLeft)
                     {
-                        moddedDamageType = DamageTypes.NoSword;
+                        moddedDamageTypeHolder.Add(DamageTypes.NoSword);
                         scissorHit = false;
                     }
                     break;
@@ -67,15 +65,15 @@ namespace SeamstressMod.SkillStates
                     attackEndPercentTime = 0.65f;
                     if (!scissorRight || !scissorLeft)
                     {
-                        moddedDamageType = DamageTypes.NoSword;
+                        moddedDamageTypeHolder.Add(DamageTypes.NoSword);
                         scissorHit = false;
                     }
                     break;
             }
             if (butchered)
             {
-                moddedDamageType2 = DamageTypes.ButcheredLifeSteal;
-                moddedDamageType3 = DamageTypes.CutDamage;
+                moddedDamageTypeHolder.Add(DamageTypes.ButcheredLifeSteal);
+                moddedDamageTypeHolder.Add(DamageTypes.CutDamage);
             }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
 

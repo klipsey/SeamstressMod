@@ -370,7 +370,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANMAN_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANMAN_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.manipulateKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texPlanarManipulationIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Telekinesis)),
 
@@ -406,7 +406,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_HEARTDASH_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_HEARTDASH_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword, Tokens.hemorrhageKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texGlimpseOfCorruptionIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HealthCostDash)),
                 activationStateMachineName = "Weapon",
@@ -440,7 +440,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.sentienceRangeKeyword, Tokens.butcheredKeyword, Tokens.cutKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texGlimpseOfPurityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Parry)),
                 activationStateMachineName = "Weapon",
@@ -476,7 +476,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_FIRE_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "SPECIAL_FIRE_DESCRIPTION",
                 keywordTokens = new string[] { Tokens.sentienceKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texSkewerIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.FireScissor)),
                 activationStateMachineName = "Weapon",
@@ -598,7 +598,7 @@ namespace SeamstressMod.Survivors.Seamstress
             On.RoR2.CharacterModel.UpdateOverlays += new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
             On.RoR2.HealthComponent.TakeDamage += new On.RoR2.HealthComponent.hook_TakeDamage(HealthComponent_TakeDamage);
             On.RoR2.Orbs.LightningOrb.Begin += new On.RoR2.Orbs.LightningOrb.hook_Begin(LightningOrb_Begin);
-            R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+            On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             On.RoR2.MapZone.TryZoneStart += new On.RoR2.MapZone.hook_TryZoneStart(DisableOOBCheck);
 
             On.RoR2.UI.LoadoutPanelController.Rebuild += LoadoutPanelController_Rebuild;
@@ -618,9 +618,16 @@ namespace SeamstressMod.Survivors.Seamstress
         private void DisableOOBCheck(On.RoR2.MapZone.orig_TryZoneStart orig, MapZone self, Collider other)
         {
             CharacterBody component = other.gameObject.GetComponent<CharacterBody>();
-            if(component.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if(component)
             {
-                if (!component.HasBuff(SeamstressBuffs.manipulated))
+                if(component.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+                {
+                    if (!component.HasBuff(SeamstressBuffs.manipulated))
+                    {
+                        orig.Invoke(self, other);
+                    }
+                }
+                else
                 {
                     orig.Invoke(self, other);
                 }
@@ -774,33 +781,37 @@ namespace SeamstressMod.Survivors.Seamstress
             }
             return res;
         }
-        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
+        private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
         {
-            if(sender == null) return;
-            if (sender.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            orig(self);
+
+            if (self)
             {
-                SeamstressController s = sender.GetComponent<SeamstressController>();
-                if (s != null)
+                if (self.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
-                    if (s.ImpGaugeAmount() > 0)
+                    SeamstressController s = self.GetComponent<SeamstressController>();
+                    if (s != null)
                     {
-                        args.baseMoveSpeedAdd += (2f * s.ImpGaugeAmountPercent());
+                        if (s.ImpGaugeAmount() > 0)
+                        {
+                            self.moveSpeed += (2f * s.ImpGaugeAmountPercent());
+                        }
                     }
-                }
-                if (!sender.HasBuff(SeamstressBuffs.scissorLeftBuff))
-                {
-                    args.attackSpeedMultAdd += .1f;
-                    args.baseMoveSpeedAdd += 1f;
-                }
-                if (!sender.HasBuff(SeamstressBuffs.scissorRightBuff))
-                {
-                    args.attackSpeedMultAdd += .1f;
-                    args.baseMoveSpeedAdd += 1f;
-                }
-                if (sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
-                {
-                    args.attackSpeedMultAdd += (.1f * sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
-                    args.baseMoveSpeedAdd += (1f * sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
+                    if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))
+                    {
+                        self.attackSpeed += .1f;
+                        self.moveSpeed += 1f;
+                    }
+                    if (!self.HasBuff(SeamstressBuffs.scissorRightBuff))
+                    {
+                        self.attackSpeed += .1f;
+                        self.moveSpeed += 1f;
+                    }
+                    if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
+                    {
+                        self.attackSpeed += (.1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
+                        self.moveSpeed += (1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
+                    }
                 }
             }
         }

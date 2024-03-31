@@ -1,7 +1,7 @@
 {
     "name": "Seamstress",
     "author": "tsuyoikenko",
-    "version_number": "0.2.1",
+    "version_number": "0.2.3",
     "website_url": "",
     "description": "Adds the Seamstress, a highly mobile survivor based around managing health for damage. NOT NETWORKED. MODEL AND ICONS WIP",
     "dependencies": [
