@@ -19,7 +19,7 @@ namespace SeamstressMod.Survivors.Seamstress
         public static DamageAPI.ModdedDamageType Empty;
         public static DamageAPI.ModdedDamageType CutDamage;
         public static DamageAPI.ModdedDamageType NoSword;
-        public static DamageAPI.ModdedDamageType ButcheredLifeSteal;
+        public static DamageAPI.ModdedDamageType InsatiableLifeSteal;
         public static DamageAPI.ModdedDamageType ClipLifeSteal;
         public static DamageAPI.ModdedDamageType PullDamage;
         internal static void Init()
@@ -27,7 +27,7 @@ namespace SeamstressMod.Survivors.Seamstress
             Empty = DamageAPI.ReserveDamageType();
             CutDamage = DamageAPI.ReserveDamageType();
             NoSword = DamageAPI.ReserveDamageType();
-            ButcheredLifeSteal = DamageAPI.ReserveDamageType();
+            InsatiableLifeSteal = DamageAPI.ReserveDamageType();
             ClipLifeSteal = DamageAPI.ReserveDamageType();
             PullDamage = DamageAPI.ReserveDamageType();
             Hook();
@@ -67,9 +67,9 @@ namespace SeamstressMod.Survivors.Seamstress
                     Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
                     if (attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) attackerBody.AddBuff(SeamstressBuffs.needles);
                 }
-                if (damageInfo.HasModdedDamageType(ButcheredLifeSteal))
+                if (damageInfo.HasModdedDamageType(InsatiableLifeSteal))
                 {
-                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.butcheredLifeSteal, default(ProcChainMask), true);
+                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.insatiableLifesSteal, default(ProcChainMask), true);
                 }
                 if (damageInfo.HasModdedDamageType(ClipLifeSteal))
                 {

@@ -216,12 +216,12 @@ namespace SeamstressMod.SkillStates
                 blastAttack.damageType = DamageType.Stun1s;
                 if (butchered)
                 {
-                    blastAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                    blastAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
                     blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
                 }
                 else
                 {
-                    blastAttack.RemoveModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                    blastAttack.RemoveModdedDamageType(DamageTypes.InsatiableLifeSteal);
                     blastAttack.RemoveModdedDamageType(DamageTypes.CutDamage);
                 }
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;

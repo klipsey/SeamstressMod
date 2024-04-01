@@ -98,7 +98,7 @@ namespace SeamstressMod.Survivors.Seamstress
                     if (seamCon.inButchered)
                     {
                         blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
-                        blastAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                        blastAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
                     }
                     blastAttack.attackerFiltering = AttackerFiltering.Default;
                     blastAttack.Fire();
@@ -142,7 +142,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 if(seamCon.inButchered)
                 {
                     blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
-                    blastAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                    blastAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
                 }
                 blastAttack.attackerFiltering = AttackerFiltering.Default;
                 blastAttack.Fire();

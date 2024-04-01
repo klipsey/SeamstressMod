@@ -275,7 +275,7 @@ namespace SeamstressMod.SkillStates
                     if(butchered)
                     {
                         blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
-                        blastAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                        blastAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
                     }
                     blastAttack.attackerFiltering = AttackerFiltering.Default;
                     blastAttack.Fire();

@@ -11,10 +11,6 @@ using RoR2.Skills;
 using UnityEngine.Rendering.PostProcessing;
 using TMPro;
 using ThreeEyedGames;
-using UnityEngine.UIElements;
-using static RoR2.Skills.ComboSkillDef;
-using EntityStates.AffixEarthHealer;
-using SeamstressMod.SkillStates;
 
 namespace SeamstressMod.Survivors.Seamstress
 {
@@ -23,6 +19,9 @@ namespace SeamstressMod.Survivors.Seamstress
         internal static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
         internal static Material commandoMat;
         //effects
+
+        internal static GameObject spawnPrefab;
+
         internal static GameObject pullShit;
 
         internal static GameObject wideSlashEffect;
@@ -192,7 +191,7 @@ namespace SeamstressMod.Survivors.Seamstress
             heartMdl.transform.GetChild(2).GetChild(6).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
             fard = heartMdl.transform.GetChild(2).GetChild(6).gameObject.GetComponent<ParticleSystem>().main;
             fard.duration = SeamstressStaticValues.butcheredDuration;
-            Material chains = Addressables.LoadAssetAsync<Material>("RoR2/Base/Gravekeeper/matGravekeeperHookChain.mat").WaitForCompletion();
+            Material chains = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion();
             chains.SetColor("_EmColor", Color.red);
             chains.SetColor("_TintColor", Color.red);
             Material[] ballsackTickler = new Material[1];
@@ -206,7 +205,7 @@ namespace SeamstressMod.Survivors.Seamstress
             chainToHeart.transform.GetChild(0).GetComponent<LineRenderer>().shadowBias = 0.5f;
             chainToHeart.transform.localScale *= 0.5f;
             chainToHeart.transform.GetChild(0).GetChild(0).gameObject.GetComponent <ParticleSystemRenderer>().mesh = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ElementalRings/PickupFireRing.prefab").WaitForCompletion().transform.GetChild(0).gameObject.GetComponent<MeshFilter>().mesh;
-            chainToHeart.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Gravekeeper/matGravekeeperHookChain.mat").WaitForCompletion();
+            chainToHeart.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion();
             Object.Destroy(chainToHeart.gameObject.GetComponent<AkEvent>());
             Object.Destroy(chainToHeart.gameObject.GetComponent<AkGameObj>());
             Content.CreateAndAddEffectDef(chainToHeart);
@@ -239,15 +238,18 @@ namespace SeamstressMod.Survivors.Seamstress
             }
         }
         #endregion
+
         #region effects
         private static void CreateEffects()
         {
+            spawnPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossDeathEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
+            spawnPrefab.AddComponent<NetworkIdentity>();
 
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             stitchEffect.AddComponent<NetworkIdentity>();
             stitchEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", coolRed);
 
-            sewn1 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack3Effect.prefab").WaitForCompletion().InstantiateClone("SewnNo");
+            sewn1 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack3Effect.prefab").WaitForCompletion().InstantiateClone("SewnNo", false);
             sewn1.AddComponent<NetworkIdentity>();
             sewn1.transform.GetChild(0).GetChild(0).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", Color.clear);
             sewn1.transform.GetChild(0).GetChild(1).gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", Color.clear);
@@ -344,16 +346,29 @@ namespace SeamstressMod.Survivors.Seamstress
             blinkDestinationPrefab.transform.GetChild(0).localScale = Vector3.one * 0.2f;
             blinkDestinationPrefab.transform.GetChild(1).localScale = Vector3.one * 0.2f;
 
-            slashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("SeamstressSlash");
+            slashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Croco/CrocoSlash.prefab").WaitForCompletion().InstantiateClone("SeamstressSlash");
             slashEffect.AddComponent<NetworkIdentity>();
-            slashEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 1f, 0.5f);
+            slashEffect.transform.GetChild(0).localScale = Vector3.one;
+            slashEffect.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpClaw.mat").WaitForCompletion();
+            slashEffect.transform.GetChild(1).gameObject.SetActive(false);
+            var fard = slashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startLifetimeMultiplier = 0.03f;
+
+
+            slashComboEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Croco/CrocoComboFinisherSlash.prefab").WaitForCompletion().InstantiateClone("SeamstressComboSlash");
+            slashComboEffect.AddComponent<NetworkIdentity>();
+            slashComboEffect.transform.GetChild(0).localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            slashComboEffect.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpClaw.mat").WaitForCompletion();
+            slashComboEffect.transform.GetChild(1).gameObject.SetActive(false);
+            fard = slashComboEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startLifetimeMultiplier = 0.03f;
 
             scissorsSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
             scissorsSwingEffect.AddComponent<NetworkIdentity>();
             scissorsSwingEffect.transform.GetChild(0).gameObject.SetActive(false);
             scissorsSwingEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion();//Assets.LoadEffect("HenrySwordSwingEffect", true);
-            var fard = scissorsSwingEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
-            fard.startLifetimeMultiplier = 1.8f;
+            fard = scissorsSwingEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startLifetimeMultiplier = 2.2f;
 
             scissorsComboSwingEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing3");
             scissorsComboSwingEffect.AddComponent<NetworkIdentity>();
@@ -387,6 +402,7 @@ namespace SeamstressMod.Survivors.Seamstress
             sex.startRotation3D = false;
             Object.Destroy(uppercutEffect.GetComponent<EffectComponent>());
 
+            
             scissorsHitImpactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMerc.prefab").WaitForCompletion().InstantiateClone("ScissorImpact", false);
             scissorsHitImpactEffect.AddComponent<NetworkIdentity>();
             scissorsHitImpactEffect.GetComponent<OmniEffect>().enabled = false;
@@ -395,8 +411,7 @@ namespace SeamstressMod.Survivors.Seamstress
             scissorsHitImpactEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             scissorsHitImpactEffect.transform.GetChild(2).localScale = Vector3.one * 1.5f;
             scissorsHitImpactEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorBlasterFireCorrupted.mat").WaitForCompletion();
-            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Merc/matOmniRadialSlash1Merc.mat").WaitForCompletion());
-            material.SetColor("_TintColor", Color.red);
+            material = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSlashImpact.mat").WaitForCompletion());
             scissorsHitImpactEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             scissorsHitImpactEffect.transform.GetChild(4).localScale = Vector3.one * 3f;
             scissorsHitImpactEffect.transform.GetChild(4).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDust.mat").WaitForCompletion();
@@ -606,7 +621,7 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             needleButcheredPrefab = PrefabAPI.InstantiateClone(needlePrefab, "NeedleButchered");
             ProjectileHealOwnerOnDamageInflicted needleHeal = needleButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = SeamstressStaticValues.butcheredLifeSteal;
+            needleHeal.fractionOfDamage = SeamstressStaticValues.insatiableLifesSteal;
             needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
         }
 

@@ -65,7 +65,7 @@ namespace SeamstressMod.SkillStates
             if (butchered)
             {
                 attack.AddModdedDamageType(DamageTypes.CutDamage);
-                attack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                attack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
             }
             EffectData effectData = new EffectData()
             {

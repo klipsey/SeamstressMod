@@ -18,7 +18,7 @@ Passive: **Imp Touched Heart**
 
 Passive: **It Hungers**
 ---
-- During Butchered 99% of healing is converted into a gauge boosting Attack Speed and Movement Speed. The gauge acts as bonus health. Heal for up to 25% of your max health when Butchered ends.
+- During Insatiable healing is converted into a gauge boosting Attack Speed and Movement Speed. The gauge acts as bonus health. Heal when Insatiable ends.
 
 Primary: **Trim**
 ---
@@ -38,11 +38,11 @@ Secondary: **Planar Manipulation**
 
 Utility: **Glimpse of Corruption** 
 ---
-- Tear out your Heart causing you to Hemorrhage and gain Butchered. Dash forward dealing damage that knocks enemies into the air. Recasting or taking damage that exceeds It Hungers gauge removes Butchered and returns you to your Heart.
+- Tear out your Heart and gain Insatiable. Dash forward dealing damage that knocks enemies into the air. Recasting or taking damage that exceeds It Hungers gauge removes Insatiable and returns you to your Heart.
 
 Utility: **Glimpse of Purity** 
 ---
-- Briefly become Invulnerable. If hit, dash forward dealing damage after a delay. Gain Butchered. During Butchered, gain base damage as if you had 50% health. Missing the hit window refunds 50% of the cooldown.
+- Parry. If successful, dash forward dealing damage after a delay. Gain Insatiable. During Insatiable, gain base damage. Missing the parry window refunds 50% of the cooldown.
 
 Special: **Skewer**
 ---
@@ -62,7 +62,7 @@ Special: **Skewer**
 ---
 - Apply a bleed based on enemies missing health.
 
-**Butchered**
+**Insatiable**
 ---
 - Grant all skills additional lifesteal and Cut.
 

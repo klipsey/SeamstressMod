@@ -181,7 +181,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 if (owner.GetComponent<SeamstressController>().inButchered)
                 {
                     impactAttack.AddModdedDamageType(DamageTypes.CutDamage);
-                    impactAttack.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+                    impactAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
                 }
                 impactAttack.falloffModel = BlastAttack.FalloffModel.None;
                 impactAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;

@@ -4,16 +4,20 @@ using UnityEngine;
 using EntityStates;
 using UnityEngine.Networking;
 using UnityEngine.AddressableAssets;
+using SeamstressMod.Survivors.Seamstress;
+using R2API;
 
 namespace SeamstressMod.SkillStates
 {
-    public class SeamstressSpawnState : SpawnState
+    public class SeamstressSpawnState : BaseState
     {
         private CameraRigController cameraController;
-        
+
+        public static float duration = 4f;
+
         private bool initCamera;
 
-        private bool check;
+        private bool check = false;
         public override void OnEnter()
         {
             base.OnEnter();
@@ -26,7 +30,15 @@ namespace SeamstressMod.SkillStates
             if (base.fixedAge > 0.56f && !this.check)
             {
                 this.check = true;
-                Util.PlaySound("Play_imp_overlord_spawn", this.gameObject);
+                EffectData effectData = new EffectData();
+                effectData.origin = base.transform.position;
+                effectData.scale = 0.1f;
+                GameObject PLEASE = EntityStates.ImpBossMonster.SpawnState.spawnEffectPrefab.InstantiateClone("Spawn");
+                GameObject PLEASE2 = EntityStates.ImpBossMonster.DeathState.initialEffect.InstantiateClone("Spawn2");
+                EffectManager.SpawnEffect(PLEASE, effectData, false);
+                EffectManager.SpawnEffect(PLEASE2, effectData, false); 
+
+                Util.PlaySound(EntityStates.ImpMonster.BlinkState.beginSoundString, this.gameObject);
 
                 Transform modelTransform = this.GetModelTransform();
                 if (modelTransform)
@@ -63,7 +75,7 @@ namespace SeamstressMod.SkillStates
                 }
             }
 
-            if (base.fixedAge >= SpawnState.duration && base.isAuthority)
+            if (base.fixedAge >= SeamstressSpawnState.duration && base.isAuthority)
             {
                 this.outer.SetNextStateToMain();
             }

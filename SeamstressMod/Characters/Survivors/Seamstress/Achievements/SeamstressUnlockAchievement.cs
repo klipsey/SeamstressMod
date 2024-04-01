@@ -18,8 +18,8 @@ namespace SeamstressMod.Survivors.Seamstress.Achievements
         {
             if (self)
             {
-                if (self.bodyIndex == BodyCatalog.FindBodyIndex("BrotherBody") &&
-                    self.HasBuff(RoR2Content.Buffs.Bleeding))
+                if (self.isChampion &&
+                    self.HasBuff(RoR2Content.Buffs.Bleeding) || self.HasBuff(RoR2Content.Buffs.SuperBleed))
                 {
                     base.Grant();
                 }

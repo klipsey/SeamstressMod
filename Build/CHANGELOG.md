@@ -1,3 +1,8 @@
+# 0.2.5
+- bug fixes
+- rewording
+- new effects
+- unlock condition
 # 0.2.3
 - Added all icons
 # 0.2.2

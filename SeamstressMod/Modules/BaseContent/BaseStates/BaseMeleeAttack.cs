@@ -263,7 +263,7 @@ namespace SeamstressMod.Modules.BaseStates
                         if(attack.HasModdedDamageType(DamageTypes.NoSword)) attack.RemoveModdedDamageType(DamageTypes.NoSword);
                         attack.pushAwayForce = 600f;
                         attackRecoil = 0.2f;
-                        swingSoundString = "Play_moonBrother_swing_horizontal";
+                        swingSoundString = "Play_imp_attack";
                         if (muzzleString == "SwingLeftSmall")
                         {
                             attack.hitBoxGroup = FindHitBoxGroup("Left");

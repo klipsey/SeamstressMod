@@ -63,7 +63,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 procCoefficient = 1f
             };
             damage.AddModdedDamageType(DamageTypes.CutDamage);
-            damage.AddModdedDamageType(DamageTypes.ButcheredLifeSteal);
+            damage.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
             hurtBox.healthComponent.TakeDamage(damage);
             GlobalEventManager.instance.OnHitEnemy(damage, hurtBox.healthComponent.gameObject);
             if (pullTracerPrefab)

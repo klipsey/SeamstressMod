@@ -33,17 +33,17 @@ namespace SeamstressMod.SkillStates
             attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 3.5f;
 
-            swingSoundString = "Play_imp_attack";
+            swingSoundString = "Play_acrid_m1_slash";
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = SeamstressAssets.clipSlashEffect;
+            swingEffectPrefab = SeamstressAssets.slashEffect;
             bonusSwingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeftSmall" : "SwingRightSmall";
             buffer = false;
             if (butchered)
             {
                 moddedDamageTypeHolder.Add(DamageTypes.CutDamage);
-                moddedDamageTypeHolder.Add(DamageTypes.ButcheredLifeSteal);
+                moddedDamageTypeHolder.Add(DamageTypes.InsatiableLifeSteal);
             }
             scissorHit = true;
             if (muzzleString == "SwingLeftSmall" && !scissorLeft)

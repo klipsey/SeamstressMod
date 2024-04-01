@@ -26,7 +26,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal const float blinkCooldown = 0.5f;
 
-        internal const float butcheredLifeSteal = 0.15f;
+        internal const float insatiableLifesSteal = 0.3f;
 
         internal const float clipLifeSteal = 0.25f;
         //75% of healing is converted but i was too lazy oops

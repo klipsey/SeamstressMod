@@ -56,7 +56,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
             maxHealth = 160f,
             healthRegen = 1f,
-            armor = 10f,
+            armor = 0f,
             damage = 8f,
 
             damageGrowth = 0f,
@@ -785,17 +785,17 @@ namespace SeamstressMod.Survivors.Seamstress
         {
             orig(self);
 
-            if (self)
+            if(self)
             {
                 if (self.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
                     SeamstressController s = self.GetComponent<SeamstressController>();
-                    if (s != null)
+                    HealthComponent healthComponent = self.GetComponent<HealthComponent>();
+                    SkillLocator skillLocator = self.GetComponent<SkillLocator>();
+                    if (s && healthComponent && skillLocator)
                     {
-                        HealthComponent healthComponent = self.GetComponent<HealthComponent>();
-                        SkillLocator skillLocator = self.GetComponent<SkillLocator>();
                         float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield + (s.ImpGaugeAmount() / 8)) - (healthComponent.health + healthComponent.shield);
-                        float fakeHealthMissing = (healthComponent.fullHealth) * 0.5f;
+                        float fakeHealthMissing = (healthComponent.fullHealth) * 0.66f;
                         if (s.inButchered && skillLocator.utility.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
                         else self.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
                         if (s.ImpGaugeAmount() > 0)
@@ -813,10 +813,13 @@ namespace SeamstressMod.Survivors.Seamstress
                         self.attackSpeed += .1f;
                         self.moveSpeed += 1f;
                     }
-                    if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
+                    if (self.inventory)
                     {
-                        self.attackSpeed += (.1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
-                        self.moveSpeed += (1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
+                        if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
+                        {
+                            self.attackSpeed += (.1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
+                            self.moveSpeed += (1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid));
+                        }
                     }
                 }
             }

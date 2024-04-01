@@ -69,7 +69,7 @@ namespace SeamstressMod.SkillStates
                         ChainUpdate(snapBackDelay);
                     }
                     snapBackDelay -= Time.fixedDeltaTime;
-                    if(snapBackDelay <= 0f) EntityState.Destroy(base.gameObject);
+                    if(snapBackDelay <= 0.2f) EntityState.Destroy(base.gameObject);
                 }
             }
         }

@@ -13,7 +13,7 @@ namespace SeamstressMod.SkillStates
 {
     public class Clip : BaseSeamstressSkillState
     {
-        public static GameObject supaEffect = SeamstressAssets.clipSlashEffect;
+        public static GameObject clawSlash = SeamstressAssets.slashEffect;
 
         public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
 
@@ -26,7 +26,7 @@ namespace SeamstressMod.SkillStates
         private OverlapAttack overlapAttack;
         private DamageType damageType = DamageType.Generic;
         private DamageAPI.ModdedDamageType moddedDamageType3 = DamageTypes.Empty;
-        private DamageAPI.ModdedDamageType moddedDamageType2 = DamageTypes.ButcheredLifeSteal;
+        private DamageAPI.ModdedDamageType moddedDamageType2 = DamageTypes.ClipLifeSteal;
         private DamageAPI.ModdedDamageType moddedDamageType = DamageTypes.CutDamage;
         private float damageCoefficient = SeamstressStaticValues.clipDamageCoefficient;
         private float procCoefficient = 1f;
@@ -189,7 +189,7 @@ namespace SeamstressMod.SkillStates
         }
         protected virtual void PlaySwingEffect()
         {
-            if (!supaEffect)
+            if (!clawSlash)
             {
                 Log.Error("Error, no effect?");
                 return;
@@ -207,18 +207,18 @@ namespace SeamstressMod.SkillStates
                     {
                         if (alternateSwings == 0)
                         {
-                            UnityEngine.Object.Instantiate(supaEffect, smallSlash);
+                            UnityEngine.Object.Instantiate(clawSlash, smallSlash);
                             alternateSwings = 1;
                         }
                         else if (alternateSwings == 1)
                         {
-                            UnityEngine.Object.Instantiate(supaEffect, smallSlash2);
+                            UnityEngine.Object.Instantiate(clawSlash, smallSlash2);
                             alternateSwings = 0;
                         }
                     }
                     else if (hasFired2)
                     {
-                        UnityEngine.Object.Instantiate(supaEffect, smallSlash2);
+                        UnityEngine.Object.Instantiate(clawSlash, smallSlash2);
                     }
                 }
                 else if(inAir)

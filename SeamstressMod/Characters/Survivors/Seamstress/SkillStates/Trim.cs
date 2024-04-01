@@ -33,10 +33,10 @@ namespace SeamstressMod.SkillStates
             attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 5f;
 
-            swingSoundString = "Play_imp_attack";
+            swingSoundString = "Play_acrid_m1_slash";
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = SeamstressAssets.clipSlashEffect;
+            swingEffectPrefab = SeamstressAssets.slashEffect;
             bonusSwingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
             scissorHit = true;
             switch (swingIndex)
@@ -58,7 +58,9 @@ namespace SeamstressMod.SkillStates
                     }
                     break;
                 case 2:
+                    swingSoundString = "Play_acrid_m1_bigSlash";
                     damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
+                    swingEffectPrefab = SeamstressAssets.slashComboEffect;
                     bonusSwingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
                     muzzleString = "SwingCenterSmall";
                     earlyExitPercentTime = 0.75f;
@@ -72,7 +74,7 @@ namespace SeamstressMod.SkillStates
             }
             if (butchered)
             {
-                moddedDamageTypeHolder.Add(DamageTypes.ButcheredLifeSteal);
+                moddedDamageTypeHolder.Add(DamageTypes.InsatiableLifeSteal);
                 moddedDamageTypeHolder.Add(DamageTypes.CutDamage);
             }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
