@@ -239,7 +239,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "GAUGE_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "GAUGE_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texItHungersIcon"),
-                keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword },
+                keywordTokens = new string[] { Tokens.insatiableKeyword },
                 activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Idle)),
                 activationStateMachineName = "",
                 baseMaxStock = 1,
@@ -405,7 +405,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "HeartDashSeamstress",
                 skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_HEARTDASH_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_HEARTDASH_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.butcheredKeyword, Tokens.cutKeyword, Tokens.hemorrhageKeyword },
+                keywordTokens = new string[] { Tokens.insatiableKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texGlimpseOfCorruptionIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HealthCostDash)),
@@ -439,7 +439,7 @@ namespace SeamstressMod.Survivors.Seamstress
                 skillName = "ParrySeamstress",
                 skillNameToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME",
                 skillDescriptionToken = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.sentienceRangeKeyword, Tokens.butcheredKeyword, Tokens.cutKeyword },
+                keywordTokens = new string[] { Tokens.sentienceRangeKeyword, Tokens.insatiableKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texGlimpseOfPurityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Parry)),
@@ -792,6 +792,12 @@ namespace SeamstressMod.Survivors.Seamstress
                     SeamstressController s = self.GetComponent<SeamstressController>();
                     if (s != null)
                     {
+                        HealthComponent healthComponent = self.GetComponent<HealthComponent>();
+                        SkillLocator skillLocator = self.GetComponent<SkillLocator>();
+                        float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield + (s.ImpGaugeAmount() / 8)) - (healthComponent.health + healthComponent.shield);
+                        float fakeHealthMissing = (healthComponent.fullHealth) * 0.5f;
+                        if (s.inButchered && skillLocator.utility.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
+                        else self.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
                         if (s.ImpGaugeAmount() > 0)
                         {
                             self.moveSpeed += (2f * s.ImpGaugeAmountPercent());

@@ -98,7 +98,7 @@ namespace SeamstressMod.Survivors.Seamstress
 
         internal static Sprite noGrab;
 
-        private static AssetBundle _assetBundle;
+        internal static AssetBundle _assetBundle;
         //projectiles
         internal static GameObject needlePrefab;
 
@@ -166,11 +166,11 @@ namespace SeamstressMod.Survivors.Seamstress
             heartMdl = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion().transform.GetChild(0).GetChild(0).gameObject.InstantiateClone("HeartMdl", false);
             heartMdl.transform.localScale /= 3f;
             Material eatMyButt = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/EliteEarth/AffixEarthCore.mat").WaitForCompletion();
-            eatMyButt.SetColor("_Color", coolRed);
-            eatMyButt.SetColor("_EmColor", coolRed);
             Material[] explodeAndDie = new Material[1]; 
             explodeAndDie[0] = eatMyButt;
             heartMdl.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials = explodeAndDie;
+            heartMdl.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0].SetColor("_Color", coolRed);
+            heartMdl.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0].SetColor("_EmColor", coolRed);
             Object.DestroyImmediate(heartMdl.GetComponent<CharacterModel>());
             Object.DestroyImmediate(heartMdl.GetComponent<HurtBoxGroup>());
             Object.DestroyImmediate(heartMdl.transform.GetChild(2).gameObject);

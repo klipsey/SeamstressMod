@@ -11,7 +11,12 @@ namespace SeamstressMod.Survivors.Seamstress
 
         public static void Init()
         {
-            masterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
+            characterUnlockableDef = Modules.Content.CreateAndAddUnlockableDef(
+                SeamstressUnlockAchievement.unlockableIdentifier,
+                Modules.Tokens.GetAchievementNameToken(SeamstressUnlockAchievement.identifier),
+                SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texGlimpseOfPurityIcon"));
+
+            masterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockableDef(
                 SeamstressMasteryAchievement.unlockableIdentifier,
                 Modules.Tokens.GetAchievementNameToken(SeamstressMasteryAchievement.identifier),
                 SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texMasteryAchievement"));

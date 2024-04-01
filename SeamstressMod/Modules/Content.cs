@@ -54,7 +54,7 @@ namespace SeamstressMod.Modules
         {
             ContentPacks.unlockableDefs.Add(unlockableDef);
         }
-        internal static UnlockableDef CreateAndAddUnlockbleDef(string identifier, string nameToken, Sprite achievementIcon)
+        internal static UnlockableDef CreateAndAddUnlockableDef(string identifier, string nameToken, Sprite achievementIcon)
         {
             UnlockableDef unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>();
             unlockableDef.cachedName = identifier;

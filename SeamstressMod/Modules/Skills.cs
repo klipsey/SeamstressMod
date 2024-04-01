@@ -241,7 +241,7 @@ namespace SeamstressMod.Modules
 
             this.cancelSprintingOnActivation = false;
 
-            this.keywordTokens = new string[] { Tokens.agileKeyword, Tokens.sentienceAttackKeyword, Tokens.cutKeyword };
+            this.keywordTokens = new string[] { Tokens.agileKeyword, Tokens.sentienceAttackKeyword };
             this.interruptPriority = InterruptPriority.Any;
             this.isCombatSkill = true;
             this.baseRechargeInterval = 0;

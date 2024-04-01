@@ -75,7 +75,6 @@ namespace SeamstressMod.Survivors.Seamstress
             RefundUtil();
             DrainGauge();
             CreateBlinkEffect(heldOrigin);
-            CalculateBonusDamage();
             ButcheredSound();
             IsButchered();
         }
@@ -206,14 +205,6 @@ namespace SeamstressMod.Survivors.Seamstress
                 }
             }
             hasPlayed = false;
-        }
-        //passive damage
-        private void CalculateBonusDamage()
-        {
-            float healthMissing = (healthComponent.fullHealth + healthComponent.fullShield) - (healthComponent.health + healthComponent.shield);
-            float fakeHealthMissing = (healthComponent.fullHealth) * 0.5f;
-            if(inButchered && skillLocator.utility.skillNameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") characterBody.baseDamage = 8f + (fakeHealthMissing * SeamstressStaticValues.passiveScaling) + (healthMissing * SeamstressStaticValues.passiveScaling);
-            else characterBody.baseDamage = 8f + (healthMissing * SeamstressStaticValues.passiveScaling);
         }
     }
 }
