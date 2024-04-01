@@ -1,5 +1,4 @@
 ﻿using BepInEx;
-using SeamstressMod.Survivors.Seamstress;
 using R2API.Utils;
 using RoR2;
 using System.Collections.Generic;
@@ -42,12 +41,12 @@ namespace SeamstressMod
             Modules.Language.Init();
 
             // character initialization
-            new SeamstressSurvivor().Initialize();
+            new SeamstressMod.Seamstress.SeamstressSurvivor().Initialize();
 
             // make a content pack and add it. this has to be last
             new Modules.ContentPacks().Initialize();
 
-            //On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { };
+            On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { };
         }
     }
 }

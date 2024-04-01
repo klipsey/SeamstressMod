@@ -3,7 +3,7 @@ using R2API;
 using RoR2;
 using RoR2.Audio;
 using RoR2.Skills;
-using SeamstressMod.Survivors.Seamstress;
+using SeamstressMod.Seamstress.Content;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -260,7 +260,7 @@ namespace SeamstressMod.Modules.BaseStates
                         attack.isCrit = RollCrit();
                         attack.impactSound = impactSound;
                         attack.damage = SeamstressStaticValues.scissorDamageCoefficient * base.damageStat;
-                        if(attack.HasModdedDamageType(DamageTypes.NoSword)) attack.RemoveModdedDamageType(DamageTypes.NoSword);
+                        if(attack.HasModdedDamageType(DamageTypes.NoScissors)) attack.RemoveModdedDamageType(DamageTypes.NoScissors);
                         attack.pushAwayForce = 600f;
                         attackRecoil = 0.2f;
                         swingSoundString = "Play_imp_attack";

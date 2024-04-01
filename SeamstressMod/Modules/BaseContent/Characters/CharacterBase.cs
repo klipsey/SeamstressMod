@@ -1,10 +1,7 @@
 ﻿using RoR2;
-using SeamstressMod.Modules.Characters;
-using SeamstressMod.Modules;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using SeamstressMod.Survivors.Seamstress;
 using EntityStates;
 
 namespace SeamstressMod.Modules.Characters

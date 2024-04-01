@@ -4,10 +4,8 @@ using RoR2.Skills;
 using System;
 using R2API;
 using System.Collections.Generic;
-using SeamstressMod;
 using UnityEngine;
-using SeamstressMod.Survivors.Seamstress;
-using SeamstressMod.SkillStates;
+using SeamstressMod.Seamstress.Components;
 
 namespace SeamstressMod.Modules
 {

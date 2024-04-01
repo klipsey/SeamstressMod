@@ -1,6 +1,7 @@
 ﻿using EntityStates;
 using RoR2;
-using SeamstressMod.Survivors.Seamstress;
+using SeamstressMod.Seamstress.Components;
+using SeamstressMod.Seamstress.Content;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,4 +1,4 @@
-﻿using SeamstressMod.Survivors.Seamstress;
+﻿using SeamstressMod.Seamstress.Content;
 
 namespace SeamstressMod.Modules
 {
