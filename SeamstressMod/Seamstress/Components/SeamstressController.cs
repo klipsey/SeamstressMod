@@ -25,7 +25,7 @@ namespace SeamstressMod.Seamstress.Components
 
         public float fiendMeter = 0f;
 
-        public float healthCoefficient = 0f;
+        public float maxHunger = 0f;
 
         private float drainAmount;
 
@@ -154,15 +154,15 @@ namespace SeamstressMod.Seamstress.Components
         }
         public void FillHunger(float healDamage)
         {
-            healthCoefficient = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
+            maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
 
-            if (fiendMeter + healDamage < healthCoefficient)
+            if (fiendMeter + healDamage < maxHunger)
             {
                 fiendMeter += healDamage;
             }
             else
             {
-                fiendMeter = healthCoefficient;
+                fiendMeter = maxHunger;
             }
 
             if (fiendMeter < 0f)

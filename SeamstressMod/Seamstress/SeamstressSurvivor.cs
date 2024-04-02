@@ -219,8 +219,8 @@ namespace SeamstressMod.Seamstress
                 skillName = SEAMSTRESS_PREFIX + "PASSIVE_NAME",
                 skillNameToken = SEAMSTRESS_PREFIX + "PASSIVE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "PASSIVE_DESCRIPTION",
-                skillIcon = assetBundle.LoadAsset<Sprite>("texImpTouchedIcon"),
-                keywordTokens = new string[] { Tokens.needleKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texItHungersIcon"),
+                keywordTokens = new string[] { Tokens.insatiableKeyword, Tokens.whatCountsAsHealth },
                 activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Idle)),
                 activationStateMachineName = "",
                 baseMaxStock = 1,
@@ -243,11 +243,11 @@ namespace SeamstressMod.Seamstress
 
             passive.impGauge = Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = SEAMSTRESS_PREFIX + "GAUGE_NAME",
-                skillNameToken = SEAMSTRESS_PREFIX + "GAUGE_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "GAUGE_DESCRIPTION",
-                skillIcon = assetBundle.LoadAsset<Sprite>("texItHungersIcon"),
-                keywordTokens = new string[] { Tokens.insatiableKeyword },
+                skillName = SEAMSTRESS_PREFIX + "NEEDLE_NAME",
+                skillNameToken = SEAMSTRESS_PREFIX + "NEEDLE_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "NEEDLE_DESCRIPTION",
+                skillIcon = assetBundle.LoadAsset<Sprite>("texImpTouchedIcon"),
+                keywordTokens = new string[] { Tokens.needleKeyword },
                 activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Idle)),
                 activationStateMachineName = "",
                 baseMaxStock = 1,
@@ -802,14 +802,14 @@ namespace SeamstressMod.Seamstress
                     SkillLocator skillLocator = self.GetComponent<SkillLocator>();
                     if (s && healthComponent && skillLocator)
                     {
-                        s.healthCoefficient = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
-                        float healthMissing = healthComponent.fullHealth + healthComponent.fullShield + s.fiendMeter / 8 - (healthComponent.health + healthComponent.shield);
+                        s.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
+                        float healthMissing = healthComponent.fullHealth + (healthComponent.fullShield + healthComponent.barrier) / 2f + s.fiendMeter / 8 - (healthComponent.health);
                         float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
                         if (s.inInsatiable && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
                         else self.baseDamage = 8f + healthMissing * SeamstressStaticValues.passiveScaling;
                         if (s.fiendMeter > 0)
                         {
-                            self.moveSpeed += 2f * Util.Remap(s.fiendMeter, 0f, s.healthCoefficient, 0f, 2f);
+                            self.moveSpeed += 2f * Util.Remap(s.fiendMeter, 0f, s.maxHunger, 0f, 2f);
                         }
                     }
                     if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))

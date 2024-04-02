@@ -45,13 +45,13 @@ namespace SeamstressMod.Seamstress.Content
             #endregion
 
             #region Passive
-            Language.Add(prefix + "PASSIVE_NAME", "Imp Touched Heart");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> for every <style=cIsHealth>1 missing health</style>. " +
-                $"<color=#9B3737>Blink</color> instead of jumping. <color=#9B3737>Needles</color> can be consumed to <color=#9B3737>Blink</color> in the air.");
+            Language.Add(prefix + "PASSIVE_NAME", "It Hungers");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"The Seamstress gains <style=cIsDamage>base damage</style> for every <style=cIsHealth>1 missing health</style>. " +
+                $"The Seamstress can fill her <style=cIsHealth>Hunger</style> during " + Tokens.insatiablePrefix + " giving movespeed and an additional layer of <style=cIsHealth>barrier</style>.");
 
-            Language.Add(prefix + "GAUGE_NAME", "It Hungers");
-            Language.Add(prefix + "GAUGE_DESCRIPTION", $"During " + Tokens.insatiablePrefix + $", <style=cIsHealing>healing</style> sates your <style=cIsHealth>Hunger</style>. " +
-                $"Filling your <style=cIsHealth>Hunger</style> gives bonus stats and acts as a <style=cIsHealth>barrier</style>.");
+            Language.Add(prefix + "NEEDLE_NAME", "Imp Touched Heart");
+            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"The Seamstress <color=#9B3737>Blinks</color> instead of jumping. <color=#9B3737>Needles</color> can be fired to <color=#9B3737>Blink</color> in the air dealing " +
+                $"<style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style>.");
             #endregion
 
             #region Primary
