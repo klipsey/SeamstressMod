@@ -54,12 +54,12 @@ namespace SeamstressMod.Seamstress.SkillStates
             base.FixedUpdate();
             if (NetworkServer.active)
             {
-                if (seamCon.inButchered && !hasFired)
+                if (seamCon.inInsatiable && !hasFired)
                 {
                     ChainUpdate(SeamstressStaticValues.butcheredDuration);
                     hasFired = true;
                 }
-                if (!seamCon.inButchered && fixedAge > 1f)
+                if (!seamCon.inInsatiable && fixedAge > 1f)
                 {
                     if (!splat)
                     {
@@ -72,11 +72,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                     snapBackDelay -= Time.fixedDeltaTime;
                     if (snapBackDelay <= 0.2f)
                     {
-                        for (int i = 0; i < transform.childCount; i++)
-                        {
-                            Object.Destroy(transform.GetChild(i).gameObject);
-                        }
-                        Object.Destroy(gameObject);
+                        EntityState.Destroy(base.gameObject.transform.GetChild(0).gameObject);
+                        EntityState.Destroy(base.gameObject);
                     }
                 }
             }
@@ -92,7 +89,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 genericFloat = num,
             };
             effectData.SetHurtBoxReference(owner);
-            EffectManager.SpawnEffect(chain, effectData, transmit: true);
+            EffectManager.SpawnEffect(chain, effectData, transmit: false);
         }
 
         public override void OnExit()

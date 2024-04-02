@@ -35,9 +35,9 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             dashVector = inputBank.aimDirection;
 
-            characterMotor.disableAirControlUntilCollision = false;
+            base.characterMotor.disableAirControlUntilCollision = false;
 
-            Transform modelTransform = GetModelTransform();
+            Transform modelTransform = base.GetModelTransform();
             Animator animator = modelTransform.GetComponent<Animator>();
 
             if (modelTransform && SeamstressAssets.destealthMaterial)
@@ -51,13 +51,13 @@ namespace SeamstressMod.Seamstress.SkillStates
                 temporaryOverlay.animateShaderAlpha = true;
             }
 
-            attack = new OverlapAttack();
-            attack.attacker = gameObject;
-            attack.inflictor = gameObject;
+            this.attack = new OverlapAttack();
+            attack.attacker = base.gameObject;
+            attack.inflictor = base.gameObject;
             attack.damageType = DamageType.Stun1s;
             attack.procCoefficient = 1f;
-            attack.teamIndex = GetTeam();
-            attack.isCrit = RollCrit();
+            attack.teamIndex = base.GetTeam();
+            attack.isCrit = base.RollCrit();
             attack.forceVector = Vector3.up * 3000f;
             attack.damage = damageCoefficient * damageStat;
             attack.hitBoxGroup = FindHitBoxGroup(hitBoxString);
@@ -69,23 +69,23 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             EffectData effectData = new EffectData()
             {
-                origin = characterBody.corePosition,
+                origin = base.characterBody.corePosition,
                 rotation = Util.QuaternionSafeLookRotation(dashVector),
                 scale = 3f
             };
             EffectManager.SpawnEffect(SeamstressAssets.impDash, effectData, false);
             EffectManager.SpawnEffect(SeamstressAssets.smallBlinkPrefab, effectData, false);
-
+            
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", baseDuration);
 
-            characterMotor.velocity.y = 0f;
-            characterMotor.velocity += dashVector * (dashPower * (moveSpeedStat + 1f));
+            base.characterMotor.velocity.y = 0f;
+            base.characterMotor.velocity += dashVector * (dashPower * (moveSpeedStat + 1f));
 
             if (NetworkServer.active)
             {
                 characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
             }
-            Vector3 effectPos = transform.localPosition;
+            Vector3 effectPos = this.transform.localPosition;
             RaycastHit raycastHit;
             if (Physics.Raycast(effectPos, Vector3.one, out raycastHit, 10f, LayerIndex.world.mask))
             {
@@ -96,20 +96,20 @@ namespace SeamstressMod.Seamstress.SkillStates
                 origin = effectPos,
                 rotation = Quaternion.identity,
                 color = SeamstressAssets.coolRed,
-            }, true);
+            }, false);
 
-            seamCon.snapBackPosition = characterBody.corePosition;
+            seamCon.snapBackPosition = base.characterBody.corePosition;
 
-            Vector3 position = characterBody.corePosition;
-            GameObject obj = projectilePrefab;
+            Vector3 position = base.characterBody.corePosition;
+            GameObject obj = UnityEngine.Object.Instantiate(projectilePrefab, position, Quaternion.identity);
             ProjectileController component = obj.GetComponent<ProjectileController>();
             if (component)
             {
-                component.owner = gameObject;
-                component.Networkowner = gameObject;
+                component.owner = base.gameObject;
+                component.Networkowner = base.gameObject;
             }
-            obj.GetComponent<TeamFilter>().teamIndex = GetComponent<TeamComponent>().teamIndex;
-            if(NetworkServer.active)
+            obj.GetComponent<TeamFilter>().teamIndex = base.GetComponent<TeamComponent>().teamIndex;
+            if (NetworkServer.active)
             {
                 NetworkServer.Spawn(obj);
             }
@@ -156,18 +156,18 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             if (NetworkServer.active && healthComponent)
             {
-                seamCon.inButchered = false;
+                seamCon.inInsatiable = false;
                 DotController.InflictDot(characterBody.gameObject, characterBody.gameObject, Dots.ButcheredDot, SeamstressStaticValues.butcheredDuration, 1, 1u);
             }
 
-            if (!hasHit) characterMotor.velocity *= 0.2f;
+            if (!hasHit) base.characterMotor.velocity *= 0.2f;
 
             if (NetworkServer.active)
             {
                 characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
                 characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.3f);
             }
-            skillLocator.utility.SetSkillOverride(gameObject, SeamstressAssets.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressAssets.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
 
             base.OnExit();
         }

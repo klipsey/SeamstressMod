@@ -76,7 +76,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     effectData.rotation = Util.QuaternionSafeLookRotation(blinkVector);
                     effectData.origin = origin;
                     effectData.scale = 0.15f;
-                    EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: true);
+                    EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: false);
                 }
             }
             else split = false;

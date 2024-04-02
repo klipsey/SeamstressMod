@@ -51,7 +51,7 @@ namespace SeamstressMod.Seamstress.Components
         {
             if (fillRectTransform)
             {
-                float fill = Util.Remap(target.fiendMeter / (target.healthCoefficient) * 100, 0f, 100f, 0f, 1f);
+                float fill = Util.Remap(target.fiendMeter, 0f, target.healthCoefficient, 0f, 1f);
                 fillRectTransform.anchorMin = new Vector2(0f, 0f);
                 fillRectTransform.anchorMax = new Vector2(fill, 1f);
                 fillRectTransform.sizeDelta = new Vector2(1f, 1f);

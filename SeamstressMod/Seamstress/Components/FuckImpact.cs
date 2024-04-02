@@ -22,6 +22,8 @@ namespace SeamstressMod.Seamstress.Components
 
         public bool alignNormals = true;
 
+        private bool hasFired = false;
+
         public UnityEvent stickEvent;
 
         private ProjectileController projectileController;
@@ -168,25 +170,29 @@ namespace SeamstressMod.Seamstress.Components
             if (enabled)
             {
                 TrySticking(impactInfo.collider, impactInfo.estimatedImpactNormal);
-                BlastAttack impactAttack = new BlastAttack();
-                GameObject owner = gameObject.GetComponent<ProjectileController>().owner;
-                impactAttack.attacker = owner;
-                impactAttack.inflictor = owner;
-                impactAttack.teamIndex = TeamComponent.GetObjectTeam(owner);
-                impactAttack.baseDamage = SeamstressStaticValues.scissorDamageCoefficient * owner.GetComponent<CharacterBody>().damage;
-                impactAttack.baseForce = 600f;
-                impactAttack.position = transform.position;
-                impactAttack.procCoefficient = 1f;
-                impactAttack.radius = 6f;
-                impactAttack.damageType = DamageType.Stun1s;
-                if (owner.GetComponent<SeamstressController>().inButchered)
+                if(!hasFired)
                 {
-                    impactAttack.AddModdedDamageType(DamageTypes.CutDamage);
-                    impactAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
+                    BlastAttack impactAttack = new BlastAttack();
+                    GameObject owner = gameObject.GetComponent<ProjectileController>().owner;
+                    impactAttack.attacker = owner;
+                    impactAttack.inflictor = owner;
+                    impactAttack.teamIndex = TeamComponent.GetObjectTeam(owner);
+                    impactAttack.baseDamage = SeamstressStaticValues.scissorDamageCoefficient * owner.GetComponent<CharacterBody>().damage;
+                    impactAttack.baseForce = 600f;
+                    impactAttack.position = transform.position;
+                    impactAttack.procCoefficient = 1f;
+                    impactAttack.radius = 6f;
+                    impactAttack.damageType = DamageType.Stun1s;
+                    if (owner.GetComponent<SeamstressController>().inInsatiable)
+                    {
+                        impactAttack.AddModdedDamageType(DamageTypes.CutDamage);
+                        impactAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
+                    }
+                    impactAttack.falloffModel = BlastAttack.FalloffModel.None;
+                    impactAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
+                    impactAttack.Fire();
+                    hasFired = true;
                 }
-                impactAttack.falloffModel = BlastAttack.FalloffModel.None;
-                impactAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
-                impactAttack.Fire();
             }
         }
 
@@ -232,13 +238,13 @@ namespace SeamstressMod.Seamstress.Components
                     origin = effectPos,
                     rotation = Quaternion.identity,
                     scale = 1.5f,
-                }, true);
+                }, false);
                 EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
                 {
                     origin = effectPos,
                     rotation = Quaternion.identity,
                     color = SeamstressAssets.coolRed,
-                }, true);
+                }, false);
                 if (stickSoundString.Length > 0)
                 {
                     Util.PlaySound(stickSoundString, base.gameObject);
@@ -252,6 +258,7 @@ namespace SeamstressMod.Seamstress.Components
                 NetworklocalRotation = Quaternion.Inverse(transform.rotation) * base.transform.rotation;
                 victim = gameObject;
                 NetworkhitHurtboxIndex = networkhitHurtboxIndex;
+                hasFired = false;
                 return true;
             }
             return false;

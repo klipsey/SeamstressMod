@@ -9,7 +9,7 @@ namespace SeamstressMod.Seamstress.Content
         {
 
             Modules.Content.AddEntityState(typeof(SeamstressSpawnState));
-            Modules.Content.AddEntityState(typeof(SeamstressMainState));
+            Modules.Content.AddEntityState(typeof(MainState));
             Modules.Content.AddEntityState(typeof(BaseSeamstressSkillState));
             Modules.Content.AddEntityState(typeof(BaseSeamstressState));
             Modules.Content.AddEntityState(typeof(SeamstressJump));

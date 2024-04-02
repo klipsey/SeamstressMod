@@ -141,8 +141,6 @@ namespace SeamstressMod.Seamstress
 
             characterPrefab = bodyPrefab;
             AddHooks();
-
-            NetworkingAPI.RegisterMessageType<Seamstress.Components.SyncHunger>();
         }
 
         private void AdditionalBodySetup()
@@ -179,14 +177,19 @@ namespace SeamstressMod.Seamstress
         {
             //clear existing state machines from your cloned body (probably commando)
             //omit all this if you want to just keep theirs
-            Prefabs.ClearEntityStateMachines(bodyPrefab);
 
             //if you set up a custom main characterstate, set it up here
             //don't forget to register custom entitystates in your HenryStates.cs
             //the main "body" state machine has some special properties
-            Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(SkillStates.SeamstressMainState), typeof(EntityStates.SpawnTeleporterState));
-
-            Prefabs.AddEntityStateMachine(bodyPrefab, "Passive", typeof(SkillStates.SeamstressJump), typeof(SkillStates.SeamstressJump));
+            bodyPrefab.GetComponent<CharacterBody>().preferredInitialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressSpawnState));
+            foreach (EntityStateMachine i in bodyPrefab.GetComponents<EntityStateMachine>())
+            {
+                if (i.customName == "Body") i.mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.MainState));
+            }
+            EntityStateMachine passiveController = bodyPrefab.AddComponent<EntityStateMachine>();
+            passiveController.initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressJump));
+            passiveController.mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressJump));
+            passiveController.customName = "Passive";
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
         }
@@ -656,7 +659,7 @@ namespace SeamstressMod.Seamstress
                     genericFloat = self.duration
                 };
                 effectData.SetHurtBoxReference(self.target);
-                EffectManager.SpawnEffect(zap, effectData, transmit: true);
+                EffectManager.SpawnEffect(zap, effectData, transmit: false);
             }
             else
             {
@@ -737,7 +740,7 @@ namespace SeamstressMod.Seamstress
                 return;
             }
             SeamstressController s = self.body.GetComponent<SeamstressController>();
-            if (self.body.HasBuff(SeamstressBuffs.butchered) && s.inButchered == false)
+            if (self.body.HasBuff(SeamstressBuffs.butchered) && s.inInsatiable == false)
             {
                 TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
                 temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
@@ -746,11 +749,11 @@ namespace SeamstressMod.Seamstress
                 temporaryOverlay.destroyComponentOnEnd = true;
                 temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
                 temporaryOverlay.AddToCharacerModel(self);
-                s.inButchered = true;
+                s.inInsatiable = true;
             }
-            else if (!self.body.HasBuff(SeamstressBuffs.butchered) && s.inButchered == true)
+            else if (!self.body.HasBuff(SeamstressBuffs.butchered) && s.inInsatiable == true)
             {
-                s.inButchered = false;
+                s.inInsatiable = false;
                 if (self.gameObject.GetComponent<TemporaryOverlay>() != null)
                 {
                     UnityEngine.Object.Destroy(self.gameObject.GetComponent<TemporaryOverlay>());
@@ -799,13 +802,14 @@ namespace SeamstressMod.Seamstress
                     SkillLocator skillLocator = self.GetComponent<SkillLocator>();
                     if (s && healthComponent && skillLocator)
                     {
+                        s.healthCoefficient = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
                         float healthMissing = healthComponent.fullHealth + healthComponent.fullShield + s.fiendMeter / 8 - (healthComponent.health + healthComponent.shield);
                         float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
-                        if (s.inButchered && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
+                        if (s.inInsatiable && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
                         else self.baseDamage = 8f + healthMissing * SeamstressStaticValues.passiveScaling;
                         if (s.fiendMeter > 0)
                         {
-                            self.moveSpeed += 2f * s.fiendMeter * s.healthCoefficient;
+                            self.moveSpeed += 2f * Util.Remap(s.fiendMeter, 0f, s.healthCoefficient, 0f, 2f);
                         }
                     }
                     if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))

@@ -42,7 +42,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float parryDamageCoefficient = 4f;
 
-        internal const float needleDamageCoefficient = 1f;
+        internal const float needleDamageCoefficient = 0.6f;
 
         internal const float sewAltDamageCoefficient = 1.5f;
 

@@ -5,30 +5,32 @@ using UnityEngine;
 
 namespace SeamstressMod.Seamstress.Components
 {
-    internal class SyncHunger : INetMessage
+    internal class SyncBlink : INetMessage
     {
         private NetworkInstanceId netId;
-        private ulong gauge;
+        private bool blinkReady;
+        private ulong blinkCD;
 
-        public SyncHunger()
+        public SyncBlink()
         {
         }
 
-        public SyncHunger(NetworkInstanceId netId, ulong gauge)
+        public SyncBlink(NetworkInstanceId netId, bool blinkReady, ulong blinkCD)
         {
             this.netId = netId;
-            this.gauge = gauge;
+            this.blinkReady = blinkReady;
+            this.blinkCD = blinkCD;
         }
 
         public void Deserialize(NetworkReader reader)
         {
             this.netId = reader.ReadNetworkId();
-            this.gauge = reader.ReadUInt64();
+            this.blinkReady = reader.ReadBoolean();
         }
 
         public void OnReceived()
         {
-            Log.Message("Recieved gauge healing: " + gauge);
+            Log.Message("Recieved BlinkState");
             GameObject bodyObject = Util.FindNetworkObject(this.netId);
             if (!bodyObject)
             {
@@ -39,15 +41,17 @@ namespace SeamstressMod.Seamstress.Components
             SeamstressController seamCon = bodyObject.GetComponent<SeamstressController>();
             if (seamCon)
             {
-                seamCon.fiendMeter = this.gauge * 0.01f;
-                Log.Message("Sending gauge: " + seamCon.fiendMeter);
+                Log.Message("BlinkReady: " + blinkReady);
+                seamCon.blinkReady = this.blinkReady;
+                seamCon.blinkCd = this.blinkCD;
             }
         }
 
         public void Serialize(NetworkWriter writer)
         {
             writer.Write(this.netId);
-            writer.Write(this.gauge);
+            writer.Write(this.blinkReady);
+            writer.Write(this.blinkCD);
         }
     }
 }

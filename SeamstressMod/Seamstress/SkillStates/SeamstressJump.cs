@@ -12,8 +12,6 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class SeamstressJump : BaseSeamstressState
     {
-        private bool hasNeedles;
-
         public float minSpread;
 
         public float maxSpread;
@@ -30,9 +28,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (needleCount > 0) hasNeedles = true;
-            else hasNeedles = false;
-            if (empowered)
+            if (this.empowered)
             {
                 projectilePrefab = SeamstressAssets.needleButcheredPrefab;
             }
@@ -41,29 +37,25 @@ namespace SeamstressMod.Seamstress.SkillStates
                 projectilePrefab = SeamstressAssets.needlePrefab;
             }
             //Log.Debug("blinkCD: " + seamCon.blinkCd);
-            if ((characterMotor.jumpCount < characterBody.maxJumpCount || hasNeedles) && (seamCon.blinkCd <= 0 || !isGrounded)) seamCon.RefreshBlink();
-            if (inputBank.jump.justPressed && isGrounded && seamCon.blinkReady)
+            if (base.inputBank.jump.justPressed && base.isGrounded && seamCon.blinkReady)
             {
                 seamCon.blinkReady = false;
-                seamCon.blinkCd = SeamstressStaticValues.blinkCooldown;
-                if (inputBank.moveVector != Vector3.zero) BlinkForward();
+                if (base.inputBank.moveVector != Vector3.zero) BlinkForward();
                 else BlinkUp();
                 return;
             }
-            else if (inputBank.jump.justPressed && characterMotor.jumpCount >= characterBody.maxJumpCount && seamCon.blinkReady)
+            else if (base.inputBank.jump.justPressed && !base.isGrounded && seamCon.blinkReady)
             {
                 seamCon.blinkReady = false;
-                seamCon.blinkCd = SeamstressStaticValues.blinkCooldown;
                 if (characterMotor.jumpCount >= characterBody.maxJumpCount)
                 {
-                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
-                    if (NetworkServer.active) characterBody.RemoveBuff(SeamstressBuffs.needles);
+                    base.characterBody.RemoveBuff(SeamstressBuffs.needles);
                 }
-                if (isAuthority)
+                if (base.isAuthority)
                 {
                     aimRay = GetAimRay();
                     aimRay.direction = Util.ApplySpread(aimRay.direction, minSpread, maxSpread, 1f, 1f, 0f, projectilePitchBonus);
-
+                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
                     if (characterBody.inventory && characterBody.inventory.GetItemCount(DLC1Content.Items.MoreMissile) > 0)
                     {
                         float damageMult = SeamstressSurvivor.GetICBMDamageMult(characterBody);
@@ -93,7 +85,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                     if (inputBank.moveVector != Vector3.zero) BlinkForward();
                     else BlinkUp();
                 }
-                return;
             }
         }
         private void BlinkForward()

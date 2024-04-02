@@ -123,7 +123,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 effectData.rotation = transform.rotation;
                 effectData.origin = transform.position;
                 effectData.scale = 0.25f;
-                EffectManager.SpawnEffect(scissorFiringPrefab, effectData, transmit: true);
+                EffectManager.SpawnEffect(scissorFiringPrefab, effectData, transmit: false);
             }
             if (isAuthority)
             {

@@ -81,11 +81,11 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             characterBody.AddTimedBuff(SeamstressBuffs.butchered, SeamstressStaticValues.butcheredDuration, 1);
             SeamstressController s = characterBody.GetComponent<SeamstressController>();
-            s.inButchered = false;
+            s.inInsatiable = false;
             CleanBuffsServer();
             if (parrySoundDef)
             {
-                EffectManager.SimpleSoundEffect(parrySoundDef.index, characterBody.corePosition, transmit: true);
+                EffectManager.SimpleSoundEffect(parrySoundDef.index, characterBody.corePosition, transmit: false);
             }
         }
 

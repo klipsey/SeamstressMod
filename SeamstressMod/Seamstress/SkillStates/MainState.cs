@@ -6,7 +6,7 @@ using SeamstressMod.Seamstress.Components;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
-    public class SeamstressMainState : GenericCharacterMain
+    public class MainState : GenericCharacterMain
     {
         private Animator animator;
         private SeamstressController seamCon;
@@ -22,24 +22,24 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 bool hopooFeather = false;
                 bool waxQuail = false;
-                if (jumpInputReceived && characterBody && characterMotor.jumpCount < characterBody.maxJumpCount)
+                if (base.jumpInputReceived && base.characterBody && base.characterMotor.jumpCount < base.characterBody.maxJumpCount)
                 {
-                    int waxQuailCount = characterBody.inventory.GetItemCount(RoR2Content.Items.JumpBoost);
+                    int waxQuailCount = base.characterBody.inventory.GetItemCount(RoR2Content.Items.JumpBoost);
                     float horizontalBonus = 1f;
                     float verticalBonus = 1f;
 
-                    if (characterMotor.jumpCount >= 1)
+                    if (characterMotor.jumpCount >= base.characterBody.baseJumpCount)
                     {
                         seamCon.hopoopFeatherTimer = 0.1f;
                         hopooFeather = true;
                         horizontalBonus = 1.5f;
                         verticalBonus = 1.5f;
                     }
-                    else if (waxQuailCount > 0 && characterBody.isSprinting)
+                    else if (waxQuailCount > 0 && base.characterBody.isSprinting)
                     {
-                        float v = characterBody.acceleration * characterMotor.airControl;
+                        float v = base.characterBody.acceleration * characterMotor.airControl;
 
-                        if (characterBody.moveSpeed > 0f && v > 0f)
+                        if (base.characterBody.moveSpeed > 0f && v > 0f)
                         {
                             waxQuail = true;
                             float num2 = Mathf.Sqrt(10f * waxQuailCount / v);
@@ -47,8 +47,12 @@ namespace SeamstressMod.Seamstress.SkillStates
                             horizontalBonus = (num2 + num3) / num3;
                         }
                     }
-                    ApplyJumpVelocity(characterMotor, characterBody, horizontalBonus, verticalBonus, false);
-                    if (hasModelAnimator)
+
+                    ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
+
+                    base.characterMotor.jumpCount++;
+
+                    if (this.hasModelAnimator)
                     {
                         int layerIndex = modelAnimator.GetLayerIndex("Body");
                         if (layerIndex >= 0)
@@ -68,7 +72,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                         EffectManager.SpawnEffect(LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/FeatherEffect"), new EffectData
                         {
                             origin = characterBody.footPosition
-                        }, true);
+                        }, false);
                     }
                     else if (characterMotor.jumpCount > 0)
                     {
@@ -76,7 +80,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                         {
                             origin = characterBody.footPosition,
                             scale = characterBody.radius
-                        }, true);
+                        }, false);
                     }
 
                     if (waxQuail)
@@ -85,11 +89,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                         {
                             origin = characterBody.footPosition,
                             rotation = Util.QuaternionSafeLookRotation(characterMotor.velocity)
-                        }, true);
+                        }, false);
                     }
-
-                    characterMotor.jumpCount++;
-
                     #region For later? thank you rob
                     /*
                     if (this.animator)

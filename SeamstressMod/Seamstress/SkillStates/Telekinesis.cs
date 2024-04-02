@@ -89,14 +89,18 @@ namespace SeamstressMod.Seamstress.SkillStates
             tracker = GetComponent<Tracker>();
             if (tracker)
             {
-                if (isAuthority)
+                victim = tracker.GetTrackingTarget();
+                if (victim)
                 {
-                    victim = tracker.GetTrackingTarget();
+                    DefaultVictim();
+                    if (NetworkServer.active)
+                    {
+                        if (!victimBody.HasBuff(SeamstressBuffs.manipulated)) victimBody.AddBuff(SeamstressBuffs.manipulated);
+                    }
                 }
-                DefaultVictim();
-                if (NetworkServer.active)
+                else
                 {
-                    if (!victimBody.HasBuff(SeamstressBuffs.manipulated)) victimBody.AddBuff(SeamstressBuffs.manipulated);
+                    Log.Debug("NO VICTIM");
                 }
             }
             if (!_barrelPoint)
@@ -193,16 +197,6 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             base.OnExit();
         }
-        public override void Update()
-        {
-            base.Update();
-            if (inputBank.skill2.justReleased || !victim.healthComponent.alive || fixedAge >= 7f)
-            {
-                outer.SetNextStateToMain();
-            }
-
-            _pickDistance = Mathf.Clamp(_pickDistance + Input.mouseScrollDelta.y, _minGrabDistance, _maxGrabDistance);
-        }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
@@ -238,7 +232,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     else vector2.y += Physics.gravity.y * Time.fixedDeltaTime;
                     if (SeamstressConfig.funny.Value) num2 = Mathf.Clamp(num2, 60f, 120f);
                     float num3 = pullSuitabilityCurve.Evaluate(num2);
-                    victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * (num3 * Mathf.Max(num2, 100f)) * num, alwaysApply: true, disableAirControlUntilCollision: true);
+                    victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * (num3 * Mathf.Max(num2, 100f)) * num, alwaysApply: true, disableAirControlUntilCollision: false);
                 }
 
                 if (victimMotor != null) bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat) + victim.healthComponent.fullCombinedHealth * 0.2f, SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullCombinedHealth * 0.7f);
@@ -250,12 +244,12 @@ namespace SeamstressMod.Seamstress.SkillStates
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
                         color = SeamstressAssets.coolRed,
-                    }, true);
+                    }, false);
                     EffectManager.SpawnEffect(SeamstressAssets.slamEffect, new EffectData
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
-                    }, true);
+                    }, false);
                     CharacterBody component = gameObject.GetComponent<CharacterBody>();
                     float num = component.damage;
                     BlastAttack blastAttack = new BlastAttack();
@@ -284,6 +278,12 @@ namespace SeamstressMod.Seamstress.SkillStates
                     hitStopwatch = 0f;
                 }
             }
+            if (base.isAuthority && base.inputBank.skill2.justReleased || !victim.healthComponent.alive || base.fixedAge >= 7f)
+            {
+                outer.SetNextStateToMain();
+            }
+
+            _pickDistance = Mathf.Clamp(_pickDistance + Input.mouseScrollDelta.y, _minGrabDistance, _maxGrabDistance);
         }
         private void DoSplashDamage(ref MovementHitInfo movementHitInfo)
         {

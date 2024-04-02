@@ -19,7 +19,7 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool hasFired;
 
-        private float pickupTimer = 1.25f;
+        private float pickupTimer = 0.75f;
 
         public void FixedUpdate()
         {
@@ -56,7 +56,7 @@ namespace SeamstressMod.Seamstress.Components
                         origin = Util.GetCorePosition(gameObject),
                         rotation = Quaternion.identity,
                         scale = 1.5f,
-                    }, true);
+                    }, false);
                     triggerEvents?.Invoke();
                     Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
                     if (healthComponent.body.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) healthComponent.body.AddBuff(SeamstressBuffs.needles);

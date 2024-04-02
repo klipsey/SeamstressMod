@@ -3,6 +3,13 @@
 - rewording
 - new effects
 - unlock condition
+- new vfx
+- half networked
+- fixed blink randomly breaking
+- fixed damage being multiplied with scissors when thrown
+- removed herobrine
+# 0.2.4
+- April Fools
 # 0.2.3
 - Added all icons
 # 0.2.2

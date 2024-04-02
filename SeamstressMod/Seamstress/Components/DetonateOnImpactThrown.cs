@@ -72,12 +72,12 @@ namespace SeamstressMod.Seamstress.Components
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
                         color = SeamstressAssets.coolRed,
-                    }, true);
+                    }, false);
                     EffectManager.SpawnEffect(SeamstressAssets.slamEffect, new EffectData
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
-                    }, true);
+                    }, false);
                     CharacterBody component = attacker.GetComponent<CharacterBody>();
                     SeamstressController seamCon = attacker.GetComponent<SeamstressController>();
                     float num2 = component.damage;
@@ -96,7 +96,7 @@ namespace SeamstressMod.Seamstress.Components
                     blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                     blastAttack.damageColorIndex = DamageColorIndex.Default;
                     blastAttack.damageType = DamageType.Stun1s;
-                    if (seamCon.inButchered)
+                    if (seamCon.inInsatiable)
                     {
                         blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
                         blastAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
@@ -121,7 +121,7 @@ namespace SeamstressMod.Seamstress.Components
                     origin = victimBody.footPosition,
                     rotation = Quaternion.identity,
                     color = SeamstressAssets.coolRed,
-                }, true);
+                }, false);
                 CharacterBody component = attacker.GetComponent<CharacterBody>();
                 SeamstressController seamCon = attacker.GetComponent<SeamstressController>();
                 float num2 = component.damage;
@@ -140,7 +140,7 @@ namespace SeamstressMod.Seamstress.Components
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                 blastAttack.damageColorIndex = DamageColorIndex.Default;
                 blastAttack.damageType = DamageType.Stun1s;
-                if (seamCon.inButchered)
+                if (seamCon.inInsatiable)
                 {
                     blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
                     blastAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);

@@ -25,17 +25,21 @@ namespace SeamstressMod.Seamstress.Components
 
         public float fiendMeter = 0f;
 
-        public float healthCoefficient;
+        public float healthCoefficient = 0f;
 
         private float drainAmount;
 
         private float dashStopwatch;
 
+        private float checkStatsStopwatch;
+
         public float hopoopFeatherTimer;
 
-        public float blinkCd;
+        public float blinkCd = 0f;
 
         public bool blinkReady;
+
+        public bool hasNeedles;
 
         private bool hasPlayed = false;
 
@@ -52,13 +56,13 @@ namespace SeamstressMod.Seamstress.Components
 
         //public float lockOutLength = 0f;
 
-        private float butcheredDuration = 0f;
+        private float insatiableDuration = 0f;
 
         private float cooldownRefund;
 
-        public bool inButchered = false;
+        public bool inInsatiable = false;
 
-        public bool runButchered;
+        public bool hasStartedInsatiable;
 
         public bool draining;
 
@@ -73,14 +77,34 @@ namespace SeamstressMod.Seamstress.Components
         public void FixedUpdate()
         {
             hopoopFeatherTimer -= Time.fixedDeltaTime;
-            blinkCd -= Time.fixedDeltaTime;
-            if (butcheredDuration > 0f) butcheredDuration -= Time.fixedDeltaTime;
+            blinkCd += Time.fixedDeltaTime;
+            hasNeedles = characterBody.HasBuff(SeamstressBuffs.needles);
+            if (insatiableDuration > 0f) insatiableDuration -= Time.fixedDeltaTime;
             if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
+            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount && blinkCd >= SeamstressStaticValues.blinkCooldown) || hasNeedles) && blinkReady == false)
+            {
+                this.blinkCd = 0f;
+                this.blinkReady = true;
+
+                NetworkIdentity networkIdentity = base.gameObject.GetComponent<NetworkIdentity>();
+                if (!networkIdentity)
+                {
+                    return;
+                }
+
+                new SyncBlink(networkIdentity.netId, (bool)blinkReady, (ulong)blinkCd).Send(R2API.Networking.NetworkDestination.Clients);
+            }
+            if (checkStatsStopwatch >= 0.5)
+            {
+                characterBody.RecalculateStats();
+                checkStatsStopwatch = 0f;
+            }
+            else checkStatsStopwatch += Time.fixedDeltaTime;
             RefundUtil();
             CheckToDrainGauge();
             CreateBlinkEffect(heldOrigin);
             ButcheredSound();
-            IsButchered();
+            IsInsatiable();
         }
         private void RefundUtil()
         {
@@ -105,10 +129,9 @@ namespace SeamstressMod.Seamstress.Components
                     fiendMeter -= drainAmount;
                     if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 8, default, false);
                 }
-                else if (fiendMeter < 0f)
+                else if (fiendMeter <= 0f)
                 {
                     draining = false;
-                    fiendMeter = 0f;
                 }
             }
         }
@@ -129,10 +152,6 @@ namespace SeamstressMod.Seamstress.Components
             dashStopwatch = 0.75f;
             hasPlayedEffect = false;
         }
-        public void RefreshBlink()
-        {
-            blinkReady = true;
-        }
         public void FillHunger(float healDamage)
         {
             healthCoefficient = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
@@ -146,20 +165,26 @@ namespace SeamstressMod.Seamstress.Components
                 fiendMeter = healthCoefficient;
             }
 
-            NetworkIdentity networkIdentity = new NetworkIdentity();
-            if(!networkIdentity)
+            if (fiendMeter < 0f)
+            {
+                draining = true;
+                fiendMeter = 0f;
+            }
+
+            NetworkIdentity networkIdentity = base.gameObject.GetComponent<NetworkIdentity>();
+            if (!networkIdentity)
             {
                 return;
             }
 
             new SyncHunger(networkIdentity.netId, (ulong)(this.fiendMeter * 100f)).Send(R2API.Networking.NetworkDestination.Clients);
         }
-        private void IsButchered()
+        private void IsInsatiable()
         {
-            if (inButchered && !runButchered)
+            if (inInsatiable && !hasStartedInsatiable)
             {
                 draining = false;
-                butcheredDuration = SeamstressStaticValues.butcheredDuration;
+                insatiableDuration = SeamstressStaticValues.butcheredDuration;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -173,9 +198,9 @@ namespace SeamstressMod.Seamstress.Components
                     temporaryOverlay.animateShaderAlpha = true;
                     #endregion
                 }
-                runButchered = true;
+                hasStartedInsatiable = true;
             }
-            else if (!inButchered && runButchered)
+            else if (!inInsatiable && hasStartedInsatiable)
             {
                 drainAmount = healthComponent.fullHealth / 125;
                 draining = true;
@@ -196,15 +221,15 @@ namespace SeamstressMod.Seamstress.Components
                 }
                 Instantiate(endReap, characterBody.modelLocator.transform);
                 Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
-                runButchered = false;
+                hasStartedInsatiable = false;
             }
         }
         //butchered end sound
         private void ButcheredSound()
         {
-            if (inButchered)
+            if (inInsatiable)
             {
-                if (butcheredDuration < 2f && !hasPlayed)
+                if (insatiableDuration < 2f && !hasPlayed)
                 {
                     Util.PlaySound("Play_nullifier_impact", characterBody.gameObject);
                     hasPlayed = true;

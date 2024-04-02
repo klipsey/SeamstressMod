@@ -44,7 +44,7 @@ namespace SeamstressMod.Modules.BaseStates
             }
             if (seamCon)
             {
-                butchered = seamCon.inButchered;
+                butchered = seamCon.inInsatiable;
                 seamCon.isDashing = inDash;
             }
         }

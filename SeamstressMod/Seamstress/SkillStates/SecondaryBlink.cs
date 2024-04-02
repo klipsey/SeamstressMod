@@ -149,7 +149,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 effectData.rotation = Util.QuaternionSafeLookRotation(blinkDestination - blinkStart);
                 effectData.origin = origin;
                 effectData.scale = doThings;
-                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: true);
+                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, effectData, transmit: false);
             }
         }
 
@@ -254,7 +254,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (this.childLocator)
                 {
                     childLocator.FindChild("DustCenter").gameObject.SetActive(
-                true);
+                false);
                 }
                 */
                 //PlayAnimation("Gesture, Additive", "BlinkEnd", "BlinkEnd.playbackRate", exitDuration);
