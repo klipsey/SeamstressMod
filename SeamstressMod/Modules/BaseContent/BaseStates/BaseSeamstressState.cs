@@ -13,6 +13,8 @@ namespace SeamstressMod.Modules.BaseStates
     {
         protected SeamstressController seamCon;
 
+        protected NeedleController needleCon;
+
         protected bool scissorRight;
 
         protected bool scissorLeft;
@@ -41,9 +43,13 @@ namespace SeamstressMod.Modules.BaseStates
             {
                 seamCon = base.GetComponent<SeamstressController>();
             }
+            if (!needleCon)
+            {
+                needleCon = base.GetComponent<NeedleController>();
+            }
             if (seamCon)
             {
-                empowered = characterBody.HasBuff(SeamstressBuffs.butchered);
+                empowered = characterBody.HasBuff(SeamstressBuffs.instatiable);
             }
         }
     }

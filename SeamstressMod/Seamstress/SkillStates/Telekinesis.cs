@@ -55,9 +55,9 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private CollisionDetectionMode collisionDetectionMode;
 
-        private float _maxGrabDistance = 40f;
+        private float _maxGrabDistance = 30f;
 
-        private float _minGrabDistance = 1f;
+        private float _minGrabDistance = 20f;
 
         private float _pickDistance;
 
@@ -283,7 +283,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 outer.SetNextStateToMain();
             }
 
-            _pickDistance = Mathf.Clamp(_pickDistance + Input.mouseScrollDelta.y, _minGrabDistance, _maxGrabDistance);
+            _pickDistance = Mathf.Clamp(_pickDistance, _minGrabDistance, _maxGrabDistance);
         }
         private void DoSplashDamage(ref MovementHitInfo movementHitInfo)
         {

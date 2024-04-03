@@ -31,6 +31,8 @@ namespace SeamstressMod.Seamstress.SkillStates
         private bool hasFired;
 
         private bool splat;
+
+        private bool ownerIsEmpowered;
         public override void OnEnter()
         {
             base.OnEnter();
@@ -52,29 +54,27 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (NetworkServer.active)
+            ownerIsEmpowered = ownerBody.HasBuff(SeamstressBuffs.instatiable);
+            Log.Debug("AM I STILL HUNGRY" + seamCon.inInsatiable + " instatiable local: " + ownerIsEmpowered);
+            if (ownerIsEmpowered && !hasFired)
             {
-                if (seamCon.inInsatiable && !hasFired)
+                ChainUpdate(SeamstressStaticValues.butcheredDuration);
+                hasFired = true;
+            }
+            if (!ownerIsEmpowered && base.fixedAge > 1f)
+            {
+                if (!splat)
                 {
-                    ChainUpdate(SeamstressStaticValues.butcheredDuration);
-                    hasFired = true;
+                    splat = true;
+                    snapBackDelay = (ownerBody.corePosition - transform.position).magnitude / 10f;
+                    snapBackDelay = Mathf.Clamp(snapBackDelay, 0.2f, 1f);
+                    chain.GetComponent<DestroyOnCondition>().enabled = false;
+                    ChainUpdate(snapBackDelay);
                 }
-                if (!seamCon.inInsatiable && fixedAge > 1f)
+                snapBackDelay -= Time.fixedDeltaTime;
+                if (snapBackDelay <= 0.2f)
                 {
-                    if (!splat)
-                    {
-                        splat = true;
-                        snapBackDelay = (ownerBody.corePosition - transform.position).magnitude / 10f;
-                        snapBackDelay = Mathf.Clamp(snapBackDelay, 0.2f, 1f);
-                        chain.GetComponent<DestroyOnCondition>().enabled = false;
-                        ChainUpdate(snapBackDelay);
-                    }
-                    snapBackDelay -= Time.fixedDeltaTime;
-                    if (snapBackDelay <= 0.2f)
-                    {
-                        EntityState.Destroy(base.gameObject.transform.GetChild(0).gameObject);
-                        EntityState.Destroy(base.gameObject);
-                    }
+                    EntityState.Destroy(base.gameObject);
                 }
             }
         }

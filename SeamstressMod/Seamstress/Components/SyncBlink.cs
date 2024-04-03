@@ -30,7 +30,6 @@ namespace SeamstressMod.Seamstress.Components
 
         public void OnReceived()
         {
-            Log.Message("Recieved BlinkState");
             GameObject bodyObject = Util.FindNetworkObject(this.netId);
             if (!bodyObject)
             {
@@ -41,7 +40,6 @@ namespace SeamstressMod.Seamstress.Components
             SeamstressController seamCon = bodyObject.GetComponent<SeamstressController>();
             if (seamCon)
             {
-                Log.Message("BlinkReady: " + blinkReady);
                 seamCon.blinkReady = this.blinkReady;
                 seamCon.blinkCd = this.blinkCD;
             }

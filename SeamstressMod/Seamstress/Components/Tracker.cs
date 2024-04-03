@@ -15,7 +15,7 @@ namespace SeamstressMod.Seamstress.Components
     {
         public float maxTrackingDistance = 40f;
 
-        public float maxTrackingAngle = 10f;
+        public float maxTrackingAngle = 20f;
 
         public float trackerUpdateFrequency = 10f;
 
@@ -54,7 +54,7 @@ namespace SeamstressMod.Seamstress.Components
         {
             if (trackingTarget != null)
             {
-                if (!trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd))
+                if (!onCooldown)
                 {
                     return trackingTarget;
                 }
@@ -90,10 +90,7 @@ namespace SeamstressMod.Seamstress.Components
                 _ = trackingTarget;
                 Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
                 SearchForTarget(aimRay);
-                if (NetworkServer.active)
-                {
-                    if (trackingTarget != null) onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
-                }
+                if (trackingTarget != null) onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
                 if (onCooldown)
                 {
                     indicator2.targetTransform = trackingTarget ? trackingTarget.transform : null;

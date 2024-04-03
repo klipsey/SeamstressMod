@@ -28,7 +28,6 @@ namespace SeamstressMod.Seamstress.Components
 
         public void OnReceived()
         {
-            Log.Message("Recieved gauge healing: " + gauge);
             GameObject bodyObject = Util.FindNetworkObject(this.netId);
             if (!bodyObject)
             {
@@ -40,7 +39,6 @@ namespace SeamstressMod.Seamstress.Components
             if (seamCon)
             {
                 seamCon.fiendMeter = this.gauge * 0.01f;
-                Log.Message("Sending gauge: " + seamCon.fiendMeter);
             }
         }
 

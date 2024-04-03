@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using UnityEngine.AddressableAssets;
 using SeamstressMod.Seamstress;
 using SeamstressMod.Seamstress.Content;
+using SeamstressMod.Seamstress.Components;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
@@ -49,7 +50,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                 seamCon.blinkReady = false;
                 if (characterMotor.jumpCount >= characterBody.maxJumpCount)
                 {
-                    base.characterBody.RemoveBuff(SeamstressBuffs.needles);
                 }
                 if (base.isAuthority)
                 {

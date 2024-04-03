@@ -299,10 +299,8 @@ namespace SeamstressMod.Seamstress.Content
             balls2.sprite = sprite;
             balls2.color = coolRed;
 
-            clawsEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Imp/WIPImpEffect.prefab").WaitForCompletion().InstantiateClone("ClawsEffect");
+            clawsEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossGroundSlam.prefab").WaitForCompletion().InstantiateClone("ClawsEffect");
             clawsEffect.AddComponent<NetworkIdentity>();
-            var claws = clawsEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
-            claws.startLifetimeMultiplier = 0.5f;
 
             #region scrapped
             /*
@@ -654,6 +652,7 @@ namespace SeamstressMod.Seamstress.Content
             ProjectileSimple simple = scissorRPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
 
+            if (!scissorRPrefab.transform.GetChild(0).GetChild(4).GetComponent<NetworkIdentity>()) scissorRPrefab.AddComponent<NetworkIdentity>();
             scissorRPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
 
             //changes team filter to only team
@@ -720,6 +719,7 @@ namespace SeamstressMod.Seamstress.Content
             ProjectileSimple simple = scissorLPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
 
+            if (!scissorLPrefab.transform.GetChild(0).GetChild(4).GetComponent<NetworkIdentity>()) scissorLPrefab.AddComponent<NetworkIdentity>();
             scissorLPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
 
             //changes team filter to only team

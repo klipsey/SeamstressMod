@@ -109,10 +109,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                 component.Networkowner = base.gameObject;
             }
             obj.GetComponent<TeamFilter>().teamIndex = base.GetComponent<TeamComponent>().teamIndex;
-            if (NetworkServer.active)
-            {
-                NetworkServer.Spawn(obj);
-            }
         }
 
         public override void FixedUpdate()

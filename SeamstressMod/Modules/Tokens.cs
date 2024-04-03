@@ -28,7 +28,7 @@ namespace SeamstressMod.Modules
         public static string sentienceAttackKeyword = KeywordText("Sentient", $"When your " + sentiencePrefix + $" weapon is available hit for an additional strike " +
             $"dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}%</style> damage.");
 
-        public static string whatCountsAsHealth = KeywordText("Missing Health", $"<style=cIsUtility<max shield</style>, <style=cIsDamage>barrier</style>, and gained <style=cIsHealth>Hunger</style>" +
+        public static string whatCountsAsHealth = KeywordText("Missing Health", $"<style=cIsUtility>max shield</style>, <style=cIsDamage>barrier</style>, and gained <style=cIsHealth>Hunger</style>" +
             $" count as <style=cIsHealth>missing health</style> but is half as effective.");
 
         public static string insatiableKeyword = KeywordText("Insatiable", $"Attacks <style=cIsHealing>lifesteal</style> and <style=cIsHealth>bleed</style> on hit. " +

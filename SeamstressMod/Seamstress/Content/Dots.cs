@@ -76,11 +76,11 @@ namespace SeamstressMod.Seamstress.Content
             private void FixedUpdate()
             {
                 if (!NetworkServer.active) return;
-                if (characterBody.HasBuff(SeamstressBuffs.butchered) || characterBody.HasBuff(SeamstressBuffs.cutBleed))
+                if (characterBody.HasBuff(SeamstressBuffs.instatiable) || characterBody.HasBuff(SeamstressBuffs.cutBleed))
                 {
                     if (!stitchDot) stitchDot = Instantiate(SeamstressAssets.stitchEffect, bleedPosition);
                 }
-                else if (!characterBody.HasBuff(SeamstressBuffs.butchered) || !characterBody.HasBuff(SeamstressBuffs.cutBleed))
+                else if (!characterBody.HasBuff(SeamstressBuffs.instatiable) || !characterBody.HasBuff(SeamstressBuffs.cutBleed))
                 {
                     Destroy(stitchDot);
                     stitchDot = null;
@@ -122,7 +122,7 @@ namespace SeamstressMod.Seamstress.Content
                 interval = 0.2f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
-                associatedBuff = SeamstressBuffs.butchered,
+                associatedBuff = SeamstressBuffs.instatiable,
                 resetTimerOnAdd = true,
             }, butcheredBehaviour, visual);
         }

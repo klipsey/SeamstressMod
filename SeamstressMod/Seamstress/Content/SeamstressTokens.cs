@@ -23,7 +23,7 @@ namespace SeamstressMod.Seamstress.Content
             #region Seamstress
             string prefix = SeamstressSurvivor.SEAMSTRESS_PREFIX;
 
-            string desc = "Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her Imp Touched Heart.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
+            string desc = "The Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her Imp Touched Heart.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Needles are a great source of extra damage. Use them wisely for damage and mobility." + Environment.NewLine + Environment.NewLine
              + "< ! > Make sure not to use Clip in a sticky situation. Having backup Needles might just save you." + Environment.NewLine + Environment.NewLine
              + "< ! > Sate your Hunger as soon as you can while Insatiable. The stats and health it provides can halt a quick death." + Environment.NewLine + Environment.NewLine
@@ -46,8 +46,8 @@ namespace SeamstressMod.Seamstress.Content
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "It Hungers");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"The Seamstress gains <style=cIsDamage>base damage</style> for every <style=cIsHealth>1 missing health</style>. " +
-                $"The Seamstress can fill her <style=cIsHealth>Hunger</style> during " + Tokens.insatiablePrefix + " giving movespeed and an additional layer of <style=cIsHealth>barrier</style>.");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> for every <style=cIsHealth>1 missing health</style>. " +
+                $"Fill your <style=cIsHealth>Hunger</style> during " + Tokens.insatiablePrefix + " giving movespeed and an additional layer of <style=cIsHealth>health</style>.");
 
             Language.Add(prefix + "NEEDLE_NAME", "Imp Touched Heart");
             Language.Add(prefix + "NEEDLE_DESCRIPTION", $"The Seamstress <color=#9B3737>Blinks</color> instead of jumping. <color=#9B3737>Needles</color> can be fired to <color=#9B3737>Blink</color> in the air dealing " +

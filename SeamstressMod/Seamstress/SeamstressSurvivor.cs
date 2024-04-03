@@ -151,6 +151,7 @@ namespace SeamstressMod.Seamstress
             float pee(CharacterBody body) => 2f * body.radius;
             bodyPrefab.AddComponent<SeamstressController>();
             bodyPrefab.AddComponent<ScissorController>();
+            bodyPrefab.AddComponent<NeedleController>();
             bodyPrefab.AddComponent<Tracker>();
             TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn1, pee, tempAdd);
             TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn3, pee, tempAdd2);
@@ -186,10 +187,7 @@ namespace SeamstressMod.Seamstress
             {
                 if (i.customName == "Body") i.mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.MainState));
             }
-            EntityStateMachine passiveController = bodyPrefab.AddComponent<EntityStateMachine>();
-            passiveController.initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressJump));
-            passiveController.mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressJump));
-            passiveController.customName = "Passive";
+            Prefabs.AddEntityStateMachine(bodyPrefab, "Passive", typeof(SkillStates.SeamstressJump), typeof(SkillStates.SeamstressJump));
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
         }
@@ -692,7 +690,7 @@ namespace SeamstressMod.Seamstress
                         DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                     }
                 }
-                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && victimBody.HasBuff(SeamstressBuffs.parryStart) || victimBody.HasBuff(SeamstressBuffs.butchered))
+                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && victimBody.HasBuff(SeamstressBuffs.parryStart) || victimBody.HasBuff(SeamstressBuffs.instatiable))
                 {
                     if (victimBody.HasBuff(SeamstressBuffs.parryStart))
                     {
@@ -703,7 +701,7 @@ namespace SeamstressMod.Seamstress
                         }
                         victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
                     }
-                    else if (victimBody.HasBuff(SeamstressBuffs.butchered) && damageInfo.dotIndex != Dots.ButcheredDot)
+                    else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.ButcheredDot)
                     {
                         SeamstressController s = victimBody.gameObject.GetComponent<SeamstressController>();
                         s.FillHunger(-damageInfo.damage);
@@ -740,7 +738,7 @@ namespace SeamstressMod.Seamstress
                 return;
             }
             SeamstressController s = self.body.GetComponent<SeamstressController>();
-            if (self.body.HasBuff(SeamstressBuffs.butchered) && s.inInsatiable == false)
+            if (self.body.HasBuff(SeamstressBuffs.instatiable) && s.inInsatiable == false)
             {
                 TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
                 temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
@@ -751,7 +749,7 @@ namespace SeamstressMod.Seamstress
                 temporaryOverlay.AddToCharacerModel(self);
                 s.inInsatiable = true;
             }
-            else if (!self.body.HasBuff(SeamstressBuffs.butchered) && s.inInsatiable == true)
+            else if (!self.body.HasBuff(SeamstressBuffs.instatiable) && s.inInsatiable == true)
             {
                 s.inInsatiable = false;
                 if (self.gameObject.GetComponent<TemporaryOverlay>() != null)
@@ -773,7 +771,7 @@ namespace SeamstressMod.Seamstress
 
         private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen = true)
         {
-            if (self.body.HasBuff(SeamstressBuffs.butchered) && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if (self.body.HasBuff(SeamstressBuffs.instatiable) && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
                 amount *= SeamstressStaticValues.healConversion;
             }
@@ -781,7 +779,7 @@ namespace SeamstressMod.Seamstress
             if (self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
                 SeamstressController s = self.body.GetComponent<SeamstressController>();
-                if (self.body.TryGetComponent(out s) && self.body.HasBuff(SeamstressBuffs.butchered))
+                if (self.body.TryGetComponent(out s) && self.body.HasBuff(SeamstressBuffs.instatiable))
                 {
                     if (self.health >= self.fullHealth) s.FillHunger(amount / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
                     else s.FillHunger(res / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
@@ -874,6 +872,7 @@ namespace SeamstressMod.Seamstress
 
                     RectTransform rect = impGauge.GetComponent<RectTransform>();
                     rect.anchorMax = new Vector2(1f, 1f);
+                    rect.sizeDelta = new Vector2(1f, 1f);
                     rect.localPosition = new Vector2(740f, 430f);
                     rect.localScale = new Vector2(0.5f, 0.5f);
                 }

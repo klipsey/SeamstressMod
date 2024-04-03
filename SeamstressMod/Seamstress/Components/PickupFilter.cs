@@ -27,7 +27,7 @@ namespace SeamstressMod.Seamstress.Components
         }
         public void OnTriggerEnter(Collider collider)
         {
-            if (!NetworkServer.active || !collider)
+            if (!collider)
             {
                 return;
             }

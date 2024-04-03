@@ -12,7 +12,7 @@ namespace SeamstressMod.Seamstress.SkillStates
     {
         private CameraRigController cameraController;
 
-        public static float duration = 4f;
+        public static float duration = 3f;
 
         private bool initCamera;
 
