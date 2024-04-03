@@ -21,8 +21,6 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected int needleCount;
 
-        protected bool hasNeedles;
-
         protected bool empowered;
 
         public override void OnEnter()

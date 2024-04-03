@@ -39,8 +39,6 @@ namespace SeamstressMod.Seamstress.Components
 
         public bool blinkReady;
 
-        public bool hasNeedles;
-
         private bool hasPlayed = false;
 
         private bool hasPlayedEffect = true;
@@ -78,25 +76,11 @@ namespace SeamstressMod.Seamstress.Components
         {
             hopoopFeatherTimer -= Time.fixedDeltaTime;
             blinkCd += Time.fixedDeltaTime;
-            hasNeedles = characterBody.HasBuff(SeamstressBuffs.needles);
             if (insatiableDuration > 0f) insatiableDuration -= Time.fixedDeltaTime;
             if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
-            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount && blinkCd >= SeamstressStaticValues.blinkCooldown) || hasNeedles) && blinkReady == false)
-            {
-                this.blinkCd = 0f;
-                this.blinkReady = true;
-
-                NetworkIdentity networkIdentity = base.gameObject.GetComponent<NetworkIdentity>();
-                if (!networkIdentity)
-                {
-                    return;
-                }
-
-                new SyncBlink(networkIdentity.netId, (bool)blinkReady, (ulong)blinkCd).Send(R2API.Networking.NetworkDestination.Clients);
-            }
             if (checkStatsStopwatch >= 0.5)
             {
-                characterBody.RecalculateStats();
+                characterBody.MarkAllStatsDirty();
                 checkStatsStopwatch = 0f;
             }
             else checkStatsStopwatch += Time.fixedDeltaTime;

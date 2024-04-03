@@ -15,6 +15,7 @@ namespace SeamstressMod.Seamstress.SkillStates
     {
         protected Transform modelTransform;
 
+        protected GameObject dashPrefab = SeamstressAssets.impDash;
         protected GameObject blinkPrefab = SeamstressAssets.smallBlinkPrefab;
 
         protected CameraTargetParams.AimRequest request;
@@ -68,7 +69,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             if (characterMotor.isGrounded) characterMotor.velocity = Vector3.zero;
             characterDirection.moveVector = blinkVector;
-            CreateBlinkEffect(Util.GetCorePosition(gameObject));
+            CreateBlinkEffect(base.characterBody.corePosition);
             speedCoefficient = 0.3f * characterBody.jumpPower * Mathf.Clamp(characterBody.moveSpeed, 1f, 5f);
             gameObject.layer = LayerIndex.fakeActor.intVal;
             characterMotor.Motor.RebuildCollidableLayers();
@@ -97,6 +98,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                     effectData.origin = origin;
                     effectData.scale = 0.15f;
                     EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: false);
+                    effectData.scale = 3f;
+                    EffectManager.SpawnEffect(dashPrefab, effectData, transmit: false);
                 }
             }
             else split = false;
@@ -121,7 +124,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             characterMotor.Motor.RebuildCollidableLayers();
             if (!outer.destroying)
             {
-                CreateBlinkEffect(Util.GetCorePosition(gameObject));
+                CreateBlinkEffect(base.characterBody.corePosition);
                 modelTransform = GetModelTransform();
                 if (modelTransform && SeamstressAssets.destealthMaterial)
                 {

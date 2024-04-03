@@ -12,7 +12,7 @@ namespace SeamstressMod.Seamstress.Components
 
         private CharacterMotor characterMotor;
 
-        public bool inNeedleConsumeRange;
+        public bool consumeNeedle;
 
         public void Awake()
         {
@@ -26,23 +26,23 @@ namespace SeamstressMod.Seamstress.Components
 
         public void FixedUpdate()
         {
-            if (hasAuthority)
+            if (characterMotor.jumpCount >= characterBody.maxJumpCount && consumeNeedle && characterBody.HasBuff(SeamstressBuffs.needles))
             {
-                if (characterMotor.jumpCount >= characterBody.maxJumpCount && inNeedleConsumeRange)
-                {
-                    CmdUpdateNeedles();
-                    inNeedleConsumeRange = false;
-                }
+                Log.Debug("Consume Needle in controller: " + consumeNeedle);
+                CmdUpdateNeedles();
             }
+            consumeNeedle = false;
         }
 
         [Command]
         public void CmdUpdateNeedles()
         {
-            if (NetworkServer.active)
+            if (!NetworkServer.active)
             {
-                characterBody.RemoveBuff(SeamstressBuffs.needles);
+                Log.Error("Network Server Not Active");
+                return;
             }
+            characterBody.RemoveBuff(SeamstressBuffs.needles);
         }
     }
 }

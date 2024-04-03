@@ -29,6 +29,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            RefreshState();
             if (this.empowered)
             {
                 projectilePrefab = SeamstressAssets.needleButcheredPrefab;
@@ -37,10 +38,16 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 projectilePrefab = SeamstressAssets.needlePrefab;
             }
-            //Log.Debug("blinkCD: " + seamCon.blinkCd);
+            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount && this.seamCon.blinkCd >= SeamstressStaticValues.blinkCooldown) || needleCount > 0) && this.seamCon.blinkReady == false)
+            {
+                Log.Debug(" Is this less than the max jumps: " + (this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount) + "What is the CD: " + seamCon.blinkCd + "Is this cause of needles: " + needleCount);
+                seamCon.blinkCd = 0f;
+                seamCon.blinkReady = true;
+            }
+                //Log.Debug("blinkCD: " + seamCon.blinkCd);
             if (base.inputBank.jump.justPressed && base.isGrounded && seamCon.blinkReady)
             {
-                seamCon.blinkReady = false;
+                this.seamCon.blinkReady = false;
                 if (base.inputBank.moveVector != Vector3.zero) BlinkForward();
                 else BlinkUp();
                 return;
@@ -48,9 +55,10 @@ namespace SeamstressMod.Seamstress.SkillStates
             else if (base.inputBank.jump.justPressed && !base.isGrounded && seamCon.blinkReady)
             {
                 seamCon.blinkReady = false;
-                if (characterMotor.jumpCount >= characterBody.maxJumpCount)
+                if (base.characterMotor.jumpCount >= base.characterBody.maxJumpCount)
                 {
-                    base.characterBody.GetComponent<NeedleController>().inNeedleConsumeRange = true;
+                    base.needleCon.consumeNeedle = true;
+                    Log.Debug("Consume Needle when pressed : " + base.needleCon.consumeNeedle);
                 }
                 if (base.isAuthority)
                 {
