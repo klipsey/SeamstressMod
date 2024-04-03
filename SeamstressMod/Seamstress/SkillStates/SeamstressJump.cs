@@ -50,6 +50,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 seamCon.blinkReady = false;
                 if (characterMotor.jumpCount >= characterBody.maxJumpCount)
                 {
+                    base.characterBody.GetComponent<NeedleController>().inNeedleConsumeRange = true;
                 }
                 if (base.isAuthority)
                 {

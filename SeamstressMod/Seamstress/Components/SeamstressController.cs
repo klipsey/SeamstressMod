@@ -106,14 +106,6 @@ namespace SeamstressMod.Seamstress.Components
             ButcheredSound();
             IsInsatiable();
         }
-        [Command]
-        public void RemoveNeedleServer()
-        {
-            if(NetworkServer.active)
-            {
-                characterBody.RemoveBuff(SeamstressBuffs.needles);
-            }
-        }
         private void RefundUtil()
         {
             if (!hasRefunded && skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressAssets.snapBackSkillDef)
