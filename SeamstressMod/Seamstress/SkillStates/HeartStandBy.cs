@@ -55,7 +55,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             base.FixedUpdate();
             ownerIsEmpowered = ownerBody.HasBuff(SeamstressBuffs.instatiable);
-            Log.Debug("AM I STILL HUNGRY" + seamCon.inInsatiable + " instatiable local: " + ownerIsEmpowered);
             if (ownerIsEmpowered && !hasFired)
             {
                 ChainUpdate(SeamstressStaticValues.butcheredDuration);

@@ -72,12 +72,12 @@ namespace SeamstressMod.Seamstress.Components
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
                         color = SeamstressAssets.coolRed,
-                    }, false);
+                    }, true);
                     EffectManager.SpawnEffect(SeamstressAssets.slamEffect, new EffectData
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
-                    }, false);
+                    }, true);
                     CharacterBody component = attacker.GetComponent<CharacterBody>();
                     SeamstressController seamCon = attacker.GetComponent<SeamstressController>();
                     float num2 = component.damage;
@@ -121,7 +121,7 @@ namespace SeamstressMod.Seamstress.Components
                     origin = victimBody.footPosition,
                     rotation = Quaternion.identity,
                     color = SeamstressAssets.coolRed,
-                }, false);
+                }, true);
                 CharacterBody component = attacker.GetComponent<CharacterBody>();
                 SeamstressController seamCon = attacker.GetComponent<SeamstressController>();
                 float num2 = component.damage;

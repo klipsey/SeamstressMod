@@ -6,8 +6,6 @@ using SeamstressMod.Modules.BaseStates;
 using R2API;
 using UnityEngine.Networking;
 using EntityStates;
-using static Rewired.ComponentControls.Effects.RotateAroundAxis;
-using static UnityEngine.UI.Image;
 using SeamstressMod.Seamstress.Components;
 using SeamstressMod.Seamstress.Content;
 
@@ -21,9 +19,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public static float procCoefficient = 1f;
 
-        public static GameObject scissorFiringPrefab = SeamstressAssets.blinkPrefab;
-
-        public static GameObject hitEffectPrefab;
+        public static GameObject scissorFiringPrefab = SeamstressAssets.impDash;
 
         public static string attackSoundString = "Play_imp_overlord_attack1_throw";
 
@@ -37,6 +33,8 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private bool hasFired;
 
+        Ray aimRay;
+
         private string fireString;
         public override void OnEnter()
         {
@@ -44,7 +42,16 @@ namespace SeamstressMod.Seamstress.SkillStates
             Util.PlaySound("Play_item_lunar_specialReplace_explode", gameObject);
             characterBody.GetComponent<ScissorController>().isRight = true;
             duration = baseDuration / attackSpeedStat;
+            aimRay = GetAimRay();
+            StartAimMode(aimRay, 2f);
             modelAnimator = GetModelAnimator();
+            if (modelAnimator)
+            {
+                //string animationStateName = ((chosenAnim == 2) ? "FireVoidspikesL" : "FireVoidspikesR");
+                //PlayAnimation("Gesture, Override", animationStateName, "FireVoidspikes.playbackRate", duration);
+                PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
+
+            }
             if (scissorRight && scissorLeft)
             {
                 chosenAnim = 2;
@@ -61,19 +68,6 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 chosenAnim = 2;
             }
-
-            if (modelAnimator)
-            {
-
-                //string animationStateName = ((chosenAnim == 2) ? "FireVoidspikesL" : "FireVoidspikesR");
-                //PlayAnimation("Gesture, Override", animationStateName, "FireVoidspikes.playbackRate", duration);
-                PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
-
-            }
-            if (characterBody)
-            {
-                characterBody.SetAimTimer(0f);
-            }
         }
 
         public override void OnExit()
@@ -89,12 +83,12 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (chosenAnim == 2)
                 {
                     projectilePrefab = SeamstressAssets.scissorLPrefab;
-                    fireString = "SwingRight";
+                    fireString = "SwingLeftSmall";
                 }
                 else if (chosenAnim == 1)
                 {
                     projectilePrefab = SeamstressAssets.scissorRPrefab;
-                    fireString = "SwingLeft";
+                    fireString = "SwingRightSmall";
                 }
                 if (butchered)
                 {
@@ -104,10 +98,10 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
                 }
-                Fire(GetAimRay(), fireString);
+                Fire(aimRay, fireString);
                 hasFired = true;
             }
-            if (fixedAge >= duration && isAuthority)
+            if (base.fixedAge >= duration && base.isAuthority)
             {
                 outer.SetNextStateToMain();
             }
@@ -120,12 +114,12 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (transform)
             {
                 EffectData effectData = new EffectData();
-                effectData.rotation = transform.rotation;
+                effectData.rotation = Util.QuaternionSafeLookRotation(aimRay.direction);
                 effectData.origin = transform.position;
-                effectData.scale = 0.25f;
+                effectData.scale = 0.5f;
                 EffectManager.SpawnEffect(scissorFiringPrefab, effectData, transmit: false);
             }
-            if (isAuthority)
+            if (base.isAuthority)
             {
                 ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * damageCoefficient, 0f, Util.CheckRoll(critStat, characterBody.master), DamageColorIndex.Default, null, -1f);
             }

@@ -19,8 +19,6 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected bool scissorLeft;
 
-        protected int needleCount;
-
         protected bool empowered;
 
         public override void OnEnter()
@@ -34,7 +32,6 @@ namespace SeamstressMod.Modules.BaseStates
         }
         protected void RefreshState()
         {
-            needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles);
             scissorRight = characterBody.HasBuff(SeamstressBuffs.scissorRightBuff);
             scissorLeft = characterBody.HasBuff(SeamstressBuffs.scissorLeftBuff);
             if (!seamCon)

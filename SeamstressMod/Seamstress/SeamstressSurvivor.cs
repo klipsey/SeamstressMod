@@ -187,7 +187,11 @@ namespace SeamstressMod.Seamstress
             {
                 if (i.customName == "Body") i.mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.MainState));
             }
-            Prefabs.AddEntityStateMachine(bodyPrefab, "Passive", typeof(SkillStates.SeamstressJump), typeof(SkillStates.SeamstressJump));
+            EntityStateMachine passiveController = bodyPrefab.AddComponent<EntityStateMachine>();
+            passiveController.initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressJump));
+            passiveController.mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressJump));
+            passiveController.customName = "Passive";
+
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
         }

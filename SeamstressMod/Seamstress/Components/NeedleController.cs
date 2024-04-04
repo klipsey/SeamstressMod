@@ -26,12 +26,14 @@ namespace SeamstressMod.Seamstress.Components
 
         public void FixedUpdate()
         {
-            if (characterMotor.jumpCount >= characterBody.maxJumpCount && consumeNeedle && characterBody.HasBuff(SeamstressBuffs.needles))
+            if(hasAuthority)
             {
-                Log.Debug("Consume Needle in controller: " + consumeNeedle);
-                CmdUpdateNeedles();
+                if (characterMotor.jumpCount >= characterBody.maxJumpCount && consumeNeedle && characterBody.HasBuff(SeamstressBuffs.needles))
+                {
+                    CmdUpdateNeedles();
+                    consumeNeedle = false;
+                }
             }
-            consumeNeedle = false;
         }
 
         [Command]

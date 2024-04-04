@@ -56,7 +56,7 @@ namespace SeamstressMod.Seamstress.Components
                         origin = Util.GetCorePosition(gameObject),
                         rotation = Quaternion.identity,
                         scale = 1.5f,
-                    }, false);
+                    }, true);
                     triggerEvents?.Invoke();
                     Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
                     if (healthComponent.body.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) healthComponent.body.AddBuff(SeamstressBuffs.needles);

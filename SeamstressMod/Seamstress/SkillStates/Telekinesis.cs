@@ -244,12 +244,12 @@ namespace SeamstressMod.Seamstress.SkillStates
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
                         color = SeamstressAssets.coolRed,
-                    }, false);
+                    }, true);
                     EffectManager.SpawnEffect(SeamstressAssets.slamEffect, new EffectData
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
-                    }, false);
+                    }, true);
                     CharacterBody component = gameObject.GetComponent<CharacterBody>();
                     float num = component.damage;
                     BlastAttack blastAttack = new BlastAttack();

@@ -626,7 +626,11 @@ namespace SeamstressMod.Seamstress.Content
         private static void CreateScissorR()
         {
             scissorRPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorR");
-
+            if (scissorRPrefab.GetComponent<NetworkIdentity>())
+            {
+                Component.Destroy(scissorRPrefab.GetComponent<NetworkIdentity>());
+                scissorRPrefab.AddComponent<NetworkIdentity>();
+            }
             Rigidbody rigid = scissorRPrefab.GetComponent<Rigidbody>();
             rigid.useGravity = true;
             rigid.freezeRotation = true;
@@ -693,6 +697,11 @@ namespace SeamstressMod.Seamstress.Content
         private static void CreateScissorL()
         {
             scissorLPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorL");
+            if (scissorLPrefab.GetComponent<NetworkIdentity>())
+            {
+                Component.Destroy(scissorLPrefab.GetComponent<NetworkIdentity>());
+                scissorLPrefab.AddComponent<NetworkIdentity>();
+            }
 
             Rigidbody rigid = scissorLPrefab.GetComponent<Rigidbody>();
             rigid.useGravity = true;

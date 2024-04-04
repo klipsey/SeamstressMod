@@ -38,13 +38,11 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 projectilePrefab = SeamstressAssets.needlePrefab;
             }
-            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount && this.seamCon.blinkCd >= SeamstressStaticValues.blinkCooldown) || needleCount > 0) && this.seamCon.blinkReady == false)
+            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount && this.seamCon.blinkCd >= SeamstressStaticValues.blinkCooldown) || characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamCon.blinkReady == false)
             {
-                Log.Debug(" Is this less than the max jumps: " + (this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount) + "What is the CD: " + seamCon.blinkCd + "Is this cause of needles: " + needleCount);
                 seamCon.blinkCd = 0f;
                 seamCon.blinkReady = true;
             }
-                //Log.Debug("blinkCD: " + seamCon.blinkCd);
             if (base.inputBank.jump.justPressed && base.isGrounded && seamCon.blinkReady)
             {
                 this.seamCon.blinkReady = false;
@@ -58,7 +56,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (base.characterMotor.jumpCount >= base.characterBody.maxJumpCount)
                 {
                     base.needleCon.consumeNeedle = true;
-                    Log.Debug("Consume Needle when pressed : " + base.needleCon.consumeNeedle);
                 }
                 if (base.isAuthority)
                 {
@@ -98,11 +95,11 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         private void BlinkForward()
         {
-            EntityStateMachine.FindByCustomName(gameObject, "Body").SetInterruptState(new SeamstressBlink(), InterruptPriority.Any);
+            EntityStateMachine.FindByCustomName(gameObject, "Passive").SetInterruptState(new SeamstressBlink(), InterruptPriority.Any);
         }
         private void BlinkUp()
         {
-            EntityStateMachine.FindByCustomName(gameObject, "Body").SetInterruptState(new SeamstressBlinkUp(), InterruptPriority.Any);
+            EntityStateMachine.FindByCustomName(gameObject, "Passive").SetInterruptState(new SeamstressBlinkUp(), InterruptPriority.Any);
         }
     }
 }

@@ -172,6 +172,24 @@ namespace SeamstressMod.Seamstress.Components
                 TrySticking(impactInfo.collider, impactInfo.estimatedImpactNormal);
                 if(!hasFired)
                 {
+                    Vector3 effectPos = this.transform.localPosition;
+                    RaycastHit raycastHit;
+                    if (Physics.Raycast(effectPos, Vector3.one, out raycastHit, 10f, LayerIndex.world.mask))
+                    {
+                        effectPos = raycastHit.point;
+                    }
+                    EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, new EffectData
+                    {
+                        origin = effectPos,
+                        rotation = Quaternion.identity,
+                        scale = 1.5f,
+                    }, true);
+                    EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                    {
+                        origin = effectPos,
+                        rotation = Quaternion.identity,
+                        color = SeamstressAssets.coolRed,
+                    }, true);
                     BlastAttack impactAttack = new BlastAttack();
                     GameObject owner = gameObject.GetComponent<ProjectileController>().owner;
                     impactAttack.attacker = owner;
@@ -227,24 +245,6 @@ namespace SeamstressMod.Seamstress.Components
                 {
                     array[i].Play();
                 }
-                Vector3 effectPos = this.transform.localPosition;
-                RaycastHit raycastHit;
-                if (Physics.Raycast(effectPos, Vector3.one, out raycastHit, 10f, LayerIndex.world.mask))
-                {
-                    effectPos = raycastHit.point;
-                }
-                EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, new EffectData
-                {
-                    origin = effectPos,
-                    rotation = Quaternion.identity,
-                    scale = 1.5f,
-                }, false);
-                EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
-                {
-                    origin = effectPos,
-                    rotation = Quaternion.identity,
-                    color = SeamstressAssets.coolRed,
-                }, false);
                 if (stickSoundString.Length > 0)
                 {
                     Util.PlaySound(stickSoundString, base.gameObject);
