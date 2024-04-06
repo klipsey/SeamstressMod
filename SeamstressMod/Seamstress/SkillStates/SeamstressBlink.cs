@@ -15,8 +15,8 @@ namespace SeamstressMod.Seamstress.SkillStates
     {
         protected Transform modelTransform;
 
-        protected GameObject dashPrefab = SeamstressAssets.impDash;
-        protected GameObject blinkPrefab = SeamstressAssets.smallBlinkPrefab;
+        protected GameObject dashPrefab = SeamstressAssets.impDashEffect;
+        protected GameObject blinkPrefab = SeamstressAssets.smallBlinkEffect;
 
         protected CameraTargetParams.AimRequest request;
 

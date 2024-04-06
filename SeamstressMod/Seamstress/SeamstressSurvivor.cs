@@ -99,6 +99,7 @@ namespace SeamstressMod.Seamstress
         public override CharacterModel prefabCharacterModel { get; protected set; }
         public override GameObject displayPrefab { get; protected set; }
 
+        public static SkillDef snapBackSkillDef;
         public override void Initialize()
         {
 
@@ -153,8 +154,8 @@ namespace SeamstressMod.Seamstress
             bodyPrefab.AddComponent<ScissorController>();
             bodyPrefab.AddComponent<NeedleController>();
             bodyPrefab.AddComponent<Tracker>();
-            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn1, pee, tempAdd);
-            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewn3, pee, tempAdd2);
+            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewnCdEffect, pee, tempAdd);
+            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewnEffect, pee, tempAdd2);
             //TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
@@ -476,6 +477,37 @@ namespace SeamstressMod.Seamstress
             });
 
             Skills.AddUtilitySkills(bodyPrefab, parrySeamstressSkillDef);
+
+            snapBackSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "SnapBack",
+                skillNameToken = "SnapBack",
+                skillDescriptionToken = "Snapback to core",
+                keywordTokens = new string[] { },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texImpTouchedIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Snapback)),
+                activationStateMachineName = "Body",
+                interruptPriority = EntityStates.InterruptPriority.Pain,
+
+                baseRechargeInterval = 0f,
+                baseMaxStock = 1,
+
+                rechargeStock = 0,
+                requiredStock = 0,
+                stockToConsume = 0,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = true,
+                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+
+                isCombatSkill = false,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = false,
+            });
         }
 
         private void AddSpecialSkills()
@@ -607,10 +639,7 @@ namespace SeamstressMod.Seamstress
             On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
             On.RoR2.CharacterModel.UpdateOverlays += new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
             On.RoR2.HealthComponent.TakeDamage += new On.RoR2.HealthComponent.hook_TakeDamage(HealthComponent_TakeDamage);
-            On.RoR2.Orbs.LightningOrb.Begin += new On.RoR2.Orbs.LightningOrb.hook_Begin(LightningOrb_Begin);
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
-            On.RoR2.MapZone.TryZoneStart += new On.RoR2.MapZone.hook_TryZoneStart(DisableOOBCheck);
-
             On.RoR2.UI.LoadoutPanelController.Rebuild += LoadoutPanelController_Rebuild;
         }
         private static void LoadoutPanelController_Rebuild(On.RoR2.UI.LoadoutPanelController.orig_Rebuild orig, LoadoutPanelController self)
@@ -625,49 +654,6 @@ namespace SeamstressMod.Seamstress
                 }
             }
         }
-        private void DisableOOBCheck(On.RoR2.MapZone.orig_TryZoneStart orig, MapZone self, Collider other)
-        {
-            CharacterBody component = other.gameObject.GetComponent<CharacterBody>();
-            if (component)
-            {
-                if (component.baseNameToken == "KENKO_SEAMSTRESS_NAME")
-                {
-                    if (!component.HasBuff(SeamstressBuffs.manipulated))
-                    {
-                        orig.Invoke(self, other);
-                    }
-                }
-                else
-                {
-                    orig.Invoke(self, other);
-                }
-            }
-            else
-            {
-                orig.Invoke(self, other);
-            }
-        }
-        private void LightningOrb_Begin(On.RoR2.Orbs.LightningOrb.orig_Begin orig, RoR2.Orbs.LightningOrb self)
-        {
-            GameObject zap = null;
-            if (self.lightningType == RoR2.Orbs.LightningOrb.LightningType.Count && self.attacker.GetComponent<CharacterBody>().baseNameToken == "KENKO_SEAMSTRESS_NAME")
-            {
-                zap = LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/OrbEffects/BeamSphereOrbEffect");
-                zap.transform.GetChild(0).GetComponent<LineRenderer>().material.SetColor("_TintColor", SeamstressAssets.coolRed);
-                self.duration = 0.1f;
-                EffectData effectData = new EffectData
-                {
-                    origin = self.origin,
-                    genericFloat = self.duration
-                };
-                effectData.SetHurtBoxReference(self.target);
-                EffectManager.SpawnEffect(zap, effectData, transmit: false);
-            }
-            else
-            {
-                orig.Invoke(self);
-            }
-        }
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
             if (!NetworkServer.active)
@@ -675,63 +661,59 @@ namespace SeamstressMod.Seamstress
                 return;
             }
             CharacterBody victimBody = self.body;
-            CharacterBody attackerBody = null;
-            if (damageInfo.attacker)
+            CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
+           
+            if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage) && attackerBody)
             {
-                attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
-            }
-            float damageCheck = damageInfo.damage;
-            if (damageCheck > 0)
-            {
-                if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))
+                if (victimBody.isBoss)
                 {
-                    if (victimBody.isBoss)
-                    {
-                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                    }
-                    else
-                    {
-                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                    }
+                    DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                 }
-                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && victimBody.HasBuff(SeamstressBuffs.parryStart) || victimBody.HasBuff(SeamstressBuffs.instatiable))
+                else
                 {
-                    if (victimBody.HasBuff(SeamstressBuffs.parryStart))
+                    DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
+                }
+            }
+
+            if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            {
+                if (victimBody.HasBuff(SeamstressBuffs.parryStart) && damageInfo.damage > 0)
+                {
+                    victimBody.RemoveBuff(SeamstressBuffs.parryStart);
+                    if (!victimBody.HasBuff(SeamstressBuffs.parrySuccess))
                     {
-                        victimBody.RemoveBuff(SeamstressBuffs.parryStart);
-                        if (!victimBody.HasBuff(SeamstressBuffs.parrySuccess))
-                        {
-                            victimBody.AddBuff(SeamstressBuffs.parrySuccess);
-                        }
-                        victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
+                        victimBody.AddBuff(SeamstressBuffs.parrySuccess);
                     }
-                    else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.ButcheredDot)
+                    victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
+                }
+                else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.SeamstressBleed)
+                {
+                    SeamstressController seamCom = victimBody.gameObject.GetComponent<SeamstressController>();
+                    if(seamCom)
                     {
-                        SeamstressController s = victimBody.gameObject.GetComponent<SeamstressController>();
-                        s.FillHunger(-damageInfo.damage);
-                        float num = s.fiendMeter - damageInfo.damage;
-                        if (num < 0)
+                        seamCom.FillHunger(-damageInfo.damage);
+                        if (seamCom.fiendMeter - damageInfo.damage <= 0)
                         {
-                            if (victimBody.skillLocator.utility.skillDef == SeamstressAssets.snapBackSkillDef)
+                            if (victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
                             {
                                 victimBody.skillLocator.utility.ExecuteIfReady();
                             }
-                            orig.Invoke(self, damageInfo);
                         }
-                    }
-                    else
-                    {
-                        orig.Invoke(self, damageInfo);
+                        else
+                        {
+                            orig.Invoke(self, damageInfo);
+                            victimBody.RecalculateStats();
+                        }
                     }
                 }
                 else
                 {
                     orig.Invoke(self, damageInfo);
                 }
-                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
-                {
-                    victimBody.RecalculateStats();
-                }
+            }
+            else
+            {
+                orig.Invoke(self, damageInfo);
             }
         }
         private void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
@@ -775,7 +757,7 @@ namespace SeamstressMod.Seamstress
 
         private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen = true)
         {
-            if (self.body.HasBuff(SeamstressBuffs.instatiable) && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if (self && self.body.HasBuff(SeamstressBuffs.instatiable) && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
                 amount *= SeamstressStaticValues.healConversion;
             }
@@ -795,56 +777,43 @@ namespace SeamstressMod.Seamstress
         {
             orig(self);
 
-            if (self)
+            if (!self || self.baseNameToken != "KENKO_SEAMSTRESS_NAME")
             {
-                if (self.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+                return;
+            }
+            SeamstressController s = self.GetComponent<SeamstressController>();
+            HealthComponent healthComponent = self.GetComponent<HealthComponent>();
+            SkillLocator skillLocator = self.GetComponent<SkillLocator>();
+            if (s && healthComponent && skillLocator)
+            {
+                s.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
+                float healthMissing = healthComponent.fullHealth + (healthComponent.fullShield + healthComponent.barrier) / 2f + s.fiendMeter / 8 - (healthComponent.health);
+                float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
+                if (s.inInsatiable && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
+                else self.baseDamage = 8f + healthMissing * SeamstressStaticValues.passiveScaling;
+                if (s.fiendMeter > 0)
                 {
-                    SeamstressController s = self.GetComponent<SeamstressController>();
-                    HealthComponent healthComponent = self.GetComponent<HealthComponent>();
-                    SkillLocator skillLocator = self.GetComponent<SkillLocator>();
-                    if (s && healthComponent && skillLocator)
-                    {
-                        s.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
-                        float healthMissing = healthComponent.fullHealth + (healthComponent.fullShield + healthComponent.barrier) / 2f + s.fiendMeter / 8 - (healthComponent.health);
-                        float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
-                        if (s.inInsatiable && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
-                        else self.baseDamage = 8f + healthMissing * SeamstressStaticValues.passiveScaling;
-                        if (s.fiendMeter > 0)
-                        {
-                            self.moveSpeed += 2f * Util.Remap(s.fiendMeter, 0f, s.maxHunger, 0f, 2f);
-                        }
-                    }
-                    if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))
-                    {
-                        self.attackSpeed += .1f;
-                        self.moveSpeed += 1f;
-                    }
-                    if (!self.HasBuff(SeamstressBuffs.scissorRightBuff))
-                    {
-                        self.attackSpeed += .1f;
-                        self.moveSpeed += 1f;
-                    }
-                    if (self.inventory)
-                    {
-                        if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
-                        {
-                            self.attackSpeed += .1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
-                            self.moveSpeed += 1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
-                        }
-                    }
+                    self.moveSpeed += 2f * Util.Remap(s.fiendMeter, 0f, s.maxHunger, 0f, 2f);
                 }
             }
-        }
-        public static float GetICBMDamageMult(CharacterBody body)
-        {
-            float mult = 1f;
-            if (body && body.inventory)
+            if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))
             {
-                int itemcount = body.inventory.GetItemCount(DLC1Content.Items.MoreMissile);
-                int stack = itemcount - 1;
-                if (stack > 0) mult += stack * 0.5f;
+                self.attackSpeed += .1f;
+                self.moveSpeed += 1f;
             }
-            return mult;
+            if (!self.HasBuff(SeamstressBuffs.scissorRightBuff))
+            {
+                self.attackSpeed += .1f;
+                self.moveSpeed += 1f;
+            }
+            if (self.inventory)
+            {
+                if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
+                {
+                    self.attackSpeed += .1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
+                    self.moveSpeed += 1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
+                }
+            }
         }
         internal static void HUDSetup(HUD hud)
         {

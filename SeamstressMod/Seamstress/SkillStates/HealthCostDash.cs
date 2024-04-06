@@ -22,7 +22,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         public static float damageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
         public static GameObject uppercutEffect = SeamstressAssets.uppercutEffect;
         public static GameObject projectilePrefab = SeamstressAssets.heartPrefab;
-        private Ray aimRay;
         private Vector3 dashVector;
         private OverlapAttack attack;
         private List<HurtBox> victimsStruck = new List<HurtBox>();
@@ -33,7 +32,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             base.OnEnter();
 
-            dashVector = inputBank.aimDirection;
+            dashVector = base.inputBank.aimDirection;
 
             base.characterMotor.disableAirControlUntilCollision = false;
 
@@ -62,7 +61,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             attack.damage = damageCoefficient * damageStat;
             attack.hitBoxGroup = FindHitBoxGroup(hitBoxString);
             attack.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            if (butchered)
+            if (insatiable)
             {
                 attack.AddModdedDamageType(DamageTypes.CutDamage);
                 attack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
@@ -73,8 +72,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                 rotation = Util.QuaternionSafeLookRotation(dashVector),
                 scale = 3f
             };
-            EffectManager.SpawnEffect(SeamstressAssets.impDash, effectData, false);
-            EffectManager.SpawnEffect(SeamstressAssets.smallBlinkPrefab, effectData, false);
+            EffectManager.SpawnEffect(SeamstressAssets.impDashEffect, effectData, false);
+            EffectManager.SpawnEffect(SeamstressAssets.smallBlinkEffect, effectData, false);
             
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", baseDuration);
 
@@ -91,14 +90,14 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 effectPos = raycastHit.point;
             }
-            EffectManager.SpawnEffect(SeamstressAssets.splat, new EffectData
+            EffectManager.SpawnEffect(SeamstressAssets.bloodSplatterEffect, new EffectData
             {
                 origin = effectPos,
                 rotation = Quaternion.identity,
                 color = SeamstressAssets.coolRed,
             }, false);
 
-            seamCon.snapBackPosition = base.characterBody.corePosition;
+            seamCom.snapBackPosition = base.characterBody.corePosition;
 
             Vector3 position = base.characterBody.corePosition;
             GameObject obj = UnityEngine.Object.Instantiate(projectilePrefab, position, Quaternion.identity);
@@ -142,7 +141,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                         rotation = Util.QuaternionSafeLookRotation(dashVector),
                         scale = 3f
                     };
-                    EffectManager.SpawnEffect(SeamstressAssets.impDash, effectData, false);
+                    EffectManager.SpawnEffect(SeamstressAssets.impDashEffect, effectData, false);
                     outer.SetNextStateToMain();
                 }
             }
@@ -152,8 +151,8 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             if (NetworkServer.active && healthComponent)
             {
-                seamCon.inInsatiable = false;
-                DotController.InflictDot(characterBody.gameObject, characterBody.gameObject, Dots.ButcheredDot, SeamstressStaticValues.butcheredDuration, 1, 1u);
+                seamCom.inInsatiable = false;
+                DotController.InflictDot(characterBody.gameObject, characterBody.gameObject, Dots.SeamstressBleed, SeamstressStaticValues.butcheredDuration, 1, 1u);
             }
 
             if (!hasHit) base.characterMotor.velocity *= 0.2f;
@@ -163,7 +162,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
                 characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.3f);
             }
-            skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressAssets.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
 
             base.OnExit();
         }

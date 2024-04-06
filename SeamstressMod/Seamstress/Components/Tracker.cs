@@ -39,8 +39,8 @@ namespace SeamstressMod.Seamstress.Components
 
         private void Awake()
         {
-            indicator = new Indicator(gameObject, SeamstressAssets.trackingTelekinesis);
-            indicator2 = new Indicator(gameObject, SeamstressAssets.notTrackingTelekinesis);
+            indicator = new Indicator(gameObject, SeamstressAssets.telekinesisTracker);
+            indicator2 = new Indicator(gameObject, SeamstressAssets.telekinesisCdTracker);
         }
 
         private void Start()

@@ -38,21 +38,21 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 projectilePrefab = SeamstressAssets.needlePrefab;
             }
-            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount && this.seamCon.blinkCd >= SeamstressStaticValues.blinkCooldown) || characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamCon.blinkReady == false)
+            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount && this.seamCom.blinkCd >= SeamstressStaticValues.blinkCooldown) || characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamCom.blinkReady == false)
             {
-                seamCon.blinkCd = 0f;
-                seamCon.blinkReady = true;
+                seamCom.blinkCd = 0f;
+                seamCom.blinkReady = true;
             }
-            if (base.inputBank.jump.justPressed && base.isGrounded && seamCon.blinkReady)
+            if (base.inputBank.jump.justPressed && base.isGrounded && seamCom.blinkReady)
             {
-                this.seamCon.blinkReady = false;
+                this.seamCom.blinkReady = false;
                 if (base.inputBank.moveVector != Vector3.zero) BlinkForward();
                 else BlinkUp();
                 return;
             }
-            else if (base.inputBank.jump.justPressed && !base.isGrounded && seamCon.blinkReady)
+            else if (base.inputBank.jump.justPressed && !base.isGrounded && seamCom.blinkReady)
             {
-                seamCon.blinkReady = false;
+                seamCom.blinkReady = false;
                 if (base.characterMotor.jumpCount >= base.characterBody.maxJumpCount)
                 {
                     base.needleCon.consumeNeedle = true;
@@ -64,7 +64,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
                     if (characterBody.inventory && characterBody.inventory.GetItemCount(DLC1Content.Items.MoreMissile) > 0)
                     {
-                        float damageMult = SeamstressSurvivor.GetICBMDamageMult(characterBody);
+                        float damageMult = GetICBMDamageMult(characterBody);
 
                         Vector3 rhs = Vector3.Cross(Vector3.up, aimRay.direction);
                         Vector3 axis = Vector3.Cross(aimRay.direction, rhs);
@@ -93,6 +93,18 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
             }
         }
+        public static float GetICBMDamageMult(CharacterBody body)
+        {
+            float mult = 1f;
+            if (body && body.inventory)
+            {
+                int itemcount = body.inventory.GetItemCount(DLC1Content.Items.MoreMissile);
+                int stack = itemcount - 1;
+                if (stack > 0) mult += stack * 0.5f;
+            }
+            return mult;
+        }
+
         private void BlinkForward()
         {
             EntityStateMachine.FindByCustomName(gameObject, "Passive").SetInterruptState(new SeamstressBlink(), InterruptPriority.Any);

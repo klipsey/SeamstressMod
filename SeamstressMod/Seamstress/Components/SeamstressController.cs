@@ -21,7 +21,7 @@ namespace SeamstressMod.Seamstress.Components
 
         private GameObject endReap = SeamstressAssets.reapEndEffect;
 
-        public static GameObject supaPrefab = SeamstressAssets.blinkPrefab;
+        public static GameObject supaPrefab = SeamstressAssets.blinkEffect;
 
         public float fiendMeter = 0f;
 
@@ -92,7 +92,7 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void RefundUtil()
         {
-            if (!hasRefunded && skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressAssets.snapBackSkillDef)
+            if (!hasRefunded && skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressSurvivor.snapBackSkillDef)
             {
                 cooldownRefund += Time.fixedDeltaTime;
                 hasRefunded = true;
@@ -199,7 +199,7 @@ namespace SeamstressMod.Seamstress.Components
                     temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                     temporaryOverlay.animateShaderAlpha = true;
                 }
-                if (skillLocator.utility.skillDef == SeamstressAssets.snapBackSkillDef)
+                if (skillLocator.utility.skillDef == SeamstressSurvivor.snapBackSkillDef)
                 {
                     skillLocator.utility.ExecuteIfReady();
                 }

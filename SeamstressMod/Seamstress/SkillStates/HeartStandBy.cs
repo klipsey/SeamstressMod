@@ -20,7 +20,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private CharacterBody ownerBody;
 
-        private SeamstressController seamCon;
+        private SeamstressController seamCom;
 
         private GameObject owner;
 
@@ -45,10 +45,11 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             PlayAnimation("Base", "SpawnToIdle");
             Util.PlaySound("Play_treeBot_R_yank", owner);
-            seamCon = owner.GetComponent<SeamstressController>();
+            seamCom = owner.GetComponent<SeamstressController>();
             ownerBody = owner.GetComponent<CharacterBody>();
+            //i need to delete this but i have no clue if its keeping everything together or not
             chain.GetComponent<DestroyOnCondition>().enabled = true;
-            chain.GetComponent<DestroyOnCondition>().seamCon = seamCon;
+            chain.GetComponent<DestroyOnCondition>().seamCom = seamCom;
         }
 
         public override void FixedUpdate()
@@ -73,7 +74,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 snapBackDelay -= Time.fixedDeltaTime;
                 if (snapBackDelay <= 0.2f)
                 {
-                    EntityState.Destroy(base.gameObject);
+                    EntityState.Destroy(this.gameObject);
                 }
             }
         }

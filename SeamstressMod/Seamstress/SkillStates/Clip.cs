@@ -13,11 +13,11 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class Clip : BaseSeamstressSkillState
     {
-        public static GameObject clawSlash = SeamstressAssets.slashEffect;
+        public static GameObject clawSlash = SeamstressAssets.clawSlashEffect;
 
         public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
 
-        public static GameObject swingEffectPrefab = SeamstressAssets.scissorsComboSwingEffect;
+        public static GameObject swingEffectPrefab = SeamstressAssets.scissorsComboSlashEffect;
 
         public static GameObject wideEffectPrefab = SeamstressAssets.wideSlashEffect;
 
@@ -71,7 +71,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            baseDuration = 0.75f - 0.5f * (0.5f * (seamCon.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
+            baseDuration = 0.75f - 0.5f * (0.5f * (seamCom.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
             snips = needleCount;
             if (!scissorRight || !scissorLeft)
             {
@@ -253,7 +253,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             overlapAttack = new OverlapAttack();
             overlapAttack.damageType = damageType;
-            if (butchered)
+            if (insatiable)
             {
                 overlapAttack.AddModdedDamageType(moddedDamageType2);
                 overlapAttack.AddModdedDamageType(moddedDamageType);

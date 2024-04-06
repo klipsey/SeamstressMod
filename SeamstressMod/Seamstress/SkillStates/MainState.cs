@@ -9,16 +9,16 @@ namespace SeamstressMod.Seamstress.SkillStates
     public class MainState : GenericCharacterMain
     {
         private Animator animator;
-        private SeamstressController seamCon;
+        private SeamstressController seamCom;
         public override void OnEnter()
         {
             base.OnEnter();
             animator = modelAnimator;
-            seamCon = GetComponent<SeamstressController>();
+            seamCom = GetComponent<SeamstressController>();
         }
         public override void ProcessJump()
         {
-            if (base.hasCharacterMotor && seamCon.blinkReady)
+            if (base.hasCharacterMotor && seamCom.blinkReady)
             {
                 bool hopooFeather = false;
                 bool waxQuail = false;
@@ -30,7 +30,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
                     if (characterMotor.jumpCount >= base.characterBody.baseJumpCount)
                     {
-                        seamCon.hopoopFeatherTimer = 0.1f;
+                        seamCom.hopoopFeatherTimer = 0.1f;
                         hopooFeather = true;
                         horizontalBonus = 1.5f;
                         verticalBonus = 1.5f;

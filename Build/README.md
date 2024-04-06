@@ -9,7 +9,6 @@
 ## [![](https://i.postimg.cc/gJ7r3rwH/seamstress.png)]()
 
 [![](https://i.postimg.cc/zD9FrGdh/Seamstress-MADISON.png)]()
-[![](https://i.postimg.cc/d0yJgnDr/raven.png)]()
 
 # Overview
 
@@ -88,7 +87,7 @@ TheTimeSweeper - Incredible new Henry template and responsible for fixing like h
 
 rob - Creator of the glorious Henry template. Also, his code for other survivors helped me get started.
 
-Gemo - Eclipse/Monsoon skin model (Raven) and all the rigging.
+Gemo - Eclipse/Monsoon skin model (Raven) (Will be added much later).
 
 Feilong - Seamstress skin designer (Raven) and permission to use the assets.
 

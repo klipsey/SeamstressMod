@@ -19,7 +19,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public static float procCoefficient = 1f;
 
-        public static GameObject scissorFiringPrefab = SeamstressAssets.impDash;
+        public static GameObject scissorFiringPrefab = SeamstressAssets.impDashEffect;
 
         public static string attackSoundString = "Play_imp_overlord_attack1_throw";
 
@@ -83,14 +83,14 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (chosenAnim == 2)
                 {
                     projectilePrefab = SeamstressAssets.scissorLPrefab;
-                    fireString = "SwingLeftSmall";
-                }
-                else if (chosenAnim == 1)
-                {
-                    projectilePrefab = SeamstressAssets.scissorRPrefab;
                     fireString = "SwingRightSmall";
                 }
-                if (butchered)
+                else
+                {
+                    projectilePrefab = SeamstressAssets.scissorRPrefab;
+                    fireString = "SwingLeftSmall";
+                }
+                if (insatiable)
                 {
                     projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
                 }
@@ -98,7 +98,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
                 }
-                Fire(aimRay, fireString);
+                Fire(this.aimRay, fireString);
                 hasFired = true;
             }
             if (base.fixedAge >= duration && base.isAuthority)

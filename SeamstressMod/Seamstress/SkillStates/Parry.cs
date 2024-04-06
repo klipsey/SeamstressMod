@@ -41,7 +41,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             bool num = characterBody.HasBuff(SeamstressBuffs.parrySuccess);
             if (isAuthority && fixedAge >= duration && num)
             {
-                blinkPrefab = SeamstressAssets.blinkPrefab;
+                blinkPrefab = SeamstressAssets.blinkEffect;
                 DoAttackServer();
                 outer.SetNextState(new ParryDash());
             }

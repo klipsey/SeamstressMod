@@ -20,11 +20,8 @@ namespace SeamstressMod.Seamstress.Content
 
             Modules.Content.AddEntityState(typeof(Flurry));
 
-            Modules.Content.AddEntityState(typeof(SecondaryBlink));
             Modules.Content.AddEntityState(typeof(Clip));
             Modules.Content.AddEntityState(typeof(Telekinesis));
-
-            Modules.Content.AddEntityState(typeof(Exhaustion));
 
             Modules.Content.AddEntityState(typeof(HealthCostDash));
             Modules.Content.AddEntityState(typeof(Snapback));

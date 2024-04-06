@@ -35,10 +35,10 @@ namespace SeamstressMod.Seamstress.Components
                 return;
             }
 
-            SeamstressController seamCon = bodyObject.GetComponent<SeamstressController>();
-            if (seamCon)
+            SeamstressController seamCom = bodyObject.GetComponent<SeamstressController>();
+            if (seamCom)
             {
-                seamCon.fiendMeter = this.gauge * 0.01f;
+                seamCom.fiendMeter = this.gauge * 0.01f;
             }
         }
 

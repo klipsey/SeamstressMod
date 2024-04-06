@@ -1,7 +1,7 @@
 {
     "name": "Seamstress",
     "author": "tsuyoikenko",
-    "version_number": "0.2.6",
+    "version_number": "0.2.7",
     "website_url": "",
     "description": "Adds the Seamstress, a mobile imp survivor that manages her health for damage. Multiplayer compatible. MODEL WIP",
     "dependencies": [

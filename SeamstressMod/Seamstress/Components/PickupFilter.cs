@@ -13,7 +13,7 @@ namespace SeamstressMod.Seamstress.Components
     {
         public TeamFilter myTeamFilter;
 
-        public static GameObject boomEffect = SeamstressAssets.blinkPrefab;
+        public static GameObject boomEffect = SeamstressAssets.blinkEffect;
 
         public UnityEvent triggerEvents;
 

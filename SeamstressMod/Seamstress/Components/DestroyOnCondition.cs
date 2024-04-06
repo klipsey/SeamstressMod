@@ -9,7 +9,7 @@ namespace SeamstressMod.Seamstress.Components
 {
     public class DestroyOnCondition : MonoBehaviour
     {
-        public SeamstressController seamCon;
+        public SeamstressController seamCom;
 
         private void Awake()
         {
@@ -20,9 +20,9 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void FixedUpdate()
         {
-            if (!seamCon.inInsatiable)
+            if (!seamCom.inInsatiable)
             {
-                Destroy(gameObject);
+                Destroy(this.gameObject);
             }
         }
     }

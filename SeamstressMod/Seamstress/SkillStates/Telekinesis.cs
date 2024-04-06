@@ -186,8 +186,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                     victimMotor.disableAirControlUntilCollision = true;
                     victimMotor.onMovementHit -= DoSplashDamage;
                 }
-                if (victimBody.gameObject.GetComponent<DetonateOnImpactThrown>() != null) Object.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpactThrown>());
-                DetonateOnImpactThrown thrown = victimBody.gameObject.AddComponent<DetonateOnImpactThrown>();
+                if (victimBody.gameObject.GetComponent<DetonateOnImpactThrownTelekinesis>() != null) Object.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpactThrownTelekinesis>());
+                DetonateOnImpactThrownTelekinesis thrown = victimBody.gameObject.AddComponent<DetonateOnImpactThrownTelekinesis>();
                 thrown.attacker = gameObject;
                 thrown.theyDidNotHaveRigid = theyDidNotHaveRigid;
                 thrown.bodyCouldTakeImpactDamage = bodyCouldTakeImpactDamage;
@@ -267,7 +267,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                     blastAttack.damageColorIndex = DamageColorIndex.Default;
                     blastAttack.damageType = DamageType.Stun1s;
-                    if (butchered)
+                    if (insatiable)
                     {
                         blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
                         blastAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);

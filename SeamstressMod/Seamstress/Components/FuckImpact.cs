@@ -178,7 +178,7 @@ namespace SeamstressMod.Seamstress.Components
                     {
                         effectPos = raycastHit.point;
                     }
-                    EffectManager.SpawnEffect(SeamstressAssets.blinkPrefab, new EffectData
+                    EffectManager.SpawnEffect(SeamstressAssets.blinkEffect, new EffectData
                     {
                         origin = effectPos,
                         rotation = Quaternion.identity,

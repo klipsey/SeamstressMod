@@ -20,8 +20,8 @@ namespace SeamstressMod.Seamstress.SkillStates
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
-            baseDuration = 1.1f - 1.1f * (0.5f * (seamCon.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
-            baseScissorDuration = 2f - 2f * (0.5f * (seamCon.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
+            baseDuration = 1.1f - 1.1f * (0.5f * (seamCom.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
+            baseScissorDuration = 2f - 2f * (0.5f * (seamCom.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             attackStartPercentTime = 0.2f;
@@ -36,11 +36,11 @@ namespace SeamstressMod.Seamstress.SkillStates
             swingSoundString = "Play_acrid_m1_slash";
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = SeamstressAssets.slashEffect;
-            bonusSwingEffectPrefab = SeamstressAssets.scissorsSwingEffect;
+            swingEffectPrefab = SeamstressAssets.clawSlashEffect;
+            bonusSwingEffectPrefab = SeamstressAssets.scissorsSlashEffect;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeftSmall" : "SwingRightSmall";
             buffer = false;
-            if (butchered)
+            if (insatiable)
             {
                 moddedDamageTypeHolder.Add(DamageTypes.CutDamage);
                 moddedDamageTypeHolder.Add(DamageTypes.InsatiableLifeSteal);

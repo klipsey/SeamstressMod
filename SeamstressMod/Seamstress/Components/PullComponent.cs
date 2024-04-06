@@ -10,7 +10,7 @@ namespace SeamstressMod.Seamstress.Components
 {
     public class PullComponent : MonoBehaviour
     {
-        private static GameObject pullTracerPrefab = SeamstressAssets.pullShit;
+        private static GameObject pullTracerPrefab = SeamstressAssets.parrySlashEffect;
 
         public CharacterBody attackerBody;
 

@@ -1,3 +1,7 @@
+# 0.2.7
+
+- Fixed railgunner mines breaking
+
 # 0.2.6
 
 - Networked!

@@ -16,7 +16,7 @@ namespace SeamstressMod.Seamstress.Content
 
         public static DotIndex SeamstressBossDot;
 
-        public static DotIndex ButcheredDot;
+        public static DotIndex SeamstressBleed;
 
         public static CustomDotBehaviour behave1;
 
@@ -51,7 +51,7 @@ namespace SeamstressMod.Seamstress.Content
         }
         public static void DelegateBehave3(DotController self, DotStack dotStack)
         {
-            if (dotStack.dotIndex == ButcheredDot)
+            if (dotStack.dotIndex == SeamstressBleed)
             {
                 float currentBarrier = self.victimBody.healthComponent.barrier;
                 float currentShield = self.victimBody.healthComponent.shield;
@@ -117,7 +117,7 @@ namespace SeamstressMod.Seamstress.Content
                 resetTimerOnAdd = false,
             }, behave2, visual);
 
-            ButcheredDot = RegisterDotDef(new DotDef
+            SeamstressBleed = RegisterDotDef(new DotDef
             {
                 interval = 0.2f,
                 damageCoefficient = 0f,

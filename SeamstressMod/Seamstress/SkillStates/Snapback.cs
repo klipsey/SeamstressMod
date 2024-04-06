@@ -56,7 +56,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
-            skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressAssets.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
         private void SetPosition(Vector3 newPosition)
         {
@@ -69,7 +69,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             if (isAuthority)
             {
-                snapPosition = seamCon.snapBackPosition;
+                snapPosition = seamCom.snapBackPosition;
                 currentPosition = characterBody.corePosition;
                 duration = (currentPosition - snapPosition).magnitude;
                 duration = Util.Remap(duration, 0f, 100f, 0.2f, 1f);
