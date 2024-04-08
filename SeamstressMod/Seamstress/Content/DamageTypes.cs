@@ -63,6 +63,17 @@ namespace SeamstressMod.Seamstress.Content
             GameObject attackerObject = damageReport.attacker.gameObject;
             if (NetworkServer.active)
             {
+                if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))
+                {
+                    if (victimBody.isBoss)
+                    {
+                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
+                    }
+                    else
+                    {
+                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
+                    }
+                }
                 if (damageInfo.HasModdedDamageType(NoScissors))
                 {
                     Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);

@@ -661,20 +661,6 @@ namespace SeamstressMod.Seamstress
                 return;
             }
             CharacterBody victimBody = self.body;
-            CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
-           
-            if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage) && attackerBody)
-            {
-                if (victimBody.isBoss)
-                {
-                    DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                }
-                else
-                {
-                    DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                }
-            }
-
             if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
                 if (victimBody.HasBuff(SeamstressBuffs.parryStart) && damageInfo.damage > 0)
@@ -685,36 +671,24 @@ namespace SeamstressMod.Seamstress
                         victimBody.AddBuff(SeamstressBuffs.parrySuccess);
                     }
                     victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
+                    return;
                 }
                 else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.SeamstressBleed)
                 {
                     SeamstressController seamCom = victimBody.gameObject.GetComponent<SeamstressController>();
-                    if(seamCom)
+                    if (seamCom)
                     {
                         seamCom.FillHunger(-damageInfo.damage);
-                        if (seamCom.fiendMeter - damageInfo.damage <= 0)
+                        if (seamCom.fiendMeter - damageInfo.damage <= 0 && victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
                         {
-                            if (victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
-                            {
-                                victimBody.skillLocator.utility.ExecuteIfReady();
-                            }
+                            victimBody.skillLocator.utility.ExecuteIfReady();
                         }
-                        else
-                        {
-                            orig.Invoke(self, damageInfo);
-                            victimBody.RecalculateStats();
-                        }
+                        return;
                     }
                 }
-                else
-                {
-                    orig.Invoke(self, damageInfo);
-                }
             }
-            else
-            {
-                orig.Invoke(self, damageInfo);
-            }
+            orig.Invoke(self, damageInfo);
+            if(victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME") victimBody.RecalculateStats();
         }
         private void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
         {
