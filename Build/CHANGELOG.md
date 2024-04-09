@@ -1,3 +1,8 @@
+# 0.2.8
+
+- Fixed NRE's happening on other survivors
+- Fixed grabbing certain enemies
+
 # 0.2.7
 
 - Fixed railgunner mines breaking

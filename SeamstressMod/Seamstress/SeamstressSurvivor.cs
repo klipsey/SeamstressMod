@@ -738,7 +738,7 @@ namespace SeamstressMod.Seamstress
             var res = orig(self, amount, procChainMask, nonRegen);
             if (self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
-                SeamstressController s = self.body.GetComponent<SeamstressController>();
+                SeamstressController s;
                 if (self.body.TryGetComponent(out s) && self.body.HasBuff(SeamstressBuffs.instatiable))
                 {
                     if (self.health >= self.fullHealth) s.FillHunger(amount / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));

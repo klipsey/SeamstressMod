@@ -239,7 +239,7 @@ namespace SeamstressMod.Modules.BaseStates
                 {
                     if (!hasFired2)
                     {
-                        hitStopDuration = 0.2f;
+                        hitStopDuration = 0.1f;
                         attack = new OverlapAttack();
                         attack.damageType = damageType;
                         foreach(DamageAPI.ModdedDamageType i in moddedDamageTypeHolder)

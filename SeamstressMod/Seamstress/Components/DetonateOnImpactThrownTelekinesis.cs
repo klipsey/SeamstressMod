@@ -7,12 +7,30 @@ using UnityEngine.Networking;
 using static RoR2.CharacterMotor;
 using R2API;
 using SeamstressMod.Seamstress.Content;
+using SeamstressMod.Seamstress.SkillStates;
 
 namespace SeamstressMod.Seamstress.Components
 {
     public class DetonateOnImpactThrownTelekinesis : MonoBehaviour
     {
+        public class DetonateOnImpact : MonoBehaviour
+        {
+            public DetonateOnImpactThrownTelekinesis endBlast;
+            private void OnCollisionEnter(Collision collision)
+            {
+                float massCalc = endBlast.victimRigid.mass / 10f;
+                float num = 60f / massCalc;
+                float magnitude = collision.relativeVelocity.magnitude;
+                if (collision.gameObject.layer == LayerIndex.world.intVal || collision.gameObject.layer == LayerIndex.entityPrecise.intVal || collision.gameObject.layer == LayerIndex.defaultLayer.intVal && magnitude >= num)
+                {
+                    endBlast.detonate = true;
+                }
+            }
+        }
+
         public GameObject attacker;
+
+        public SphereCollider tempSphereCollider;
 
         private CharacterBody victimBody;
 
@@ -32,95 +50,54 @@ namespace SeamstressMod.Seamstress.Components
 
         public bool theyDidNotHaveRigid;
 
+        public bool detonate;
+
+        private bool hasFired;
         private void Awake()
         {
-            victimBody = gameObject.GetComponent<CharacterBody>();
+            victimBody = GetComponent<CharacterBody>();
             victimMotor = victimBody.characterMotor;
             victimRigid = victimBody.rigidbody;
-            victimRigidMotor = GetComponent<RigidbodyMotor>();
-            if (victimMotor != null)
-            {
-                victimMotor.disableAirControlUntilCollision = true;
-                victimMotor.onMovementHit += DoSplashDamage;
-            }
+            victimRigidMotor = victimBody.gameObject.GetComponent<RigidbodyMotor>();
+            detonate = false;
         }
 
         private void Start()
         {
+            if (victimMotor)
+            {
+                victimMotor.disableAirControlUntilCollision = true;
+                victimMotor.onMovementHit += DoSplashDamage;
+            }
+            else
+            {
+                if(theyDidNotHaveRigid)
+                {
+                    victimRigid = victimBody.gameObject.GetComponent<Rigidbody>();
+                    tempSphereCollider = victimBody.gameObject.GetComponent<SphereCollider>();
+                }
+                if (victimBody.gameObject.GetComponent<DetonateOnImpact>()) Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
+                victimBody.gameObject.AddComponent<DetonateOnImpact>();
+                victimBody.gameObject.GetComponent<DetonateOnImpact>().endBlast = this;
+            }
             stopwatch = 0f;
         }
         private void FixedUpdate()
         {
             stopwatch += Time.fixedDeltaTime;
-            if (stopwatch > 5f)
+            if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonate && !hasFired)
             {
-                EndGrab();
-            }
-        }
-        private void OnCollisionEnter(Collision collision)
-        {
-            float massCalc = (victimMotor ? victimMotor.mass : victimRigid.mass) / 10f;
-            float num = 60f / massCalc;
-            float magnitude = collision.relativeVelocity.magnitude;
-            if (victimMotor == null && magnitude >= num)
-            {
-                if (collision.gameObject.layer == LayerIndex.world.intVal || collision.gameObject.layer == LayerIndex.entityPrecise.intVal || collision.gameObject.layer == LayerIndex.defaultLayer.intVal)
-                {
-                    float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage, victimBody.healthComponent.fullHealth * 0.7f); ;
-                    EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
-                    {
-                        origin = victimBody.footPosition,
-                        rotation = Quaternion.identity,
-                        color = SeamstressAssets.coolRed,
-                    }, true);
-                    EffectManager.SpawnEffect(SeamstressAssets.slamEffect, new EffectData
-                    {
-                        origin = victimBody.footPosition,
-                        rotation = Quaternion.identity,
-                    }, true);
-                    CharacterBody component = attacker.GetComponent<CharacterBody>();
-                    SeamstressController seamCom = attacker.GetComponent<SeamstressController>();
-                    float num2 = component.damage;
-                    BlastAttack blastAttack = new BlastAttack();
-                    blastAttack.position = victimBody.footPosition;
-                    blastAttack.baseDamage = SeamstressStaticValues.telekinesisDamageCoefficient * num2 + bonusDamage;
-                    blastAttack.baseForce = 800f;
-                    blastAttack.bonusForce = Vector3.zero;
-                    blastAttack.radius = 10f;
-                    blastAttack.attacker = attacker;
-                    blastAttack.inflictor = attacker;
-                    blastAttack.teamIndex = component.teamComponent.teamIndex;
-                    blastAttack.crit = component.RollCrit();
-                    blastAttack.procChainMask = default;
-                    blastAttack.procCoefficient = 1f;
-                    blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
-                    blastAttack.damageColorIndex = DamageColorIndex.Default;
-                    blastAttack.damageType = DamageType.Stun1s;
-                    if (seamCom.inInsatiable)
-                    {
-                        blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
-                        blastAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
-                    }
-                    blastAttack.attackerFiltering = AttackerFiltering.Default;
-                    blastAttack.Fire();
-                }
-            }
-            EndGrab();
-        }
-
-        private void DoSplashDamage(ref MovementHitInfo movementHitInfo)
-        {
-            float massCalc = (victimMotor ? victimMotor.mass : victimRigid.mass) / 10f;
-            float num = 60f / massCalc;
-            float magnitude = movementHitInfo.velocity.magnitude;
-            if (magnitude >= num)
-            {
-                float bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage, victimBody.healthComponent.fullHealth * 0.7f); ;
+                float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage, victimBody.healthComponent.fullHealth * 0.7f);
                 EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
                 {
                     origin = victimBody.footPosition,
                     rotation = Quaternion.identity,
                     color = SeamstressAssets.coolRed,
+                }, true);
+                EffectManager.SpawnEffect(SeamstressAssets.slamEffect, new EffectData
+                {
+                    origin = victimBody.footPosition,
+                    rotation = Quaternion.identity,
                 }, true);
                 CharacterBody component = attacker.GetComponent<CharacterBody>();
                 SeamstressController seamCom = attacker.GetComponent<SeamstressController>();
@@ -129,7 +106,7 @@ namespace SeamstressMod.Seamstress.Components
                 blastAttack.position = victimBody.footPosition;
                 blastAttack.baseDamage = SeamstressStaticValues.telekinesisDamageCoefficient * num2 + bonusDamage;
                 blastAttack.baseForce = 800f;
-                blastAttack.bonusForce = Vector3.up * 2000f;
+                blastAttack.bonusForce = Vector3.zero;
                 blastAttack.radius = 10f;
                 blastAttack.attacker = attacker;
                 blastAttack.inflictor = attacker;
@@ -147,24 +124,40 @@ namespace SeamstressMod.Seamstress.Components
                 }
                 blastAttack.attackerFiltering = AttackerFiltering.Default;
                 blastAttack.Fire();
-                victimMotor.onMovementHit -= DoSplashDamage;
+                stopwatch = 5f;
+                detonate = false;
+                hasFired = true;
             }
-            EndGrab();
+            if (stopwatch >= 5f)
+            {
+                EndGrab();
+            }
+        }
+
+        private void DoSplashDamage(ref MovementHitInfo movementHitInfo)
+        {
+            float num = Mathf.Abs(movementHitInfo.velocity.magnitude);
+            float num2 = Mathf.Max(num - (victimBody.baseMoveSpeed + 70f), 0f);
+            if(num2 > 0) detonate = true;
         }
 
         private void EndGrab()
         {
-            if (victimRigidMotor != null)
+            if (victimBody.gameObject.GetComponent<DetonateOnImpact>())
+            {
+                Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
+            }
+            if (victimRigidMotor)
             {
                 victimRigidMotor.canTakeImpactDamage = bodyCouldTakeImpactDamage;
                 victimRigidMotor.enabled = true;
             }
-            if (theyDidNotHaveRigid)
+            if (victimMotor)
             {
-                Destroy(gameObject.GetComponent<Rigidbody>());
-                Destroy(gameObject.GetComponent<SphereCollider>());
+                victimMotor.disableAirControlUntilCollision = false;
+                victimMotor.onMovementHit -= DoSplashDamage;
             }
-            if (NetworkServer.active && victimBody != null)
+            if (NetworkServer.active && victimBody)
             {
                 victimBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
             }
@@ -172,14 +165,19 @@ namespace SeamstressMod.Seamstress.Components
             {
                 victimRigid.collisionDetectionMode = coll;
             }
+            if (theyDidNotHaveRigid)
+            {
+                Destroy(victimRigid);
+                Destroy(tempSphereCollider);
+            }
             if (SeamstressConfig.funny.Value)
             {
-                if (victimMotor != null && victimMotor.mass != previousMass)
+                if (victimMotor && victimMotor.mass != previousMass)
                 {
                     victimMotor.mass = previousMass;
                     victimMotor.mass = Mathf.Clamp(victimMotor.mass, 60f, 120f);
                 }
-                else if (victimRigid != null && victimRigid.mass != previousMass)
+                else if (victimRigid && victimRigid.mass != previousMass)
                 {
                     victimRigid.mass = previousMass;
                     victimRigid.mass = Mathf.Clamp(victimRigid.mass, 60f, 120f);
@@ -187,6 +185,5 @@ namespace SeamstressMod.Seamstress.Components
             }
             Destroy(this);
         }
-
     }
 }

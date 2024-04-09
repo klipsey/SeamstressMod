@@ -20,7 +20,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             public Telekinesis telekinesis;
             private void OnCollisionEnter(UnityEngine.Collision collision)
             {
-                float massCalc = (telekinesis.victimMotor ? telekinesis.victimMotor.mass : telekinesis.victimRigid.mass) / 10f;
+                float massCalc = telekinesis.victimRigid.mass / 10f;
                 float num = 60f / massCalc;
                 float magnitude = collision.relativeVelocity.magnitude;
                 if (collision.gameObject.layer == LayerIndex.world.intVal || collision.gameObject.layer == LayerIndex.entityPrecise.intVal || collision.gameObject.layer == LayerIndex.defaultLayer.intVal && magnitude >= num)
@@ -44,10 +44,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         private RigidbodyMotor victimRigidMotor;
 
         private Rigidbody victimRigid;
-
-        private Rigidbody tempRigidbody;
-
-        private SphereCollider tempSphereCollider;
 
         private CharacterBody victimBody;
 
@@ -132,11 +128,10 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     victimRigid = victimBody.gameObject.AddComponent<Rigidbody>();
                     victimRigid.mass = 100f;
-                    tempRigidbody = victimRigid;
-                    tempSphereCollider = victimBody.gameObject.AddComponent<SphereCollider>();
+                    victimBody.gameObject.AddComponent<SphereCollider>();
                     theyDidNotHaveRigid = true;
                 }
-                if (victimBody.gameObject.GetComponent<DetonateOnImpact>() != null) Object.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
+                if (victimBody.gameObject.GetComponent<DetonateOnImpact>()) Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
                 victimBody.gameObject.AddComponent<DetonateOnImpact>();
                 victimBody.gameObject.GetComponent<DetonateOnImpact>().telekinesis = this;
                 if (victimRigidMotor)
@@ -177,16 +172,16 @@ namespace SeamstressMod.Seamstress.SkillStates
                         victimBody.AddTimedBuff(SeamstressBuffs.manipulatedCd, Mathf.Min(SeamstressStaticValues.telekinesisCooldown, Mathf.Max(0.5f, SeamstressStaticValues.telekinesisCooldown * characterBody.skillLocator.secondary.cooldownScale - characterBody.skillLocator.secondary.flatCooldownReduction)));
                     }
                 }
-                if (victimBody.gameObject.GetComponent<DetonateOnImpact>() != null)
+                if (victimBody.gameObject.GetComponent<DetonateOnImpact>())
                 {
-                    Object.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
+                    Destroy(victimBody.gameObject.GetComponent<DetonateOnImpact>());
                 }
                 if (victimMotor)
                 {
                     victimMotor.disableAirControlUntilCollision = true;
                     victimMotor.onMovementHit -= DoSplashDamage;
                 }
-                if (victimBody.gameObject.GetComponent<DetonateOnImpactThrownTelekinesis>() != null) Object.Destroy(victimBody.gameObject.GetComponent<DetonateOnImpactThrownTelekinesis>());
+                if (victimBody.gameObject.GetComponent<DetonateOnImpactThrownTelekinesis>()) Destroy(victimBody.gameObject.GetComponent<DetonateOnImpactThrownTelekinesis>());
                 DetonateOnImpactThrownTelekinesis thrown = victimBody.gameObject.AddComponent<DetonateOnImpactThrownTelekinesis>();
                 thrown.attacker = gameObject;
                 thrown.theyDidNotHaveRigid = theyDidNotHaveRigid;
@@ -288,7 +283,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         private void DoSplashDamage(ref MovementHitInfo movementHitInfo)
         {
             float num = Mathf.Abs(movementHitInfo.velocity.magnitude);
-            float num2 = Mathf.Max(num - (characterBody.baseMoveSpeed + 70f), 0f);
+            float num2 = Mathf.Max(num - (victimBody.baseMoveSpeed + 70f), 0f);
             if (num2 > 0 && hitStopwatch > 0.75) detonateNextFrame = true;
         }
         public override InterruptPriority GetMinimumInterruptPriority()
