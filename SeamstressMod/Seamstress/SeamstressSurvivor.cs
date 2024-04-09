@@ -21,27 +21,18 @@ namespace SeamstressMod.Seamstress
 {
     public class SeamstressSurvivor : SurvivorBase<SeamstressSurvivor>
     {
-        //todo guide
-        //used to load the assetbundle for this character. must be unique
-        public override string assetBundleName => "seamstressassets"; //if you do not change this, you are giving permission to deprecate the mod
-
-        //the name of the prefab we will create. conventionally ending in "Body". must be unique
-        public override string bodyName => "SeamstressBody"; //if you do not change this, you get the point by now
-
-        //name of the ai master for vengeance and goobo. must be unique
-        public override string masterName => "SeamstressMonsterMaster"; //if you do not
-
-        //the names of the prefabs you set up in unity that we will use to build your character
+        public override string assetBundleName => "seamstressassets";
+        public override string bodyName => "SeamstressBody"; 
+        public override string masterName => "SeamstressMonsterMaster"; 
         public override string modelPrefabName => "mdlHenry";
         public override string displayPrefabName => "HenryDisplay";
 
         public const string SEAMSTRESS_PREFIX = SeamstressPlugin.DEVELOPER_PREFIX + "_SEAMSTRESS_";
-
-        //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => SEAMSTRESS_PREFIX;
 
         internal static GameObject characterPrefab;
-        //store extra skills here
+
+        public static SkillDef snapBackSkillDef;
 
         public override BodyInfo bodyInfo => new BodyInfo
         {
@@ -90,16 +81,12 @@ namespace SeamstressMod.Seamstress
         public override UnlockableDef characterUnlockableDef => SeamstressUnlockables.characterUnlockableDef;
 
         public override ItemDisplaysBase itemDisplays => new SeamstressItemDisplays();
-
-        //set in base classes
         public override AssetBundle assetBundle { get; protected set; }
         public override GameObject bodyPrefab { get; protected set; }
         public override CharacterBody prefabCharacterBody { get; protected set; }
         public override GameObject characterModelObject { get; protected set; }
         public override CharacterModel prefabCharacterModel { get; protected set; }
         public override GameObject displayPrefab { get; protected set; }
-
-        public static SkillDef snapBackSkillDef;
         public override void Initialize()
         {
 
@@ -156,9 +143,6 @@ namespace SeamstressMod.Seamstress
             bodyPrefab.AddComponent<Tracker>();
             TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewnCdEffect, pee, tempAdd);
             TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewnEffect, pee, tempAdd2);
-            //TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.stitchTempEffectPrefab, tempAdd);
-            //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
-            //anything else here
         }
         public void AddHitboxes()
         {
@@ -274,8 +258,6 @@ namespace SeamstressMod.Seamstress
 
         private void AddPrimarySkills()
         {
-            //the primary skill is created using a constructor for a typical primary
-            //it is also a SteppedSkillDef. Custom Skilldefs are very useful for custom behaviors related to casting a skill. see ror2's different skilldefs for reference
             SteppedSkillDef trimSkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
                 (
                     "Trim",
@@ -285,7 +267,6 @@ namespace SeamstressMod.Seamstress
                     new EntityStates.SerializableEntityStateType(typeof(SkillStates.Trim)),
                     "Weapon"
                 ));
-            //custom Skilldefs can have additional fields that you can set manually
             trimSkillDef.stepCount = 3;
             trimSkillDef.stepGraceDuration = 1f;
 
@@ -300,7 +281,6 @@ namespace SeamstressMod.Seamstress
                     new EntityStates.SerializableEntityStateType(typeof(SkillStates.Flurry)),
                     "Weapon"
                 ));
-            //custom Skilldefs can have additional fields that you can set manually
             flurrySkillDef.stepCount = 2;
             flurrySkillDef.stepGraceDuration = 1f;
 
@@ -341,40 +321,6 @@ namespace SeamstressMod.Seamstress
             });
 
             Skills.AddSecondarySkills(bodyPrefab, Clip);
-            /*
-            SkillDef planarShift = Skills.CreateSkillDef(new SkillDefInfo
-            {
-                skillName = "PlanarShift",
-                skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANARSHIFT_NAME",
-                skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANARSHIFT_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.needleKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SecondaryBlink)),
-                
-                activationStateMachineName = "Weapon",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
-
-                baseMaxStock = 1,
-                baseRechargeInterval = 6,
-                rechargeStock = 1,
-                requiredStock = 1,
-                stockToConsume = 1,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = false,
-                beginSkillCooldownOnSkillEnd = false,
-                mustKeyPress = true,
-
-                isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = false,
-            });
-
-            Skills.AddSecondarySkills(bodyPrefab, planarShift);
-            */
             TrackingSkillDef planarManipulation = Skills.CreateSkillDef<TrackingSkillDef>(new SkillDefInfo
             {
                 skillName = "PlanarManipulation",
