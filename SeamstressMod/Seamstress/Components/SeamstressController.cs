@@ -19,21 +19,19 @@ namespace SeamstressMod.Seamstress.Components
 
         private SkillLocator skillLocator;
 
-        private GameObject endReap = SeamstressAssets.reapEndEffect;
+        private GameObject insatiableEndPrefab = SeamstressAssets.instatiableEndEffect;
 
         public static GameObject supaPrefab = SeamstressAssets.blinkEffect;
 
         public float fiendMeter = 0f;
 
-        public float maxHunger = 0f;
+        public float maxHunger;
 
         private float drainAmount;
 
-        private float dashStopwatch;
+        private float parryDashDelayTimer;
 
         private float checkStatsStopwatch;
-
-        public float hopoopFeatherTimer;
 
         public float blinkCd = 0f;
 
@@ -43,24 +41,17 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool hasPlayedEffect = true;
 
-        public bool isDashing;
-
         public Vector3 heldDashVector;
 
         public Vector3 heldOrigin;
 
         public Vector3 snapBackPosition;
-        //private float leapLength = 0f;
 
-        //public float lockOutLength = 0f;
-
-        private float insatiableDuration = 0f;
+        private float insatiableStopwatch = 0f;
 
         private float cooldownRefund;
 
-        public bool inInsatiable = false;
-
-        public bool hasStartedInsatiable;
+        public bool inInsatiable { get; private set; }
 
         public bool draining;
 
@@ -72,23 +63,52 @@ namespace SeamstressMod.Seamstress.Components
             healthComponent = GetComponent<HealthComponent>();
             skillLocator = GetComponent<SkillLocator>();
         }
+        public void Start()
+        {
+            maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
+        }
         public void FixedUpdate()
         {
-            hopoopFeatherTimer -= Time.fixedDeltaTime;
             blinkCd += Time.fixedDeltaTime;
-            if (insatiableDuration > 0f) insatiableDuration -= Time.fixedDeltaTime;
-            if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
+
+            if (insatiableStopwatch > 0f)
+            {
+                insatiableStopwatch -= Time.fixedDeltaTime;
+            }
+            else if(inInsatiable && insatiableStopwatch <= 0f)
+            {
+                DeactivateInsatiable();
+            }
+
+            if (parryDashDelayTimer > 0)
+            {
+                parryDashDelayTimer -= Time.fixedDeltaTime;
+            }
+            else if (parryDashDelayTimer <= 0 && !hasPlayedEffect)
+            {
+                CreateBlinkEffect(heldOrigin);
+            }
+
+            //Updates passive damage ..
             if (checkStatsStopwatch >= 0.5)
             {
                 characterBody.MarkAllStatsDirty();
                 checkStatsStopwatch = 0f;
             }
             else checkStatsStopwatch += Time.fixedDeltaTime;
+
+            if(draining && fiendMeter > 0f)
+            {
+                fiendMeter -= drainAmount;
+                healthComponent.Heal(drainAmount / 8, default, false);
+            }
+            else
+            {
+                fiendMeter = 0;
+                draining = false;
+            }
             RefundUtil();
-            CheckToDrainGauge();
-            CreateBlinkEffect(heldOrigin);
-            ButcheredSound();
-            IsInsatiable();
+            InstatiableSound();
         }
         private void RefundUtil()
         {
@@ -104,24 +124,9 @@ namespace SeamstressMod.Seamstress.Components
                 hasRefunded = false;
             }
         }
-        private void CheckToDrainGauge()
-        {
-            if (draining)
-            {
-                if (fiendMeter > 0f)
-                {
-                    fiendMeter -= drainAmount;
-                    if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 8, default, false);
-                }
-                else if (fiendMeter <= 0f)
-                {
-                    draining = false;
-                }
-            }
-        }
         private void CreateBlinkEffect(Vector3 origin)
         {
-            if (supaPrefab && !hasPlayedEffect && dashStopwatch < 0)
+            if (supaPrefab)
             {
                 EffectData effectData = new EffectData();
                 effectData.rotation = Util.QuaternionSafeLookRotation(heldDashVector);
@@ -133,7 +138,7 @@ namespace SeamstressMod.Seamstress.Components
         }
         public void StartDashEffectTimer()
         {
-            dashStopwatch = 0.75f;
+            parryDashDelayTimer = 0.75f;
             hasPlayedEffect = false;
         }
         public void FillHunger(float healDamage)
@@ -151,7 +156,8 @@ namespace SeamstressMod.Seamstress.Components
 
             if (fiendMeter < 0f)
             {
-                draining = true;
+                DeactivateInsatiable();
+                draining = false;
                 fiendMeter = 0f;
             }
 
@@ -163,57 +169,56 @@ namespace SeamstressMod.Seamstress.Components
 
             new SyncHunger(networkIdentity.netId, (ulong)(this.fiendMeter * 100f)).Send(R2API.Networking.NetworkDestination.Clients);
         }
-        private void IsInsatiable()
+        //Shit is so scuffed LMAO
+        public void ActivateInsatiable()
         {
-            if (inInsatiable && !hasStartedInsatiable)
+            inInsatiable = true;
+            draining = false;
+            insatiableStopwatch = SeamstressStaticValues.butcheredDuration;
+            Transform modelTransform = characterBody.modelLocator.modelTransform;
+            if (modelTransform)
             {
-                draining = false;
-                insatiableDuration = SeamstressStaticValues.butcheredDuration;
-                Transform modelTransform = characterBody.modelLocator.modelTransform;
-                if (modelTransform)
-                {
-                    #region overlay
-                    TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
-                    temporaryOverlay.duration = 1f;
-                    temporaryOverlay.destroyComponentOnEnd = true;
-                    temporaryOverlay.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/matOnFire.mat").WaitForCompletion();
-                    temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
-                    temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                    temporaryOverlay.animateShaderAlpha = true;
-                    #endregion
-                }
-                hasStartedInsatiable = true;
-            }
-            else if (!inInsatiable && hasStartedInsatiable)
-            {
-                drainAmount = healthComponent.fullHealth / 125;
-                draining = true;
-                Transform modelTransform = characterBody.modelLocator.modelTransform;
-                if (modelTransform)
-                {
-                    TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
-                    temporaryOverlay.duration = 1f;
-                    temporaryOverlay.destroyComponentOnEnd = true;
-                    temporaryOverlay.originalMaterial = SeamstressAssets.destealthMaterial;
-                    temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
-                    temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                    temporaryOverlay.animateShaderAlpha = true;
-                }
-                if (skillLocator.utility.skillDef == SeamstressSurvivor.snapBackSkillDef)
-                {
-                    skillLocator.utility.ExecuteIfReady();
-                }
-                Instantiate(endReap, characterBody.modelLocator.transform);
-                Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
-                hasStartedInsatiable = false;
+                #region overlay
+                TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
+                temporaryOverlay.duration = 1f;
+                temporaryOverlay.destroyComponentOnEnd = true;
+                temporaryOverlay.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/matOnFire.mat").WaitForCompletion();
+                temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
+                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                temporaryOverlay.animateShaderAlpha = true;
+                #endregion
             }
         }
-        //butchered end sound
-        private void ButcheredSound()
+        //If it works it works
+        public void DeactivateInsatiable()
+        {
+            inInsatiable = false;
+            drainAmount = healthComponent.fullHealth / 125;
+            draining = true;
+            Transform modelTransform = characterBody.modelLocator.modelTransform;
+            if (modelTransform)
+            {
+                TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
+                temporaryOverlay.duration = 1f;
+                temporaryOverlay.destroyComponentOnEnd = true;
+                temporaryOverlay.originalMaterial = SeamstressAssets.destealthMaterial;
+                temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
+                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                temporaryOverlay.animateShaderAlpha = true;
+            }
+            if (skillLocator.utility.skillDef == SeamstressSurvivor.snapBackSkillDef)
+            {
+                skillLocator.utility.ExecuteIfReady();
+            }
+            Instantiate(insatiableEndPrefab, characterBody.modelLocator.transform);
+            Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
+        }
+        //end sound
+        private void InstatiableSound()
         {
             if (inInsatiable)
             {
-                if (insatiableDuration < 2f && !hasPlayed)
+                if (insatiableStopwatch < 2f && !hasPlayed)
                 {
                     Util.PlaySound("Play_nullifier_impact", characterBody.gameObject);
                     hasPlayed = true;

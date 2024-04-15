@@ -57,6 +57,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
             skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            seamCom.DeactivateInsatiable();
         }
         private void SetPosition(Vector3 newPosition)
         {
@@ -105,10 +106,6 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (cameraTargetParams)
             {
                 aimRequest.Dispose();
-            }
-            if (NetworkServer.active)
-            {
-                if (needleCount < 5) characterBody.AddBuff(SeamstressBuffs.needles);
             }
 
             base.OnExit();

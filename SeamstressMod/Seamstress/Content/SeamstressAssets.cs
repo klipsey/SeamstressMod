@@ -11,6 +11,7 @@ using TMPro;
 using ThreeEyedGames;
 using SeamstressMod.Seamstress.Components;
 using static UnityEngine.ParticleSystem.PlaybackState;
+using HG;
 
 namespace SeamstressMod.Seamstress.Content
 {
@@ -44,7 +45,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal static GameObject groundClawsEffect;
 
-        internal static GameObject reapEndEffect;
+        internal static GameObject instatiableEndEffect;
 
         internal static GameObject scissorsHitImpactEffect;
         internal static GameObject slamEffect;
@@ -55,6 +56,8 @@ namespace SeamstressMod.Seamstress.Content
         internal static GameObject sewnEffect;
 
         //Misc Prefabs
+        internal static TeamAreaIndicator seamstressTeamAreaIndicator;
+
         internal static GameObject telekinesisTracker;
         internal static GameObject telekinesisCdTracker;
 
@@ -369,20 +372,20 @@ namespace SeamstressMod.Seamstress.Content
             impDashEffect.transform.GetChild(0).GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             SeamstressMod.Modules.Content.CreateAndAddEffectDef(impDashEffect);
 
-            reapEndEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("ReapEnd");
-            reapEndEffect.AddComponent<NetworkIdentity>();
-            var fart = reapEndEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            instatiableEndEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("ReapEnd");
+            instatiableEndEffect.AddComponent<NetworkIdentity>();
+            var fart = instatiableEndEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             fart.startColor = Color.black;
-            fart = reapEndEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+            fart = instatiableEndEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
             fart.startColor = Color.red;
-            reapEndEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
-            reapEndEffect.transform.GetChild(3).gameObject.SetActive(false);
-            reapEndEffect.transform.GetChild(4).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
+            instatiableEndEffect.transform.GetChild(2).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
+            instatiableEndEffect.transform.GetChild(3).gameObject.SetActive(false);
+            instatiableEndEffect.transform.GetChild(4).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
             material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/LunarSkillReplacements/matLunarNeedleImpactEffect.mat").WaitForCompletion());
             material.SetColor("_TintColor", Color.red);
-            reapEndEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
-            reapEndEffect.transform.GetChild(6).gameObject.SetActive(false);
-            Object.Destroy(reapEndEffect.GetComponent<EffectComponent>());
+            instatiableEndEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            instatiableEndEffect.transform.GetChild(6).gameObject.SetActive(false);
+            Object.Destroy(instatiableEndEffect.GetComponent<EffectComponent>());
 
             genericImpactExplosionEffect = CreateImpactExplosionEffect("SeamstressScissorImpact", Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matBloodGeneric.mat").WaitForCompletion(), 2);
             bloodSplatterEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Brother/BrotherSlamImpact.prefab").WaitForCompletion().InstantiateClone("Splat", true);
@@ -410,6 +413,12 @@ namespace SeamstressMod.Seamstress.Content
             slamEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossGroundSlam.prefab").WaitForCompletion().InstantiateClone("SeamstressSlamEffect");
             slamEffect.AddComponent<NetworkIdentity>();
             SeamstressMod.Modules.Content.CreateAndAddEffectDef(slamEffect);
+
+            TeamAreaIndicator teamArea = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().transform.Find("ImpactEffect/TeamAreaIndicator, FullSphere").gameObject, "SeamstressTeamIndicator", false).GetComponent<TeamAreaIndicator>();
+            teamArea.teamMaterialPairs[1].sharedMaterial = new Material(teamArea.teamMaterialPairs[1].sharedMaterial);
+            teamArea.teamMaterialPairs[1].sharedMaterial.SetColor("_TintColor", Color.red);
+
+            seamstressTeamAreaIndicator = teamArea;
         }
 
         #endregion
@@ -423,11 +432,9 @@ namespace SeamstressMod.Seamstress.Content
             CreateEmpoweredNeedle();
             SeamstressMod.Modules.Content.AddProjectilePrefab(needleButcheredPrefab);
 
-            CreateScissorR();
-            SeamstressMod.Modules.Content.AddProjectilePrefab(scissorRPrefab);
+            scissorRPrefab = CreateScissor("ScissorRightGhost", "ScissorR");
 
-            CreateScissorL();
-            SeamstressMod.Modules.Content.AddProjectilePrefab(scissorLPrefab);
+            scissorLPrefab = CreateScissor("ScissorLeftGhost", "ScissorL");
         }
         private static void CreateNeedle()
         {
@@ -492,22 +499,24 @@ namespace SeamstressMod.Seamstress.Content
             needleHeal.fractionOfDamage = SeamstressStaticValues.insatiableLifesSteal;
             needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
         }
-
-        private static void CreateScissorR()
+        
+        private static GameObject CreateScissor(string modelName, string name)
         {
-            scissorRPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorR");
-            Rigidbody rigid = scissorRPrefab.GetComponent<Rigidbody>();
+            GameObject scissorPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone(name);
+            Rigidbody rigid = scissorPrefab.GetComponent<Rigidbody>();
             rigid.useGravity = true;
             rigid.freezeRotation = true;
 
-            SphereCollider sphereCollider = scissorRPrefab.GetComponent<SphereCollider>();
+            SphereCollider sphereCollider = scissorPrefab.GetComponent<SphereCollider>();
             sphereCollider.material.bounciness = 0;
             sphereCollider.material.staticFriction = 10000;
             sphereCollider.material.dynamicFriction = 10000;
             sphereCollider.radius = 1f;
             sphereCollider.enabled = false;
 
-            ProjectileImpactExplosion impactAlly = scissorRPrefab.GetComponent<ProjectileImpactExplosion>();
+            Object.Destroy(scissorPrefab.transform.Find("ImpactEffect/TeamAreaIndicator, FullSphere").gameObject);
+
+            ProjectileImpactExplosion impactAlly = scissorPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorSlashDamageCoefficient;
             impactAlly.blastProcCoefficient = 1f;
             impactAlly.destroyOnEnemy = false;
@@ -515,31 +524,28 @@ namespace SeamstressMod.Seamstress.Content
             impactAlly.lifetime = 16f;
             impactAlly.lifetimeAfterImpact = 16f;
 
-            ProjectileDamage scissorDamage = scissorRPrefab.GetComponent<ProjectileDamage>();
+            ProjectileDamage scissorDamage = scissorPrefab.GetComponent<ProjectileDamage>();
             scissorDamage.damageType = DamageType.Stun1s;
 
-            ProjectileSimple simple = scissorRPrefab.GetComponent<ProjectileSimple>();
+            ProjectileSimple simple = scissorPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
 
-            if (!scissorRPrefab.transform.GetChild(0).GetChild(4).GetComponent<NetworkIdentity>()) scissorRPrefab.AddComponent<NetworkIdentity>();
-            scissorRPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
-
             //changes team filter to only team
-            PickupFilter scissorPickup = scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilter>();
-            scissorPickup.myTeamFilter = scissorRPrefab.GetComponent<TeamFilter>();
-            scissorPickup.triggerEvents = scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
-            Object.Destroy(scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
+            PickupFilter scissorPickup = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilter>();
+            scissorPickup.myTeamFilter = scissorPrefab.GetComponent<TeamFilter>();
+            scissorPickup.triggerEvents = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
+            Object.Destroy(scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
 
-            FuckImpact fuck = scissorRPrefab.AddComponent<FuckImpact>();
-            fuck.stickSoundString = scissorRPrefab.GetComponent<ProjectileStickOnImpact>().stickSoundString;
-            fuck.stickParticleSystem = scissorRPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
+            FuckImpact fuck = scissorPrefab.AddComponent<FuckImpact>();
+            fuck.stickSoundString = scissorPrefab.GetComponent<ProjectileStickOnImpact>().stickSoundString;
+            fuck.stickParticleSystem = scissorPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
             fuck.ignoreCharacters = true;
             fuck.ignoreWorld = false;
-            fuck.stickEvent = scissorRPrefab.GetComponent<ProjectileStickOnImpact>().stickEvent;
+            fuck.stickEvent = scissorPrefab.GetComponent<ProjectileStickOnImpact>().stickEvent;
             fuck.alignNormals = true;
-            Object.Destroy(scissorRPrefab.GetComponent<ProjectileStickOnImpact>());
+            Object.Destroy(scissorPrefab.GetComponent<ProjectileStickOnImpact>());
 
-            scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
+            scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
 
             GameObject travelEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.transform.GetChild(4).gameObject.InstantiateClone("Spin", false);
             travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
@@ -547,10 +553,10 @@ namespace SeamstressMod.Seamstress.Content
             travelEffect.transform.GetChild(2).gameObject.SetActive(false);
             travelEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
 
-            ProjectileController scissorController = scissorRPrefab.GetComponent<ProjectileController>();
+            ProjectileController scissorController = scissorPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
-            if (_assetBundle.LoadAsset<GameObject>("ScissorRightGhost") != null)
-                scissorController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorRightGhost");
+            if (_assetBundle.LoadAsset<GameObject>(modelName) != null)
+                scissorController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab(modelName);
             if (!scissorController.ghostPrefab.GetComponent<NetworkIdentity>())
                 scissorController.ghostPrefab.AddComponent<NetworkIdentity>();
             if (!scissorController.ghostPrefab.GetComponent<VFXAttributes>()) scissorController.ghostPrefab.AddComponent<VFXAttributes>();
@@ -558,73 +564,10 @@ namespace SeamstressMod.Seamstress.Content
             scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
             if (!scissorController.ghostPrefab.transform.Find("Spin")) travelEffect.transform.SetParent(scissorController.ghostPrefab.transform);
-        }
-        private static void CreateScissorL()
-        {
-            scissorLPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone("ScissorL");
 
-            Rigidbody rigid = scissorLPrefab.GetComponent<Rigidbody>();
-            rigid.useGravity = true;
-            rigid.freezeRotation = true;
+            SeamstressMod.Modules.Content.AddProjectilePrefab(scissorPrefab);
 
-            SphereCollider sphereCollider = scissorLPrefab.GetComponent<SphereCollider>();
-            sphereCollider.material.bounciness = 0;
-            sphereCollider.material.staticFriction = 10000;
-            sphereCollider.material.dynamicFriction = 10000;
-            sphereCollider.radius = 1f;
-            sphereCollider.enabled = false;
-
-            ProjectileImpactExplosion impactAlly = scissorLPrefab.GetComponent<ProjectileImpactExplosion>();
-            impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorSlashDamageCoefficient;
-            impactAlly.blastProcCoefficient = 1f;
-            impactAlly.destroyOnEnemy = false;
-            impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
-            impactAlly.lifetime = 16f;
-            impactAlly.lifetimeAfterImpact = 16f;
-
-            ProjectileDamage scissorDamage = scissorLPrefab.GetComponent<ProjectileDamage>();
-            scissorDamage.damageType = DamageType.Stun1s;
-
-            ProjectileSimple simple = scissorLPrefab.GetComponent<ProjectileSimple>();
-            simple.desiredForwardSpeed = 120f;
-
-            if (!scissorLPrefab.transform.GetChild(0).GetChild(4).GetComponent<NetworkIdentity>()) scissorLPrefab.AddComponent<NetworkIdentity>();
-            scissorLPrefab.transform.GetChild(0).GetChild(4).localScale = Vector3.one * 6f;
-
-            //changes team filter to only team
-            PickupFilter scissorPickup = scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilter>();
-            scissorPickup.myTeamFilter = scissorLPrefab.GetComponent<TeamFilter>();
-            scissorPickup.triggerEvents = scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
-            Object.Destroy(scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
-
-            FuckImpact fuck = scissorLPrefab.AddComponent<FuckImpact>();
-            fuck.stickSoundString = scissorLPrefab.GetComponent<ProjectileStickOnImpact>().stickSoundString;
-            fuck.stickParticleSystem = scissorLPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
-            fuck.ignoreCharacters = true;
-            fuck.ignoreWorld = false;
-            fuck.stickEvent = scissorLPrefab.GetComponent<ProjectileStickOnImpact>().stickEvent;
-            fuck.alignNormals = true;
-            Object.Destroy(scissorLPrefab.GetComponent<ProjectileStickOnImpact>());
-
-            scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
-
-            GameObject travelEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.transform.GetChild(4).gameObject.InstantiateClone("Spin", false);
-            travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
-            travelEffect.transform.GetChild(1).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
-            travelEffect.transform.GetChild(2).gameObject.SetActive(false);
-            travelEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
-
-            ProjectileController scissorController = scissorLPrefab.GetComponent<ProjectileController>();
-            scissorController.procCoefficient = 1f;
-            if (_assetBundle.LoadAsset<GameObject>("ScissorLeftGhost") != null)
-                scissorController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("ScissorLeftGhost");
-            if (!scissorController.ghostPrefab.GetComponent<NetworkIdentity>())
-                scissorController.ghostPrefab.AddComponent<NetworkIdentity>();
-            if (!scissorController.ghostPrefab.GetComponent<VFXAttributes>()) scissorController.ghostPrefab.AddComponent<VFXAttributes>();
-            scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
-            scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
-
-            if (!scissorController.ghostPrefab.transform.Find("Spin")) travelEffect.transform.SetParent(scissorController.ghostPrefab.transform);
+            return scissorPrefab;
         }
         #endregion
 
