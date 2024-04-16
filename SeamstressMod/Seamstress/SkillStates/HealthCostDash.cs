@@ -151,7 +151,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             seamCom.ActivateInsatiable();
             if (!hasHit) base.characterMotor.velocity *= 0.2f;
-            DotController.InflictDot(characterBody.gameObject, characterBody.gameObject, Dots.SeamstressBleed, SeamstressStaticValues.butcheredDuration, 1, 1u);
+            if(NetworkServer.active) DotController.InflictDot(characterBody.gameObject, characterBody.gameObject, Dots.SeamstressBleed, SeamstressStaticValues.instatiableDuation, 1, 1u);
             skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
 
             base.OnExit();

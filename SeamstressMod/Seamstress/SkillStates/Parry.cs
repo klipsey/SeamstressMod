@@ -80,7 +80,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 return;
             }
-            characterBody.AddTimedBuff(SeamstressBuffs.instatiable, SeamstressStaticValues.butcheredDuration, 1);
+            characterBody.AddTimedBuff(SeamstressBuffs.instatiable, SeamstressStaticValues.instatiableDuation, 1);
             CleanBuffsServer();
             if (parrySoundDef)
             {

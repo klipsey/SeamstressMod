@@ -19,6 +19,8 @@ namespace SeamstressMod.Seamstress.Components
 
         private SkillLocator skillLocator;
 
+        private CharacterModel charModel;
+
         private GameObject insatiableEndPrefab = SeamstressAssets.instatiableEndEffect;
 
         public static GameObject supaPrefab = SeamstressAssets.blinkEffect;
@@ -62,6 +64,7 @@ namespace SeamstressMod.Seamstress.Components
             characterMotor = GetComponent<CharacterMotor>();
             healthComponent = GetComponent<HealthComponent>();
             skillLocator = GetComponent<SkillLocator>();
+            charModel = gameObject.GetComponent<CharacterModel>();
         }
         public void Start()
         {
@@ -174,7 +177,7 @@ namespace SeamstressMod.Seamstress.Components
         {
             inInsatiable = true;
             draining = false;
-            insatiableStopwatch = SeamstressStaticValues.butcheredDuration;
+            insatiableStopwatch = SeamstressStaticValues.instatiableDuation;
             Transform modelTransform = characterBody.modelLocator.modelTransform;
             if (modelTransform)
             {
@@ -186,6 +189,14 @@ namespace SeamstressMod.Seamstress.Components
                 temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
                 temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                 temporaryOverlay.animateShaderAlpha = true;
+
+                TemporaryOverlay temporaryOverlay2 = charModel.gameObject.AddComponent<TemporaryOverlay>();
+                temporaryOverlay2.duration = SeamstressStaticValues.instatiableDuation;
+                temporaryOverlay2.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
+                temporaryOverlay2.animateShaderAlpha = true;
+                temporaryOverlay2.destroyComponentOnEnd = true;
+                temporaryOverlay2.originalMaterial = SeamstressAssets.insatiableOverlayMat;
+                temporaryOverlay2.AddToCharacerModel(charModel);
                 #endregion
             }
         }

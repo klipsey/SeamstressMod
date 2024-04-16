@@ -69,7 +69,7 @@ namespace SeamstressMod.Seamstress.Content
 
         //Materials
         internal static Material destealthMaterial;
-        internal static Material butcheredOverlayMat;
+        internal static Material insatiableOverlayMat;
         internal static Material parryMat;
         internal static Material crocoMat;
 
@@ -126,21 +126,21 @@ namespace SeamstressMod.Seamstress.Content
             heartMdl.transform.GetChild(2).localScale = new Vector3(1.5f, 1.5f, 1.5f);
             heartMdl.transform.GetChild(2).GetChild(0).gameObject.GetComponent<Light>().color = theRed;
             heartMdl.transform.GetChild(2).GetChild(0).gameObject.GetComponent<Light>().range = 2f;
-            heartMdl.transform.GetChild(2).GetChild(0).gameObject.GetComponent<LightIntensityCurve>().timeMax = SeamstressStaticValues.butcheredDuration;
+            heartMdl.transform.GetChild(2).GetChild(0).gameObject.GetComponent<LightIntensityCurve>().timeMax = SeamstressStaticValues.instatiableDuation;
             heartMdl.transform.GetChild(2).GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Junk/Common/VFX/matBloodParticle.mat").WaitForCompletion();
             var fard = heartMdl.transform.GetChild(2).GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
-            fard.duration = SeamstressStaticValues.butcheredDuration;
+            fard.duration = SeamstressStaticValues.instatiableDuation;
             heartMdl.transform.GetChild(2).GetChild(2).gameObject.SetActive(false);
             heartMdl.transform.GetChild(2).GetChild(3).gameObject.SetActive(false);
             fard = heartMdl.transform.GetChild(2).GetChild(4).gameObject.GetComponent<ParticleSystem>().main;
             fard.startColor = theRed;
-            fard.duration = SeamstressStaticValues.butcheredDuration;
+            fard.duration = SeamstressStaticValues.instatiableDuation;
             fard = heartMdl.transform.GetChild(2).GetChild(5).gameObject.GetComponent<ParticleSystem>().main;
             fard.startColor = coolRed;
-            fard.duration = SeamstressStaticValues.butcheredDuration;
+            fard.duration = SeamstressStaticValues.instatiableDuation;
             heartMdl.transform.GetChild(2).GetChild(6).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", Color.red);
             fard = heartMdl.transform.GetChild(2).GetChild(6).gameObject.GetComponent<ParticleSystem>().main;
-            fard.duration = SeamstressStaticValues.butcheredDuration;
+            fard.duration = SeamstressStaticValues.instatiableDuation;
             Material chains = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion();
             chains.SetColor("_EmColor", Color.red);
             chains.SetColor("_TintColor", Color.red);
@@ -191,7 +191,7 @@ namespace SeamstressMod.Seamstress.Content
 
         private static void CreateMaterials()
         {
-            butcheredOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
+            insatiableOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
 
             destealthMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpBossDissolve.mat").WaitForCompletion();
 

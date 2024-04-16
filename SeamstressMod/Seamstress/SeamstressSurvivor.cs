@@ -643,18 +643,7 @@ namespace SeamstressMod.Seamstress
             {
                 return;
             }
-            SeamstressController s = self.body.GetComponent<SeamstressController>();
-            if (self.body.HasBuff(SeamstressBuffs.instatiable) && s.inInsatiable == false)
-            {
-                TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
-                temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
-                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
-                temporaryOverlay.animateShaderAlpha = true;
-                temporaryOverlay.destroyComponentOnEnd = true;
-                temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
-                temporaryOverlay.AddToCharacerModel(self);
-            }
-            else if (!self.body.HasBuff(SeamstressBuffs.instatiable) && s.inInsatiable == true)
+            if (!self.body.HasBuff(SeamstressBuffs.instatiable))
             {
                 if (self.gameObject.GetComponent<TemporaryOverlay>() != null)
                 {

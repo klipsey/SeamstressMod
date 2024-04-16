@@ -58,7 +58,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             ownerIsEmpowered = ownerBody.HasBuff(SeamstressBuffs.instatiable);
             if (ownerIsEmpowered && !hasFired)
             {
-                ChainUpdate(SeamstressStaticValues.butcheredDuration);
+                ChainUpdate(SeamstressStaticValues.instatiableDuation);
                 hasFired = true;
             }
             if (!ownerIsEmpowered && base.fixedAge > 1f)
