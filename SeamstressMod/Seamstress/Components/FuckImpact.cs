@@ -167,7 +167,7 @@ namespace SeamstressMod.Seamstress.Components
 
         public void OnProjectileImpact(ProjectileImpactInfo impactInfo)
         {
-            if (enabled)
+            if (base.enabled)
             {
                 TrySticking(impactInfo.collider, impactInfo.estimatedImpactNormal);
                 if(!hasFired)

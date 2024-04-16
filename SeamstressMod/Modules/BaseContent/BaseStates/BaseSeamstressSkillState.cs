@@ -45,7 +45,6 @@ namespace SeamstressMod.Modules.BaseStates
             if (seamCom)
             {
                 insatiable = seamCom.inInsatiable;
-                seamCom.isDashing = inDash;
             }
         }
     }

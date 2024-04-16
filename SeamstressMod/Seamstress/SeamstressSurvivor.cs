@@ -653,11 +653,9 @@ namespace SeamstressMod.Seamstress
                 temporaryOverlay.destroyComponentOnEnd = true;
                 temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
                 temporaryOverlay.AddToCharacerModel(self);
-                s.inInsatiable = true;
             }
             else if (!self.body.HasBuff(SeamstressBuffs.instatiable) && s.inInsatiable == true)
             {
-                s.inInsatiable = false;
                 if (self.gameObject.GetComponent<TemporaryOverlay>() != null)
                 {
                     UnityEngine.Object.Destroy(self.gameObject.GetComponent<TemporaryOverlay>());
@@ -714,6 +712,7 @@ namespace SeamstressMod.Seamstress
                 if (s.fiendMeter > 0)
                 {
                     self.moveSpeed += 2f * Util.Remap(s.fiendMeter, 0f, s.maxHunger, 0f, 2f);
+                    self.attackSpeed += .1f * Util.Remap(s.fiendMeter, 0f, s.maxHunger, 0f, 2f);
                 }
             }
             if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))

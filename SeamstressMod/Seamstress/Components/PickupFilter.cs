@@ -19,13 +19,22 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool hasFired;
 
-        private float pickupTimer = 0.75f;
+        private bool hasActivated = false;
+
+        private float pickupTimer = 5f;
 
         public void FixedUpdate()
         {
             pickupTimer -= Time.fixedDeltaTime;
+            if(pickupTimer <= 0 && !hasActivated)
+            {
+                TeamAreaIndicator seamArea = Object.Instantiate(SeamstressAssets.seamstressTeamAreaIndicator, transform.GetParent());
+                seamArea.gameObject.transform.localScale = Vector3.one * 6f;
+                seamArea.teamFilter = myTeamFilter;
+                hasActivated = true;
+            }
         }
-        public void OnTriggerEnter(Collider collider)
+        public void OnTriggerStay(Collider collider)
         {
             if (!collider)
             {
@@ -40,14 +49,14 @@ namespace SeamstressMod.Seamstress.Components
             if (healthComponent)
             {
                 TeamComponent component2 = healthComponent.GetComponent<TeamComponent>();
-                if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer < 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+                if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer <= 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
-                    string hi = gameObject.transform.root.name;
-                    if (hi == "ScissorR(Clone)")
+                    string scissorName = gameObject.transform.root.name;
+                    if (scissorName == "ScissorR(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = true;
                     }
-                    else if (hi == "ScissorL(Clone)")
+                    else if (scissorName == "ScissorL(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = false;
                     }
