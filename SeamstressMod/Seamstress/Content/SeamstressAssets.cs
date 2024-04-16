@@ -541,11 +541,8 @@ namespace SeamstressMod.Seamstress.Content
 
             scissorRPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
 
-            GameObject travelEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.transform.GetChild(4).gameObject.InstantiateClone("Spin", false);
-            travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
-            travelEffect.transform.GetChild(1).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
-            travelEffect.transform.GetChild(2).gameObject.SetActive(false);
-            travelEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
+            GameObject travelEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.InstantiateClone("Spin", false);
+            travelEffect.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
 
             ProjectileController scissorController = scissorRPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
@@ -556,8 +553,16 @@ namespace SeamstressMod.Seamstress.Content
             if (!scissorController.ghostPrefab.GetComponent<VFXAttributes>()) scissorController.ghostPrefab.AddComponent<VFXAttributes>();
             scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
             scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
-
-            if (!scissorController.ghostPrefab.transform.Find("Spin")) travelEffect.transform.SetParent(scissorController.ghostPrefab.transform);
+            TrailRenderer trail = scissorController.ghostPrefab.AddComponent<TrailRenderer>();
+            trail.startWidth = 0.045f;
+            trail.endWidth = 0f;
+            trail.time = 0.5f;
+            trail.emitting = true;
+            trail.numCornerVertices = 0;
+            trail.numCapVertices = 0;
+            trail.material = travelEffect.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().material;
+            trail.startColor = travelEffect.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().startColor;
+            trail.endColor = travelEffect.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().endColor;
         }
         private static void CreateScissorL()
         {
@@ -608,11 +613,8 @@ namespace SeamstressMod.Seamstress.Content
 
             scissorLPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
 
-            GameObject travelEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.transform.GetChild(4).gameObject.InstantiateClone("Spin", false);
-            travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
-            travelEffect.transform.GetChild(1).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
-            travelEffect.transform.GetChild(2).gameObject.SetActive(false);
-            travelEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
+            GameObject travelEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.InstantiateClone("Spin", false);
+            travelEffect.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
 
             ProjectileController scissorController = scissorLPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
@@ -623,8 +625,16 @@ namespace SeamstressMod.Seamstress.Content
             if (!scissorController.ghostPrefab.GetComponent<VFXAttributes>()) scissorController.ghostPrefab.AddComponent<VFXAttributes>();
             scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
             scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
-
-            if (!scissorController.ghostPrefab.transform.Find("Spin")) travelEffect.transform.SetParent(scissorController.ghostPrefab.transform);
+            TrailRenderer trail = scissorController.ghostPrefab.AddComponent<TrailRenderer>();
+            trail.startWidth = 0.045f;
+            trail.endWidth = 0f;
+            trail.time = 0.5f;
+            trail.emitting = true;
+            trail.numCornerVertices = 0;
+            trail.numCapVertices = 0;
+            trail.material = travelEffect.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().material;
+            trail.startColor = travelEffect.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().startColor;
+            trail.endColor = travelEffect.transform.GetChild(4).GetChild(1).gameObject.GetComponent<TrailRenderer>().endColor;
         }
         #endregion
 
