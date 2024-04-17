@@ -19,21 +19,19 @@ namespace SeamstressMod.Seamstress.Components
 
         private SkillLocator skillLocator;
 
-        private GameObject endReap = SeamstressAssets.reapEndEffect;
+        private GameObject insatiableEndPrefab = SeamstressAssets.instatiableEndEffect;
 
         public static GameObject supaPrefab = SeamstressAssets.blinkEffect;
 
         public float fiendMeter = 0f;
 
-        public float maxHunger = 0f;
+        public float maxHunger;
 
         private float drainAmount;
 
         private float dashStopwatch;
 
         private float checkStatsStopwatch;
-
-        public float hopoopFeatherTimer;
 
         public float blinkCd = 0f;
 
@@ -50,11 +48,8 @@ namespace SeamstressMod.Seamstress.Components
         public Vector3 heldOrigin;
 
         public Vector3 snapBackPosition;
-        //private float leapLength = 0f;
 
-        //public float lockOutLength = 0f;
-
-        private float insatiableDuration = 0f;
+        private float insatiableStopwatch = 0f;
 
         private float cooldownRefund;
 
@@ -72,11 +67,14 @@ namespace SeamstressMod.Seamstress.Components
             healthComponent = GetComponent<HealthComponent>();
             skillLocator = GetComponent<SkillLocator>();
         }
+        public void Start()
+        {
+            maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
+        }
         public void FixedUpdate()
         {
-            hopoopFeatherTimer -= Time.fixedDeltaTime;
             blinkCd += Time.fixedDeltaTime;
-            if (insatiableDuration > 0f) insatiableDuration -= Time.fixedDeltaTime;
+            if (insatiableStopwatch > 0f) insatiableStopwatch -= Time.fixedDeltaTime;
             if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
             if (checkStatsStopwatch >= 0.5)
             {
@@ -87,7 +85,7 @@ namespace SeamstressMod.Seamstress.Components
             RefundUtil();
             CheckToDrainGauge();
             CreateBlinkEffect(heldOrigin);
-            ButcheredSound();
+            InsatiableSound();
             IsInsatiable();
         }
         private void RefundUtil()
@@ -168,7 +166,7 @@ namespace SeamstressMod.Seamstress.Components
             if (inInsatiable && !hasStartedInsatiable)
             {
                 draining = false;
-                insatiableDuration = SeamstressStaticValues.butcheredDuration;
+                insatiableStopwatch = SeamstressStaticValues.insatiableDuration;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -203,17 +201,17 @@ namespace SeamstressMod.Seamstress.Components
                 {
                     skillLocator.utility.ExecuteIfReady();
                 }
-                Instantiate(endReap, characterBody.modelLocator.transform);
+                Instantiate(insatiableEndPrefab, characterBody.modelLocator.transform);
                 Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
                 hasStartedInsatiable = false;
             }
         }
-        //butchered end sound
-        private void ButcheredSound()
+        //end sound
+        private void InsatiableSound()
         {
             if (inInsatiable)
             {
-                if (insatiableDuration < 2f && !hasPlayed)
+                if (insatiableStopwatch < 2f && !hasPlayed)
                 {
                     Util.PlaySound("Play_nullifier_impact", characterBody.gameObject);
                     hasPlayed = true;

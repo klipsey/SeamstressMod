@@ -160,7 +160,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (NetworkServer.active)
             {
                 characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
-                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.3f);
+                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.2f);
             }
             skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
 

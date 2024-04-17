@@ -37,7 +37,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             base.OnEnter();
             Util.PlaySound(exitSoundString, gameObject);
-            Util.CleanseBody(characterBody, false, false, false, true, false, false);
+            if(NetworkServer.active) Util.CleanseBody(base.characterBody, false, false, false, true, false, false);
             CalculateSnapDestination();
             modelTransform = GetModelTransform();
             if (modelTransform)
@@ -67,7 +67,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         private void CalculateSnapDestination()
         {
-            if (isAuthority)
+            if (base.isAuthority)
             {
                 snapPosition = seamCom.snapBackPosition;
                 currentPosition = characterBody.corePosition;
@@ -87,7 +87,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 SetPosition(Vector3.Lerp(currentPosition, snapPosition, fixedAge / duration));
             }
-            if (fixedAge >= duration && isAuthority)
+            if (fixedAge >= duration && base.isAuthority)
             {
                 hasSnapped = true;
                 outer.SetNextStateToMain();
@@ -105,10 +105,6 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (cameraTargetParams)
             {
                 aimRequest.Dispose();
-            }
-            if (NetworkServer.active)
-            {
-                if (needleCount < 5) characterBody.AddBuff(SeamstressBuffs.needles);
             }
 
             base.OnExit();

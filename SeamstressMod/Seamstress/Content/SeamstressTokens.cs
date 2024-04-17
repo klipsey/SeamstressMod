@@ -47,7 +47,7 @@ namespace SeamstressMod.Seamstress.Content
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "It Hungers");
             Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> for every <style=cIsHealth>1 missing health</style>. " +
-                $"Fill your <style=cIsHealth>Hunger</style> during " + Tokens.insatiablePrefix + " giving move speed and an additional layer of <style=cIsHealth>health</style>.");
+                $"Filling <style=cIsHealth>Hunger</style> during " + Tokens.insatiablePrefix + " grants <style=cIsUtility>move speed</style> and an additional layer of <style=cIsHealth>health</style>.");
 
             Language.Add(prefix + "NEEDLE_NAME", "Imp Touched Heart");
             Language.Add(prefix + "NEEDLE_DESCRIPTION", $"The Seamstress <color=#9B3737>Blinks</color> instead of jumping. <color=#9B3737>Needles</color> can be fired to <color=#9B3737>Blink</color> in the air dealing " +

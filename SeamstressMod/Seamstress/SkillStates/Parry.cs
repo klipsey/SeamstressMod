@@ -38,14 +38,14 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            bool num = characterBody.HasBuff(SeamstressBuffs.parrySuccess);
-            if (isAuthority && fixedAge >= duration && num)
+            bool success = characterBody.HasBuff(SeamstressBuffs.parrySuccess);
+            if (base.isAuthority && base.fixedAge >= duration && success)
             {
                 blinkPrefab = SeamstressAssets.blinkEffect;
                 DoAttackServer();
                 outer.SetNextState(new ParryDash());
             }
-            else if (isAuthority && fixedAge >= duration && !num)
+            else if (base.isAuthority && base.fixedAge >= duration && !success)
             {
                 skillLocator.utility.rechargeStopwatch += 0.5f * skillLocator.utility.cooldownRemaining;
                 outer.SetNextStateToMain();
@@ -79,7 +79,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 return;
             }
-            characterBody.AddTimedBuff(SeamstressBuffs.instatiable, SeamstressStaticValues.butcheredDuration, 1);
+            characterBody.AddTimedBuff(SeamstressBuffs.instatiable, SeamstressStaticValues.insatiableDuration, 1);
             SeamstressController s = characterBody.GetComponent<SeamstressController>();
             s.inInsatiable = false;
             CleanBuffsServer();

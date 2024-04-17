@@ -38,7 +38,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 projectilePrefab = SeamstressAssets.needlePrefab;
             }
-            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount && this.seamCom.blinkCd >= SeamstressStaticValues.blinkCooldown) || characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamCom.blinkReady == false)
+            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount || characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamCom.blinkCd >= SeamstressStaticValues.blinkCooldown) && this.seamCom.blinkReady == false)
             {
                 seamCom.blinkCd = 0f;
                 seamCom.blinkReady = true;

@@ -99,7 +99,7 @@ namespace SeamstressMod.Seamstress.Components
         private void FixedUpdate()
         {
             stopwatch += Time.fixedDeltaTime;
-            if (attackerBody.gameObject.GetComponent<SeamstressController>().isDashing == false && stopwatch > delay)
+            if (stopwatch > delay)
             {
                 dashStopwatch += Time.fixedDeltaTime;
                 if (!hasFired)

@@ -92,11 +92,11 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
                 if (insatiable)
                 {
-                    projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
+                    projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
                 }
                 else
                 {
-                    projectilePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
+                    projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
                 }
                 Fire(this.aimRay, fireString);
                 hasFired = true;

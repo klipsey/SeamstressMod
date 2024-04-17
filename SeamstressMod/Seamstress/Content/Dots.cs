@@ -51,7 +51,7 @@ namespace SeamstressMod.Seamstress.Content
         }
         public static void DelegateBehave3(DotController self, DotStack dotStack)
         {
-            if (dotStack.dotIndex == SeamstressBleed)
+            if (dotStack.dotIndex == SeamstressBleed && self.victimBody.healthComponent.combinedHealth > self.victimBody.healthComponent.fullCombinedHealth * 0.05)
             {
                 float currentBarrier = self.victimBody.healthComponent.barrier;
                 float currentShield = self.victimBody.healthComponent.shield;

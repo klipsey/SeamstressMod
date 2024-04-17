@@ -26,17 +26,17 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float blinkCooldown = 0.5f;
 
-        internal const float insatiableLifesSteal = 0.3f;
+        internal const float insatiableLifesSteal = 0.5f;
 
         internal const float clipLifeSteal = 0.25f;
-        //75% of healing is converted but i was too lazy oops
-        internal const float healConversion = 0.01f;
+
+        internal const float healConversion = 0.001f;
 
         internal const float needleGainInterval = 1f;
 
         internal const int maxNeedleAmount = 5;
 
-        internal const float butcheredDuration = 6f;
+        internal const float insatiableDuration = 6f;
 
         internal const float passiveScaling = 0.05f;
 
