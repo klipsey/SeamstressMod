@@ -30,7 +30,6 @@ namespace SeamstressMod.Seamstress.SkillStates
 
                     if (characterMotor.jumpCount >= base.characterBody.baseJumpCount)
                     {
-                        seamCom.hopoopFeatherTimer = 0.1f;
                         hopooFeather = true;
                         horizontalBonus = 1.5f;
                         verticalBonus = 1.5f;

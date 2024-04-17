@@ -16,6 +16,7 @@ using R2API.Networking;
 using SeamstressMod.Seamstress.Components;
 using SeamstressMod.Seamstress.Content;
 using SeamstressMod.Seamstress.SkillStates;
+using UnityEngine.UIElements;
 
 namespace SeamstressMod.Seamstress
 {
@@ -643,21 +644,8 @@ namespace SeamstressMod.Seamstress
             {
                 return;
             }
-            SeamstressController s = self.body.GetComponent<SeamstressController>();
-            if (self.body.HasBuff(SeamstressBuffs.instatiable) && s.inInsatiable == false)
+            if (!self.body.HasBuff(SeamstressBuffs.instatiable))
             {
-                TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
-                temporaryOverlay.duration = SeamstressStaticValues.butcheredDuration;
-                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
-                temporaryOverlay.animateShaderAlpha = true;
-                temporaryOverlay.destroyComponentOnEnd = true;
-                temporaryOverlay.originalMaterial = SeamstressAssets.butcheredOverlayMat;
-                temporaryOverlay.AddToCharacerModel(self);
-                s.inInsatiable = true;
-            }
-            else if (!self.body.HasBuff(SeamstressBuffs.instatiable) && s.inInsatiable == true)
-            {
-                s.inInsatiable = false;
                 if (self.gameObject.GetComponent<TemporaryOverlay>() != null)
                 {
                     UnityEngine.Object.Destroy(self.gameObject.GetComponent<TemporaryOverlay>());
@@ -714,6 +702,7 @@ namespace SeamstressMod.Seamstress
                 if (s.fiendMeter > 0)
                 {
                     self.moveSpeed += 2f * Util.Remap(s.fiendMeter, 0f, s.maxHunger, 0f, 2f);
+                    self.attackSpeed += .1f * Util.Remap(s.fiendMeter, 0f, s.maxHunger, 0f, 2f);
                 }
             }
             if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))
@@ -759,7 +748,7 @@ namespace SeamstressMod.Seamstress
                     impGauge.transform.Find("LevelDisplayRoot").Find("ValueText").gameObject.SetActive(false);
                     impGauge.transform.Find("LevelDisplayRoot").Find("PrefixText").gameObject.SetActive(false);
 
-                    impGauge.transform.Find("ExpBarRoot").GetChild(0).GetComponent<Image>().enabled = true;
+                    impGauge.transform.Find("ExpBarRoot").GetChild(0).GetComponent<UnityEngine.UI.Image>().enabled = true;
 
                     impGauge.transform.Find("LevelDisplayRoot").GetComponent<RectTransform>().anchoredPosition = new Vector2(-12f, 0f);
 
