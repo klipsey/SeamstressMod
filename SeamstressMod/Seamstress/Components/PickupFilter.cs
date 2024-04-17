@@ -24,8 +24,6 @@ namespace SeamstressMod.Seamstress.Components
 
         private float pickupTimer = 5f;
 
-        private float pickupTimer = 5f;
-
         public void FixedUpdate()
         {
             pickupTimer -= Time.fixedDeltaTime;
