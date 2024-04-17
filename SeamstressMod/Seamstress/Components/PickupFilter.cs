@@ -6,10 +6,11 @@ using RoR2.Projectile;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using SeamstressMod.Seamstress.Content;
+using System;
 
 namespace SeamstressMod.Seamstress.Components
 {
-    public class PickupFilter : MonoBehaviour
+    public class PickupFilter : NetworkBehaviour
     {
         public TeamFilter myTeamFilter;
 
@@ -26,14 +27,13 @@ namespace SeamstressMod.Seamstress.Components
         public void FixedUpdate()
         {
             pickupTimer -= Time.fixedDeltaTime;
-            if(pickupTimer <= 0 && !hasActivated)
+            if (pickupTimer <= 0 && !hasActivated)
             {
-                TeamAreaIndicator seamArea = Object.Instantiate(SeamstressAssets.seamstressTeamAreaIndicator, transform.GetParent());
-                seamArea.gameObject.transform.localScale = Vector3.one * 6f;
-                seamArea.teamFilter = myTeamFilter;
+                this.transform.root.Find("SeamstressTeamIndicator(Clone)").gameObject.SetActive(true);
                 hasActivated = true;
             }
         }
+
         public void OnTriggerStay(Collider collider)
         {
             if (!collider)

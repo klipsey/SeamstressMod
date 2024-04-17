@@ -12,6 +12,7 @@ using ThreeEyedGames;
 using SeamstressMod.Seamstress.Components;
 using static UnityEngine.ParticleSystem.PlaybackState;
 using HG;
+using UnityEngine.UIElements;
 
 namespace SeamstressMod.Seamstress.Content
 {
@@ -414,7 +415,10 @@ namespace SeamstressMod.Seamstress.Content
             slamEffect.AddComponent<NetworkIdentity>();
             SeamstressMod.Modules.Content.CreateAndAddEffectDef(slamEffect);
 
-            TeamAreaIndicator teamArea = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().transform.Find("ImpactEffect/TeamAreaIndicator, FullSphere").gameObject, "SeamstressTeamIndicator", false).GetComponent<TeamAreaIndicator>();
+            GameObject impThing = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ImpVoidspikeProjectile");
+
+            TeamAreaIndicator teamArea = PrefabAPI.InstantiateClone(impThing.transform.Find("ImpactEffect/TeamAreaIndicator, FullSphere").gameObject, "SeamstressTeamIndicator", false).GetComponent<TeamAreaIndicator>();
+            
             teamArea.teamMaterialPairs[1].sharedMaterial = new Material(teamArea.teamMaterialPairs[1].sharedMaterial);
             teamArea.teamMaterialPairs[1].sharedMaterial.SetColor("_TintColor", Color.red);
 
@@ -502,7 +506,7 @@ namespace SeamstressMod.Seamstress.Content
         
         private static GameObject CreateScissor(string modelName, string name)
         {
-            GameObject scissorPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone(name);
+            GameObject scissorPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone(name, true);
             Rigidbody rigid = scissorPrefab.GetComponent<Rigidbody>();
             rigid.useGravity = true;
             rigid.freezeRotation = true;
@@ -514,7 +518,13 @@ namespace SeamstressMod.Seamstress.Content
             sphereCollider.radius = 1f;
             sphereCollider.enabled = false;
 
-            Object.Destroy(scissorPrefab.transform.Find("ImpactEffect/TeamAreaIndicator, FullSphere").gameObject);
+            scissorPrefab.transform.Find("ImpactEffect/TeamAreaIndicator, FullSphere").gameObject.SetActive(false);
+
+            TeamAreaIndicator seamArea = UnityEngine.Object.Instantiate(seamstressTeamAreaIndicator, scissorPrefab.transform);
+            seamArea.gameObject.transform.localScale = Vector3.one * 6f;
+            seamArea.teamFilter = scissorPrefab.GetComponent<TeamFilter>();
+
+            seamArea.gameObject.SetActive(false);
 
             ProjectileImpactExplosion impactAlly = scissorPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorSlashDamageCoefficient;
@@ -539,13 +549,14 @@ namespace SeamstressMod.Seamstress.Content
             FuckImpact fuck = scissorPrefab.AddComponent<FuckImpact>();
             fuck.stickSoundString = scissorPrefab.GetComponent<ProjectileStickOnImpact>().stickSoundString;
             fuck.stickParticleSystem = scissorPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
-            fuck.ignoreCharacters = true;
+            fuck.ignoreCharacters = false;
             fuck.ignoreWorld = false;
             fuck.stickEvent = scissorPrefab.GetComponent<ProjectileStickOnImpact>().stickEvent;
             fuck.alignNormals = true;
             Object.Destroy(scissorPrefab.GetComponent<ProjectileStickOnImpact>());
 
             scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
+            scissorPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
 
             GameObject travelEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.transform.GetChild(4).gameObject.InstantiateClone("Spin", false);
             travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());

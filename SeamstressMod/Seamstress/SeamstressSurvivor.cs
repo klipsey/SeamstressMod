@@ -16,6 +16,7 @@ using R2API.Networking;
 using SeamstressMod.Seamstress.Components;
 using SeamstressMod.Seamstress.Content;
 using SeamstressMod.Seamstress.SkillStates;
+using UnityEngine.UIElements;
 
 namespace SeamstressMod.Seamstress
 {
@@ -747,7 +748,7 @@ namespace SeamstressMod.Seamstress
                     impGauge.transform.Find("LevelDisplayRoot").Find("ValueText").gameObject.SetActive(false);
                     impGauge.transform.Find("LevelDisplayRoot").Find("PrefixText").gameObject.SetActive(false);
 
-                    impGauge.transform.Find("ExpBarRoot").GetChild(0).GetComponent<Image>().enabled = true;
+                    impGauge.transform.Find("ExpBarRoot").GetChild(0).GetComponent<UnityEngine.UI.Image>().enabled = true;
 
                     impGauge.transform.Find("LevelDisplayRoot").GetComponent<RectTransform>().anchoredPosition = new Vector2(-12f, 0f);
 

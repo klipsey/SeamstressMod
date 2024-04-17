@@ -64,7 +64,7 @@ namespace SeamstressMod.Seamstress.Components
             characterMotor = GetComponent<CharacterMotor>();
             healthComponent = GetComponent<HealthComponent>();
             skillLocator = GetComponent<SkillLocator>();
-            charModel = gameObject.GetComponent<CharacterModel>();
+            charModel = GetComponent<ModelLocator>().modelTransform.GetComponent<CharacterModel>();
         }
         public void Start()
         {

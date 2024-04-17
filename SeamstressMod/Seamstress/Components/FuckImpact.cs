@@ -170,7 +170,7 @@ namespace SeamstressMod.Seamstress.Components
             if (base.enabled)
             {
                 TrySticking(impactInfo.collider, impactInfo.estimatedImpactNormal);
-                if(!hasFired)
+                if (!hasFired)
                 {
                     Vector3 effectPos = this.transform.localPosition;
                     RaycastHit raycastHit;
@@ -240,6 +240,7 @@ namespace SeamstressMod.Seamstress.Components
             if (gameObject)
             {
                 stickEvent.Invoke();
+                RpcFuckYou();
                 ParticleSystem[] array = stickParticleSystem;
                 for (int i = 0; i < array.Length; i++)
                 {
@@ -264,6 +265,11 @@ namespace SeamstressMod.Seamstress.Components
             return false;
         }
 
+        [ClientRpc]
+        public void RpcFuckYou()
+        {
+            stickEvent.Invoke();
+        }
         private void UpdateSticking()
         {
             bool flag = stuckTransform;
@@ -413,4 +419,3 @@ namespace SeamstressMod.Seamstress.Components
     }
 
 }
-
