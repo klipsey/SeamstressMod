@@ -56,6 +56,8 @@ namespace SeamstressMod.Seamstress.Content
         internal static GameObject sewnCdEffect;
         internal static GameObject sewnEffect;
 
+        internal static GameObject trailEffect;
+
         //Misc Prefabs
         internal static TeamAreaIndicator seamstressTeamAreaIndicator;
 
@@ -423,6 +425,22 @@ namespace SeamstressMod.Seamstress.Content
             teamArea.teamMaterialPairs[1].sharedMaterial.SetColor("_TintColor", Color.red);
 
             seamstressTeamAreaIndicator = teamArea;
+
+            //Add this to her hands during insatiable?
+            GameObject obj = new GameObject();
+            trailEffect = obj.InstantiateClone("SeamstressTrail", false);
+            TrailRenderer trail = trailEffect.AddComponent<TrailRenderer>();
+            trail.startWidth = 5f;
+            trail.endWidth = 0f;
+            trail.widthMultiplier = 1f;
+            trail.time = 0.3f;
+            trail.emitting = true;
+            trail.numCornerVertices = 0;
+            trail.numCapVertices = 0;
+            trail.material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion();
+            trail.startColor = Color.red;
+            trail.endColor = Color.red;
+            trail.alignment = LineAlignment.TransformZ;
         }
 
         #endregion
@@ -523,8 +541,9 @@ namespace SeamstressMod.Seamstress.Content
             TeamAreaIndicator seamArea = UnityEngine.Object.Instantiate(seamstressTeamAreaIndicator, scissorPrefab.transform);
             seamArea.gameObject.transform.localScale = Vector3.one * 6f;
             seamArea.teamFilter = scissorPrefab.GetComponent<TeamFilter>();
-
             seamArea.gameObject.SetActive(false);
+
+            Object.Instantiate(trailEffect, scissorPrefab.transform);
 
             ProjectileImpactExplosion impactAlly = scissorPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorSlashDamageCoefficient;
@@ -558,12 +577,6 @@ namespace SeamstressMod.Seamstress.Content
             scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
             scissorPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
 
-            GameObject travelEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.transform.GetChild(4).gameObject.InstantiateClone("Spin", false);
-            travelEffect.transform.GetChild(0).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
-            travelEffect.transform.GetChild(1).gameObject.GetComponent<TrailRenderer>().material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion());
-            travelEffect.transform.GetChild(2).gameObject.SetActive(false);
-            travelEffect.transform.GetChild(3).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", theRed);
-
             ProjectileController scissorController = scissorPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
             if (_assetBundle.LoadAsset<GameObject>(modelName) != null)
@@ -573,8 +586,6 @@ namespace SeamstressMod.Seamstress.Content
             if (!scissorController.ghostPrefab.GetComponent<VFXAttributes>()) scissorController.ghostPrefab.AddComponent<VFXAttributes>();
             scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
             scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Medium;
-
-            if (!scissorController.ghostPrefab.transform.Find("Spin")) travelEffect.transform.SetParent(scissorController.ghostPrefab.transform);
 
             SeamstressMod.Modules.Content.AddProjectilePrefab(scissorPrefab);
 

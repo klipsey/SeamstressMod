@@ -30,13 +30,43 @@ namespace SeamstressMod.Seamstress.Content
              + "< ! > Glimpse of Corruption is a great way to boost your damage but be wary of where you leave your Heart." + Environment.NewLine + Environment.NewLine
              + "< ! > Use and retrieve your Sentient weapon often to keep up a balance of damage and mobility." + Environment.NewLine + Environment.NewLine;
 
+            /*
+             * its not really shown yet in the anims but the panel on the top of the robe/heart area opens up to her artificial heart. 
+             * the lore is something along the lines of her being a human who was plagued with illness during her life forcing her to have an artificial heart. 
+             * while traveling on a civilian ship, the ship was intercepted by imps attempting to escape petrichor V causing it 
+             * to be sent into the red plane where everyone in the ship either died immediately to the dimension or killed off by imps. 
+             * Due to her heart being artificial, she didnt immediately die but instead got corrupted by the plane instead. I was thinking that 
+             * maybe she IS killed in the plane by another survivor with her heart corrupting her but idk about that yet. For the scissors all 
+             * i know is that they are sentient but i dont really have anything for why they would be 
+            */
+            string lore = "Pale skin and fatigue. Signs of a disease spreading within children of the high court. How unfortunate they are." +
+                Environment.NewLine +
+                Environment.NewLine +
+                "A sickly infant, frail and weak, cry as her parents do too. A tragic fate for these aging nobles as she is their only heir. With a shaky future, her <style=cIsHealth>heart</style> still beats." +
+                Environment.NewLine +
+                Environment.NewLine +
+                "The disease is curable with an artificial heart but the operation cannot be done on those who haven't reached adulthood. Only few are lucky enough to fall within that timeframe." +
+                Environment.NewLine +
+                Environment.NewLine +
+                "A bedridden princess, her health is fading. She holds on for dear life. She needs to survive one more week. Hanging on by a thread, her <color=#292525>heart</color> still beats." +
+                Environment.NewLine +
+                Environment.NewLine +
+                "Although an artifical heart extends their lifespan, their day to day remains the same. Requiring constant maintenance with risks of malfunctioning, venturing far from home could spell death. " +
+                "Many take up slower hobbies like baking and sewing but not everyone is content with their lives." +
+                Environment.NewLine +
+                Environment.NewLine +
+                "A restless noble, with robotic vitality. Her <style=cIsUtility>heart</style> still beats. " +
+                Environment.NewLine +
+                Environment.NewLine +
+                "Many who run away are given a reality check. The galaxy outside of the high court isn't the wonderland depicted in books. It's more akin to a tragic fairytale. " +
+                "A corrupted creature, on borrowed time. Her <color=#9B3737>heart</color> still beats.";
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
-
+            
             Language.Add(prefix + "NAME", "Seamstress");
             Language.Add(prefix + "DESCRIPTION", desc);
             Language.Add(prefix + "SUBTITLE", "The Tattered Maiden");
-            Language.Add(prefix + "LORE", "Durrrr");
+            Language.Add(prefix + "LORE", lore);
             Language.Add(prefix + "OUTRO_FLAVOR", outro);
             Language.Add(prefix + "OUTRO_FAILURE", outroFailure);
 

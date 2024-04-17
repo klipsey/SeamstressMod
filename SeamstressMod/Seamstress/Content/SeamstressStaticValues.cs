@@ -32,8 +32,6 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float healConversion = 0.001f;
 
-        internal const float needleGainInterval = 1f;
-
         internal const int maxNeedleAmount = 5;
 
         internal const float insatiableDuration = 6f;
@@ -42,7 +40,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float parryDamageCoefficient = 4f;
 
-        internal const float needleDamageCoefficient = 0.6f;
+        internal const float needleDamageCoefficient = 0.8f;
 
         internal const float sewAltDamageCoefficient = 1.5f;
 
