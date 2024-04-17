@@ -6,10 +6,11 @@ using RoR2.Projectile;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using SeamstressMod.Seamstress.Content;
+using System;
 
 namespace SeamstressMod.Seamstress.Components
 {
-    public class PickupFilter : MonoBehaviour
+    public class PickupFilter : NetworkBehaviour
     {
         public TeamFilter myTeamFilter;
 
@@ -19,13 +20,21 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool hasFired;
 
-        private float pickupTimer = 0.75f;
+        private bool hasActivated = false;
+
+        private float pickupTimer = 5f;
 
         public void FixedUpdate()
         {
             pickupTimer -= Time.fixedDeltaTime;
+            if (pickupTimer <= 0 && !hasActivated)
+            {
+                this.transform.root.Find("SeamstressTeamIndicator(Clone)").gameObject.SetActive(true);
+                hasActivated = true;
+            }
         }
-        public void OnTriggerEnter(Collider collider)
+
+        public void OnTriggerStay(Collider collider)
         {
             if (!collider)
             {
@@ -40,14 +49,14 @@ namespace SeamstressMod.Seamstress.Components
             if (healthComponent)
             {
                 TeamComponent component2 = healthComponent.GetComponent<TeamComponent>();
-                if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer < 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+                if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer <= 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
-                    string hi = gameObject.transform.root.name;
-                    if (hi == "ScissorR(Clone)")
+                    string scissorName = gameObject.transform.root.name;
+                    if (scissorName == "ScissorR(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = true;
                     }
-                    else if (hi == "ScissorL(Clone)")
+                    else if (scissorName == "ScissorL(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = false;
                     }

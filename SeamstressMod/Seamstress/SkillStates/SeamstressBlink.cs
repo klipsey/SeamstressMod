@@ -24,7 +24,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public static float duration = 0.2f;
 
-        private float speedCoefficient;
+        protected float speedCoefficient;
 
         public static string beginSoundString = "Play_imp_attack_blink";
 
@@ -69,7 +69,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             if (characterMotor.isGrounded) characterMotor.velocity = Vector3.zero;
             characterDirection.moveVector = blinkVector;
-            CreateBlinkEffect(base.characterBody.corePosition);
+            CreateBlinkEffect(base.characterBody.corePosition, true);
             speedCoefficient = 0.3f * characterBody.jumpPower * Mathf.Clamp(characterBody.moveSpeed, 1f, 5f);
             gameObject.layer = LayerIndex.fakeActor.intVal;
             characterMotor.Motor.RebuildCollidableLayers();
@@ -87,22 +87,21 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             return Vector3.Normalize(Quaternion.AngleAxis(num, axis) * inputBank.moveVector);
         }
-        protected void CreateBlinkEffect(Vector3 origin)
+        protected void CreateBlinkEffect(Vector3 origin, bool first)
         {
-            if (!split)
+            if (blinkPrefab)
             {
-                if (blinkPrefab)
+                EffectData effectData = new EffectData();
+                effectData.rotation = Util.QuaternionSafeLookRotation(blinkVector);
+                effectData.origin = origin;
+                effectData.scale = 0.15f;
+                EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: false);
+                effectData.scale = 3f;
+                if(!first)
                 {
-                    EffectData effectData = new EffectData();
-                    effectData.rotation = Util.QuaternionSafeLookRotation(blinkVector);
-                    effectData.origin = origin;
-                    effectData.scale = 0.15f;
-                    EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: false);
-                    effectData.scale = 3f;
                     EffectManager.SpawnEffect(dashPrefab, effectData, transmit: false);
                 }
             }
-            else split = false;
         }
 
         public override void FixedUpdate()
@@ -124,7 +123,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             characterMotor.Motor.RebuildCollidableLayers();
             if (!outer.destroying)
             {
-                CreateBlinkEffect(base.characterBody.corePosition);
+                CreateBlinkEffect(base.characterBody.corePosition, false);
                 modelTransform = GetModelTransform();
                 if (modelTransform && SeamstressAssets.destealthMaterial)
                 {
