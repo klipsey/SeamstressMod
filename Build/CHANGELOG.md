@@ -2,7 +2,7 @@
 
 - No model yet. I've been sick and working on smaller stuff
 - Nerfed dash to always be tied to cooldown (0.5 seconds)
-- Time it take to pick up Scissors increased to 5 seconds
+- Time it takes to pick up Scissors increased to 5 seconds
 - Scissors now form a pickup circle after 5 seconds
 - Scissors now pickup if youre in the circle when it activates (no more having to leave and enter it)
 - Networked the pickup circle (THE VANILLA IMPSPIKE ISNT NETWORKED?????)
