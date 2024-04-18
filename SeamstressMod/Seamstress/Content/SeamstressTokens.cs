@@ -42,24 +42,29 @@ namespace SeamstressMod.Seamstress.Content
             string lore = "Pale skin and fatigue. Signs of a disease spreading within children of the high court. How unfortunate they are." +
                 Environment.NewLine +
                 Environment.NewLine +
-                "A sickly infant, frail and weak, cry as her parents do too. A tragic fate for these aging nobles as she is their only heir. With a shaky future, her <style=cIsHealth>heart</style> still beats." +
+                "A sickly infant, frail and weak, cries as her parents do too. A tragic fate for these aging nobles as she is their only heir. With a shaky future, her <style=cIsHealth>heart</style> still beats." +
                 Environment.NewLine +
                 Environment.NewLine +
                 "The disease is curable with an artificial heart but the operation cannot be done on those who haven't reached adulthood. Only few are lucky enough to fall within that timeframe." +
                 Environment.NewLine +
                 Environment.NewLine +
-                "A bedridden princess, her health is fading. She holds on for dear life. She needs to survive one more week. Hanging on by a thread, her <color=#292525>heart</color> still beats." +
+                "A bedridden teen, her health quickly fading. She holds on for dear life. She needs to survive one more week. Hanging on by a thread, her <color=#292525>heart</color> still beats." +
                 Environment.NewLine +
                 Environment.NewLine +
-                "Although an artifical heart extends their lifespan, their day to day remains the same. Requiring constant maintenance with risks of malfunctioning, venturing far from home could spell death. " +
+                "Although an artificial heart cures the disease, one's day-to-day remains the same. With frequent maintenance and risks of malfunctioning, venturing far from home could spell death. " +
                 "Many take up slower hobbies like baking and sewing but not everyone is content with their lives." +
                 Environment.NewLine +
                 Environment.NewLine +
-                "A restless noble, with robotic vitality. Her <style=cIsUtility>heart</style> still beats. " +
+                "A restless seamstress, with robotic vitality, despises the walls she resides in. She wants nothing to do with her nobility. It ties her down to a monotonous life. " +
+                "As darkness settles, she escapes her quarters filled with adrenaline as her <style=cIsUtility>heart</style> still beats. " +
                 Environment.NewLine +
                 Environment.NewLine +
                 "Many who run away are given a reality check. The galaxy outside of the high court isn't the wonderland depicted in books. It's more akin to a tragic fairytale. " +
-                "A corrupted creature, on borrowed time. Her <color=#9B3737>heart</color> still beats.";
+                Environment.NewLine +
+                Environment.NewLine +
+                "A corrupted creature, on borrowed time. How did it go so wrong? The ship she boarded -swallowed by a rift from imps who desired the same escape as her. " +
+                "The imps weren't hostile but instead filled with fear. As a wave of blood blended with the red-painted sky, every human and imp alike was cut clean. " +
+                "A whisper, a target, a new life. Her <color=#9B3737>heart</color> still beats.";
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
             

@@ -7,6 +7,7 @@
 - Scissors now pickup if youre in the circle when it activates (no more having to leave and enter it)
 - Networked the pickup circle (THE VANILLA IMPSPIKE ISNT NETWORKED?????)
 - Buffed lifesteal during insatiable
+- Logbook added
 
 # 0.2.8
 

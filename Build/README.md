@@ -12,7 +12,7 @@
 
 # Overview
 
-The Seamstress is a mobile imp survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. Managing her needles, weapons, and health are all apart of her complex kit.
+The Seamstress is a half-imp survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. Managing her needles, weapons, and health are all apart of her complex kit.
 
 # Skills
 

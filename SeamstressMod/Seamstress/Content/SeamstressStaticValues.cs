@@ -26,7 +26,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float blinkCooldown = 0.5f;
 
-        internal const float insatiableLifesSteal = 0.5f;
+        internal const float insatiableLifesSteal = 0.4f;
 
         internal const float clipLifeSteal = 0.25f;
 
