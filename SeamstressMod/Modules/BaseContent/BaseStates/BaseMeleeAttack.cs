@@ -241,16 +241,10 @@ namespace SeamstressMod.Modules.BaseStates
                     {
                         hitStopDuration = 0.1f;
                         attack = new OverlapAttack();
-                        attack.damageType = damageType;
-                        foreach(DamageAPI.ModdedDamageType i in moddedDamageTypeHolder)
-                        {
-                            attack.AddModdedDamageType(i);
-                        }
-                        moddedDamageTypeHolder.Clear();
                         attack.attacker = gameObject;
                         attack.inflictor = gameObject;
                         attack.teamIndex = GetTeam();
-                        if (!isFlatDamage) attack.damage = damageTotal * base.damageStat;
+                        if (!isFlatDamage) attack.damage = SeamstressStaticValues.scissorSlashDamageCoefficient * base.damageStat;
                         else attack.damage = damageTotal;
                         attack.procCoefficient = procCoefficient;
                         attack.hitEffectPrefab = hitEffectPrefab;
@@ -259,8 +253,13 @@ namespace SeamstressMod.Modules.BaseStates
                         attack.hitBoxGroup = FindHitBoxGroup(hitboxGroupName);
                         attack.isCrit = RollCrit();
                         attack.impactSound = impactSound;
-                        attack.damage = SeamstressStaticValues.scissorDamageCoefficient * base.damageStat;
-                        if(attack.HasModdedDamageType(DamageTypes.NoScissors)) attack.RemoveModdedDamageType(DamageTypes.NoScissors);
+                        attack.damageType = damageType;
+                        moddedDamageTypeHolder.Clear();
+                        foreach (DamageAPI.ModdedDamageType i in moddedDamageTypeHolder)
+                        {
+                            attack.AddModdedDamageType(i);
+                        }
+                        if (attack.HasModdedDamageType(DamageTypes.NoScissors)) attack.RemoveModdedDamageType(DamageTypes.NoScissors);
                         attack.pushAwayForce = 600f;
                         attackRecoil = 0.2f;
                         swingSoundString = "Play_imp_attack";
