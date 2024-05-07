@@ -1,3 +1,7 @@
+# 0.5.1
+
+- Read me
+
 # 0.5.0 
 
 - Model no animations

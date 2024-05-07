@@ -1,9 +1,9 @@
 {
     "name": "Seamstress",
     "author": "tsuyoikenko",
-    "version_number": "0.5.0",
+    "version_number": "0.5.1",
     "website_url": "",
-    "description": "Adds the Seamstress, a half-imp survivor that manages her health for damage. Multiplayer compatible. MODEL WIP",
+    "description": "Adds the Seamstress, a half-imp survivor that manages her health for damage. Multiplayer compatible. Animations WIP",
     "dependencies": [
         "bbepis-BepInExPack-5.4.1905",
         "RiskofThunder-R2API_Core-5.0.3",

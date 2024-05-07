@@ -6,9 +6,15 @@
 
 ## Model Previews
 
-## [![](https://i.postimg.cc/gJ7r3rwH/seamstress.png)]()
+[![](https://i.postimg.cc/26jwnxxV/Seamstress-Hi.png)]()
+
+[![](https://i.postimg.cc/d0yJgnDr/raven.png)]()
+
+[![](https://i.postimg.cc/rm605G25/ravendgb.png)]()
+[![](https://i.postimg.cc/htjdnP0Q/asdsadsa.png)]()
 
 [![](https://i.postimg.cc/zD9FrGdh/Seamstress-MADISON.png)]()
+
 
 # Overview
 
@@ -79,7 +85,7 @@ Contact me on Discord: https://discord.gg/3NaMEsvYeD
 
 # Credits
 
-tsuyoikenko - Code and (eventually) the base model/animations.
+tsuyoikenko - Code, skill icons, majority of models, sound, and animations.
 
 hkryu - Icon and art https://www.instagram.com/hkryu_/ https://twitter.com/___hkryu
 
@@ -87,7 +93,7 @@ TheTimeSweeper - Incredible new Henry template and responsible for fixing like h
 
 rob - Creator of the glorious Henry template. Also, his code for other survivors helped me get started.
 
-Gemo - Eclipse/Monsoon skin model (Raven) (Will be added much later).
+Gemo - Eclipse skin model (Raven)
 
 Feilong - Seamstress skin designer (Raven) and permission to use the assets.
 
