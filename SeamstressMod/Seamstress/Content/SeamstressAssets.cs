@@ -74,7 +74,7 @@ namespace SeamstressMod.Seamstress.Content
         internal static Material destealthMaterial;
         internal static Material insatiableOverlayMat;
         internal static Material parryMat;
-        internal static Material crocoMat;
+        internal static Material commandoMat;
 
         //Networked Hit Sounds
         internal static NetworkSoundEventDef scissorsHitSoundEvent;
@@ -656,12 +656,12 @@ namespace SeamstressMod.Seamstress.Content
         }
         public static Material CreateMaterial(string materialName, float emission, Color emissionColor, float normalStrength)
         {
-            if (!crocoMat) crocoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
+            if (!commandoMat) commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
 
-            Material mat = UnityEngine.Object.Instantiate<Material>(crocoMat);
-            Material tempMat = _assetBundle.LoadAsset<Material>(materialName);
+            Material mat = UnityEngine.Object.Instantiate<Material>(commandoMat);
+            Material tempMat = SeamstressAssets._assetBundle.LoadAsset<Material>(materialName);
 
-            if (!tempMat) return crocoMat;
+            if (!tempMat) return commandoMat;
 
             mat.name = materialName;
             mat.SetColor("_Color", tempMat.GetColor("_Color"));
@@ -676,17 +676,17 @@ namespace SeamstressMod.Seamstress.Content
 
         public static Material CreateMaterial(string materialName)
         {
-            return CreateMaterial(materialName, 0f);
+            return SeamstressAssets.CreateMaterial(materialName, 0f);
         }
 
         public static Material CreateMaterial(string materialName, float emission)
         {
-            return CreateMaterial(materialName, emission, Color.black);
+            return SeamstressAssets.CreateMaterial(materialName, emission, Color.black);
         }
 
         public static Material CreateMaterial(string materialName, float emission, Color emissionColor)
         {
-            return CreateMaterial(materialName, emission, emissionColor, 0f);
+            return SeamstressAssets.CreateMaterial(materialName, emission, emissionColor, 0f);
         }
         #endregion
     }

@@ -2,7 +2,7 @@
 
 - BETA
 - Multiplayer Compatible
-- Currently working on animations. Model not imported.
+- Currently working on animations
 
 ## Model Previews
 

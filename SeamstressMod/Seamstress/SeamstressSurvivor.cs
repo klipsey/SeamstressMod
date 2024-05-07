@@ -24,8 +24,8 @@ namespace SeamstressMod.Seamstress
         public override string assetBundleName => "seamstressassets";
         public override string bodyName => "SeamstressBody"; 
         public override string masterName => "SeamstressMonsterMaster"; 
-        public override string modelPrefabName => "mdlHenry";
-        public override string displayPrefabName => "HenryDisplay";
+        public override string modelPrefabName => "mdlSeamstress";
+        public override string displayPrefabName => "SeamstressDisplay";
 
         public const string SEAMSTRESS_PREFIX = SeamstressPlugin.DEVELOPER_PREFIX + "_SEAMSTRESS_";
         public override string survivorTokenPrefix => SEAMSTRESS_PREFIX;
@@ -40,7 +40,7 @@ namespace SeamstressMod.Seamstress
             bodyNameToken = SEAMSTRESS_PREFIX + "NAME",
             subtitleNameToken = SEAMSTRESS_PREFIX + "SUBTITLE",
 
-            characterPortrait = assetBundle.LoadAsset<Texture>("texHenryIcon"),
+            characterPortrait = assetBundle.LoadAsset<Texture>("ravenIcon"),
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
@@ -61,20 +61,17 @@ namespace SeamstressMod.Seamstress
 
         public override CustomRendererInfo[] customRendererInfos => new CustomRendererInfo[]
         {
-
-                new CustomRendererInfo
-                {
-                    childName = "SwordModel",
-                    material = assetBundle.LoadMaterial("matHenry"),
-                },
-                new CustomRendererInfo
-                {
-                    childName = "GunModel",
-                },
                 new CustomRendererInfo
                 {
                     childName = "Model",
-                }
+                    material = assetBundle.LoadMaterial("matSeamstress"),
+
+                },
+                new CustomRendererInfo
+                {
+                    childName = "ScissorModel",
+                    material = assetBundle.LoadMaterial("matSeamstress"),
+                },
 
         };
 
@@ -514,37 +511,32 @@ namespace SeamstressMod.Seamstress
             //pass in meshes as they are named in your assetbundle
             //currently not needed as with only 1 skin they will simply take the default meshes
             //uncomment this when you have another skin
-            //defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
-            //    "meshHenrySword",
-            //    "meshHenryGun",
-            //    "meshHenry");
+            defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+                "meshSeamstress",
+                "meshScissors");
 
             //add new skindef to our list of skindefs. this is what we'll be passing to the SkinController
             skins.Add(defaultSkin);
             #endregion
-
             //uncomment this when you have a mastery skin
             #region MasterySkin
-
+            
             ////creating a new skindef as we did before
-            //SkinDef masterySkin = Modules.Skins.CreateSkinDef(HENRY_PREFIX + "MASTERY_SKIN_NAME",
-            //    assetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
-            //    defaultRendererinfos,
-            //    prefabCharacterModel.gameObject,
-            //    HenryUnlockables.masterySkinUnlockableDef);
+            SkinDef masterySkin = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
+                assetBundle.LoadAsset<Sprite>("texVergilAchievement"),
+                defaultRendererinfos,
+                prefabCharacterModel.gameObject);
 
             ////adding the mesh replacements as above. 
             ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
-            //masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
-            //    "meshHenrySwordAlt",
-            //    null,//no gun mesh replacement. use same gun mesh
-            //    "meshHenryAlt");
+            masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+                "meshPrincess",
+                "meshPrincessSword");
 
             ////masterySkin has a new set of RendererInfos (based on default rendererinfos)
             ////you can simply access the RendererInfos' materials and set them to the new materials for your skin.
-            //masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
-            //masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
-            //masterySkin.rendererInfos[2].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matPrincessBlue");
+            masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matPrincessSword");
 
             ////here's a barebones example of using gameobjectactivations that could probably be streamlined or rewritten entirely, truthfully, but it works
             //masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
@@ -556,9 +548,49 @@ namespace SeamstressMod.Seamstress
             //    }
             //};
             ////simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
+            ///
+            SkinDef masterySkin2 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
+                assetBundle.LoadAsset<Sprite>("texDanteAchievement"),
+                defaultRendererinfos,
+                prefabCharacterModel.gameObject);
 
-            //skins.Add(masterySkin);
+            masterySkin2.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+                "meshPrincess",
+                "meshPrincessSword");
 
+            masterySkin2.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matPrincessRed");
+            masterySkin2.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matPrincessSwordAlt");
+
+            SkinDef masterySkin3 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
+                assetBundle.LoadAsset<Sprite>("texDanteAchievement"),
+                defaultRendererinfos,
+                prefabCharacterModel.gameObject);
+
+            masterySkin3.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+                "RavenBody",
+                "ShadowClaws");
+
+            masterySkin3.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matRaven");
+            masterySkin3.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHands");
+
+            SkinDef masterySkin4 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
+            assetBundle.LoadAsset<Sprite>("texDanteAchievement"),
+            defaultRendererinfos,
+            prefabCharacterModel.gameObject);
+
+            masterySkin4.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+                "RavenBodyAlt",
+                "ShadowClaws");
+
+            masterySkin4.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matRavenAlt");
+            masterySkin4.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHands");
+
+            skins.Add(masterySkin);
+            skins.Add(masterySkin2);
+            skins.Add(masterySkin3);
+            skins.Add(masterySkin4);
+
+            
             #endregion
 
             skinController.skins = skins.ToArray();

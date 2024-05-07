@@ -72,6 +72,11 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override void OnExit()
         {
+            RefreshState();
+            if (!scissorLeft && !scissorRight) 
+            {
+                characterBody.GetComponent<SeamstressController>().ReactivateScissor("meshScissors", false);
+            }
             base.OnExit();
         }
 

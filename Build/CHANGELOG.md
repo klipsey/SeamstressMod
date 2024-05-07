@@ -1,3 +1,8 @@
+# 0.5.0 
+
+- Model no animations
+- Icon is Raven cause im lazy
+
 # 0.2.9
 
 - No model yet. I've been sick and working on smaller stuff

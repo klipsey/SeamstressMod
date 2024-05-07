@@ -9,16 +9,14 @@ using R2API.Networking.Interfaces;
 
 namespace SeamstressMod.Seamstress.Components
 {
-    public class SeamstressController : NetworkBehaviour
+    public class SeamstressController : MonoBehaviour
     {
         private CharacterBody characterBody;
-
+        private ChildLocator childLocator;
         private CharacterMotor characterMotor;
-
         private HealthComponent healthComponent;
-
         private SkillLocator skillLocator;
-
+        private Animator animator;
         private GameObject insatiableEndPrefab = SeamstressAssets.instatiableEndEffect;
 
         public static GameObject supaPrefab = SeamstressAssets.blinkEffect;
@@ -66,6 +64,8 @@ namespace SeamstressMod.Seamstress.Components
             characterMotor = GetComponent<CharacterMotor>();
             healthComponent = GetComponent<HealthComponent>();
             skillLocator = GetComponent<SkillLocator>();
+            ModelLocator modelLocator = this.GetComponent<ModelLocator>();
+            childLocator = modelLocator.modelBaseTransform.GetComponentInChildren<ChildLocator>();
         }
         public void Start()
         {
@@ -87,6 +87,19 @@ namespace SeamstressMod.Seamstress.Components
             CreateBlinkEffect(heldOrigin);
             InsatiableSound();
             IsInsatiable();
+        }
+        public void ReactivateScissor(string scissor, bool activate)
+        {
+            if (scissor == "meshScissors" && activate == true)
+            {
+                childLocator.FindChild("ScissorModel").gameObject.SetActive(true);
+
+            }
+            else if (scissor == "meshScissors" && activate == false)
+            {
+                childLocator.FindChild("ScissorModel").gameObject.SetActive(false);
+
+            }
         }
         private void RefundUtil()
         {

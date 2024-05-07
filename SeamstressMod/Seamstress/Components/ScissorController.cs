@@ -48,6 +48,7 @@ namespace SeamstressMod.Seamstress.Components
             if (hasAuthority && characterBody.skillLocator.special.stock < characterBody.skillLocator.special.maxStock)
             {
                 characterBody.skillLocator.special.stock++;
+                characterBody.GetComponent<SeamstressController>().ReactivateScissor("meshScissors", true);
                 if (characterBody.skillLocator.special.stock == characterBody.skillLocator.special.maxStock)
                 {
                     characterBody.skillLocator.special.rechargeStopwatch = 0f;
