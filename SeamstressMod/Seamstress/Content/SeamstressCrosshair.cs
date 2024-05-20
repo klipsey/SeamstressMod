@@ -13,11 +13,8 @@ namespace SeamstressMod.Seamstress.Content
     public static class SeamstressCrosshair
     {
         internal static GameObject seamstressCrosshair;
-
-        private static AssetBundle _assetBundle;
         public static void Init(AssetBundle assetBundle)
         {
-            _assetBundle = assetBundle;
             CreateCrosshair();
         }
 

@@ -19,7 +19,7 @@ namespace SeamstressMod.Seamstress.Content
     public static class SeamstressAssets
     {
         //AssetBundle
-        internal static AssetBundle _assetBundle;
+        internal static AssetBundle mainAssetBundle;
 
         //Shader
         internal static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
@@ -57,6 +57,9 @@ namespace SeamstressMod.Seamstress.Content
         internal static GameObject sewnEffect;
 
         internal static GameObject trailEffect;
+
+        internal static GameObject bloodExplosionEffect;
+        internal static GameObject bloodSpurtEffect;
 
         //Misc Prefabs
         internal static TeamAreaIndicator seamstressTeamAreaIndicator;
@@ -98,8 +101,11 @@ namespace SeamstressMod.Seamstress.Content
         public static void Init(AssetBundle assetBundle)
         {
 
-            _assetBundle = assetBundle;
+            mainAssetBundle = assetBundle;
+        }
 
+        public static void InitAssets()
+        {
             CreateMaterials();
 
             CreateEffects();
@@ -207,6 +213,28 @@ namespace SeamstressMod.Seamstress.Content
             spawnPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossDeathEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             spawnPrefab.AddComponent<NetworkIdentity>();
 
+            bloodExplosionEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("DriverBloodExplosion", false);
+
+            Material bloodMat = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matBloodHumanLarge.mat").WaitForCompletion();
+            Material bloodMat2 = Addressables.LoadAssetAsync<Material>("RoR2/Base/moon2/matBloodSiphon.mat").WaitForCompletion();
+
+
+            bloodExplosionEffect.transform.Find("Particles/LongLifeNoiseTrails").GetComponent<ParticleSystemRenderer>().material = bloodMat;
+            bloodExplosionEffect.transform.Find("Particles/LongLifeNoiseTrails, Bright").GetComponent<ParticleSystemRenderer>().material = bloodMat;
+            bloodExplosionEffect.transform.Find("Particles/Dash").GetComponent<ParticleSystemRenderer>().material = bloodMat;
+            bloodExplosionEffect.transform.Find("Particles/Dash, Bright").GetComponent<ParticleSystemRenderer>().material = bloodMat;
+            bloodExplosionEffect.transform.Find("Particles/DashRings").GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/moon2/matBloodSiphon.mat").WaitForCompletion();
+            bloodExplosionEffect.GetComponentInChildren<Light>().gameObject.SetActive(false);
+
+            bloodExplosionEffect.GetComponentInChildren<PostProcessVolume>().sharedProfile = Addressables.LoadAssetAsync<PostProcessProfile>("RoR2/Base/title/ppLocalGold.asset").WaitForCompletion();
+
+            Modules.Content.CreateAndAddEffectDef(bloodExplosionEffect);
+
+            bloodSpurtEffect = mainAssetBundle.LoadAsset<GameObject>("BloodSpurtEffect");
+
+            bloodSpurtEffect.transform.Find("Blood").GetComponent<ParticleSystemRenderer>().material = bloodMat2;
+            bloodSpurtEffect.transform.Find("Trails").GetComponent<ParticleSystemRenderer>().trailMaterial = bloodMat2;
+
             stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
             stitchEffect.AddComponent<NetworkIdentity>();
             stitchEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", coolRed);
@@ -235,7 +263,7 @@ namespace SeamstressMod.Seamstress.Content
             Object.DestroyImmediate(telekinesisTracker.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
             SpriteRenderer balls = telekinesisTracker.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
             balls.SetMaterial(component);
-            texCanGrab = _assetBundle.LoadAsset<Sprite>("Grab");
+            texCanGrab = mainAssetBundle.LoadAsset<Sprite>("Grab");
             balls.sprite = texCanGrab;
             telekinesisTracker.transform.GetChild(1).gameObject.SetActive(false);
             Sprite sprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/UI/texCrosshair2.png").WaitForCompletion();
@@ -251,7 +279,7 @@ namespace SeamstressMod.Seamstress.Content
             Object.DestroyImmediate(telekinesisCdTracker.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
             balls = telekinesisCdTracker.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
             balls.SetMaterial(component);
-            texCanGrab = _assetBundle.LoadAsset<Sprite>("NoGrab");
+            texCanGrab = mainAssetBundle.LoadAsset<Sprite>("NoGrab");
             balls.sprite = texCanGrab;
             telekinesisCdTracker.transform.GetChild(1).gameObject.SetActive(false);
             sprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/UI/texCrosshair2.png").WaitForCompletion();
@@ -579,8 +607,8 @@ namespace SeamstressMod.Seamstress.Content
 
             ProjectileController scissorController = scissorPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
-            if (_assetBundle.LoadAsset<GameObject>(modelName) != null)
-                scissorController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab(modelName);
+            if (mainAssetBundle.LoadAsset<GameObject>(modelName) != null)
+                scissorController.ghostPrefab = mainAssetBundle.CreateProjectileGhostPrefab(modelName);
             if (!scissorController.ghostPrefab.GetComponent<NetworkIdentity>())
                 scissorController.ghostPrefab.AddComponent<NetworkIdentity>();
             if (!scissorController.ghostPrefab.GetComponent<VFXAttributes>()) scissorController.ghostPrefab.AddComponent<VFXAttributes>();
@@ -659,7 +687,7 @@ namespace SeamstressMod.Seamstress.Content
             if (!commandoMat) commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
 
             Material mat = UnityEngine.Object.Instantiate<Material>(commandoMat);
-            Material tempMat = SeamstressAssets._assetBundle.LoadAsset<Material>(materialName);
+            Material tempMat = SeamstressAssets.mainAssetBundle.LoadAsset<Material>(materialName);
 
             if (!tempMat) return commandoMat;
 

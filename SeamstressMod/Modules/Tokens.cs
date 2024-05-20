@@ -8,31 +8,34 @@ namespace SeamstressMod.Modules
 
         public const string sentiencePrefix = "<color=#9B3737>Sentient</color>";
 
+        public const string reachPrefix = "<color=#9B3737>Reach</color>";
+
+        public const string symbioticPrefix = "<color=#9B3737>Symbiotic</color>";
+
         public const string needlePrefix = "<color=#9B3737>Needle</color>";
 
-        public const string insatiablePrefix = "<style=cIsUtility>Insatiable</style>";
+        public const string insatiablePrefix = "<color=#9B3737>Insatiable</color>";
+
+        public const string crushPrefix = "<color=#9B3737>Crush</color>";
 
         public static string agileKeyword = KeywordText("Agile", "The skill can be used while sprinting.");
 
-        public static string needleKeyword = KeywordText("Needle", $"Gain <color=#9B3737>Needles</color> by picking up your " 
-            + sentiencePrefix + " weapon or when landing <color=#9B3737>Sentient</color> attacks without your weapon.");
+        public static string crushKeyword = KeywordText("Crush", $"Deal bonus damage to an enemy based on their velocity and <style=cIsHealth>max health</style>.");
 
-        public static string manipulateKeyword = KeywordText("Manipulate", $"Deal bonus damage to an enemy based on their velocity and <style=cIsHealth>max health</style>.");
-
-        public static string sentienceKeyword = KeywordText("Sentient", "Your <color=#9B3737>Sentient</color> weapon. Gain <style=cIsDamage>attack speed</style> and " +
+        public static string symbioticKeyward = KeywordText("Symbiotic", "Gain <style=cIsDamage>attack speed</style> and " +
             "<style=cIsUtility>move speed</style> for each stock missing.");
 
-        public static string sentienceRangeKeyword = KeywordText("Sentient", "When your " + sentiencePrefix + " weapon is available increase the range of this " +
+        public static string reachKeyword = KeywordText("Reach", "When your " + symbioticPrefix + " weapon is available increase the range of this " +
             "attack.");
 
-        public static string sentienceAttackKeyword = KeywordText("Sentient", $"When your " + sentiencePrefix + $" weapon is available hit for an additional strike " +
-            $"dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}%</style> damage.");
+        public static string sentienceAttackKeyword = KeywordText("Sentient", $"When your " + symbioticPrefix + $" weapon is available hit for an additional strike " +
+            $"dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style>.");
 
-        public static string whatCountsAsHealth = KeywordText("Missing Health", $"<style=cIsUtility>max shield</style>, <style=cIsDamage>barrier</style>, and gained <style=cIsHealth>Hunger</style>" +
+        public static string whatCountsAsHealth = KeywordText("It Hungers", $"<style=cIsUtility>Max shield</style>, <style=cIsDamage>barrier</style>, and <color=#9B3737>Insatiables</color> health " +
             $" count as <style=cIsHealth>missing health</style> but is half as effective.");
 
-        public static string insatiableKeyword = KeywordText("Insatiable", $"Attacks <style=cIsHealing>lifesteal</style> and <style=cIsHealth>bleed</style> on hit. " +
-            $"<style=cIsHealing>Healing</style> sates your <style=cIsHealth>Hunger</style> instead.");
+        public static string insatiableKeyword = KeywordText("Insatiable", $"Become <style=cIsDamage>frenzied</style> causing your attacks to <style=cIsHealing>lifesteal</style> and <style=cIsHealth>bleed</style>. " +
+            $"<style=cIsHealing>Healing</style> is converted into extra layer of <style=cIsHealth>health</style> that <style=cIsHealing>heals</style> you after <color=#9B3737>Insatiable</color> ends.");
         public static string DamageText(string text)
         {
             return $"<style=cIsDamage>{text}</style>";

@@ -34,7 +34,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const int maxNeedleAmount = 5;
 
-        internal const float insatiableDuration = 6f;
+        internal const float insatiableDuration = 12f;
 
         internal const float passiveScaling = 0.05f;
 

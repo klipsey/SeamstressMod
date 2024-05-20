@@ -82,11 +82,15 @@ namespace SeamstressMod.Seamstress.Components
                 checkStatsStopwatch = 0f;
             }
             else checkStatsStopwatch += Time.fixedDeltaTime;
-            RefundUtil();
             CheckToDrainGauge();
             CreateBlinkEffect(heldOrigin);
             InsatiableSound();
             IsInsatiable();
+        }
+
+        public bool HasNeedles()
+        {
+            return this.characterBody.HasBuff(SeamstressBuffs.needles);
         }
         public void ReactivateScissor(string scissor, bool activate)
         {
@@ -99,20 +103,6 @@ namespace SeamstressMod.Seamstress.Components
             {
                 childLocator.FindChild("ScissorModel").gameObject.SetActive(false);
 
-            }
-        }
-        private void RefundUtil()
-        {
-            if (!hasRefunded && skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillDef == SeamstressSurvivor.snapBackSkillDef)
-            {
-                cooldownRefund += Time.fixedDeltaTime;
-                hasRefunded = true;
-            }
-            else if (hasRefunded && !skillLocator.utility.skillOverrides.Any() && skillLocator.utility.skillName == "HeartDashSeamstress")
-            {
-                skillLocator.utility.rechargeStopwatch += cooldownRefund;
-                cooldownRefund = 0f;
-                hasRefunded = false;
             }
         }
         private void CheckToDrainGauge()

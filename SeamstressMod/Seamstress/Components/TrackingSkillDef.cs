@@ -12,19 +12,22 @@ namespace SeamstressMod.Seamstress.Components
         protected class InstanceData : BaseSkillInstanceData
         {
             public Tracker tracker;
+
+            public SeamstressController seamstressController;
         }
 
         public override BaseSkillInstanceData OnAssigned([NotNull] GenericSkill skillSlot)
         {
             return new InstanceData
             {
-                tracker = skillSlot.GetComponent<Tracker>()
+                tracker = skillSlot.GetComponent<Tracker>(),
+                seamstressController = skillSlot.GetComponent<SeamstressController>()
             };
         }
 
         private static bool HasTarget([NotNull] GenericSkill skillSlot)
         {
-            if (!(((InstanceData)skillSlot.skillInstanceData).tracker?.GetTrackingTarget()))
+            if (!(((InstanceData)skillSlot.skillInstanceData).tracker?.GetTrackingTarget()) || !((InstanceData)skillSlot.skillInstanceData).seamstressController.HasNeedles())
             {
                 return false;
             }

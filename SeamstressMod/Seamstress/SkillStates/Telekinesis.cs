@@ -92,6 +92,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     if (NetworkServer.active)
                     {
                         if (!victimBody.HasBuff(SeamstressBuffs.manipulated)) victimBody.AddBuff(SeamstressBuffs.manipulated);
+                        this.characterBody.RemoveBuff(SeamstressBuffs.needles);
                     }
                 }
                 else

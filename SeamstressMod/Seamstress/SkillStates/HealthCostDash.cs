@@ -61,6 +61,14 @@ namespace SeamstressMod.Seamstress.SkillStates
             attack.damage = damageCoefficient * damageStat;
             attack.hitBoxGroup = FindHitBoxGroup(hitBoxString);
             attack.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+
+            EffectManager.SpawnEffect(SeamstressAssets.bloodExplosionEffect, new EffectData
+            {
+                origin = this.transform.position,
+                rotation = Quaternion.identity,
+                scale = 0.5f
+            }, false);
+
             if (insatiable)
             {
                 attack.AddModdedDamageType(DamageTypes.CutDamage);
@@ -152,7 +160,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (NetworkServer.active && healthComponent)
             {
                 seamCom.inInsatiable = false;
-                DotController.InflictDot(characterBody.gameObject, characterBody.gameObject, Dots.SeamstressBleed, SeamstressStaticValues.insatiableDuration, 1, 1u);
+                DotController.InflictDot(base.gameObject, base.gameObject, Dots.SeamstressBleed, SeamstressStaticValues.insatiableDuration, 1, 1u);
             }
 
             if (!hasHit) base.characterMotor.velocity *= 0.2f;

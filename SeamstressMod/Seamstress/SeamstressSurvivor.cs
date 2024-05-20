@@ -40,7 +40,7 @@ namespace SeamstressMod.Seamstress
             bodyNameToken = SEAMSTRESS_PREFIX + "NAME",
             subtitleNameToken = SEAMSTRESS_PREFIX + "SUBTITLE",
 
-            characterPortrait = assetBundle.LoadAsset<Texture>("ravenIcon"),
+            characterPortrait = assetBundle.LoadAsset<Texture>("texSeamstressIcon"),
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
@@ -64,13 +64,18 @@ namespace SeamstressMod.Seamstress
                 new CustomRendererInfo
                 {
                     childName = "Model",
-                    material = assetBundle.LoadMaterial("matSeamstress"),
+                    dontHotpoo = true,
 
                 },
                 new CustomRendererInfo
                 {
                     childName = "ScissorModel",
-                    material = assetBundle.LoadMaterial("matSeamstress"),
+                    dontHotpoo = true,
+                },
+                new CustomRendererInfo
+                {
+                    childName = "CrownModel",
+                    dontHotpoo = true
                 },
 
         };
@@ -112,14 +117,14 @@ namespace SeamstressMod.Seamstress
             SeamstressStates.Init();
             SeamstressTokens.Init();
 
-            SeamstressAssets.Init(assetBundle);
+            SeamstressAssets.InitAssets();
             SeamstressBuffs.Init(assetBundle);
 
             Dots.Init();
 
             InitializeEntityStateMachines();
             InitializeSkills();
-            InitializeSkins();
+            InitializeSkins(assetBundle);
             InitializeCharacterMaster();
 
             AdditionalBodySetup();
@@ -231,7 +236,7 @@ namespace SeamstressMod.Seamstress
                 skillNameToken = SEAMSTRESS_PREFIX + "NEEDLE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "NEEDLE_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texImpTouchedIcon"),
-                keywordTokens = new string[] { Tokens.needleKeyword },
+                keywordTokens = new string[] { },
                 activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Idle)),
                 activationStateMachineName = "",
                 baseMaxStock = 1,
@@ -291,7 +296,7 @@ namespace SeamstressMod.Seamstress
                 skillName = "Clip",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.sentienceRangeKeyword, Tokens.needleKeyword },
+                keywordTokens = new string[] { Tokens.reachKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texClipIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(Clip)),
@@ -323,7 +328,7 @@ namespace SeamstressMod.Seamstress
                 skillName = "PlanarManipulation",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANMAN_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_PLANMAN_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.manipulateKeyword },
+                keywordTokens = new string[] { Tokens.crushKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texPlanarManipulationIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Telekinesis)),
@@ -366,7 +371,7 @@ namespace SeamstressMod.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 8f,
+                baseRechargeInterval = 4f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -393,7 +398,7 @@ namespace SeamstressMod.Seamstress
                 skillName = "ParrySeamstress",
                 skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_PARRY_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.sentienceRangeKeyword, Tokens.insatiableKeyword },
+                keywordTokens = new string[] { Tokens.reachKeyword, Tokens.insatiableKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texGlimpseOfPurityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Parry)),
@@ -460,7 +465,7 @@ namespace SeamstressMod.Seamstress
                 skillName = "FireSeamstress",
                 skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_FIRE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_FIRE_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.sentienceKeyword },
+                keywordTokens = new string[] { Tokens.symbioticKeyward },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSkewerIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.FireScissor)),
@@ -489,9 +494,42 @@ namespace SeamstressMod.Seamstress
             Skills.AddSpecialSkills(bodyPrefab, fireScissor);
         }
         #endregion skills
+        public static Material CreateMaterial(AssetBundle assetBundle, string materialName, float emission, Color emissionColor, float normalStrength)
+        {
+            if (!SeamstressAssets.commandoMat) SeamstressAssets.commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
 
+            Material mat = UnityEngine.Object.Instantiate<Material>(SeamstressAssets.commandoMat);
+            Material tempMat = assetBundle.LoadAsset<Material>(materialName);
+
+            if (!tempMat) return SeamstressAssets.commandoMat;
+
+            mat.name = materialName;
+            mat.SetColor("_Color", tempMat.GetColor("_Color"));
+            mat.SetTexture("_MainTex", tempMat.GetTexture("_MainTex"));
+            mat.SetColor("_EmColor", emissionColor);
+            mat.SetFloat("_EmPower", emission);
+            mat.SetTexture("_EmTex", tempMat.GetTexture("_EmissionMap"));
+            mat.SetFloat("_NormalStrength", normalStrength);
+
+            return mat;
+        }
+
+        public static Material CreateMaterial(AssetBundle assetBundle, string materialName)
+        {
+            return CreateMaterial(assetBundle, materialName, 0f);
+        }
+
+        public static Material CreateMaterial(AssetBundle assetBundle, string materialName, float emission)
+        {
+            return CreateMaterial(assetBundle, materialName, emission, Color.black);
+        }
+
+        public static Material CreateMaterial(AssetBundle assetBundle, string materialName, float emission, Color emissionColor)
+        {
+            return CreateMaterial(assetBundle, materialName, emission, emissionColor, 0f);
+        }
         #region skins
-        public override void InitializeSkins()
+        public override void InitializeSkins(AssetBundle assetBundle)
         {
             ModelSkinController skinController = prefabCharacterModel.gameObject.AddComponent<ModelSkinController>();
             ChildLocator childLocator = prefabCharacterModel.GetComponent<ChildLocator>();
@@ -513,7 +551,8 @@ namespace SeamstressMod.Seamstress
             //uncomment this when you have another skin
             defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshSeamstress",
-                "meshScissors");
+                "meshScissors",
+                "meshSeamstressCrown");
 
             //add new skindef to our list of skindefs. this is what we'll be passing to the SkinController
             skins.Add(defaultSkin);
@@ -531,12 +570,14 @@ namespace SeamstressMod.Seamstress
             ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
             masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshPrincess",
-                "meshPrincessSword");
+                "meshPrincessSword",
+                "meshPrincessCrown");
 
             ////masterySkin has a new set of RendererInfos (based on default rendererinfos)
             ////you can simply access the RendererInfos' materials and set them to the new materials for your skin.
-            masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matPrincessBlue");
-            masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matPrincessSword");
+            masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessBlue");
+            masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessSword");
+            masterySkin.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessBlueEmissions");
 
             ////here's a barebones example of using gameobjectactivations that could probably be streamlined or rewritten entirely, truthfully, but it works
             //masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
@@ -556,34 +597,40 @@ namespace SeamstressMod.Seamstress
 
             masterySkin2.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshPrincess",
-                "meshPrincessSword");
+                "meshPrincessSword",
+                "meshPrincessCrown");
 
-            masterySkin2.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matPrincessRed");
-            masterySkin2.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matPrincessSwordAlt");
+            masterySkin2.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessRed");
+            masterySkin2.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessSwordAlt");
+            masterySkin2.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessRedEmissions");
 
             SkinDef masterySkin3 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
-                assetBundle.LoadAsset<Sprite>("texDanteAchievement"),
+                assetBundle.LoadAsset<Sprite>("ravenIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
 
             masterySkin3.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
-                "RavenBody",
-                "ShadowClaws");
+                "meshRaven",
+                "meshShadowClaws",
+                "meshRavenCrown");
 
-            masterySkin3.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matRaven");
-            masterySkin3.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHands");
+            masterySkin3.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matRaven");
+            masterySkin3.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenShadowClaws");
+            masterySkin3.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matRaven");
 
             SkinDef masterySkin4 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
-            assetBundle.LoadAsset<Sprite>("texDanteAchievement"),
+            assetBundle.LoadAsset<Sprite>("ravenIcon"),
             defaultRendererinfos,
             prefabCharacterModel.gameObject);
 
             masterySkin4.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
-                "RavenBodyAlt",
-                "ShadowClaws");
+                "meshRavenAlt",
+                "meshShadowClaws",
+                "meshRavenCrownAlt");
 
-            masterySkin4.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matRavenAlt");
-            masterySkin4.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHands");
+            masterySkin4.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenAlt");
+            masterySkin4.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenShadowClaws");
+            masterySkin4.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenAltEmission");
 
             skins.Add(masterySkin);
             skins.Add(masterySkin2);
@@ -729,42 +776,39 @@ namespace SeamstressMod.Seamstress
         {
             orig(self);
 
-            if (!self || self.baseNameToken != "KENKO_SEAMSTRESS_NAME")
+            if (self && self.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
-                return;
-            }
-            SeamstressController s = self.GetComponent<SeamstressController>();
-            HealthComponent healthComponent = self.GetComponent<HealthComponent>();
-            SkillLocator skillLocator = self.GetComponent<SkillLocator>();
-            if (s && healthComponent && skillLocator)
-            {
-                s.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
-                float healthMissing = healthComponent.fullHealth + (healthComponent.fullShield + healthComponent.barrier) / 2f + s.fiendMeter / 8 - (healthComponent.health);
-                float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
-                if (s.inInsatiable && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
-                else self.baseDamage = 8f + healthMissing * SeamstressStaticValues.passiveScaling;
-                if (s.fiendMeter > 0)
+                SeamstressController seamstressController = self.GetComponent<SeamstressController>();
+                HealthComponent healthComponent = self.GetComponent<HealthComponent>();
+                SkillLocator skillLocator = self.GetComponent<SkillLocator>();
+                if (seamstressController && healthComponent && skillLocator)
                 {
-                    self.moveSpeed += 2f * Util.Remap(s.fiendMeter, 0f, s.maxHunger, 0f, 2f);
-                    self.attackSpeed += .1f * Util.Remap(s.fiendMeter, 0f, s.maxHunger, 0f, 2f);
+                    seamstressController.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
+                    float healthMissing = healthComponent.fullHealth + (healthComponent.fullShield + healthComponent.barrier) / 2f + seamstressController.fiendMeter / 8 - (healthComponent.health);
+                    float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
+                    if (seamstressController.inInsatiable && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
+                    else self.baseDamage = 8f + healthMissing * SeamstressStaticValues.passiveScaling;
                 }
-            }
-            if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))
-            {
-                self.attackSpeed += .1f;
-                self.moveSpeed += 1f;
-            }
-            if (!self.HasBuff(SeamstressBuffs.scissorRightBuff))
-            {
-                self.attackSpeed += .1f;
-                self.moveSpeed += 1f;
-            }
-            if (self.inventory)
-            {
-                if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
+                if(self.HasBuff(SeamstressBuffs.instatiable))
                 {
-                    self.attackSpeed += .1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
-                    self.moveSpeed += 1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
+                    self.attackSpeed += .4f;
+                    self.moveSpeed += 4f;
+                }
+                if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))
+                {
+                    self.attackSpeed += .1f;
+                }
+                if (!self.HasBuff(SeamstressBuffs.scissorRightBuff))
+                {
+                    self.attackSpeed += .1f;
+                }
+                if (self.inventory)
+                {
+                    if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
+                    {
+                        self.attackSpeed += .1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
+                        self.moveSpeed += 1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
+                    }
                 }
             }
         }

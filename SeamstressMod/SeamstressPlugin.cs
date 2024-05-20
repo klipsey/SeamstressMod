@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Security;
 using System.Security.Permissions;
 using R2API.Networking;
+using SeamstressMod.Modules;
+using SeamstressMod.Seamstress.Content;
+using ShaderSwapper;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -15,6 +18,7 @@ namespace SeamstressMod
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
     [BepInDependency(NetworkingAPI.PluginGUID)]
+    [BepInDependency("com.weliveinasociety.CustomEmotesAPI", BepInDependency.DependencyFlags.SoftDependency)]
 
     public class SeamstressPlugin : BaseUnityPlugin
     {
@@ -42,6 +46,8 @@ namespace SeamstressMod
             // used when you want to properly set up language folders
             Modules.Language.Init();
 
+            SeamstressAssets.Init(Assets.LoadAssetBundle("seamstressassets"));
+            StartCoroutine(SeamstressAssets.mainAssetBundle.UpgradeStubbedShadersAsync());
             // character initialization
             new SeamstressMod.Seamstress.SeamstressSurvivor().Initialize();
 
@@ -49,6 +55,11 @@ namespace SeamstressMod
             new Modules.ContentPacks().Initialize();
 
             //On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { };
+        }
+
+        private void Start()
+        {
+            SoundBanks.Init();
         }
     }
 }

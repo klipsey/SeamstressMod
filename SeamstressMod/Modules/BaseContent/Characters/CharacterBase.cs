@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using EntityStates;
+using SeamstressMod.Seamstress.Content;
 
 namespace SeamstressMod.Modules.Characters
 {
@@ -31,7 +32,7 @@ namespace SeamstressMod.Modules.Characters
         public virtual void Initialize()
         {
             instance = this as T;
-            assetBundle = Assets.LoadAssetBundle(assetBundleName);
+            assetBundle = SeamstressAssets.mainAssetBundle;
 
             InitializeCharacter();
         }
@@ -75,7 +76,7 @@ namespace SeamstressMod.Modules.Characters
 
         public abstract void InitializeSkills();
 
-        public abstract void InitializeSkins();
+        public abstract void InitializeSkins(AssetBundle assetBundle);
 
         public abstract void InitializeCharacterMaster();
 

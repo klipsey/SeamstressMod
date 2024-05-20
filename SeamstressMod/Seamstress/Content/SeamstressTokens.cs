@@ -26,7 +26,7 @@ namespace SeamstressMod.Seamstress.Content
             string desc = "The Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her Imp Touched Heart.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Needles are a great source of extra damage. Use them wisely for damage and mobility." + Environment.NewLine + Environment.NewLine
              + "< ! > Make sure not to use Clip in a sticky situation. Having backup Needles might just save you." + Environment.NewLine + Environment.NewLine
-             + "< ! > Sate your Hunger as soon as you can while Insatiable. The stats and health it provides can halt a quick death." + Environment.NewLine + Environment.NewLine
+             + "< ! > Heal as much as you can during Insatiable. The health it provides can halt a quick death." + Environment.NewLine + Environment.NewLine
              + "< ! > Glimpse of Corruption is a great way to boost your damage but be wary of where you leave your Heart." + Environment.NewLine + Environment.NewLine
              + "< ! > Use and retrieve your Sentient weapon often to keep up a balance of damage and mobility." + Environment.NewLine + Environment.NewLine;
 
@@ -84,12 +84,12 @@ namespace SeamstressMod.Seamstress.Content
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "It Hungers");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> for every <style=cIsHealth>1 missing health</style>. " +
-                $"Filling <style=cIsHealth>Hunger</style> during " + Tokens.insatiablePrefix + " grants <style=cIsUtility>move speed</style> and an additional layer of <style=cIsHealth>health</style>.");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> for every <style=cIsHealth>1 missing health</style>.");
 
             Language.Add(prefix + "NEEDLE_NAME", "Imp Touched Heart");
-            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"The Seamstress <color=#9B3737>Blinks</color> instead of jumping. <color=#9B3737>Needles</color> can be fired to <color=#9B3737>Blink</color> in the air dealing " +
-                $"<style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"<color=#9B3737>Blink</color> instead of jumping. <color=#9B3737>Blinking</color> in the air fires <color=#9B3737>Needles</color> that deal " +
+                $"<style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style>. Gain <color=#9B3737>Needles</color> by picking up your " + Tokens.symbioticPrefix + " weapon " +
+                "or when attacking enemies without them.");
             #endregion
 
             #region Primary
@@ -108,19 +108,20 @@ namespace SeamstressMod.Seamstress.Content
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.insatiableLifesSteal}% of the damage dealt</style>.");
 
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
-            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.sentiencePrefix + $". Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip 5 additional times per <color=#9B3737>Needle</color>. " +
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.reachPrefix + $". Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip 5 additional times per <color=#9B3737>Needle</color>. " +
                 $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.clipLifeSteal}% of the damage dealt</style>.");
 
             Language.Add(prefix + "SECONDARY_PLANMAN_NAME", "Planar Manipulation");
-            Language.Add(prefix + "SECONDARY_PLANMAN_DESCRIPTION", $"<color=#9B3737>Manipulate</color>. Slamming enemies at high speeds deals <style=cIsDamage>{100f * SeamstressStaticValues.telekinesisDamageCoefficient}% damage</style> in an area. " +
-                $"<style=cIsUtility>{SeamstressStaticValues.telekinesisCooldown}</style> second cooldown on the same target.");
+            Language.Add(prefix + "SECONDARY_PLANMAN_DESCRIPTION", Tokens.crushPrefix + $". Consume a <color=#9B3737>Needle</color>. Slamming enemies at high speeds deals <style=cIsDamage>{100f * SeamstressStaticValues.telekinesisDamageCoefficient}% damage</style> in an area. " +
+                $"<style=cIsUtility>{SeamstressStaticValues.telekinesisCooldown} second cooldown</style> on the same target.");
 
             #endregion
 
             #region Utility 
             Language.Add(prefix + "UTILITY_HEARTDASH_NAME", "Glimpse of Corruption");
-            Language.Add(prefix + "UTILITY_HEARTDASH_DESCRIPTION", $"Tear out your <color=#9B3737>Heart</color> gaining " + Tokens.insatiablePrefix + $". Dash forward dealing " +
-                $"<style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style>. Recasting or losing sated <style=cIsHealth>Hunger</style> returns you to your <color=#9B3737>Heart</color>.");
+            Language.Add(prefix + "UTILITY_HEARTDASH_DESCRIPTION", $"Tear out your <color=#9B3737>heart</color> gaining " + Tokens.insatiablePrefix + $". Dash forward dealing " +
+                $"<style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style>. Recasting or losing your <style=cIsHealth>extra health</style> from " 
+                + Tokens.insatiablePrefix + " returns you to your <color=#9B3737>heart</color>.");
 
             Language.Add(prefix + "UTILITY_PARRY_NAME", "Glimpse of Purity");
             Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Prepare a <style=cIsUtility>parry</style>. If successful, dash forward dealing <style=cIsDamage>{100f * SeamstressStaticValues.parryDamageCoefficient}% damage</style> and gain " +
