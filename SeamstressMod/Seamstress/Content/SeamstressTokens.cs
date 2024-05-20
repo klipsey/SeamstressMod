@@ -78,8 +78,8 @@ namespace SeamstressMod.Seamstress.Content
             #region Skins
             Language.Add(prefix + "MASTERY_SKIN_NAME", "Alternate");
             Language.Add(prefix + "MASTERY_SKIN2_NAME", "Alternate2");
-            Language.Add(prefix + "MASTERY_SKIN3_NAME", "Alternate3");
-            Language.Add(prefix + "MASTERY_SKIN4_NAME", "Alternate4");
+            Language.Add(prefix + "MASTERY_SKIN3_NAME", "Raven");
+            Language.Add(prefix + "MASTERY_SKIN4_NAME", "Raven Alternate");
             #endregion
 
             #region Passive

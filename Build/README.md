@@ -1,8 +1,8 @@
 # Seamstress
 
-- BETA
 - Multiplayer Compatible
 - Currently working on animations
+- Contact me on Discord: https://discord.gg/3NaMEsvYeD
 
 ## Model Previews
 
@@ -81,7 +81,6 @@ The Seamstress is a half-imp survivor who uses her health for damage. She doesn'
 - EFFECT VARIES ON SKILL. When your Sentient weapon is available increase the range of this attack. When your Sentient weapon is available hit for an additional strike. Gain Attack Speed and Movement Speed for each Sentient weapon missing.
 
 Please play my mod. I need to find bugs.
-Contact me on Discord: https://discord.gg/3NaMEsvYeD
 
 # Credits
 
