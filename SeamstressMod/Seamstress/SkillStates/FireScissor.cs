@@ -73,10 +73,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnExit()
         {
             RefreshState();
-            if (!scissorLeft && !scissorRight) 
-            {
-                characterBody.GetComponent<SeamstressController>().ReactivateScissor("meshScissors", false);
-            }
             base.OnExit();
         }
 
@@ -87,12 +83,12 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 if (chosenAnim == 2)
                 {
-                    projectilePrefab = SeamstressAssets.scissorLPrefab;
+                    projectilePrefab = this.seamstressController.scissorLPrefab;
                     fireString = "SwingRightSmall";
                 }
                 else
                 {
-                    projectilePrefab = SeamstressAssets.scissorRPrefab;
+                    projectilePrefab = this.seamstressController.scissorRPrefab;
                     fireString = "SwingLeftSmall";
                 }
                 if (insatiable)
@@ -103,6 +99,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
                 }
+                float healthMissing = (this.characterBody.healthComponent.health + this.characterBody.healthComponent.shield) / (this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield);
+                projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().fractionOfDamage = healthMissing / 4f;
                 Fire(this.aimRay, fireString);
                 hasFired = true;
             }

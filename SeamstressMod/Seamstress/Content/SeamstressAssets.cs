@@ -458,16 +458,15 @@ namespace SeamstressMod.Seamstress.Content
             GameObject obj = new GameObject();
             trailEffect = obj.InstantiateClone("SeamstressTrail", false);
             TrailRenderer trail = trailEffect.AddComponent<TrailRenderer>();
-            trail.startWidth = 5f;
+            trail.startWidth = 0.5f;
             trail.endWidth = 0f;
-            trail.widthMultiplier = 1f;
-            trail.time = 0.3f;
+            trail.time = 0.5f;
             trail.emitting = true;
             trail.numCornerVertices = 0;
             trail.numCapVertices = 0;
-            trail.material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpPortalEffectEdge.mat").WaitForCompletion();
+            trail.material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matSmokeTrail.mat").WaitForCompletion();
             trail.startColor = Color.red;
-            trail.endColor = Color.red;
+            trail.endColor = Color.black;
             trail.alignment = LineAlignment.TransformZ;
         }
 
@@ -546,7 +545,7 @@ namespace SeamstressMod.Seamstress.Content
         {
             needleButcheredPrefab = needlePrefab.InstantiateClone("NeedleButchered");
             ProjectileHealOwnerOnDamageInflicted needleHeal = needleButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = SeamstressStaticValues.insatiableLifesSteal;
+            needleHeal.fractionOfDamage = 0.5f;
             needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
         }
         
@@ -582,7 +581,10 @@ namespace SeamstressMod.Seamstress.Content
             impactAlly.lifetimeAfterImpact = 16f;
 
             ProjectileDamage scissorDamage = scissorPrefab.GetComponent<ProjectileDamage>();
-            scissorDamage.damageType = DamageType.Stun1s;
+            scissorDamage.damageType = DamageType.Stun1s | DamageType.AOE;
+
+            ProjectileHealOwnerOnDamageInflicted scissorHeal = scissorPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
+            scissorHeal.fractionOfDamage = 0.5f;
 
             ProjectileSimple simple = scissorPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
@@ -605,10 +607,18 @@ namespace SeamstressMod.Seamstress.Content
             scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
             scissorPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
 
+            float die = modelName == "ScissorRightGhost" ? 3.1f : -3.1f;
+            GameObject ScissorModelTransform = new GameObject();
+            ScissorModelTransform.name = modelName + "Transform";
+            ScissorModelTransform.transform.localScale = Vector3.one * 2f;
+            ScissorModelTransform.transform.localPosition = new Vector3(0, die, -1);
+            ScissorModelTransform.transform.rotation = Quaternion.AngleAxis(270f, Vector3.forward);
+            ScissorModelTransform.transform.SetParent(scissorPrefab.transform, false);
             ProjectileController scissorController = scissorPrefab.GetComponent<ProjectileController>();
             scissorController.procCoefficient = 1f;
             if (mainAssetBundle.LoadAsset<GameObject>(modelName) != null)
                 scissorController.ghostPrefab = mainAssetBundle.CreateProjectileGhostPrefab(modelName);
+            scissorController.ghostTransformAnchor = scissorPrefab.transform.Find(modelName + "Transform");
             if (!scissorController.ghostPrefab.GetComponent<NetworkIdentity>())
                 scissorController.ghostPrefab.AddComponent<NetworkIdentity>();
             if (!scissorController.ghostPrefab.GetComponent<VFXAttributes>()) scissorController.ghostPrefab.AddComponent<VFXAttributes>();
@@ -631,7 +641,6 @@ namespace SeamstressMod.Seamstress.Content
         #endregion
 
         #region helpers
-        //love ya rob
         private static GameObject CreateImpactExplosionEffect(string effectName, Material bloodMat, float scale = 1f)
         {
             GameObject newEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Brother/BrotherSlamImpact.prefab").WaitForCompletion().InstantiateClone(effectName, true);

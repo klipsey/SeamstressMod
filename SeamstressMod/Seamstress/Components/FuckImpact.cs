@@ -200,12 +200,12 @@ namespace SeamstressMod.Seamstress.Components
                     impactAttack.position = transform.position;
                     impactAttack.procCoefficient = 1f;
                     impactAttack.radius = 6f;
-                    impactAttack.damageType = DamageType.Stun1s;
+                    impactAttack.damageType = DamageType.Stun1s | DamageType.AOE;
                     if (owner.GetComponent<SeamstressController>().inInsatiable)
                     {
                         impactAttack.AddModdedDamageType(DamageTypes.CutDamage);
-                        impactAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
                     }
+                    impactAttack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
                     impactAttack.falloffModel = BlastAttack.FalloffModel.None;
                     impactAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
                     impactAttack.Fire();

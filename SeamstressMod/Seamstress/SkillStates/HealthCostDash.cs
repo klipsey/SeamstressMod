@@ -72,8 +72,8 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (insatiable)
             {
                 attack.AddModdedDamageType(DamageTypes.CutDamage);
-                attack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
             }
+            attack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
             EffectData effectData = new EffectData()
             {
                 origin = base.characterBody.corePosition,
@@ -105,7 +105,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 color = SeamstressAssets.coolRed,
             }, false);
 
-            seamCom.snapBackPosition = base.characterBody.corePosition;
+            seamstressController.snapBackPosition = base.characterBody.corePosition;
 
             Vector3 position = base.characterBody.corePosition;
             GameObject obj = UnityEngine.Object.Instantiate(projectilePrefab, position, Quaternion.identity);
@@ -159,7 +159,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             if (NetworkServer.active && healthComponent)
             {
-                seamCom.inInsatiable = false;
+                seamstressController.inInsatiable = false;
                 DotController.InflictDot(base.gameObject, base.gameObject, Dots.SeamstressBleed, SeamstressStaticValues.insatiableDuration, 1, 1u);
             }
 
@@ -168,7 +168,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (NetworkServer.active)
             {
                 characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
-                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.2f);
+                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
             }
             skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
 

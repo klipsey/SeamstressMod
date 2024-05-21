@@ -69,7 +69,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             if (base.isAuthority)
             {
-                snapPosition = seamCom.snapBackPosition;
+                snapPosition = seamstressController.snapBackPosition;
                 currentPosition = characterBody.corePosition;
                 duration = (currentPosition - snapPosition).magnitude;
                 duration = Util.Remap(duration, 0f, 100f, 0.2f, 1f);

@@ -82,8 +82,8 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 isDashing = true;
                 dashVector = inputBank.aimDirection;
-                seamCom.heldDashVector = dashVector;
-                seamCom.heldOrigin = Util.GetCorePosition(gameObject);
+                seamstressController.heldDashVector = dashVector;
+                seamstressController.heldOrigin = Util.GetCorePosition(gameObject);
                 //PlayCrossfade("FullBody, Override", "AssaulterLoop", 0.1f);
                 gameObject.layer = LayerIndex.fakeActor.intVal;
                 characterMotor.Motor.RebuildCollidableLayers();
@@ -127,7 +127,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         public override void OnExit()
         {
-            seamCom.StartDashEffectTimer();
+            seamstressController.StartDashEffectTimer();
             gameObject.layer = LayerIndex.defaultLayer.intVal;
             characterMotor.Motor.RebuildCollidableLayers();
             if (!insatiable) Util.PlaySound("Play_item_proc_whip", gameObject);

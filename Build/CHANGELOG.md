@@ -1,3 +1,7 @@
+# 0.5.3
+
+- I would never keep things undocumented in the changelog for people to figure out what's being changed
+
 # 0.5.2
 
 - ???

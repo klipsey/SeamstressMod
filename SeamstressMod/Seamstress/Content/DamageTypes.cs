@@ -20,16 +20,14 @@ namespace SeamstressMod.Seamstress.Content
         public static DamageAPI.ModdedDamageType Empty;
         public static DamageAPI.ModdedDamageType CutDamage;
         public static DamageAPI.ModdedDamageType NoScissors;
-        public static DamageAPI.ModdedDamageType InsatiableLifeSteal;
-        public static DamageAPI.ModdedDamageType ClipLifeSteal;
+        public static DamageAPI.ModdedDamageType SeamstressLifesteal;
         public static DamageAPI.ModdedDamageType PullDamage;
         internal static void Init()
         {
             Empty = DamageAPI.ReserveDamageType();
             CutDamage = DamageAPI.ReserveDamageType();
             NoScissors = DamageAPI.ReserveDamageType();
-            InsatiableLifeSteal = DamageAPI.ReserveDamageType();
-            ClipLifeSteal = DamageAPI.ReserveDamageType();
+            SeamstressLifesteal = DamageAPI.ReserveDamageType();
             PullDamage = DamageAPI.ReserveDamageType();
             Hook();
         }
@@ -61,8 +59,9 @@ namespace SeamstressMod.Seamstress.Content
             CharacterBody victimBody = damageReport.victimBody;
             CharacterBody attackerBody = damageReport.attackerBody;
             GameObject attackerObject = damageReport.attacker.gameObject;
-            if (NetworkServer.active)
+            if (NetworkServer.active && attackerBody && attackerBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
+                SeamstressController seamstressController = attackerBody.GetComponent<SeamstressController>();
                 if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))
                 {
                     if (victimBody.isBoss)
@@ -79,13 +78,13 @@ namespace SeamstressMod.Seamstress.Content
                     Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
                     if (attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) attackerBody.AddBuff(SeamstressBuffs.needles);
                 }
-                if (damageInfo.HasModdedDamageType(InsatiableLifeSteal))
+                if (damageInfo.HasModdedDamageType(SeamstressLifesteal))
                 {
-                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.insatiableLifesSteal, default, true);
-                }
-                if (damageInfo.HasModdedDamageType(ClipLifeSteal))
-                {
-                    attackerBody.healthComponent.Heal(damageReport.damageDealt * SeamstressStaticValues.clipLifeSteal, default, true);
+                    if(seamstressController)
+                    {
+                        float healthMissing = (attackerBody.healthComponent.health + attackerBody.healthComponent.shield) / (attackerBody.healthComponent.fullHealth + attackerBody.healthComponent.fullShield);
+                        attackerBody.healthComponent.Heal(damageReport.damageDealt * (healthMissing * SeamstressStaticValues.passiveHealingScaling), default, true);
+                    }
                 }
             }
         }

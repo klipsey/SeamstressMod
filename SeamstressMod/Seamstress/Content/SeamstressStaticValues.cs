@@ -26,17 +26,15 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float blinkCooldown = 0.5f;
 
-        internal const float insatiableLifesSteal = 0.4f;
-
-        internal const float clipLifeSteal = 0.25f;
-
         internal const float healConversion = 0.001f;
 
         internal const int maxNeedleAmount = 5;
 
         internal const float insatiableDuration = 12f;
 
-        internal const float passiveScaling = 0.05f;
+        internal const float passiveScaling = 0.075f;
+
+        internal const float passiveHealingScaling = 0.25f;
 
         internal const float parryDamageCoefficient = 4f;
 
@@ -44,7 +42,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float sewAltDamageCoefficient = 1.5f;
 
-        internal const float clipDamageCoefficient = 1f;
+        internal const float clipDamageCoefficient = 1.25f;
 
         internal const float needleProcCoefficient = 0.7f;
 

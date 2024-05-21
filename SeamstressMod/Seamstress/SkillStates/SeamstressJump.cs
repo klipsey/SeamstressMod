@@ -32,13 +32,15 @@ namespace SeamstressMod.Seamstress.SkillStates
             RefreshState();
             if (this.empowered)
             {
+                float healthMissing = (this.characterBody.healthComponent.health + this.characterBody.healthComponent.shield) / (this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield);
                 projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().fractionOfDamage =  healthMissing;
             }
             else
             {
                 projectilePrefab = SeamstressAssets.needlePrefab;
             }
-            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount || characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamCom.blinkCd >= SeamstressStaticValues.blinkCooldown) && this.seamCom.blinkReady == false)
+            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount || this.characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamCom.blinkCd >= SeamstressStaticValues.blinkCooldown) && this.seamCom.blinkReady == false)
             {
                 seamCom.blinkCd = 0f;
                 seamCom.blinkReady = true;

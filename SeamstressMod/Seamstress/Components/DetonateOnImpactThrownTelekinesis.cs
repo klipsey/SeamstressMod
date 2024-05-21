@@ -116,12 +116,12 @@ namespace SeamstressMod.Seamstress.Components
                 blastAttack.procCoefficient = 1f;
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                 blastAttack.damageColorIndex = DamageColorIndex.Default;
-                blastAttack.damageType = DamageType.Stun1s;
+                blastAttack.damageType = DamageType.Stun1s | DamageType.AOE;
                 if (seamCom.inInsatiable)
                 {
                     blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
-                    blastAttack.AddModdedDamageType(DamageTypes.InsatiableLifeSteal);
                 }
+                blastAttack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
                 blastAttack.attackerFiltering = AttackerFiltering.Default;
                 blastAttack.Fire();
                 stopwatch = 5f;

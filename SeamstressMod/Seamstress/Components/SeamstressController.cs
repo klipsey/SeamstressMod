@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using System.Linq;
 using SeamstressMod.Seamstress.Content;
 using R2API.Networking.Interfaces;
+using RoR2.Projectile;
 
 namespace SeamstressMod.Seamstress.Components
 {
@@ -20,6 +21,10 @@ namespace SeamstressMod.Seamstress.Components
         private GameObject insatiableEndPrefab = SeamstressAssets.instatiableEndEffect;
 
         public static GameObject supaPrefab = SeamstressAssets.blinkEffect;
+
+        public GameObject scissorLPrefab = SeamstressAssets.scissorLPrefab;
+
+        public GameObject scissorRPrefab = SeamstressAssets.scissorRPrefab;
 
         public float fiendMeter = 0f;
 
@@ -49,15 +54,12 @@ namespace SeamstressMod.Seamstress.Components
 
         private float insatiableStopwatch = 0f;
 
-        private float cooldownRefund;
-
         public bool inInsatiable = false;
 
         public bool hasStartedInsatiable;
 
         public bool draining;
 
-        private bool hasRefunded;
         public void Awake()
         {
             characterBody = GetComponent<CharacterBody>();
@@ -70,6 +72,19 @@ namespace SeamstressMod.Seamstress.Components
         public void Start()
         {
             maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
+            Invoke("SetupSkin", 0.5f);
+        }
+
+        private void SetupSkin()
+        {
+            if (childLocator.FindChild("ScissorLModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh && childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh != null)
+            {
+                scissorLPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshFilter>().mesh = childLocator.FindChild("ScissorLModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh;
+                scissorLPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshRenderer>().material = childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().material;
+                scissorRPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshFilter>().mesh = childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh;
+                scissorRPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshRenderer>().material = childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().material;
+
+            }
         }
         public void FixedUpdate()
         {
@@ -92,17 +107,15 @@ namespace SeamstressMod.Seamstress.Components
         {
             return this.characterBody.HasBuff(SeamstressBuffs.needles);
         }
-        public void ReactivateScissor(string scissor, bool activate)
+        public void ReactivateScissor(string scissorName, bool activate)
         {
-            if (scissor == "meshScissors" && activate == true)
+            if (activate == true)
             {
-                childLocator.FindChild("ScissorModel").gameObject.SetActive(true);
-
+                childLocator.FindChild(scissorName).gameObject.SetActive(true);
             }
-            else if (scissor == "meshScissors" && activate == false)
+            else if (activate == false)
             {
-                childLocator.FindChild("ScissorModel").gameObject.SetActive(false);
-
+                childLocator.FindChild(scissorName).gameObject.SetActive(false);
             }
         }
         private void CheckToDrainGauge()
@@ -112,7 +125,7 @@ namespace SeamstressMod.Seamstress.Components
                 if (fiendMeter > 0f)
                 {
                     fiendMeter -= drainAmount;
-                    if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 8, default, false);
+                    if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 4, default, false);
                 }
                 else if (fiendMeter <= 0f)
                 {

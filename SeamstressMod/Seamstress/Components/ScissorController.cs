@@ -37,6 +37,14 @@ namespace SeamstressMod.Seamstress.Components
                 if (scissorCount != oldScissorCount)
                 {
                     CmdUpdateScissors(scissorCount);
+
+                    if(scissorCount > oldScissorCount)
+                    {
+                        if (isRight)
+                        {
+                        }
+                        else if (!isRight) characterBody.GetComponent<SeamstressController>().ReactivateScissor("ScissorLModel", true);
+                    }
                 }
                 oldScissorCount = scissorCount;
             }
@@ -48,7 +56,7 @@ namespace SeamstressMod.Seamstress.Components
             if (hasAuthority && characterBody.skillLocator.special.stock < characterBody.skillLocator.special.maxStock)
             {
                 characterBody.skillLocator.special.stock++;
-                characterBody.GetComponent<SeamstressController>().ReactivateScissor("meshScissors", true);
+
                 if (characterBody.skillLocator.special.stock == characterBody.skillLocator.special.maxStock)
                 {
                     characterBody.skillLocator.special.rechargeStopwatch = 0f;
@@ -66,24 +74,56 @@ namespace SeamstressMod.Seamstress.Components
                 switch (newCount)
                 {
                     case 0:
-                        if (buffLeft == 1) characterBody.RemoveBuff(SeamstressBuffs.scissorLeftBuff);
-                        if (buffRight == 1) characterBody.RemoveBuff(SeamstressBuffs.scissorRightBuff);
+                        if (buffLeft == 1)
+                        {
+                            characterBody.RemoveBuff(SeamstressBuffs.scissorLeftBuff);
+                            characterBody.GetComponent<SeamstressController>().ReactivateScissor("ScissorLModel", false);
+                        }
+                        if (buffRight == 1)
+                        {
+                            characterBody.RemoveBuff(SeamstressBuffs.scissorRightBuff);
+                            characterBody.GetComponent<SeamstressController>().ReactivateScissor("ScissorRModel", false);
+                        }
                         break;
                     case 1:
                         if (isRight)
                         {
-                            if (buffRight == 0) characterBody.AddBuff(SeamstressBuffs.scissorRightBuff);
-                            if (buffLeft == 1) characterBody.RemoveBuff(SeamstressBuffs.scissorLeftBuff);
+                            if (buffRight == 0)
+                            {
+                                characterBody.AddBuff(SeamstressBuffs.scissorRightBuff);
+                                characterBody.GetComponent<SeamstressController>().ReactivateScissor("ScissorRModel", true);
+                            }
+                            if (buffLeft == 1)
+                            {
+                                characterBody.RemoveBuff(SeamstressBuffs.scissorLeftBuff);
+                                characterBody.GetComponent<SeamstressController>().ReactivateScissor("ScissorLModel", false);
+                            }
                         }
                         if (!isRight)
                         {
-                            if (buffRight == 1) characterBody.RemoveBuff(SeamstressBuffs.scissorRightBuff);
-                            if (buffLeft == 0) characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
+                            if (buffRight == 1)
+                            {
+                                characterBody.RemoveBuff(SeamstressBuffs.scissorRightBuff);
+                                characterBody.GetComponent<SeamstressController>().ReactivateScissor("ScissorLModel", false);
+                            }
+                            if (buffLeft == 0)
+                            {
+                                characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
+                                characterBody.GetComponent<SeamstressController>().ReactivateScissor("ScissorLModel", true);
+                            }
                         }
                         break;
                     case 2:
-                        if (buffLeft == 0) characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
-                        if (buffRight == 0) characterBody.AddBuff(SeamstressBuffs.scissorRightBuff);
+                        if (buffLeft == 0)
+                        {
+                            characterBody.AddBuff(SeamstressBuffs.scissorLeftBuff);
+                            characterBody.GetComponent<SeamstressController>().ReactivateScissor("ScissorLModel", true);
+                        }
+                        if (buffRight == 0)
+                        {
+                            characterBody.AddBuff(SeamstressBuffs.scissorRightBuff);
+                            characterBody.GetComponent<SeamstressController>().ReactivateScissor("ScissorRModel", true);
+                        }
                         break;
                 }
             }

@@ -78,7 +78,6 @@ namespace SeamstressMod.Modules.BaseStates
             {
                 attack.AddModdedDamageType(i);
             }
-            moddedDamageTypeHolder.Clear();
             attack.attacker = gameObject;
             attack.inflictor = gameObject;
             attack.teamIndex = GetTeam();
@@ -111,6 +110,7 @@ namespace SeamstressMod.Modules.BaseStates
             {
                 RemoveHitstop();
             }
+            moddedDamageTypeHolder.Clear();
             base.OnExit();
         }
 
@@ -254,7 +254,6 @@ namespace SeamstressMod.Modules.BaseStates
                         attack.isCrit = RollCrit();
                         attack.impactSound = impactSound;
                         attack.damageType = damageType;
-                        moddedDamageTypeHolder.Clear();
                         foreach (DamageAPI.ModdedDamageType i in moddedDamageTypeHolder)
                         {
                             attack.AddModdedDamageType(i);

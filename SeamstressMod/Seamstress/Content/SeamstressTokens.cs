@@ -84,32 +84,27 @@ namespace SeamstressMod.Seamstress.Content
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "It Hungers");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> for every <style=cIsHealth>1 missing health</style>.");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> and <style=cIsHealing>lifesteal</style> for every <style=cIsHealth>1 missing health</style>.");
 
             Language.Add(prefix + "NEEDLE_NAME", "Imp Touched Heart");
-            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"<color=#9B3737>Blink</color> instead of jumping. <color=#9B3737>Blinking</color> in the air fires <color=#9B3737>Needles</color> that deal " +
-                $"<style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style>. Gain <color=#9B3737>Needles</color> by picking up your " + Tokens.symbioticPrefix + " weapon " +
+            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"<color=#9B3737>Blink</color> instead of jumping. <color=#9B3737>Blinking</color> in the air fires <color=#9B3737>Needles</color> dealing " +
+                $"<style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style>. Gain <color=#9B3737>Needles</color> by picking up " + Tokens.symbioticPrefix + " weapons " +
                 "or when attacking enemies without them.");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
-            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.sentiencePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>." +
+            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.symbioticSlashPrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>." +
               $" Every 3rd hit deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style>.");
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Flurry");
-            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.sentiencePrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.symbioticSlashPrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>.");
             #endregion
 
             #region Secondary
-            Language.Add(prefix + "SECONDARY_PLANARSHIFT_NAME", "Planar Shift");
-            Language.Add(prefix + "SECONDARY_PLANARSHIFT_DESCRIPTION", $"Consume all <color=#9B3737>Needles</color>. Temporarily shift and reappear dealing <style=cIsDamage>{100f * SeamstressStaticValues.sewAltDamageCoefficient}% damage</style>" +
-                $" per <color=#9B3737>Needle</color> to surrounding enemies. " +
-                $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.insatiableLifesSteal}% of the damage dealt</style>.");
 
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
-            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.reachPrefix + $". Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip 5 additional times per <color=#9B3737>Needle</color>. " +
-                $"<style=cIsHealing>Heal for {100f * SeamstressStaticValues.clipLifeSteal}% of the damage dealt</style>.");
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.reachPrefix + $". Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip 5 additional times per <color=#9B3737>Needle</color>.");
 
             Language.Add(prefix + "SECONDARY_PLANMAN_NAME", "Planar Manipulation");
             Language.Add(prefix + "SECONDARY_PLANMAN_DESCRIPTION", Tokens.crushPrefix + $". Consume a <color=#9B3737>Needle</color>. Slamming enemies at high speeds deals <style=cIsDamage>{100f * SeamstressStaticValues.telekinesisDamageCoefficient}% damage</style> in an area. " +
@@ -131,8 +126,8 @@ namespace SeamstressMod.Seamstress.Content
 
             #region Special
             Language.Add(prefix + "SPECIAL_FIRE_NAME", "Skewer");
-            Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"Fire a " + Tokens.sentiencePrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
-                $"Pick up " + Tokens.sentiencePrefix + $" weapons to deal <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style> in an area.");
+            Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
+                $"Pick up " + Tokens.symbioticPrefix + $" weapons to deal <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style> in an area.");
             #endregion
 
             #region Achievements

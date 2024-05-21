@@ -12,6 +12,9 @@ ModelImporter:
   - first:
       74: 6959255037098086446
     second: IdleButchered
+  - first:
+      74: -2394181796071041201
+    second: CSSIdleIn
   externalObjects: {}
   materials:
     materialImportMode: 1

@@ -26,7 +26,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         private OverlapAttack overlapAttack;
         private DamageType damageType = DamageType.Generic;
         private DamageAPI.ModdedDamageType moddedDamageType3 = DamageTypes.Empty;
-        private DamageAPI.ModdedDamageType moddedDamageType2 = DamageTypes.ClipLifeSteal;
         private DamageAPI.ModdedDamageType moddedDamageType = DamageTypes.CutDamage;
         private float damageCoefficient = SeamstressStaticValues.clipDamageCoefficient;
         private float procCoefficient = 1f;
@@ -71,7 +70,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            baseDuration = 0.75f - 0.5f * (0.5f * (seamCom.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
+            baseDuration = 0.75f - 0.5f * (0.5f * (seamstressController.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
             snips = needleCount;
             if (!scissorRight || !scissorLeft)
             {
@@ -255,11 +254,9 @@ namespace SeamstressMod.Seamstress.SkillStates
             overlapAttack.damageType = damageType;
             if (insatiable)
             {
-                overlapAttack.AddModdedDamageType(moddedDamageType2);
                 overlapAttack.AddModdedDamageType(moddedDamageType);
             }
-            overlapAttack.AddModdedDamageType(DamageTypes.ClipLifeSteal);
-            overlapAttack.AddModdedDamageType(moddedDamageType3);
+            overlapAttack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
             overlapAttack.attacker = gameObject;
             overlapAttack.inflictor = gameObject;
             overlapAttack.teamIndex = GetTeam();
