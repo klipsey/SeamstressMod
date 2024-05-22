@@ -32,6 +32,7 @@ namespace SeamstressMod.Seamstress.Content
         internal static GameObject wideSlashEffect;
         internal static GameObject uppercutEffect;
         internal static GameObject clipSlashEffect;
+        internal static GameObject pickupScissorEffect;
         internal static GameObject scissorsSlashEffect;
         internal static GameObject scissorsComboSlashEffect;
 
@@ -57,6 +58,7 @@ namespace SeamstressMod.Seamstress.Content
         internal static GameObject sewnEffect;
 
         internal static GameObject trailEffect;
+        internal static GameObject trailEffectHands;
 
         internal static GameObject bloodExplosionEffect;
         internal static GameObject bloodSpurtEffect;
@@ -210,8 +212,11 @@ namespace SeamstressMod.Seamstress.Content
         #region effects
         private static void CreateEffects()
         {
-            spawnPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossDeathEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
+            spawnPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossDeathEffect.prefab").WaitForCompletion().InstantiateClone("SpawnEffect");
             spawnPrefab.AddComponent<NetworkIdentity>();
+            spawnPrefab.GetComponent<EffectComponent>().applyScale = true;
+            spawnPrefab.transform.Find("DashRings").localScale *= 0.75f;
+            Modules.Content.CreateAndAddEffectDef(spawnPrefab);
 
             bloodExplosionEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpBossBlink.prefab").WaitForCompletion().InstantiateClone("DriverBloodExplosion", false);
 
@@ -313,17 +318,15 @@ namespace SeamstressMod.Seamstress.Content
             clawSlashEffect.AddComponent<NetworkIdentity>();
             clawSlashEffect.transform.GetChild(0).localScale = new Vector3(1f, 1f, 1f);
             clawSlashEffect.GetComponent<ScaleParticleSystemDuration>().initialDuration = 0.5f;
-            clawSlashEffect.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Croco/matCrocoSlash.mat").WaitForCompletion();
-            clawSlashEffect.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(22f / 255f, 0f, 0f));
-            clawSlashEffect.transform.GetChild(1).gameObject.SetActive(false);
-
+            clawSlashEffect.transform.Find("SwingTrail").gameObject.GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Croco/matCrocoSlash.mat").WaitForCompletion();
+            clawSlashEffect.transform.Find("SwingTrail").gameObject.GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", mainAssetBundle.LoadAsset<Texture>("texRampSeamstress"));
 
             clawSlashComboEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Croco/CrocoComboFinisherSlash.prefab").WaitForCompletion().InstantiateClone("SeamstressComboSlash");
             clawSlashComboEffect.AddComponent<NetworkIdentity>();
             clawSlashComboEffect.transform.GetChild(0).localScale = new Vector3(1.25f, 1.25f, 1.25f);
             clawSlashComboEffect.GetComponent<ScaleParticleSystemDuration>().initialDuration = 0.5f;
             clawSlashComboEffect.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Croco/matCrocoSlash.mat").WaitForCompletion();
-            clawSlashComboEffect.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(22f / 255f, 0f, 0f));
+            clawSlashComboEffect.transform.Find("SwingTrail").gameObject.GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", mainAssetBundle.LoadAsset<Texture>("texRampSeamstress"));
             clawSlashComboEffect.transform.GetChild(1).gameObject.SetActive(false);
 
             scissorsSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ScissorSwing");
@@ -341,12 +344,18 @@ namespace SeamstressMod.Seamstress.Content
 
             clipSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordFinisherSlash.prefab").WaitForCompletion().InstantiateClone("ClipSwing");
             clipSlashEffect.AddComponent<NetworkIdentity>();
-            clipSlashEffect.transform.GetChild(0).gameObject.SetActive(false);
             Material material = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpSwipe.mat").WaitForCompletion());
             clipSlashEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             clipSlashEffect.transform.GetChild(1).localScale = new Vector3(0.5f, 0.75f, 0.5f);
             fard = clipSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             fard.startLifetimeMultiplier = 0.6f;
+
+            pickupScissorEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("ScissorPickupSwing");
+            pickupScissorEffect.AddComponent<NetworkIdentity>();
+            pickupScissorEffect.transform.GetChild(0).localScale *= 1.5f;
+            pickupScissorEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            fard = pickupScissorEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+            fard.startLifetimeMultiplier = 5f;
 
             wideSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressWideSwordSwing");
             wideSlashEffect.AddComponent<NetworkIdentity>();
@@ -458,16 +467,28 @@ namespace SeamstressMod.Seamstress.Content
             GameObject obj = new GameObject();
             trailEffect = obj.InstantiateClone("SeamstressTrail", false);
             TrailRenderer trail = trailEffect.AddComponent<TrailRenderer>();
-            trail.startWidth = 0.5f;
+            trail.startWidth = 1f;
             trail.endWidth = 0f;
             trail.time = 0.5f;
             trail.emitting = true;
             trail.numCornerVertices = 0;
             trail.numCapVertices = 0;
             trail.material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matSmokeTrail.mat").WaitForCompletion();
-            trail.startColor = Color.red;
-            trail.endColor = Color.black;
+            trail.material.SetTexture("_RemapTex", mainAssetBundle.LoadAsset<Texture>("texRampSeamstressTrail"));
             trail.alignment = LineAlignment.TransformZ;
+
+            GameObject obj2 = new GameObject();
+            trailEffectHands = obj2.InstantiateClone("SeamstressTrail", false);
+            TrailRenderer trail2 = trailEffectHands.AddComponent<TrailRenderer>();
+            trail2.startWidth = 0.5f;
+            trail2.endWidth = 0f;
+            trail2.time = 0.5f;
+            trail2.emitting = true;
+            trail2.numCornerVertices = 0;
+            trail2.numCapVertices = 0;
+            trail2.material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matSmokeTrail.mat").WaitForCompletion();
+            trail2.material.SetTexture("_RemapTex", mainAssetBundle.LoadAsset<Texture>("texRampSeamstressTrail"));
+
         }
 
         #endregion
@@ -579,6 +600,7 @@ namespace SeamstressMod.Seamstress.Content
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
             impactAlly.lifetime = 16f;
             impactAlly.lifetimeAfterImpact = 16f;
+            impactAlly.impactEffect = pickupScissorEffect;
 
             ProjectileDamage scissorDamage = scissorPrefab.GetComponent<ProjectileDamage>();
             scissorDamage.damageType = DamageType.Stun1s | DamageType.AOE;

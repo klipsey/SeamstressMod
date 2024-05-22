@@ -27,7 +27,7 @@ namespace SeamstressMod.Seamstress.Content
              + "< ! > Needles are a great source of extra damage. Use them wisely for damage and mobility." + Environment.NewLine + Environment.NewLine
              + "< ! > Make sure not to use Clip in a sticky situation. Having backup Needles might just save you." + Environment.NewLine + Environment.NewLine
              + "< ! > Heal as much as you can during Insatiable. The health it provides can halt a quick death." + Environment.NewLine + Environment.NewLine
-             + "< ! > Glimpse of Corruption is a great way to boost your damage but be wary of where you leave your Heart." + Environment.NewLine + Environment.NewLine
+             + "< ! > Brutalize is a great way to boost your damage but be wary of where you leave your Heart." + Environment.NewLine + Environment.NewLine
              + "< ! > Use and retrieve your Sentient weapon often to keep up a balance of damage and mobility." + Environment.NewLine + Environment.NewLine;
 
             /*
@@ -113,12 +113,12 @@ namespace SeamstressMod.Seamstress.Content
             #endregion
 
             #region Utility 
-            Language.Add(prefix + "UTILITY_HEARTDASH_NAME", "Glimpse of Corruption");
+            Language.Add(prefix + "UTILITY_HEARTDASH_NAME", "Brutalize");
             Language.Add(prefix + "UTILITY_HEARTDASH_DESCRIPTION", $"Tear out your <color=#9B3737>heart</color> gaining " + Tokens.insatiablePrefix + $". Dash forward dealing " +
                 $"<style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style>. Recasting or losing your <style=cIsHealth>extra health</style> from " 
                 + Tokens.insatiablePrefix + " returns you to your <color=#9B3737>heart</color>.");
 
-            Language.Add(prefix + "UTILITY_PARRY_NAME", "Glimpse of Purity");
+            Language.Add(prefix + "UTILITY_PARRY_NAME", "Retaliate");
             Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Prepare a <style=cIsUtility>parry</style>. If successful, dash forward dealing <style=cIsDamage>{100f * SeamstressStaticValues.parryDamageCoefficient}% damage</style> and gain " +
                Tokens.insatiablePrefix + ".");
 
@@ -127,7 +127,7 @@ namespace SeamstressMod.Seamstress.Content
             #region Special
             Language.Add(prefix + "SPECIAL_FIRE_NAME", "Skewer");
             Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
-                $"Pick up " + Tokens.symbioticPrefix + $" weapons to deal <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style> in an area.");
+                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style>.");
             #endregion
 
             #region Achievements

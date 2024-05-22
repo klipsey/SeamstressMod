@@ -5,6 +5,7 @@ using EntityStates;
 using UnityEngine.Networking;
 using UnityEngine.AddressableAssets;
 using R2API;
+using SeamstressMod.Seamstress.Content;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
@@ -26,18 +27,14 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (fixedAge > 0.56f && !check)
+            if (base.fixedAge > 1f && !check)
             {
                 check = true;
                 EffectData effectData = new EffectData();
                 effectData.origin = transform.position;
-                effectData.scale = 0.1f;
-                GameObject PLEASE = EntityStates.ImpBossMonster.SpawnState.spawnEffectPrefab.InstantiateClone("Spawn");
-                GameObject PLEASE2 = EntityStates.ImpBossMonster.DeathState.initialEffect.InstantiateClone("Spawn2");
-                EffectManager.SpawnEffect(PLEASE, effectData, false);
-                EffectManager.SpawnEffect(PLEASE2, effectData, false);
+                EffectManager.SpawnEffect(SeamstressAssets.spawnPrefab, effectData, false);
 
-                Util.PlaySound(BlinkState.beginSoundString, gameObject);
+                Util.PlaySound("sfx_seamstress_spawn", gameObject);
 
                 Transform modelTransform = GetModelTransform();
                 if (modelTransform)
@@ -74,9 +71,9 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
             }
 
-            if (fixedAge >= duration && isAuthority)
+            if (base.fixedAge >= duration && base.isAuthority)
             {
-                outer.SetNextStateToMain();
+                base.outer.SetNextStateToMain();
             }
         }
 

@@ -14,7 +14,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float scissorSlashDamageCoefficient = 2f;
 
-        internal const float cutDotDamage = 0.01f;
+        internal const float cutDotDamage = 0.5f;
 
         internal const float cutDotBossDamage = 0.005f;
 
@@ -34,7 +34,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float passiveScaling = 0.075f;
 
-        internal const float passiveHealingScaling = 0.25f;
+        internal const float passiveHealingScaling = 0.15f;
 
         internal const float parryDamageCoefficient = 4f;
 

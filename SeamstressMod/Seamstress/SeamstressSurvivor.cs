@@ -50,7 +50,7 @@ namespace SeamstressMod.Seamstress
 
             maxHealth = 160f,
             healthRegen = 1f,
-            armor = 0f,
+            armor = 15f,
             damage = 8f,
 
             damageGrowth = 0f,

@@ -18,13 +18,18 @@ namespace SeamstressMod.Seamstress.Components
         private HealthComponent healthComponent;
         private SkillLocator skillLocator;
         private Animator animator;
+
         private GameObject insatiableEndPrefab = SeamstressAssets.instatiableEndEffect;
 
-        public static GameObject supaPrefab = SeamstressAssets.blinkEffect;
+        public GameObject supaPrefab = SeamstressAssets.blinkEffect;
 
         public GameObject scissorLPrefab = SeamstressAssets.scissorLPrefab;
 
         public GameObject scissorRPrefab = SeamstressAssets.scissorRPrefab;
+
+        public GameObject trailEffectPrefab = SeamstressAssets.trailEffect;
+
+        public GameObject trailEffectPrefab2 = SeamstressAssets.trailEffect;
 
         public float fiendMeter = 0f;
 
@@ -181,6 +186,13 @@ namespace SeamstressMod.Seamstress.Components
         {
             if (inInsatiable && !hasStartedInsatiable)
             {
+                if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
+                if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
+                Transform handR = this.childLocator.FindChild("HandR");
+                Transform handL = this.childLocator.FindChild("HandL");
+                trailEffectPrefab = GameObject.Instantiate(SeamstressAssets.trailEffectHands, handR);
+                trailEffectPrefab2 = GameObject.Instantiate(SeamstressAssets.trailEffectHands, handL);
+
                 draining = false;
                 insatiableStopwatch = SeamstressStaticValues.insatiableDuration;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
@@ -196,10 +208,15 @@ namespace SeamstressMod.Seamstress.Components
                     temporaryOverlay.animateShaderAlpha = true;
                     #endregion
                 }
+
+
                 hasStartedInsatiable = true;
             }
             else if (!inInsatiable && hasStartedInsatiable)
             {
+                if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
+                if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
+
                 drainAmount = healthComponent.fullHealth / 125;
                 draining = true;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;

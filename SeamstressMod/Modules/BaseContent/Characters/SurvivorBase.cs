@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using RoR2.Skills;
 using SeamstressMod.Modules.Characters;
 using SeamstressMod.Modules;
+using SeamstressMod.Seamstress.Components;
 
 namespace SeamstressMod.Modules.Characters
 {
@@ -32,6 +33,7 @@ namespace SeamstressMod.Modules.Characters
         protected virtual void InitializeDisplayPrefab()
         {
             displayPrefab = Prefabs.CreateDisplayPrefab(assetBundle, displayPrefabName, bodyPrefab);
+            displayPrefab.AddComponent<SeamstressCSS>();
         }
 
         protected virtual void InitializeSurvivor()

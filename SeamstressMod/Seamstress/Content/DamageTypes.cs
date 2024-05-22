@@ -64,14 +64,7 @@ namespace SeamstressMod.Seamstress.Content
                 SeamstressController seamstressController = attackerBody.GetComponent<SeamstressController>();
                 if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))
                 {
-                    if (victimBody.isBoss)
-                    {
-                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressBossDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                    }
-                    else
-                    {
-                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
-                    }
+                    DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, Dots.SeamstressDot, SeamstressStaticValues.cutDuration, damageInfo.procCoefficient);
                 }
                 if (damageInfo.HasModdedDamageType(NoScissors))
                 {
