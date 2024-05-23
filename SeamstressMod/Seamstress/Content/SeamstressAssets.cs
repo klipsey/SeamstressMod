@@ -85,10 +85,6 @@ namespace SeamstressMod.Seamstress.Content
         internal static NetworkSoundEventDef scissorsHitSoundEvent;
         internal static NetworkSoundEventDef parrySuccessSoundEvent;
 
-        //Sprites
-        internal static Sprite texCanGrab;
-        internal static Sprite texCantGrab;
-
         //Projectiles
         internal static GameObject needlePrefab;
         internal static GameObject needleGhost;
@@ -268,8 +264,7 @@ namespace SeamstressMod.Seamstress.Content
             Object.DestroyImmediate(telekinesisTracker.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
             SpriteRenderer balls = telekinesisTracker.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
             balls.SetMaterial(component);
-            texCanGrab = mainAssetBundle.LoadAsset<Sprite>("Grab");
-            balls.sprite = texCanGrab;
+            balls.sprite = mainAssetBundle.LoadAsset<Sprite>("Grab");
             telekinesisTracker.transform.GetChild(1).gameObject.SetActive(false);
             Sprite sprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/UI/texCrosshair2.png").WaitForCompletion();
             Material component2 = telekinesisTracker.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().material;
@@ -284,8 +279,7 @@ namespace SeamstressMod.Seamstress.Content
             Object.DestroyImmediate(telekinesisCdTracker.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
             balls = telekinesisCdTracker.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
             balls.SetMaterial(component);
-            texCanGrab = mainAssetBundle.LoadAsset<Sprite>("NoGrab");
-            balls.sprite = texCanGrab;
+            balls.sprite = mainAssetBundle.LoadAsset<Sprite>("NoGrab");
             telekinesisCdTracker.transform.GetChild(1).gameObject.SetActive(false);
             sprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/UI/texCrosshair2.png").WaitForCompletion();
             component2 = telekinesisCdTracker.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().material;
@@ -480,7 +474,7 @@ namespace SeamstressMod.Seamstress.Content
             GameObject obj2 = new GameObject();
             trailEffectHands = obj2.InstantiateClone("SeamstressTrail", false);
             TrailRenderer trail2 = trailEffectHands.AddComponent<TrailRenderer>();
-            trail2.startWidth = 0.5f;
+            trail2.startWidth = 0.3f;
             trail2.endWidth = 0f;
             trail2.time = 0.5f;
             trail2.emitting = true;
