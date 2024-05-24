@@ -1411,6 +1411,28 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="sfx_ravager_charge_beam_loop" ID="{E39EB510-E081-4D81-B72C-A6774D9B5724}">
+					<ChildrenList>
+						<Action Name="" ID="{4A93BF15-6991-4789-8D97-5B9E58A036C8}" ShortID="605202129">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="sfx_ravager_charge_beam_loop" ID="{9DA609B8-54B6-4951-AD17-2208907A3CDD}" WorkUnitID="{FE3FA7C5-9E89-40FE-8C7C-97CE0994E519}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="sfx_seamstress_dash" ID="{9A687B65-C25B-4166-AF63-8CFFCAF09076}">
+					<ChildrenList>
+						<Action Name="" ID="{4C965B1F-F726-4D66-B3C0-2A47E7C0F699}" ShortID="653476763">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="sfx_seamstress_dash" ID="{592F090F-46E4-40BB-A4A0-D7F629EE4ED8}" WorkUnitID="{FE3FA7C5-9E89-40FE-8C7C-97CE0994E519}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

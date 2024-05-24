@@ -21,7 +21,10 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+
             if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
+
+            PlayAnimation("Body", "Spawn");
         }
 
         public override void FixedUpdate()

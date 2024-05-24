@@ -5,33 +5,33 @@ namespace SeamstressMod.Seamstress.Content
 {
     public static class SeamstressConfig
     {
-        public static ConfigEntry<bool> funny;
-        public static ConfigEntry<float> someConfigFloat;
+        public static ConfigEntry<bool> heavyEnemy;
+        public static ConfigEntry<bool> forceUnlockCharacter;
+        public static ConfigEntry<bool> forceUnlockRaven;
         public static ConfigEntry<float> someConfigFloatWithCustomRange;
 
         public static void Init()
         {
-            string section = "Seamstress";
+            string section = "Seamstress - 01";
 
             //add more here or else you're cringe
-            funny = Config.BindAndOptions(
+            heavyEnemy = Config.BindAndOptions(
                 section,
                 "Pickup Big Enemies",
                 false,
                 "Allows you to pickup bigger enemies for fun.");
 
-            someConfigFloat = Config.BindAndOptions(
+            forceUnlockCharacter = Config.BindAndOptions(
                 section,
-                "Nothing. For now...",
-                5f);//blank description will default to just the name
+                "Force Unlock Seamstress",
+                false,
+                "Cheater...");
 
-            someConfigFloatWithCustomRange = Config.BindAndOptions(
+            forceUnlockRaven = Config.BindAndOptions(
                 section,
-                "someConfigfloat2",
-                5f,
-                0,
-                50,
-                "Nothing. For now...");
+                "Force Unlock Raven",
+                false,
+                "If you're not Feilong, you're a cheater.");
         }
     }
 }

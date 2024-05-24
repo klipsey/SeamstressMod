@@ -21,12 +21,20 @@ namespace SeamstressMod.Seamstress.SkillStates
         protected CameraTargetParams.AimRequest request;
 
         protected Vector3 blinkVector;
+        protected Vector3 slipVector = Vector3.zero;
+        private Vector3 cachedForward;
 
-        public static float duration = 0.2f;
+        private Quaternion slideRotation;
+
+        public float duration = 0.2f;
 
         protected float speedCoefficient;
 
         public static string beginSoundString = "Play_imp_attack_blink";
+
+        public string animationLayer = "FullBody, Override";
+
+        public string animString = "Dash";
 
         protected CharacterModel characterModel;
 
@@ -40,7 +48,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             base.OnEnter();
             Util.PlaySound(beginSoundString, gameObject);
-            PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", duration);
             modelTransform = GetModelTransform();
             if (modelTransform)
             {
@@ -62,6 +69,19 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 request = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
+            this.slipVector = ((base.inputBank.moveVector == Vector3.zero) ? base.characterDirection.forward : base.inputBank.moveVector).normalized;
+            this.cachedForward = this.characterDirection.forward;
+
+            Animator anim = this.GetModelAnimator();
+
+            Vector3 rhs = base.characterDirection ? base.characterDirection.forward : this.slipVector;
+            Vector3 rhs2 = Vector3.Cross(Vector3.up, rhs);
+            float num = Vector3.Dot(this.slipVector, rhs);
+            float num2 = Vector3.Dot(this.slipVector, rhs2);
+            anim.SetFloat("dashF", num);
+            anim.SetFloat("dashR", num2);
+            this.slideRotation = Quaternion.LookRotation(this.slipVector, this.cachedForward);
+
             blinkVector = GetBlinkVector();
             if (blinkVector.sqrMagnitude < Mathf.Epsilon)
             {
@@ -69,6 +89,9 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             if (characterMotor.isGrounded) characterMotor.velocity = Vector3.zero;
             characterDirection.moveVector = blinkVector;
+
+            base.PlayCrossfade(animationLayer, animString, "Dash.playbackRate", this.duration * 1.5f, 0.05f);
+
             CreateBlinkEffect(base.characterBody.corePosition, true);
             speedCoefficient = 0.3f * characterBody.jumpPower * Mathf.Clamp(characterBody.moveSpeed, 1f, 5f);
             gameObject.layer = LayerIndex.fakeActor.intVal;

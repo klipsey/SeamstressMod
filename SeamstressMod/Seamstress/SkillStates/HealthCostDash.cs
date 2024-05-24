@@ -17,7 +17,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class HealthCostDash : BaseSeamstressSkillState
     {
-        public static float baseDuration = 0.3f;
+        public static float baseDuration = 0.8f;
         public static float dashPower = 6f;
         public static float damageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
         public static GameObject uppercutEffect = SeamstressAssets.uppercutEffect;
@@ -27,6 +27,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         private List<HurtBox> victimsStruck = new List<HurtBox>();
         protected string hitBoxString = "Sword";
         private bool hasHit;
+        private bool hasDelayed;
 
         public override void OnEnter()
         {
@@ -42,87 +43,93 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (modelTransform && SeamstressAssets.destealthMaterial)
             {
                 TemporaryOverlay temporaryOverlay = animator.gameObject.AddComponent<TemporaryOverlay>();
-                temporaryOverlay.duration = 1f;
+                temporaryOverlay.duration = 1.2f;
                 temporaryOverlay.destroyComponentOnEnd = true;
                 temporaryOverlay.originalMaterial = SeamstressAssets.destealthMaterial;
                 temporaryOverlay.inspectorCharacterModel = animator.gameObject.GetComponent<CharacterModel>();
                 temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                 temporaryOverlay.animateShaderAlpha = true;
             }
-
-            this.attack = new OverlapAttack();
-            attack.attacker = base.gameObject;
-            attack.inflictor = base.gameObject;
-            attack.damageType = DamageType.Stun1s;
-            attack.procCoefficient = 1f;
-            attack.teamIndex = base.GetTeam();
-            attack.isCrit = base.RollCrit();
-            attack.forceVector = Vector3.up * 3000f;
-            attack.damage = damageCoefficient * damageStat;
-            attack.hitBoxGroup = FindHitBoxGroup(hitBoxString);
-            attack.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-
-            EffectManager.SpawnEffect(SeamstressAssets.bloodExplosionEffect, new EffectData
-            {
-                origin = this.transform.position,
-                rotation = Quaternion.identity,
-                scale = 0.5f
-            }, false);
-
-            if (insatiable)
-            {
-                attack.AddModdedDamageType(DamageTypes.CutDamage);
-            }
-            attack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
-            EffectData effectData = new EffectData()
-            {
-                origin = base.characterBody.corePosition,
-                rotation = Util.QuaternionSafeLookRotation(dashVector),
-                scale = 3f
-            };
-            EffectManager.SpawnEffect(SeamstressAssets.impDashEffect, effectData, false);
-            EffectManager.SpawnEffect(SeamstressAssets.smallBlinkEffect, effectData, false);
-            
-            PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", baseDuration);
-
-            base.characterMotor.velocity.y = 0f;
-            base.characterMotor.velocity += dashVector * (dashPower * (moveSpeedStat + 1f));
-
+            base.characterMotor.velocity = Vector3.zero;
             if (NetworkServer.active)
             {
                 characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
             }
-            Vector3 effectPos = this.transform.localPosition;
-            RaycastHit raycastHit;
-            if (Physics.Raycast(effectPos, Vector3.one, out raycastHit, 10f, LayerIndex.world.mask))
-            {
-                effectPos = raycastHit.point;
-            }
-            EffectManager.SpawnEffect(SeamstressAssets.bloodSplatterEffect, new EffectData
-            {
-                origin = effectPos,
-                rotation = Quaternion.identity,
-                color = SeamstressAssets.coolRed,
-            }, false);
-
-            seamstressController.snapBackPosition = base.characterBody.corePosition;
-
-            Vector3 position = base.characterBody.corePosition;
-            GameObject obj = UnityEngine.Object.Instantiate(projectilePrefab, position, Quaternion.identity);
-            ProjectileController component = obj.GetComponent<ProjectileController>();
-            if (component)
-            {
-                component.owner = base.gameObject;
-                component.Networkowner = base.gameObject;
-            }
-            obj.GetComponent<TeamFilter>().teamIndex = base.GetComponent<TeamComponent>().teamIndex;
+            PlayAnimation("FullBody, Override", "RipHeart", "Dash.playbackRate", (baseDuration / attackSpeedStat) * 1.5f);
+            Util.PlayAttackSpeedSound("Play_imp_overlord_attack2_tell", gameObject, attackSpeedStat);
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            if (!hasDelayed) base.characterMotor.velocity.y = base.characterMotor.velocity.y;
+            if (base.fixedAge > 0.5f && !hasDelayed)
+            {
+                Util.PlaySound("sfx_seamstress_dash",base.gameObject);
+                Util.PlaySound("sfx_seamstress_chains", base.gameObject);
+                hasDelayed = true;
+                this.attack = new OverlapAttack();
+                attack.attacker = base.gameObject;
+                attack.inflictor = base.gameObject;
+                attack.damageType = DamageType.Stun1s;
+                attack.procCoefficient = 1f;
+                attack.teamIndex = base.GetTeam();
+                attack.isCrit = base.RollCrit();
+                attack.forceVector = Vector3.up * 3000f;
+                attack.damage = damageCoefficient * damageStat;
+                attack.hitBoxGroup = FindHitBoxGroup(hitBoxString);
+                attack.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
 
-            if (isAuthority)
+                EffectManager.SpawnEffect(SeamstressAssets.bloodExplosionEffect, new EffectData
+                {
+                    origin = this.transform.position,
+                    rotation = Quaternion.identity,
+                    scale = 0.5f
+                }, false);
+
+                if (insatiable)
+                {
+                    attack.AddModdedDamageType(DamageTypes.CutDamage);
+                }
+                attack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
+                EffectData effectData = new EffectData()
+                {
+                    origin = base.characterBody.corePosition,
+                    rotation = Util.QuaternionSafeLookRotation(dashVector),
+                    scale = 3f
+                };
+                EffectManager.SpawnEffect(SeamstressAssets.impDashEffect, effectData, false);
+                EffectManager.SpawnEffect(SeamstressAssets.smallBlinkEffect, effectData, false);
+
+                base.characterMotor.velocity.y = 0f;
+                base.characterMotor.velocity += dashVector * (dashPower * (moveSpeedStat + 1f));
+
+                Vector3 effectPos = this.transform.localPosition;
+                RaycastHit raycastHit;
+                if (Physics.Raycast(effectPos, Vector3.one, out raycastHit, 10f, LayerIndex.world.mask))
+                {
+                    effectPos = raycastHit.point;
+                }
+                EffectManager.SpawnEffect(SeamstressAssets.bloodSplatterEffect, new EffectData
+                {
+                    origin = effectPos,
+                    rotation = Quaternion.identity,
+                    color = SeamstressAssets.coolRed,
+                }, false);
+
+                seamstressController.snapBackPosition = base.characterBody.corePosition;
+
+                Vector3 position = base.characterBody.corePosition;
+                GameObject obj = UnityEngine.Object.Instantiate(projectilePrefab, position, Quaternion.identity);
+                ProjectileController component = obj.GetComponent<ProjectileController>();
+                if (component)
+                {
+                    component.owner = base.gameObject;
+                    component.Networkowner = base.gameObject;
+                }
+                obj.GetComponent<TeamFilter>().teamIndex = base.GetComponent<TeamComponent>().teamIndex;
+            }
+            if (base.isAuthority && hasDelayed)
             {
                 characterDirection.forward = dashVector;
                 characterBody.isSprinting = true;
@@ -141,7 +148,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     outer.SetNextStateToMain();
                 }
 
-                if (fixedAge >= baseDuration)
+                if (fixedAge >= baseDuration && hasDelayed)
                 {
                     EffectData effectData = new EffectData()
                     {

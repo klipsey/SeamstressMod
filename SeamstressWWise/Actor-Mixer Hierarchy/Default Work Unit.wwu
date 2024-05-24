@@ -3113,7 +3113,7 @@
 										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-6</Value>
+												<Value>4</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -3389,6 +3389,28 @@
 										<ActiveSource Name="SE_BTL_RAM_Entry_1P_01" ID="{4060A128-F4E3-4509-AAF0-FDE2A74EB3CB}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
+								<Sound Name="sfx_seamstress_dash" ID="{592F090F-46E4-40BB-A4A0-D7F629EE4ED8}" ShortID="605132560">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{140D52C2-62AC-4006-AE21-98F493D2358C}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{92A1A0F3-7047-4165-95AE-D5CFCC30AE61}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sfx_seamstress_dash" ID="{C8D4ADAD-DFA9-4E39-A7C3-F0875FF8D434}">
+											<Language>SFX</Language>
+											<AudioFile>sfx_seamstress_dash.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="849505283"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sfx_seamstress_dash" ID="{C8D4ADAD-DFA9-4E39-A7C3-F0875FF8D434}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
 							</ChildrenList>
 						</ActorMixer>
 						<Sound Name="sfx_driver_explosion" ID="{FD8D7F5F-8FF7-41A0-BC29-86BDA8782570}" ShortID="639982188">
@@ -3466,6 +3488,31 @@
 							</ChildrenList>
 							<ActiveSourceList>
 								<ActiveSource Name="245372__quaker540__hq-explosion" ID="{7A744BE3-DD41-4187-9D42-8BF9F45E1F4E}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sfx_ravager_charge_beam_loop" ID="{9DA609B8-54B6-4951-AD17-2208907A3CDD}" ShortID="236027198">
+							<PropertyList>
+								<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{140D52C2-62AC-4006-AE21-98F493D2358C}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{92A1A0F3-7047-4165-95AE-D5CFCC30AE61}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sfx_ravager_charge_beam_loop" ID="{A1E4270D-168B-4BBB-B1A1-C1EBD659DE72}">
+									<Language>SFX</Language>
+									<AudioFile>sfx_ravager_charge_beam_loop.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="647558055"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sfx_ravager_charge_beam_loop" ID="{A1E4270D-168B-4BBB-B1A1-C1EBD659DE72}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

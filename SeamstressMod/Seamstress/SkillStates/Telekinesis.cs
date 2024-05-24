@@ -77,13 +77,15 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private bool theyDidNotHaveRigid;
 
+        private uint playId;
+
         public override void OnEnter()
         {
             base.OnEnter();
             pullSuitabilityCurve.AddKey(0, 1);
             pullSuitabilityCurve.AddKey(2000, 0);
             tracker = GetComponent<Tracker>();
-            if (tracker)
+            if (tracker && characterBody.HasBuff(SeamstressBuffs.needles))
             {
                 victim = tracker.GetTrackingTarget();
                 if (victim)
@@ -94,10 +96,20 @@ namespace SeamstressMod.Seamstress.SkillStates
                         if (!victimBody.HasBuff(SeamstressBuffs.manipulated)) victimBody.AddBuff(SeamstressBuffs.manipulated);
                         this.characterBody.RemoveBuff(SeamstressBuffs.needles);
                     }
+                    base.PlayCrossfade("Gesture, Override", "Manipulate", "Manipulate.playbackRate", (6f / this.attackSpeedStat) * 0.15f, 0.05f);
+
+                    this.playId = Util.PlaySound("sfx_ravager_charge_beam_loop", base.gameObject);
                 }
                 else
                 {
                     Log.Debug("NO VICTIM");
+                }
+            }
+            else
+            {
+                if(base.isAuthority)
+                {
+                    outer.SetNextStateToMain();
                 }
             }
             if (!_barrelPoint)
@@ -147,7 +159,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 collisionDetectionMode = victimRigid.collisionDetectionMode;
                 victimRigid.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             }
-            if (SeamstressConfig.funny.Value)
+            if (SeamstressConfig.heavyEnemy.Value)
             {
                 if (victimMotor)
                 {
@@ -163,6 +175,9 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         public override void OnExit()
         {
+            AkSoundEngine.StopPlayingID(this.playId);
+
+            PlayAnimation("Gesture, Override", "BufferEmpty");
             if (victimBody)
             {
                 if (NetworkServer.active)
@@ -226,7 +241,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                         num2 = victimRigid.mass;
                     }
                     else vector2.y += Physics.gravity.y * Time.fixedDeltaTime;
-                    if (SeamstressConfig.funny.Value) num2 = Mathf.Clamp(num2, 60f, 120f);
+                    if(num2 < 1000f) num2 = Util.Remap(num2, 60f, 1000f, 60f, 150f);
                     float num3 = pullSuitabilityCurve.Evaluate(num2);
                     victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * (num3 * Mathf.Max(num2, 100f)) * num, alwaysApply: true, disableAirControlUntilCollision: false);
                 }

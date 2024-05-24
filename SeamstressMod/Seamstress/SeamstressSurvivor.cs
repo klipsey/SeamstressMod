@@ -16,6 +16,7 @@ using R2API.Networking;
 using SeamstressMod.Seamstress.Components;
 using SeamstressMod.Seamstress.Content;
 using SeamstressMod.Seamstress.SkillStates;
+using EmotesAPI;
 
 namespace SeamstressMod.Seamstress
 {
@@ -44,7 +45,7 @@ namespace SeamstressMod.Seamstress
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
-            crosshair = Assets.LoadCrosshair("SimpleDot"),
+            crosshair = Modules.Assets.LoadCrosshair("SimpleDot"),
             podPrefab = null,
             initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressSpawnState)),
 
@@ -82,6 +83,11 @@ namespace SeamstressMod.Seamstress
                     childName = "CrownModel",
                     dontHotpoo = true
                 },
+                new CustomRendererInfo
+                {
+                    childName = "HeartModel",
+                    dontHotpoo = true,
+                }
 
         };
 
@@ -110,6 +116,8 @@ namespace SeamstressMod.Seamstress
 
         public override void InitializeCharacter()
         {
+            SeamstressConfig.Init();
+
             SeamstressUnlockables.Init();
 
             SeamstressCrosshair.Init(assetBundle);
@@ -118,7 +126,6 @@ namespace SeamstressMod.Seamstress
 
             DamageTypes.Init();
 
-            SeamstressConfig.Init();
             SeamstressStates.Init();
             SeamstressTokens.Init();
 
@@ -477,7 +484,7 @@ namespace SeamstressMod.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 12f,
+                baseRechargeInterval = 16f,
                 baseMaxStock = 2,
 
                 rechargeStock = 2,
@@ -558,7 +565,8 @@ namespace SeamstressMod.Seamstress
                 "meshSeamstress",
                 "meshScissorL",
                 "meshScissorR",
-                "meshSeamstressCrown");
+                "meshSeamstressCrown",
+                "meshHeart");
 
             defaultSkin.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matSeamstress");
             defaultSkin.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matSeamstressEmission");
@@ -573,9 +581,10 @@ namespace SeamstressMod.Seamstress
             
             ////creating a new skindef as we did before
             SkinDef masterySkin = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
-                assetBundle.LoadAsset<Sprite>("texVergilAchievement"),
+                assetBundle.LoadAsset<Sprite>("texMonsoonBlue"),
                 defaultRendererinfos,
-                prefabCharacterModel.gameObject);
+                prefabCharacterModel.gameObject
+                , SeamstressUnlockables.masterySkinUnlockableDef);
 
             ////adding the mesh replacements as above. 
             ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
@@ -583,7 +592,8 @@ namespace SeamstressMod.Seamstress
                 "meshPrincess",
                 "meshPrincessSwordL",
                 "meshPrincessSwordR",
-                "meshPrincessCrown");
+                "meshPrincessCrown",
+                null);
 
             ////masterySkin has a new set of RendererInfos (based on default rendererinfos)
             ////you can simply access the RendererInfos' materials and set them to the new materials for your skin.
@@ -592,65 +602,94 @@ namespace SeamstressMod.Seamstress
             masterySkin.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessSword");
             masterySkin.rendererInfos[3].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessBlueEmissions");
 
+
             ////here's a barebones example of using gameobjectactivations that could probably be streamlined or rewritten entirely, truthfully, but it works
-            //masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
-            //{
-            //    new SkinDef.GameObjectActivation
-            //    {
-            //        gameObject = childLocator.FindChildGameObject("GunModel"),
-            //        shouldActivate = false,
-            //    }
-            //};
+            masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                   gameObject = childLocator.FindChildGameObject("HeartModel"),
+                    shouldActivate = false,
+                }
+            };
             ////simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
             ///
             SkinDef masterySkin2 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
-                assetBundle.LoadAsset<Sprite>("texDanteAchievement"),
+                assetBundle.LoadAsset<Sprite>("texMonsoonRed"),
                 defaultRendererinfos,
-                prefabCharacterModel.gameObject);
+                prefabCharacterModel.gameObject,
+                SeamstressUnlockables.masterySkinUnlockableDef);
 
             masterySkin2.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshPrincess",
                 "meshPrincessSwordL",
                 "meshPrincessSwordR",
-                "meshPrincessCrown");
+                "meshPrincessCrown",
+                null);
 
             masterySkin2.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessRed");
             masterySkin2.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessSwordAlt");
             masterySkin2.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessSwordAlt");
             masterySkin2.rendererInfos[3].defaultMaterial = assetBundle.LoadAsset<Material>("matPrincessRedEmissions");
 
+            masterySkin2.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                   gameObject = childLocator.FindChildGameObject("HeartModel"),
+                    shouldActivate = false,
+                }
+            };
             SkinDef masterySkin3 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
                 assetBundle.LoadAsset<Sprite>("ravenIcon"),
                 defaultRendererinfos,
-                prefabCharacterModel.gameObject);
+                prefabCharacterModel.gameObject, SeamstressUnlockables.masteryTyphoonSkinUnlockableDef);
 
             masterySkin3.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshRaven",
                 "meshShadowClawsL",
                 "meshShadowClawsR",
-                "meshRavenCrown");
+                "meshRavenCrown",
+                null);
 
             masterySkin3.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matRaven");
             masterySkin3.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenShadowClaws");
             masterySkin3.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenShadowClaws");
             masterySkin3.rendererInfos[3].defaultMaterial = assetBundle.LoadAsset<Material>("matRaven");
 
+            masterySkin3.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                   gameObject = childLocator.FindChildGameObject("HeartModel"),
+                    shouldActivate = false,
+                }
+            };
             SkinDef masterySkin4 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
             assetBundle.LoadAsset<Sprite>("ravenIcon"),
             defaultRendererinfos,
-            prefabCharacterModel.gameObject);
+            prefabCharacterModel.gameObject, SeamstressUnlockables.masteryTyphoonSkinUnlockableDef);
 
             masterySkin4.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshRavenAlt",
                 "meshShadowClawsL",
                 "meshShadowClawsR",
-                "meshRavenCrownAlt");
+                "meshRavenCrownAlt", 
+                null);
 
             masterySkin4.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenAlt");
             masterySkin4.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenShadowClaws");
             masterySkin4.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenShadowClaws");
             masterySkin4.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenAltEmission");
 
+            masterySkin4.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                   gameObject = childLocator.FindChildGameObject("HeartModel"),
+                    shouldActivate = false,
+                }
+            };
             skins.Add(masterySkin);
             skins.Add(masterySkin2);
             skins.Add(masterySkin3);
@@ -685,6 +724,16 @@ namespace SeamstressMod.Seamstress
             On.RoR2.HealthComponent.TakeDamage += new On.RoR2.HealthComponent.hook_TakeDamage(HealthComponent_TakeDamage);
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             On.RoR2.UI.LoadoutPanelController.Rebuild += LoadoutPanelController_Rebuild;
+            if (SeamstressPlugin.emotesInstalled) Emotes();
+        }
+        private static void Emotes()
+        {
+            On.RoR2.SurvivorCatalog.Init += (orig) =>
+            {
+                orig();
+                var skele = SeamstressAssets.mainAssetBundle.LoadAsset<GameObject>("seamstress_emoteskeleton");
+                CustomEmotesAPI.ImportArmature(SeamstressSurvivor.characterPrefab, skele);
+            };
         }
         private static void LoadoutPanelController_Rebuild(On.RoR2.UI.LoadoutPanelController.orig_Rebuild orig, LoadoutPanelController self)
         {

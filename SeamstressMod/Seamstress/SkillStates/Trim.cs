@@ -34,7 +34,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 5f;
 
-            swingSoundString = "Play_acrid_m1_slash";
+            swingSoundString = "sfx_seamstress_swing";
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.clawSlashEffect;
@@ -107,7 +107,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     PlayCrossfade("Gesture, Override", "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
                     break;
                 case 2:
-                    PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", duration, 0.1f * duration);
+                    PlayCrossfade("Gesture, Override", "Slash3", "Slash.playbackRate", duration * 1.5f, 0.1f * duration);
                     break;
             }
         }

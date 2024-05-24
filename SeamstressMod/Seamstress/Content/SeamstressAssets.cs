@@ -347,9 +347,12 @@ namespace SeamstressMod.Seamstress.Content
             pickupScissorEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("ScissorPickupSwing");
             pickupScissorEffect.AddComponent<NetworkIdentity>();
             pickupScissorEffect.transform.GetChild(0).localScale *= 1.5f;
-            pickupScissorEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
+            pickupScissorEffect.transform.GetChild(0).rotation = Quaternion.AngleAxis(90f,Vector3.left);
+            pickupScissorEffect.transform.GetChild(1).rotation = Quaternion.AngleAxis(90f, Vector3.left);
+            pickupScissorEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             fard = pickupScissorEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
-            fard.startLifetimeMultiplier = 5f;
+            fard.startLifetimeMultiplier = 2f;
+            Modules.Content.CreateAndAddEffectDef(pickupScissorEffect);
 
             wideSlashEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressWideSwordSwing");
             wideSlashEffect.AddComponent<NetworkIdentity>();
@@ -612,7 +615,7 @@ namespace SeamstressMod.Seamstress.Content
             Object.Destroy(scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
 
             FuckImpact fuck = scissorPrefab.AddComponent<FuckImpact>();
-            fuck.stickSoundString = scissorPrefab.GetComponent<ProjectileStickOnImpact>().stickSoundString;
+            fuck.stickSoundString = "sfx_seamstress_scissor_land";
             fuck.stickParticleSystem = scissorPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
             fuck.ignoreCharacters = false;
             fuck.ignoreWorld = false;

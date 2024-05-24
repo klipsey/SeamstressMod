@@ -34,7 +34,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             attackRecoil = 2 / attackSpeedStat;
             hitHopVelocity = 3.5f;
 
-            swingSoundString = "Play_acrid_m1_slash";
+            swingSoundString = "sfx_seamstress_swing";
             hitSoundString = "";
             hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
             swingEffectPrefab = SeamstressAssets.clawSlashEffect;

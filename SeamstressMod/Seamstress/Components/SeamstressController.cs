@@ -7,6 +7,7 @@ using System.Linq;
 using SeamstressMod.Seamstress.Content;
 using R2API.Networking.Interfaces;
 using RoR2.Projectile;
+using EntityStates;
 
 namespace SeamstressMod.Seamstress.Components
 {
@@ -73,6 +74,7 @@ namespace SeamstressMod.Seamstress.Components
             skillLocator = GetComponent<SkillLocator>();
             ModelLocator modelLocator = this.GetComponent<ModelLocator>();
             childLocator = modelLocator.modelBaseTransform.GetComponentInChildren<ChildLocator>();
+            this.animator = modelLocator.modelTransform.GetComponent<Animator>();
         }
         public void Start()
         {
@@ -182,10 +184,53 @@ namespace SeamstressMod.Seamstress.Components
 
             new SyncHunger(networkIdentity.netId, (ulong)(this.fiendMeter * 100f)).Send(R2API.Networking.NetworkDestination.Clients);
         }
+        public void PlayScissorRSwing()
+        {
+            PlayCrossfade("Gesture, Override", "ScissorRSlash", "Slash.playbackRate", 1.5f, 0.05f);
+        }
+        public void PlayScissorLSwing()
+        {
+            PlayCrossfade("Gesture, Override", "ScissorLSlash", "Slash.playbackRate", 1.5f, 0.05f);
+        }
+        protected void PlayCrossfade(string layerName, string animationStateName, string playbackRateParam, float duration, float crossfadeDuration)
+        {
+            if (duration <= 0f)
+            {
+                Debug.LogWarningFormat("EntityState.PlayCrossfade: Zero duration is not allowed. type={0}", GetType().Name);
+                return;
+            }
+            Animator modelAnimator = this.animator;
+            if ((bool)modelAnimator)
+            {
+                modelAnimator.speed = 1f;
+                modelAnimator.Update(0f);
+                int layerIndex = modelAnimator.GetLayerIndex(layerName);
+                modelAnimator.SetFloat(playbackRateParam, 1f);
+                modelAnimator.CrossFadeInFixedTime(animationStateName, crossfadeDuration, layerIndex);
+                modelAnimator.Update(0f);
+                float length = modelAnimator.GetNextAnimatorStateInfo(layerIndex).length;
+                modelAnimator.SetFloat(playbackRateParam, length / duration);
+            }
+        }
+        public void EnableInstatiableLayer()
+        {
+            if (!this.animator || !this.childLocator) return;
+
+            this.childLocator.FindChild("HeartModel").gameObject.SetActive(false);
+            this.animator.SetLayerWeight(this.animator.GetLayerIndex("Body, Butchered"), 1f);
+        }
+        public void DisableInstatiableLayer() 
+        {
+            if (!this.animator || !this.childLocator) return;
+
+            this.childLocator.FindChild("HeartModel").gameObject.SetActive(true);
+            this.animator.SetLayerWeight(this.animator.GetLayerIndex("Body, Butchered"), 0f);
+        }
         private void IsInsatiable()
         {
             if (inInsatiable && !hasStartedInsatiable)
             {
+                EnableInstatiableLayer();
                 if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
                 if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
                 Transform handR = this.childLocator.FindChild("HandR");
@@ -214,6 +259,7 @@ namespace SeamstressMod.Seamstress.Components
             }
             else if (!inInsatiable && hasStartedInsatiable)
             {
+                DisableInstatiableLayer();
                 if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
                 if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
 

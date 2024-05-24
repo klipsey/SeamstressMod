@@ -15,6 +15,8 @@ namespace SeamstressMod.Seamstress.SkillStates
     {
         public override void OnEnter()
         {
+            animationLayer = "Body";
+            animString = "Jump";
             base.OnEnter();
             base.speedCoefficient = 0.3f * characterBody.jumpPower * 3f;
             base.blinkVector = Vector3.up;

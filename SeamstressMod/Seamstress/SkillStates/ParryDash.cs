@@ -72,7 +72,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             overlapAttack.damageType = DamageType.Stun1s;
             Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
             hitSound = "Play_imp_overlord_impact";
-            PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", dashDuration);
+            PlayAnimation("FullBody, Override", "ParrySlash", "Dash.playbackRate", dashDuration * 1.5f);
         }
         public override void FixedUpdate()
         {

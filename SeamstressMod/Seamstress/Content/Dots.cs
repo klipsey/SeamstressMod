@@ -27,7 +27,7 @@ namespace SeamstressMod.Seamstress.Content
         }
         public static void DelegateBehave3(DotController self, DotStack dotStack)
         {
-            if (dotStack.dotIndex == SeamstressBleed && self.victimBody.healthComponent.combinedHealth > self.victimBody.healthComponent.fullCombinedHealth * 0.05)
+            if (dotStack.dotIndex == SeamstressBleed && self.victimBody.healthComponent.combinedHealth > self.victimBody.healthComponent.fullCombinedHealth * 0.1f)
             {
                 float currentBarrier = self.victimBody.healthComponent.barrier;
                 float currentShield = self.victimBody.healthComponent.shield;
@@ -78,7 +78,7 @@ namespace SeamstressMod.Seamstress.Content
             SeamstressDot = RegisterDotDef(new DotDef
             {
                 interval = 0.2f,
-                damageCoefficient = 0.5f,
+                damageCoefficient = 0.2f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.cutBleed,
                 resetTimerOnAdd = false,

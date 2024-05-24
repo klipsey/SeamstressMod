@@ -261,7 +261,7 @@ namespace SeamstressMod.Modules.BaseStates
                         if (attack.HasModdedDamageType(DamageTypes.NoScissors)) attack.RemoveModdedDamageType(DamageTypes.NoScissors);
                         attack.pushAwayForce = 600f;
                         attackRecoil = 0.2f;
-                        swingSoundString = "Play_imp_attack";
+                        swingSoundString = "sfx_seamstress_swing_scissor";
                         if (muzzleString == "SwingLeftSmall")
                         {
                             attack.hitBoxGroup = FindHitBoxGroup("Left");

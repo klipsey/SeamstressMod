@@ -22,7 +22,7 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool hasActivated = false;
 
-        private float pickupTimer = 5f;
+        private float pickupTimer = 8f;
 
         public void FixedUpdate()
         {
@@ -55,19 +55,21 @@ namespace SeamstressMod.Seamstress.Components
                     if (scissorName == "ScissorR(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = true;
+                        if(healthComponent.body.TryGetComponent<SeamstressController>(out var seamstressController))
+                        {
+                            seamstressController.PlayScissorRSwing();
+                        }
                     }
                     else if (scissorName == "ScissorL(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = false;
+                        if (healthComponent.body.TryGetComponent<SeamstressController>(out var seamstressController))
+                        {
+                            seamstressController.PlayScissorLSwing();
+                        }
                     }
-                    EffectManager.SpawnEffect(boomEffect, new EffectData
-                    {
-                        origin = Util.GetCorePosition(gameObject),
-                        rotation = Quaternion.identity,
-                        scale = 1.5f,
-                    }, true);
                     triggerEvents?.Invoke();
-                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
+                    Util.PlaySound("sfx_seamstress_swing_scissor", gameObject);
                     if (healthComponent.body.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) healthComponent.body.AddBuff(SeamstressBuffs.needles);
                     healthComponent.body.GetComponent<ScissorController>().RpcAddSpecialStock();
                     hasFired = true;

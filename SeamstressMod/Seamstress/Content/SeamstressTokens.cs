@@ -28,7 +28,7 @@ namespace SeamstressMod.Seamstress.Content
              + "< ! > Make sure not to use Clip in a sticky situation. Having backup Needles might just save you." + Environment.NewLine + Environment.NewLine
              + "< ! > Heal as much as you can during Insatiable. The health it provides can halt a quick death." + Environment.NewLine + Environment.NewLine
              + "< ! > Brutalize is a great way to boost your damage but be wary of where you leave your Heart." + Environment.NewLine + Environment.NewLine
-             + "< ! > Use and retrieve your Sentient weapon often to keep up a balance of damage and mobility." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Use and retrieve your Symbiotic weapon often to keep up a balance of damage and mobility." + Environment.NewLine + Environment.NewLine;
 
             /*
              * its not really shown yet in the anims but the panel on the top of the robe/heart area opens up to her artificial heart. 
@@ -87,7 +87,7 @@ namespace SeamstressMod.Seamstress.Content
             Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> and <style=cIsHealing>lifesteal</style> for every <style=cIsHealth>1 missing health</style>.");
 
             Language.Add(prefix + "NEEDLE_NAME", "Imp Touched Heart");
-            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"<color=#9B3737>Blink</color> instead of jumping. <color=#9B3737>Blinking</color> in the air fires <color=#9B3737>Needles</color> dealing " +
+            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"Seamstress <color=#9B3737>Blinks</color>. <color=#9B3737>Blinking</color> in the air fires a <color=#9B3737>Needle</color> dealing " +
                 $"<style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style>. Gain <color=#9B3737>Needles</color> by picking up " + Tokens.symbioticPrefix + " weapons " +
                 "or when attacking enemies without them.");
             #endregion
@@ -133,6 +133,9 @@ namespace SeamstressMod.Seamstress.Content
             #region Achievements
             Language.Add(Tokens.GetAchievementNameToken(SeamstressMasteryAchievement.identifier), "Seamstress: Mastery");
             Language.Add(Tokens.GetAchievementDescriptionToken(SeamstressMasteryAchievement.identifier), "As Seamstress, beat the game or obliterate on Monsoon.");
+
+            Language.Add(Tokens.GetAchievementNameToken(SeamstressRavenUnlockAchievement.identifier), "Raven: Unlocked");
+            Language.Add(Tokens.GetAchievementDescriptionToken(SeamstressRavenUnlockAchievement.identifier), "As Seamstress, beat the game or obliterate on Eclipse or higher.");
 
             Language.Add(Tokens.GetAchievementNameToken(SeamstressUnlockAchievement.identifier), "Just A Trim");
             Language.Add(Tokens.GetAchievementDescriptionToken(SeamstressUnlockAchievement.identifier), "Defeat a teleporter boss with bleed.");

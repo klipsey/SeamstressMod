@@ -34,6 +34,7 @@ namespace SeamstressMod
 
         public static SeamstressPlugin instance;
 
+        public static bool emotesInstalled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.weliveinasociety.CustomEmotesAPI");
         void Awake()
         {
             instance = this;

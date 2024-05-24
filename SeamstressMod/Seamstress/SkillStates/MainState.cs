@@ -51,21 +51,6 @@ namespace SeamstressMod.Seamstress.SkillStates
 
                     base.characterMotor.jumpCount++;
 
-                    if (this.hasModelAnimator)
-                    {
-                        int layerIndex = modelAnimator.GetLayerIndex("Body");
-                        if (layerIndex >= 0)
-                        {
-                            if (characterMotor.jumpCount == 0)
-                            {
-                                modelAnimator.CrossFadeInFixedTime("Jump", smoothingParameters.intoJumpTransitionTime, layerIndex);
-                            }
-                            else
-                            {
-                                modelAnimator.CrossFadeInFixedTime("BonusJump", smoothingParameters.intoJumpTransitionTime, layerIndex);
-                            }
-                        }
-                    }
                     if (hopooFeather)
                     {
                         EffectManager.SpawnEffect(LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/FeatherEffect"), new EffectData

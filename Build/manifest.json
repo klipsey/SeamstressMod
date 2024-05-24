@@ -1,9 +1,9 @@
 {
     "name": "Seamstress",
     "author": "tsuyoikenko",
-    "version_number": "0.5.3",
+    "version_number": "1.0.0",
     "website_url": "",
-    "description": "Seamstress. Animations WIP",
+    "description": "Adds the Seamstress and Raven. Full release.",
     "dependencies": [
         "bbepis-BepInExPack-5.4.1905",
         "RiskofThunder-R2API_Core-5.0.3",

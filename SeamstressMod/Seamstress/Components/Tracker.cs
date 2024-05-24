@@ -90,11 +90,11 @@ namespace SeamstressMod.Seamstress.Components
                 _ = trackingTarget;
                 Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
                 SearchForTarget(aimRay);
-                if (trackingTarget != null || !characterBody.HasBuff(SeamstressBuffs.needles))
+                if (trackingTarget != null)
                 {
                     onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
                 }
-                if (onCooldown)
+                if (onCooldown || !characterBody.HasBuff(SeamstressBuffs.needles))
                 {
                     indicator2.targetTransform = trackingTarget ? trackingTarget.transform : null;
                     indicator.targetTransform = null;

@@ -29,7 +29,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private float duration;
 
-        private int chosenAnim = 2;
+        private string chosenAnim = "FireScissorL";
 
         private bool hasFired;
 
@@ -45,28 +45,25 @@ namespace SeamstressMod.Seamstress.SkillStates
             aimRay = GetAimRay();
             StartAimMode(aimRay, 2f);
             modelAnimator = GetModelAnimator();
-            if (modelAnimator)
+            if(modelAnimator)
             {
-                //string animationStateName = ((chosenAnim == 2) ? "FireVoidspikesL" : "FireVoidspikesR");
-                //PlayAnimation("Gesture, Override", animationStateName, "FireVoidspikes.playbackRate", duration);
-                PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
-
-            }
-            if (scissorRight && scissorLeft)
-            {
-                chosenAnim = 2;
-            }
-            else if (scissorRight && !scissorLeft)
-            {
-                chosenAnim = 1;
-            }
-            else if (scissorLeft && !scissorRight)
-            {
-                chosenAnim = 2;
-            }
-            else
-            {
-                chosenAnim = 2;
+                if (scissorRight && scissorLeft)
+                {
+                    chosenAnim = "FireScissorL";
+                }
+                else if (scissorRight && !scissorLeft)
+                {
+                    chosenAnim = "FireScissorR";
+                }
+                else if (scissorLeft && !scissorRight)
+                {
+                    chosenAnim = "FireScissorL";
+                }
+                else
+                {
+                    chosenAnim = "FireScissorL";
+                }
+                PlayCrossfade("Gesture, Override", chosenAnim, "Slash.playbackRate", duration, 0.05f);
             }
         }
 
@@ -81,7 +78,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             base.FixedUpdate();
             if (modelAnimator && !hasFired)
             {
-                if (chosenAnim == 2)
+                if (chosenAnim == "FireScissorL")
                 {
                     projectilePrefab = this.seamstressController.scissorLPrefab;
                     fireString = "SwingRightSmall";
@@ -131,18 +128,5 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             return InterruptPriority.PrioritySkill;
         }
-
-        public override void OnSerialize(NetworkWriter writer)
-        {
-            base.OnSerialize(writer);
-            writer.Write((char)chosenAnim);
-        }
-
-        public override void OnDeserialize(NetworkReader reader)
-        {
-            base.OnDeserialize(reader);
-            chosenAnim = reader.ReadChar();
-        }
     }
-
 }

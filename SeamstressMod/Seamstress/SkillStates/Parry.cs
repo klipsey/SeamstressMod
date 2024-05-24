@@ -32,7 +32,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 CleanBuffsServer();
                 characterBody.AddBuff(SeamstressBuffs.parryStart);
             }
-            PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", duration);
+            PlayAnimation("FullBody, Override", "Parry", "Slash.playbackRate", duration * 1.5f);
         }
 
         public override void FixedUpdate()

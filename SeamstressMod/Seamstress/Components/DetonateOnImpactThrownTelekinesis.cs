@@ -170,7 +170,7 @@ namespace SeamstressMod.Seamstress.Components
                 Destroy(victimRigid);
                 Destroy(tempSphereCollider);
             }
-            if (SeamstressConfig.funny.Value)
+            if (SeamstressConfig.heavyEnemy.Value)
             {
                 if (victimMotor && victimMotor.mass != previousMass)
                 {

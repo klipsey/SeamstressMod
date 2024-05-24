@@ -15,6 +15,135 @@ ModelImporter:
   - first:
       74: -2394181796071041201
     second: CSSIdleIn
+  - first:
+      74: 2337581520248669239
+    second: Armature|AimPitch
+  - first:
+      74: -3498632222991233575
+    second: Armature|AimYaw
+  - first:
+      74: 4781951162920444690
+    second: Armature|ArmatureAction
+  - first:
+      74: 1138058251333943779
+    second: Armature|Ascend
+  - first:
+      74: -4213601855402709400
+    second: Armature|Clip
+  - first:
+      74: 8755621121690581227
+    second: Armature|ClipRavenButchered
+  - first:
+      74: 7716703115156078458
+    second: Armature|CSSIdle
+  - first:
+      74: 2562173591226776667
+    second: Armature|CSSIdleIn
+  - first:
+      74: 7699907859392306082
+    second: Armature|DashB
+  - first:
+      74: 351712589551498685
+    second: Armature|DashF
+  - first:
+      74: 8667190075572369825
+    second: Armature|DashL
+  - first:
+      74: 8453624699857197762
+    second: Armature|DashR
+  - first:
+      74: -5392195937436897604
+    second: Armature|Descend
+  - first:
+      74: 5434418853472708053
+    second: Armature|DescendFast
+  - first:
+      74: 3124274799925495256
+    second: Armature|FireScissorL
+  - first:
+      74: -1880157873938760612
+    second: Armature|FireScissorR
+  - first:
+      74: -8945691123924629249
+    second: Armature|Idle
+  - first:
+      74: -4281082018218880012
+    second: Armature|IdleIn
+  - first:
+      74: 1494638541294049132
+    second: Armature|IdleInButchered
+  - first:
+      74: 1079665108409675491
+    second: Armature|Jump
+  - first:
+      74: -3036680522325082556
+    second: Armature|JumpSprint
+  - first:
+      74: 5803183430482004391
+    second: Armature|Manipulate
+  - first:
+      74: 2868896550796193110
+    second: Armature|Parry
+  - first:
+      74: 6464016174180750408
+    second: Armature|ParrySlash
+  - first:
+      74: 9082501790590836315
+    second: Armature|PickupScissorLSlash
+  - first:
+      74: 8197582553930191292
+    second: Armature|PickupScissorRSlash
+  - first:
+      74: 2398607740615008303
+    second: Armature|RipHeart
+  - first:
+      74: 9115115818954613908
+    second: Armature|RunB
+  - first:
+      74: 1895109735461398272
+    second: Armature|RunBButchered
+  - first:
+      74: -3692564187089589101
+    second: Armature|RunF
+  - first:
+      74: 3906170454950520340
+    second: Armature|RunFButchered
+  - first:
+      74: -8651651518101165635
+    second: Armature|RunL
+  - first:
+      74: -671878738662175952
+    second: Armature|RunLButchered
+  - first:
+      74: -7304068189903988303
+    second: Armature|RunR
+  - first:
+      74: -1761587238616918830
+    second: Armature|RunRButchered
+  - first:
+      74: -8807050056543116534
+    second: Armature|Slash1
+  - first:
+      74: 4336271007893979479
+    second: Armature|Slash2
+  - first:
+      74: 2762399794109667122
+    second: Armature|Slash3
+  - first:
+      74: -682236144924341708
+    second: Armature|Spawn
+  - first:
+      74: -3112965366749432192
+    second: Armature|Sprint
+  - first:
+      74: 3801639673374246413
+    second: Armature|SprintFast
+  - first:
+      74: 8418031867330162854
+    second: Armature|SprintToIdle
+  - first:
+      74: -1515450233735730027
+    second: Armature|SprintToIdleButchered
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -81,7 +210,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 1
+  importAnimation: 0
   humanDescription:
     serializedVersion: 3
     human: []
