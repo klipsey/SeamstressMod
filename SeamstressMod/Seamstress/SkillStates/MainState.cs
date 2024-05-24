@@ -51,6 +51,22 @@ namespace SeamstressMod.Seamstress.SkillStates
 
                     base.characterMotor.jumpCount++;
 
+                    if (this.hasModelAnimator)
+                    {
+                        int layerIndex = modelAnimator.GetLayerIndex("FullBody, Override");
+                        if (layerIndex >= 0)
+                        {
+                            Vector3 slipVector = ((base.inputBank.moveVector == Vector3.zero) ? base.characterDirection.forward : base.inputBank.moveVector).normalized;
+                            Vector3 cachedForward = this.characterDirection.forward;
+                            Vector3 rhs = base.characterDirection ? base.characterDirection.forward : slipVector;
+                            Vector3 rhs2 = Vector3.Cross(Vector3.up, rhs);
+                            float num = Vector3.Dot(slipVector, rhs);
+                            float num2 = Vector3.Dot(slipVector, rhs2);
+                            modelAnimator.SetFloat("dashF", num);
+                            modelAnimator.SetFloat("dashR", num2);
+                            modelAnimator.CrossFadeInFixedTime("Dash", smoothingParameters.intoJumpTransitionTime, layerIndex);
+                        }
+                    }
                     if (hopooFeather)
                     {
                         EffectManager.SpawnEffect(LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/FeatherEffect"), new EffectData

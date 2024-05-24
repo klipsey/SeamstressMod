@@ -50,8 +50,8 @@ namespace SeamstressMod.Seamstress
             initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressSpawnState)),
 
             maxHealth = 160f,
-            healthRegen = 1f,
-            armor = 15f,
+            healthRegen = 0.7f,
+            armor = -5f,
             damage = 8f,
 
             damageGrowth = 0f,

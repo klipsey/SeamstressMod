@@ -1,6 +1,9 @@
 # 1.0.0
 
-- Full release.
+- Full release
+- Animations
+- Heavy balance changes
+- Emote support
 
 # 0.5.3
 
