@@ -12,6 +12,7 @@ namespace SeamstressMod.Seamstress.Components
         public HUD targetHUD;
         public SeamstressController target;
         public RectTransform fillRectTransform;
+        public GameObject display;
 
         private Image fillBar;
         private PlayerCharacterMasterController playerCharacterMasterController;
@@ -32,8 +33,8 @@ namespace SeamstressMod.Seamstress.Components
 
                 if (playerCharacterMasterController && playerCharacterMasterController.master.hasBody)
                 {
-                    SeamstressController fuckYou = playerCharacterMasterController.master.GetBody().GetComponent<SeamstressController>();
-                    if (fuckYou) SetTarget(fuckYou);
+                    SeamstressController seamstressController = playerCharacterMasterController.master.GetBody().GetComponent<SeamstressController>();
+                    if (seamstressController) SetTarget(seamstressController);
                 }
             }
             else
@@ -49,6 +50,14 @@ namespace SeamstressMod.Seamstress.Components
 
         private void UpdateDisplay()
         {
+            if (target.fiendMeter <= 0)
+            {
+                display.SetActive(false);
+            }
+            else
+            {
+                display.SetActive(true);
+            }
             if (fillRectTransform)
             {
                 float fill = Util.Remap(target.fiendMeter, 0f, target.maxHunger, 0f, 1f);

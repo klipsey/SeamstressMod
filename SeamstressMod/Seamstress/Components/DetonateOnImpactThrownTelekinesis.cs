@@ -117,7 +117,7 @@ namespace SeamstressMod.Seamstress.Components
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                 blastAttack.damageColorIndex = DamageColorIndex.Default;
                 blastAttack.damageType = DamageType.Stun1s | DamageType.AOE;
-                if (seamCom.inInsatiable)
+                if (seamCom.inInsatiableSkill)
                 {
                     blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
                 }

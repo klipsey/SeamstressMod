@@ -22,7 +22,7 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool hasActivated = false;
 
-        private float pickupTimer = 8f;
+        public float pickupTimer = 7f;
 
         public void FixedUpdate()
         {

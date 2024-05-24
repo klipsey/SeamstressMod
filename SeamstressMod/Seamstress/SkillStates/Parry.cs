@@ -80,8 +80,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                 return;
             }
             characterBody.AddTimedBuff(SeamstressBuffs.instatiable, SeamstressStaticValues.insatiableDuration / 1.5f, 1);
-            SeamstressController s = characterBody.GetComponent<SeamstressController>();
-            s.inInsatiable = false;
             CleanBuffsServer();
             if (parrySoundDef)
             {

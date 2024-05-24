@@ -536,6 +536,9 @@ namespace SeamstressMod.Seamstress.Content
             needleFinder.ignoreAir = false;
             needleFinder.flierAltitudeTolerance = Mathf.Infinity;
 
+            ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
+            needleHeal.fractionOfDamage = 0.15f;
+
             ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
             needleController.procCoefficient = 1f;
             needleGhost = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.InstantiateClone("NeedleGhost", false);
@@ -562,8 +565,6 @@ namespace SeamstressMod.Seamstress.Content
         private static void CreateEmpoweredNeedle()
         {
             needleButcheredPrefab = needlePrefab.InstantiateClone("NeedleButchered");
-            ProjectileHealOwnerOnDamageInflicted needleHeal = needleButcheredPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = 0.5f;
             needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
         }
         
@@ -591,12 +592,12 @@ namespace SeamstressMod.Seamstress.Content
             Object.Instantiate(trailEffect, scissorPrefab.transform);
 
             ProjectileImpactExplosion impactAlly = scissorPrefab.GetComponent<ProjectileImpactExplosion>();
-            impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorSlashDamageCoefficient;
+            impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorPickupDamageCoefficient;
             impactAlly.blastProcCoefficient = 1f;
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
-            impactAlly.lifetime = 16f;
-            impactAlly.lifetimeAfterImpact = 16f;
+            impactAlly.lifetime = 14f;
+            impactAlly.lifetimeAfterImpact = 14f;
             impactAlly.impactEffect = pickupScissorEffect;
 
             ProjectileDamage scissorDamage = scissorPrefab.GetComponent<ProjectileDamage>();
@@ -614,7 +615,7 @@ namespace SeamstressMod.Seamstress.Content
             scissorPickup.triggerEvents = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
             Object.Destroy(scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
 
-            FuckImpact fuck = scissorPrefab.AddComponent<FuckImpact>();
+            ScissorImpact fuck = scissorPrefab.AddComponent<ScissorImpact>();
             fuck.stickSoundString = "sfx_seamstress_scissor_land";
             fuck.stickParticleSystem = scissorPrefab.GetComponent<ProjectileStickOnImpact>().stickParticleSystem;
             fuck.ignoreCharacters = false;

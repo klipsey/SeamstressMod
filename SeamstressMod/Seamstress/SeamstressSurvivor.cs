@@ -51,7 +51,7 @@ namespace SeamstressMod.Seamstress
 
             maxHealth = 160f,
             healthRegen = 1f,
-            armor = -5f,
+            armor = 0f,
             damage = 8f,
 
             damageGrowth = 0f,
@@ -383,7 +383,7 @@ namespace SeamstressMod.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 4f,
+                baseRechargeInterval = 6f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -484,7 +484,7 @@ namespace SeamstressMod.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 16f,
+                baseRechargeInterval = 14f,
                 baseMaxStock = 2,
 
                 rechargeStock = 2,
@@ -493,7 +493,7 @@ namespace SeamstressMod.Seamstress
 
                 resetCooldownTimerOnUse = false,
                 fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = true,
+                dontAllowPastMaxStocks = false,
                 mustKeyPress = true,
                 beginSkillCooldownOnSkillEnd = false,
 
@@ -766,13 +766,13 @@ namespace SeamstressMod.Seamstress
                     victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
                     return;
                 }
-                else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.SeamstressBleed)
+                else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.SeamstressSelfBleed)
                 {
                     SeamstressController seamCom = victimBody.gameObject.GetComponent<SeamstressController>();
-                    if (seamCom)
+                    if (seamCom && !victimBody.HasBuff(RoR2.RoR2Content.Buffs.HiddenInvincibility))
                     {
                         seamCom.FillHunger(-damageInfo.damage);
-                        if (seamCom.fiendMeter - damageInfo.damage <= 0 && victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
+                        if (seamCom.fiendMeter - damageInfo.damage <= -1 * (victimBody.healthComponent.fullCombinedHealth * 0.1f) && victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
                         {
                             victimBody.skillLocator.utility.ExecuteIfReady();
                         }
@@ -791,7 +791,7 @@ namespace SeamstressMod.Seamstress
                 return;
             }
             SeamstressController s = self.body.GetComponent<SeamstressController>();
-            if (self.body.HasBuff(SeamstressBuffs.instatiable) && s.inInsatiable == false)
+            if (self.body.HasBuff(SeamstressBuffs.instatiable) && s.hasStartedInsatiable == false)
             {
                 TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
                 temporaryOverlay.duration = SeamstressStaticValues.insatiableDuration;
@@ -800,11 +800,11 @@ namespace SeamstressMod.Seamstress
                 temporaryOverlay.destroyComponentOnEnd = true;
                 temporaryOverlay.originalMaterial = SeamstressAssets.insatiableOverlayMat;
                 temporaryOverlay.AddToCharacerModel(self);
-                s.inInsatiable = true;
+                s.inInsatiableSkill = true;
             }
-            else if (!self.body.HasBuff(SeamstressBuffs.instatiable) && s.inInsatiable == true)
+            else if (!self.body.HasBuff(SeamstressBuffs.instatiable) && s.hasStartedInsatiable == true)
             {
-                s.inInsatiable = false;
+                s.inInsatiableSkill = false;
                 if (self.gameObject.GetComponent<TemporaryOverlay>() != null)
                 {
                     UnityEngine.Object.Destroy(self.gameObject.GetComponent<TemporaryOverlay>());
@@ -854,13 +854,13 @@ namespace SeamstressMod.Seamstress
                     seamstressController.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
                     float healthMissing = healthComponent.fullHealth + healthComponent.fullShield - healthComponent.health;
                     float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
-                    if (seamstressController.inInsatiable && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
+                    if (seamstressController.inInsatiableSkill && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
                     else self.baseDamage = 8f + healthMissing * SeamstressStaticValues.passiveScaling;
                 }
                 if(self.HasBuff(SeamstressBuffs.instatiable))
                 {
-                    self.attackSpeed += .4f;
-                    self.moveSpeed += 4f;
+                    self.attackSpeed += .2f;
+                    self.moveSpeed += 2f;
                 }
                 if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))
                 {
@@ -874,8 +874,8 @@ namespace SeamstressMod.Seamstress
                 {
                     if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
                     {
-                        self.attackSpeed += .1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
-                        self.moveSpeed += 1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
+                        self.attackSpeed += .05f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
+                        self.moveSpeed += 0.5f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
                     }
                 }
             }
@@ -900,6 +900,7 @@ namespace SeamstressMod.Seamstress
                     ImpGauge impGaugeComponent = impGauge.AddComponent<ImpGauge>();
                     impGaugeComponent.targetHUD = hud;
                     impGaugeComponent.fillRectTransform = impGauge.transform.Find("ExpBarRoot").GetChild(0).GetChild(0).GetComponent<RectTransform>();
+                    impGaugeComponent.display = impGauge;
 
                     impGauge.transform.Find("LevelDisplayRoot").Find("ValueText").gameObject.SetActive(false);
                     impGauge.transform.Find("LevelDisplayRoot").Find("PrefixText").gameObject.SetActive(false);

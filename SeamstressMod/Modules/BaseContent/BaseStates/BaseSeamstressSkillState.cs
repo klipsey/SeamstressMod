@@ -44,7 +44,7 @@ namespace SeamstressMod.Modules.BaseStates
             }
             if (seamstressController)
             {
-                insatiable = seamstressController.inInsatiable;
+                insatiable = seamstressController.inInsatiableSkill;
             }
         }
     }

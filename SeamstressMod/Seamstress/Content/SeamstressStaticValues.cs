@@ -12,11 +12,11 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float flurryDamageCoefficient = 1.2f;
 
-        internal const float scissorSlashDamageCoefficient = 2f;
+        internal const float scissorSlashDamageCoefficient = 1.5f;
 
-        internal const float cutDotDamage = 0.5f;
+        internal const float scissorPickupDamageCoefficient = 2f;
 
-        internal const float cutDotBossDamage = 0.005f;
+        internal const float cutDotDamage = 0.2f;
 
         internal const float blinkDamageCoefficient = 4f;
 
@@ -24,7 +24,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float reapHealthCost = 0.5f;
 
-        internal const float blinkCooldown = 0.5f;
+        internal const float blinkCooldown = 0.4f;
 
         internal const float healConversion = 0.001f;
 

@@ -14,24 +14,24 @@ namespace SeamstressMod.Seamstress.Content
     {
         public static DotIndex SeamstressDot;
 
-        public static DotIndex SeamstressBleed;
+        public static DotIndex SeamstressSelfBleed;
 
-        public static CustomDotBehaviour butcheredBehaviour;
+        public static CustomDotBehaviour selfDamageBehaviour;
 
         public static CustomDotVisual visual;
         internal static void Init()
         {
-            butcheredBehaviour = DelegateBehave3;
+            selfDamageBehaviour = SelfBleedDelegate;
             visual = StitchVisual;
             RegisterDots();
         }
-        public static void DelegateBehave3(DotController self, DotStack dotStack)
+        public static void SelfBleedDelegate(DotController self, DotStack dotStack)
         {
-            if (dotStack.dotIndex == SeamstressBleed && self.victimBody.healthComponent.combinedHealth > self.victimBody.healthComponent.fullCombinedHealth * 0.1f)
+            if (dotStack.dotIndex == SeamstressSelfBleed)
             {
                 float currentBarrier = self.victimBody.healthComponent.barrier;
                 float currentShield = self.victimBody.healthComponent.shield;
-                dotStack.damage = Math.Max(1f, self.victimBody.healthComponent.health * 0.04f + self.victimBody.healthComponent.shield + self.victimBody.healthComponent.barrier);
+                dotStack.damage = (self.victimBody.healthComponent.fullCombinedHealth - (self.victimBody.healthComponent.fullCombinedHealth - (self.victimBody.healthComponent.health + self.victimBody.healthComponent.shield))) * 0.02f;
                 dotStack.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT;
                 self.victimBody.healthComponent.AddBarrier(currentBarrier);
                 self.victimBody.healthComponent.shield = currentShield;
@@ -78,20 +78,20 @@ namespace SeamstressMod.Seamstress.Content
             SeamstressDot = RegisterDotDef(new DotDef
             {
                 interval = 0.2f,
-                damageCoefficient = 0.2f,
+                damageCoefficient = SeamstressStaticValues.cutDotDamage,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.cutBleed,
                 resetTimerOnAdd = false,
             }, null, visual);
 
-            SeamstressBleed = RegisterDotDef(new DotDef
+            SeamstressSelfBleed = RegisterDotDef(new DotDef
             {
                 interval = 0.2f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.instatiable,
                 resetTimerOnAdd = true,
-            }, butcheredBehaviour, visual);
+            }, selfDamageBehaviour, visual);
         }
     }
 }

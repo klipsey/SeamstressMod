@@ -17,11 +17,11 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class HealthCostDash : BaseSeamstressSkillState
     {
-        public static float baseDuration = 0.8f;
-        public static float dashPower = 6f;
-        public static float damageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
-        public static GameObject uppercutEffect = SeamstressAssets.uppercutEffect;
-        public static GameObject projectilePrefab = SeamstressAssets.heartPrefab;
+        public float baseDuration = 0.8f;
+        public float dashPower = 6f;
+        public float damageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
+        public GameObject uppercutEffect = SeamstressAssets.uppercutEffect;
+        public GameObject projectilePrefab = SeamstressAssets.heartPrefab;
         private Vector3 dashVector;
         private OverlapAttack attack;
         private List<HurtBox> victimsStruck = new List<HurtBox>();
@@ -55,15 +55,15 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
             }
-            PlayAnimation("FullBody, Override", "RipHeart", "Dash.playbackRate", (baseDuration / attackSpeedStat) * 1.5f);
+            PlayAnimation("FullBody, Override", "RipHeart", "Dash.playbackRate", (baseDuration / attackSpeedStat) * 1.8f);
             Util.PlayAttackSpeedSound("Play_imp_overlord_attack2_tell", gameObject, attackSpeedStat);
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (!hasDelayed) base.characterMotor.velocity.y = base.characterMotor.velocity.y;
-            if (base.fixedAge > 0.5f && !hasDelayed)
+            if (!hasDelayed) base.characterMotor.velocity.y = 0f;
+            if (base.fixedAge > (0.5f / attackSpeedStat) && !hasDelayed)
             {
                 Util.PlaySound("sfx_seamstress_dash",base.gameObject);
                 Util.PlaySound("sfx_seamstress_chains", base.gameObject);
@@ -75,7 +75,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 attack.procCoefficient = 1f;
                 attack.teamIndex = base.GetTeam();
                 attack.isCrit = base.RollCrit();
-                attack.forceVector = Vector3.up * 3000f;
+                attack.forceVector = Vector3.up * 2000f;
                 attack.damage = damageCoefficient * damageStat;
                 attack.hitBoxGroup = FindHitBoxGroup(hitBoxString);
                 attack.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
@@ -120,7 +120,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 seamstressController.snapBackPosition = base.characterBody.corePosition;
 
                 Vector3 position = base.characterBody.corePosition;
-                GameObject obj = UnityEngine.Object.Instantiate(projectilePrefab, position, Quaternion.identity);
+                GameObject obj = UnityEngine.Object.Instantiate<GameObject>(this.projectilePrefab, position, Quaternion.identity);
                 ProjectileController component = obj.GetComponent<ProjectileController>();
                 if (component)
                 {
@@ -128,6 +128,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                     component.Networkowner = base.gameObject;
                 }
                 obj.GetComponent<TeamFilter>().teamIndex = base.GetComponent<TeamComponent>().teamIndex;
+
+                NetworkServer.Spawn(obj);
             }
             if (base.isAuthority && hasDelayed)
             {
@@ -164,19 +166,15 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override void OnExit()
         {
-            if (NetworkServer.active && healthComponent)
+            if (NetworkServer.active && base.healthComponent)
             {
-                seamstressController.inInsatiable = false;
-                DotController.InflictDot(base.gameObject, base.gameObject, Dots.SeamstressBleed, SeamstressStaticValues.insatiableDuration, 1, 1u);
+                seamstressController.FillHunger(this.healthComponent.fullCombinedHealth / 2f);
+                characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
+                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 1f);
             }
 
             if (!hasHit) base.characterMotor.velocity *= 0.2f;
 
-            if (NetworkServer.active)
-            {
-                characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
-                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.25f);
-            }
             skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
 
             base.OnExit();
@@ -184,7 +182,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.Pain;
+            return InterruptPriority.Death;
         }
     }
 }

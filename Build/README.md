@@ -14,7 +14,8 @@ The Seamstress is a half-imp survivor who uses her health for damage. She doesn'
 
 # Skills
 
-[![stupidassthumbnail.png](https://i.postimg.cc/7LZS0jnY/stupidassthumbnail.png)](https://youtu.be/cobHVCCfwRw)
+https://youtu.be/vQJDFoajnA8
+[![stupidassthumbnail.png](https://i.postimg.cc/7LZS0jnY/stupidassthumbnail.png)](https://youtu.be/vQJDFoajnA8)
 
 ## Passive: **It Hungers**
 
@@ -70,6 +71,14 @@ The Seamstress is a half-imp survivor who uses her health for damage. She doesn'
 
 [![Screenshot-2024-05-24-015601.png](https://i.postimg.cc/J7cjFvLR/Screenshot-2024-05-24-015601.png)]()
 
+# Skins 
+
+[![asdsadsa.png](https://i.postimg.cc/htjdnP0Q/asdsadsa.png)](https://postimg.cc/56h0qJTf)
+
+## Raven
+
+[![raven.png](https://i.postimg.cc/d0yJgnDr/raven.png)](https://postimg.cc/d7JMy22V)
+[![ravendgb.png](https://i.postimg.cc/rm605G25/ravendgb.png)](https://postimg.cc/LqT8p1Xs)
 
 # Credits
 

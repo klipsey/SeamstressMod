@@ -32,9 +32,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             RefreshState();
             if (this.empowered)
             {
-                float healthMissing = (this.characterBody.healthComponent.health + this.characterBody.healthComponent.shield) / (this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield);
                 projectilePrefab = SeamstressAssets.needleButcheredPrefab;
-                projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().fractionOfDamage =  healthMissing;
             }
             else
             {
@@ -58,12 +56,14 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (base.characterMotor.jumpCount >= base.characterBody.maxJumpCount)
                 {
                     base.needleCon.consumeNeedle = true;
+                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
                 }
                 if (base.isAuthority)
                 {
                     aimRay = GetAimRay();
                     aimRay.direction = Util.ApplySpread(aimRay.direction, minSpread, maxSpread, 1f, 1f, 0f, projectilePitchBonus);
-                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
+                    float healthMissing = ((this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield) - (this.characterBody.healthComponent.health + this.characterBody.healthComponent.shield)) / (this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield);
+                    projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().fractionOfDamage = healthMissing * SeamstressStaticValues.passiveHealingScaling;
                     if (characterBody.inventory && characterBody.inventory.GetItemCount(DLC1Content.Items.MoreMissile) > 0)
                     {
                         float damageMult = GetICBMDamageMult(characterBody);

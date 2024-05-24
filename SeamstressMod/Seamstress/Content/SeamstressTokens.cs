@@ -84,10 +84,10 @@ namespace SeamstressMod.Seamstress.Content
 
             #region Passive
             Language.Add(prefix + "PASSIVE_NAME", "It Hungers");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> and <style=cIsHealing>lifesteal</style> for every <style=cIsHealth>1 missing health</style>.");
+            Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> and <style=cIsHealing>lifesteal</style> based on <style=cIsHealth>missing health</style>.");
 
             Language.Add(prefix + "NEEDLE_NAME", "Imp Touched Heart");
-            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"Seamstress <color=#9B3737>Blinks</color>. <color=#9B3737>Blinking</color> in the air fires a <color=#9B3737>Needle</color> dealing " +
+            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"<color=#9B3737>Blink</color> instead of jumping. <color=#9B3737>Needles</color> let you <color=#9B3737>Blink</color> mid air firing out and dealing " +
                 $"<style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style>. Gain <color=#9B3737>Needles</color> by picking up " + Tokens.symbioticPrefix + " weapons " +
                 "or when attacking enemies without them.");
             #endregion

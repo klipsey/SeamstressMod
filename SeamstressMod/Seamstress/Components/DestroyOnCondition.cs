@@ -20,7 +20,7 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void FixedUpdate()
         {
-            if (!seamCom.inInsatiable)
+            if (!seamCom.inInsatiableSkill)
             {
                 Destroy(this.gameObject);
             }

@@ -13,8 +13,7 @@ namespace SeamstressMod.Seamstress.Content
 
         public static void Init()
         {
-            //RETURN ! 
-            if(SeamstressConfig.forceUnlockCharacter.Value)
+            if(!SeamstressConfig.forceUnlockCharacter.Value)
             {
                 characterUnlockableDef = Modules.Content.CreateAndAddUnlockableDef(
                     SeamstressUnlockAchievement.unlockableIdentifier,
@@ -26,9 +25,8 @@ namespace SeamstressMod.Seamstress.Content
                 SeamstressMasteryAchievement.unlockableIdentifier,
                 Modules.Tokens.GetAchievementNameToken(SeamstressMasteryAchievement.identifier),
                 SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texMonsoonBlue"));
-            //DELETE 
-            masterySkinUnlockableDef = null;
-            if (SeamstressConfig.forceUnlockRaven.Value)
+             
+            if (!SeamstressConfig.forceUnlockRaven.Value)
             {
                 masteryTyphoonSkinUnlockableDef = Modules.Content.CreateAndAddUnlockableDef(
                     SeamstressRavenUnlockAchievement.unlockableIdentifier,

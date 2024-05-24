@@ -96,8 +96,9 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
                 }
-                float healthMissing = (this.characterBody.healthComponent.health + this.characterBody.healthComponent.shield) / (this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield);
-                projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().fractionOfDamage = healthMissing / 4f;
+                float healthMissing = ((this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield) - (this.characterBody.healthComponent.health + this.characterBody.healthComponent.shield)) / (this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield);
+                projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().fractionOfDamage = healthMissing * SeamstressStaticValues.passiveHealingScaling;
+                if (base.characterBody.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) > 0) projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilter>().pickupTimer = 7f * 0.66f;
                 Fire(this.aimRay, fireString);
                 hasFired = true;
             }
@@ -121,7 +122,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             if (base.isAuthority)
             {
-                ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * damageCoefficient, 0f, Util.CheckRoll(critStat, characterBody.master), DamageColorIndex.Default, null, -1f);
+                ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, damageStat * damageCoefficient, 0f, Util.CheckRoll(critStat, characterBody.master), DamageColorIndex.Default, null, -1f);
             }
         }
         public override InterruptPriority GetMinimumInterruptPriority()

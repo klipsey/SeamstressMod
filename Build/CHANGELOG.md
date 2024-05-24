@@ -1,3 +1,14 @@
+# 1.0.1
+
+- Items dont kill Seamstress anymore lol
+- Reduced r pickup time by 1 second and gave it lysate interaction
+- Reverted armor back to 0 from -5
+- Activating Brutalize gives you 25% bar immediately and cannot be canceled for 1 second
+- Brutalize now has an 6 second cooldown
+- Accidently had lifesteal decreasing as you lost health
+- Nerfed attackspeed and movespeed gain from Insatiable 
+- Animation smoothing
+
 # 1.0.0
 
 - Full release

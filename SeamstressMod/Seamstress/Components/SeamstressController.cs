@@ -60,9 +60,9 @@ namespace SeamstressMod.Seamstress.Components
 
         private float insatiableStopwatch = 0f;
 
-        public bool inInsatiable = false;
+        public bool inInsatiableSkill = false;
 
-        public bool hasStartedInsatiable;
+        public bool hasStartedInsatiable = false;
 
         public bool draining;
 
@@ -228,7 +228,7 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void IsInsatiable()
         {
-            if (inInsatiable && !hasStartedInsatiable)
+            if (inInsatiableSkill && !hasStartedInsatiable)
             {
                 EnableInstatiableLayer();
                 if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
@@ -254,10 +254,9 @@ namespace SeamstressMod.Seamstress.Components
                     #endregion
                 }
 
-
                 hasStartedInsatiable = true;
             }
-            else if (!inInsatiable && hasStartedInsatiable)
+            else if (!inInsatiableSkill && hasStartedInsatiable)
             {
                 DisableInstatiableLayer();
                 if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
@@ -288,7 +287,7 @@ namespace SeamstressMod.Seamstress.Components
         //end sound
         private void InsatiableSound()
         {
-            if (inInsatiable)
+            if (inInsatiableSkill)
             {
                 if (insatiableStopwatch < 2f && !hasPlayed)
                 {

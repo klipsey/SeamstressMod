@@ -194,8 +194,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                 return;
             }
             Transform bigSnip = FindModelChild("SwingCenter");
-            Transform smallSlash = FindModelChild("SwingRightSmall");
-            Transform smallSlash2 = FindModelChild("SwingLeftSmall");
+            Transform smallSlash = FindModelChild("SwingLeftSmall");
+            Transform smallSlash2 = FindModelChild("SwingRightSmall");
             Transform bigSnipAir = FindModelChild("SwingCharAirCenter");
             Transform bigSnipAir2 = FindModelChild("SwingCharAirCenter2");
             if (bigSnip && smallSlash && smallSlash2 && bigSnip && bigSnipAir && bigSnipAir2) //lol
@@ -242,6 +242,24 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
                 else
                 {
+                    if (hasFired && !hasFired2)
+                    {
+                        if (alternateSwings == 0)
+                        {
+                            UnityEngine.Object.Instantiate(clawSlash, smallSlash);
+                            alternateSwings = 1;
+                        }
+                        else if (alternateSwings == 1)
+                        {
+                            UnityEngine.Object.Instantiate(clawSlash, smallSlash2);
+                            alternateSwings = 0;
+                        }
+                    }
+                    else if (hasFired2)
+                    {
+                        UnityEngine.Object.Instantiate(clawSlash, smallSlash2);
+                    }
+
                     UnityEngine.Object.Instantiate(swingEffectPrefab, bigSnip);
                 }
             }
@@ -290,7 +308,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         private void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", "Clip", "Slash.playbackRate", duration * 2f, 0.1f * duration);
+            PlayCrossfade("Gesture, Override", "Clip", "Slash.playbackRate", duration * 1.7f, 0.1f * duration);
         }
         public override void OnExit()
         {
