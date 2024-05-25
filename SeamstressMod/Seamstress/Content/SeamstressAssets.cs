@@ -571,6 +571,13 @@ namespace SeamstressMod.Seamstress.Content
         private static GameObject CreateScissor(string modelName, string name)
         {
             GameObject scissorPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ImpBoss/ImpVoidspikeProjectile.prefab").WaitForCompletion().InstantiateClone(name, true);
+
+            var white = scissorPrefab.transform.Find("ImpactEffect").Find("Flash, White").gameObject.GetComponent<ParticleSystem>().main;
+            white.startSize = 2f;
+
+            var red = scissorPrefab.transform.Find("ImpactEffect").Find("Flash, Red").gameObject.GetComponent<ParticleSystem>().main;
+            red.startSize = 2f;
+            
             Rigidbody rigid = scissorPrefab.GetComponent<Rigidbody>();
             rigid.useGravity = true;
             rigid.freezeRotation = true;

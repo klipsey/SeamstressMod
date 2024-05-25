@@ -753,6 +753,10 @@ namespace SeamstressMod.Seamstress
             {
                 return;
             }
+            if (!self.alive || self.godMode || self.ospTimer > 0f)
+            {
+                return;
+            }
             CharacterBody victimBody = self.body;
             if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
