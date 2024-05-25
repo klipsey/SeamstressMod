@@ -54,7 +54,7 @@ namespace SeamstressMod.Seamstress
             armor = 0f,
             damage = 10f,
 
-            damageGrowth = 0.4f,
+            damageGrowth = 0f,
             healthGrowth = 160f * 0.3f,
 
             jumpCount = 1,

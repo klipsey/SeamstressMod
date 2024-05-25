@@ -31,7 +31,7 @@ namespace SeamstressMod.Seamstress.Content
                 masteryTyphoonSkinUnlockableDef = Modules.Content.CreateAndAddUnlockableDef(
                     SeamstressRavenUnlockAchievement.unlockableIdentifier,
                     Modules.Tokens.GetAchievementNameToken(SeamstressRavenUnlockAchievement.identifier),
-                    SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texRavenIcon"));
+                    SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("ravenIcon"));
             }
         }
     }

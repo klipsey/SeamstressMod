@@ -168,9 +168,9 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             if (NetworkServer.active && base.healthComponent)
             {
-                seamstressController.FillHunger(this.healthComponent.fullCombinedHealth / 2f);
+                seamstressController.FillHunger(this.healthComponent.fullCombinedHealth / 4f);
                 characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
-                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 1f);
+                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f);
             }
 
             if (!hasHit) base.characterMotor.velocity *= 0.2f;

@@ -73,6 +73,11 @@ namespace SeamstressMod.Seamstress.SkillStates
             Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
             hitSound = "Play_imp_overlord_impact";
             PlayAnimation("FullBody, Override", "ParrySlash", "Dash.playbackRate", dashDuration * 1.5f);
+
+            if (NetworkServer.active)
+            {
+                characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
+            }
         }
         public override void FixedUpdate()
         {
@@ -127,6 +132,13 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         public override void OnExit()
         {
+            if (NetworkServer.active && base.healthComponent)
+            {
+                seamstressController.FillHunger(this.healthComponent.fullCombinedHealth / 4f);
+                characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
+                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f);
+            }
+
             seamstressController.StartDashEffectTimer();
             gameObject.layer = LayerIndex.defaultLayer.intVal;
             characterMotor.Motor.RebuildCollidableLayers();

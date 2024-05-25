@@ -1,3 +1,13 @@
+# 1.0.3
+
+- Reverted base damage per level just to make it more clear that its negligible
+- Lowered duration of i frame from 0.2 seconds to 0.1 second but buffed blink cooldown from 0.5 seconds to 0.4 seconds
+- Nerfed base damage scaling from 0.075 per 1 missing health to 0.05 per 1 missing health
+- Buffed flurry and trims damage scalings accordingly
+- Nerfed inital imp gauge amount on brutalize from ~25% inital to ~12.5% initial
+- Buffed parry to have the same standard immunity and initial gauge as brutalize 
+- Buffed manipulate to move heavier things quicker
+
 # 1.0.2
 
 - Gave her slight base damage scaling (10 base 0.4 per level) so being at full health doesnt feel AS terrible (it is still negligible)
