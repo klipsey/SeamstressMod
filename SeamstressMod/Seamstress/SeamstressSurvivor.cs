@@ -52,9 +52,9 @@ namespace SeamstressMod.Seamstress
             maxHealth = 160f,
             healthRegen = 1f,
             armor = 0f,
-            damage = 8f,
+            damage = 10f,
 
-            damageGrowth = 0f,
+            damageGrowth = 0.4f,
             healthGrowth = 160f * 0.3f,
 
             jumpCount = 1,
@@ -852,10 +852,10 @@ namespace SeamstressMod.Seamstress
                 if (seamstressController && healthComponent && skillLocator)
                 {
                     seamstressController.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
-                    float healthMissing = healthComponent.fullHealth + healthComponent.fullShield - healthComponent.health;
+                    float healthMissing = (healthComponent.fullCombinedHealth * self.cursePenalty) - healthComponent.health;
                     float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
-                    if (seamstressController.inInsatiableSkill && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 8f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
-                    else self.baseDamage = 8f + healthMissing * SeamstressStaticValues.passiveScaling;
+                    if (seamstressController.inInsatiableSkill && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 10f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
+                    else self.baseDamage = 10f + healthMissing * SeamstressStaticValues.passiveScaling;
                 }
                 if(self.HasBuff(SeamstressBuffs.instatiable))
                 {
@@ -900,7 +900,6 @@ namespace SeamstressMod.Seamstress
                     ImpGauge impGaugeComponent = impGauge.AddComponent<ImpGauge>();
                     impGaugeComponent.targetHUD = hud;
                     impGaugeComponent.fillRectTransform = impGauge.transform.Find("ExpBarRoot").GetChild(0).GetChild(0).GetComponent<RectTransform>();
-                    impGaugeComponent.display = impGauge;
 
                     impGauge.transform.Find("LevelDisplayRoot").Find("ValueText").gameObject.SetActive(false);
                     impGauge.transform.Find("LevelDisplayRoot").Find("PrefixText").gameObject.SetActive(false);

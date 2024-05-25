@@ -78,7 +78,23 @@ namespace SeamstressMod.Seamstress.SkillStates
             characterDirection.moveVector = blinkVector;
 
             CreateBlinkEffect(base.characterBody.corePosition, true);
-            speedCoefficient = 0.3f * characterBody.jumpPower * Mathf.Clamp(characterBody.moveSpeed, 1f, 5f);
+
+            int waxQuailCount = base.characterBody.inventory.GetItemCount(RoR2Content.Items.JumpBoost);
+            float horizontalBonus = 1f;
+
+            if (waxQuailCount > 0 && base.characterBody.isSprinting)
+            {
+                float v = base.characterBody.acceleration * characterMotor.airControl;
+
+                if (base.characterBody.moveSpeed > 0f && v > 0f)
+                {
+                    float num2 = Mathf.Sqrt(10f * waxQuailCount / v);
+                    float num3 = characterBody.moveSpeed / v;
+                    horizontalBonus = (num2 + num3) / num3;
+                }
+            }
+
+            speedCoefficient = 0.3f * characterBody.jumpPower * Mathf.Clamp((characterBody.moveSpeed * horizontalBonus) / 4f, 5f, 20f);
             gameObject.layer = LayerIndex.fakeActor.intVal;
             characterMotor.Motor.RebuildCollidableLayers();
         }

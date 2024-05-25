@@ -1,3 +1,11 @@
+# 1.0.2
+
+- Gave her slight base damage scaling (10 base 0.4 per level) so being at full health doesnt feel AS terrible (it is still negligible)
+- Blink distance scales harder with movespeed
+- Fixed wax quail not being awesome
+- Fixed curse not counting towards base damage
+- Fixed Imp Gauge 
+
 # 1.0.1
 
 - Items dont kill Seamstress anymore lol

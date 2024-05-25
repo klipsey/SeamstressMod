@@ -23,7 +23,7 @@ namespace SeamstressMod.Seamstress.Content
             #region Seamstress
             string prefix = SeamstressSurvivor.SEAMSTRESS_PREFIX;
 
-            string desc = "The Seamstress is a mobile survivor that uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her Imp Touched Heart.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
+            string desc = "The Seamstress is a mobile survivor that uses her health for damage. Her base damage is extremely low so stack health items to take advantage of Imp Touched Heart.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Needles are a great source of extra damage. Use them wisely for damage and mobility." + Environment.NewLine + Environment.NewLine
              + "< ! > Make sure not to use Clip in a sticky situation. Having backup Needles might just save you." + Environment.NewLine + Environment.NewLine
              + "< ! > Heal as much as you can during Insatiable. The health it provides can halt a quick death." + Environment.NewLine + Environment.NewLine
