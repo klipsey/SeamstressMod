@@ -11,7 +11,7 @@ namespace SeamstressMod.Modules.BaseStates
 {
     public abstract class BaseSeamstressState : BaseState
     {
-        protected SeamstressController seamCom;
+        protected SeamstressController seamstressController;
 
         protected NeedleController needleCon;
 
@@ -19,7 +19,7 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected bool scissorLeft;
 
-        protected bool empowered;
+        protected bool insatiable;
 
         public override void OnEnter()
         {
@@ -34,17 +34,17 @@ namespace SeamstressMod.Modules.BaseStates
         {
             scissorRight = characterBody.HasBuff(SeamstressBuffs.scissorRightBuff);
             scissorLeft = characterBody.HasBuff(SeamstressBuffs.scissorLeftBuff);
-            if (!seamCom)
+            if (!seamstressController)
             {
-                seamCom = base.GetComponent<SeamstressController>();
+                seamstressController = base.GetComponent<SeamstressController>();
             }
             if (!needleCon)
             {
                 needleCon = base.GetComponent<NeedleController>();
             }
-            if (seamCom)
+            if (seamstressController)
             {
-                empowered = characterBody.HasBuff(SeamstressBuffs.instatiable);
+                insatiable = characterBody.HasBuff(SeamstressBuffs.instatiable);
             }
         }
     }

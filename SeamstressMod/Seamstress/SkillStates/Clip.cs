@@ -13,13 +13,13 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class Clip : BaseSeamstressSkillState
     {
-        public static GameObject clawSlash = SeamstressAssets.clawSlashEffect;
+        public GameObject clawSlash = SeamstressAssets.clawSlashEffect;
 
-        public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+        public GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
 
-        public static GameObject swingEffectPrefab = SeamstressAssets.scissorsComboSlashEffect;
+        public GameObject swingEffectPrefab = SeamstressAssets.scissorsSlashComboEffect;
 
-        public static GameObject wideEffectPrefab = SeamstressAssets.wideSlashEffect;
+        public GameObject wideEffectPrefab = SeamstressAssets.wideSlashEffect;
 
         protected Animator animator;
 
@@ -69,6 +69,14 @@ namespace SeamstressMod.Seamstress.SkillStates
         private Vector3 storedVelocity;
         public override void OnEnter()
         {
+            RefreshState();
+            if (seamstressController.blue)
+            {
+                clawSlash = SeamstressAssets.clawSlashEffect2;
+                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect2;
+                swingEffectPrefab = SeamstressAssets.scissorsSlashComboEffect2;
+                wideEffectPrefab = SeamstressAssets.wideSlashEffect2;
+            }
             base.OnEnter();
             baseDuration = 0.75f - 0.5f * (0.5f * (seamstressController.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
             snips = needleCount;

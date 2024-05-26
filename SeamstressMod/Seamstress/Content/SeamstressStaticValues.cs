@@ -6,6 +6,8 @@ namespace SeamstressMod.Seamstress.Content
 {
     public static class SeamstressStaticValues
     {
+        internal const float baseDamage = 12f;
+
         internal const float trimDamageCoefficient = 1.2f;
 
         internal const float trimThirdDamageCoefficient = 1.5f;

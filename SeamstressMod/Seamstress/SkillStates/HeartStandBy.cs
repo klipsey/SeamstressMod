@@ -14,13 +14,13 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class HeartStandBy : BaseState
     {
-        public static GameObject chain = SeamstressAssets.chainToHeart;
+        public GameObject chain = SeamstressAssets.chainToHeart;
 
         public static AnimationCurve yankSuitabilityCurve;
 
         private CharacterBody ownerBody;
 
-        private SeamstressController seamCom;
+        private SeamstressController seamstressController;
 
         private GameObject owner;
 
@@ -45,11 +45,12 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             PlayAnimation("Base", "SpawnToIdle");
             Util.PlaySound("Play_treeBot_R_yank", owner);
-            seamCom = owner.GetComponent<SeamstressController>();
+            seamstressController = owner.GetComponent<SeamstressController>();
             ownerBody = owner.GetComponent<CharacterBody>();
+            if (seamstressController.blue) this.chain = SeamstressAssets.chainToHeart2;
             //i need to delete this but i have no clue if its keeping everything together or not
             chain.GetComponent<DestroyOnCondition>().enabled = true;
-            chain.GetComponent<DestroyOnCondition>().seamCom = seamCom;
+            chain.GetComponent<DestroyOnCondition>().seamstressController = seamstressController;
         }
 
         public override void FixedUpdate()

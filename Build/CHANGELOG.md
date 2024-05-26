@@ -1,3 +1,10 @@
+# 1.0.4
+
+- Lowered PP
+- Fixed first hopoo feather consuming needle
+- Added new vfx for blue skin
+- Hopefully fixed multiplayer drag issues
+
 # 1.0.3
 
 - Reverted base damage per level just to make it more clear that its negligible

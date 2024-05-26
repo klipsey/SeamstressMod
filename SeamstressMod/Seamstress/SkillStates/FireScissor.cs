@@ -13,17 +13,17 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class FireScissor : BaseSeamstressSkillState
     {
+        public GameObject scissorFiringPrefab = SeamstressAssets.impDashEffect;
+
+        private GameObject projectilePrefab;
+
         public static float baseDuration = 0.5f;
 
         public static float damageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
 
         public static float procCoefficient = 1f;
 
-        public static GameObject scissorFiringPrefab = SeamstressAssets.impDashEffect;
-
         public static string attackSoundString = "Play_imp_overlord_attack1_throw";
-
-        private GameObject projectilePrefab;
 
         private Animator modelAnimator;
 
@@ -38,6 +38,8 @@ namespace SeamstressMod.Seamstress.SkillStates
         private string fireString;
         public override void OnEnter()
         {
+            RefreshState();
+            if (seamstressController.blue) scissorFiringPrefab = SeamstressAssets.impDashEffect2;
             base.OnEnter();
             Util.PlaySound("Play_item_lunar_specialReplace_explode", gameObject);
             characterBody.GetComponent<ScissorController>().isRight = true;

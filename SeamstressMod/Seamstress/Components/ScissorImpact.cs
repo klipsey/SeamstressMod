@@ -16,6 +16,10 @@ namespace SeamstressMod.Seamstress.Components
 
         public ParticleSystem[] stickParticleSystem;
 
+        public GameObject impactEffect;
+
+        public GameObject explosionEffect;
+
         public bool ignoreCharacters;
 
         public bool ignoreWorld;
@@ -25,8 +29,6 @@ namespace SeamstressMod.Seamstress.Components
         private bool hasFired = false;
 
         public UnityEvent stickEvent;
-
-        private ProjectileController projectileController;
 
         private Rigidbody rigidbody;
 
@@ -121,7 +123,6 @@ namespace SeamstressMod.Seamstress.Components
 
         private void Awake()
         {
-            projectileController = GetComponent<ProjectileController>();
             rigidbody = GetComponent<Rigidbody>();
         }
 
@@ -178,13 +179,13 @@ namespace SeamstressMod.Seamstress.Components
                     {
                         effectPos = raycastHit.point;
                     }
-                    EffectManager.SpawnEffect(SeamstressAssets.blinkEffect, new EffectData
+                    EffectManager.SpawnEffect(impactEffect, new EffectData
                     {
                         origin = effectPos,
                         rotation = Quaternion.identity,
                         scale = 1.5f,
                     }, true);
-                    EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                    EffectManager.SpawnEffect(explosionEffect, new EffectData
                     {
                         origin = effectPos,
                         rotation = Quaternion.identity,

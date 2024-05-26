@@ -36,9 +36,9 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             swingSoundString = "sfx_seamstress_swing";
             hitSoundString = "";
-            hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = SeamstressAssets.clawSlashEffect;
-            bonusSwingEffectPrefab = SeamstressAssets.scissorsSlashEffect;
+            hitEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsHitImpactEffect2 : SeamstressAssets.scissorsHitImpactEffect;
+            swingEffectPrefab = seamstressController.blue ? SeamstressAssets.clawSlashEffect2 : SeamstressAssets.clawSlashEffect;
+            bonusSwingEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsSlashEffect2 : SeamstressAssets.scissorsSlashEffect;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeftSmall" : "SwingRightSmall";
             buffer = false;
             if (insatiable)

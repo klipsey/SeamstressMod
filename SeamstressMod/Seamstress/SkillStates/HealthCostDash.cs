@@ -22,6 +22,13 @@ namespace SeamstressMod.Seamstress.SkillStates
         public float damageCoefficient = SeamstressStaticValues.blinkDamageCoefficient;
         public GameObject uppercutEffect = SeamstressAssets.uppercutEffect;
         public GameObject projectilePrefab = SeamstressAssets.heartPrefab;
+        public GameObject scissorHitImpactEffect = SeamstressAssets.scissorsHitImpactEffect;
+        public GameObject bloodExplosionEffect = SeamstressAssets.bloodExplosionEffect;
+        public GameObject impDashEffect = SeamstressAssets.impDashEffect;
+        public GameObject bloodSplatterEffect = SeamstressAssets.bloodSplatterEffect;
+        public GameObject smallBlinkEffect = SeamstressAssets.smallBlinkEffect;
+        public Color mainColor = SeamstressAssets.coolRed;
+        public Material destealthMaterial = SeamstressAssets.destealthMaterial;
         private Vector3 dashVector;
         private OverlapAttack attack;
         private List<HurtBox> victimsStruck = new List<HurtBox>();
@@ -31,6 +38,19 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override void OnEnter()
         {
+            RefreshState();
+            if (seamstressController.blue)
+            {
+                uppercutEffect = SeamstressAssets.uppercutEffect2;
+                projectilePrefab = SeamstressAssets.heartPrefab2;
+                scissorHitImpactEffect = SeamstressAssets.scissorsHitImpactEffect2;
+                bloodExplosionEffect = SeamstressAssets.bloodExplosionEffect2;
+                impDashEffect = SeamstressAssets.impDashEffect2;
+                bloodSplatterEffect = SeamstressAssets.bloodSplatterEffect2;
+                smallBlinkEffect = SeamstressAssets.smallBlinkEffect2;
+                mainColor = Color.cyan;
+                destealthMaterial = SeamstressAssets.destealthMaterial2;
+            }
             base.OnEnter();
 
             dashVector = base.inputBank.aimDirection;
@@ -40,12 +60,12 @@ namespace SeamstressMod.Seamstress.SkillStates
             Transform modelTransform = base.GetModelTransform();
             Animator animator = modelTransform.GetComponent<Animator>();
 
-            if (modelTransform && SeamstressAssets.destealthMaterial)
+            if (modelTransform && this.destealthMaterial)
             {
                 TemporaryOverlay temporaryOverlay = animator.gameObject.AddComponent<TemporaryOverlay>();
                 temporaryOverlay.duration = 1.2f;
                 temporaryOverlay.destroyComponentOnEnd = true;
-                temporaryOverlay.originalMaterial = SeamstressAssets.destealthMaterial;
+                temporaryOverlay.originalMaterial = this.destealthMaterial;
                 temporaryOverlay.inspectorCharacterModel = animator.gameObject.GetComponent<CharacterModel>();
                 temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                 temporaryOverlay.animateShaderAlpha = true;
@@ -78,9 +98,9 @@ namespace SeamstressMod.Seamstress.SkillStates
                 attack.forceVector = Vector3.up * 2000f;
                 attack.damage = damageCoefficient * damageStat;
                 attack.hitBoxGroup = FindHitBoxGroup(hitBoxString);
-                attack.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+                attack.hitEffectPrefab = scissorHitImpactEffect;
 
-                EffectManager.SpawnEffect(SeamstressAssets.bloodExplosionEffect, new EffectData
+                EffectManager.SpawnEffect(this.bloodExplosionEffect, new EffectData
                 {
                     origin = this.transform.position,
                     rotation = Quaternion.identity,
@@ -98,8 +118,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                     rotation = Util.QuaternionSafeLookRotation(dashVector),
                     scale = 3f
                 };
-                EffectManager.SpawnEffect(SeamstressAssets.impDashEffect, effectData, false);
-                EffectManager.SpawnEffect(SeamstressAssets.smallBlinkEffect, effectData, false);
+                EffectManager.SpawnEffect(this.impDashEffect, effectData, false);
+                EffectManager.SpawnEffect(this.smallBlinkEffect, effectData, false);
 
                 base.characterMotor.velocity.y = 0f;
                 base.characterMotor.velocity += dashVector * (dashPower * (moveSpeedStat + 1f));
@@ -110,11 +130,11 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     effectPos = raycastHit.point;
                 }
-                EffectManager.SpawnEffect(SeamstressAssets.bloodSplatterEffect, new EffectData
+                EffectManager.SpawnEffect(this.bloodSplatterEffect, new EffectData
                 {
                     origin = effectPos,
                     rotation = Quaternion.identity,
-                    color = SeamstressAssets.coolRed,
+                    color = mainColor,
                 }, false);
 
                 seamstressController.snapBackPosition = base.characterBody.corePosition;
@@ -158,7 +178,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                         rotation = Util.QuaternionSafeLookRotation(dashVector),
                         scale = 3f
                     };
-                    EffectManager.SpawnEffect(SeamstressAssets.impDashEffect, effectData, false);
+                    EffectManager.SpawnEffect(this.impDashEffect, effectData, false);
                     outer.SetNextStateToMain();
                 }
             }

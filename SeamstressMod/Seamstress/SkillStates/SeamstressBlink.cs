@@ -15,8 +15,9 @@ namespace SeamstressMod.Seamstress.SkillStates
     {
         protected Transform modelTransform;
 
-        protected GameObject dashPrefab = SeamstressAssets.impDashEffect;
-        protected GameObject blinkPrefab = SeamstressAssets.smallBlinkEffect;
+        public GameObject dashPrefab = SeamstressAssets.impDashEffect;
+        public GameObject blinkPrefab = SeamstressAssets.smallBlinkEffect;
+        public Material destealthMaterial = SeamstressAssets.destealthMaterial;
 
         protected CameraTargetParams.AimRequest request;
 
@@ -46,6 +47,13 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override void OnEnter()
         {
+            RefreshState();
+            if (seamstressController.blue)
+            {
+                dashPrefab = SeamstressAssets.impDashEffect2;
+                blinkPrefab = SeamstressAssets.smallBlinkEffect2;
+                destealthMaterial = SeamstressAssets.destealthMaterial2;
+            }
             base.OnEnter();
             Util.PlaySound(beginSoundString, gameObject);
             modelTransform = GetModelTransform();
@@ -154,12 +162,12 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 CreateBlinkEffect(base.characterBody.corePosition, false);
                 modelTransform = GetModelTransform();
-                if (modelTransform && SeamstressAssets.destealthMaterial)
+                if (modelTransform && this.destealthMaterial)
                 {
                     TemporaryOverlay temporaryOverlay = animator.gameObject.AddComponent<TemporaryOverlay>();
                     temporaryOverlay.duration = 1f;
                     temporaryOverlay.destroyComponentOnEnd = true;
-                    temporaryOverlay.originalMaterial = SeamstressAssets.destealthMaterial;
+                    temporaryOverlay.originalMaterial = this.destealthMaterial;
                     temporaryOverlay.inspectorCharacterModel = animator.gameObject.GetComponent<CharacterModel>();
                     temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                     temporaryOverlay.animateShaderAlpha = true;

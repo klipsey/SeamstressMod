@@ -13,7 +13,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class ParryDash : BaseSeamstressSkillState
     {
-        public static GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+        public GameObject hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
         public bool hasHit { get; private set; }
 
         public static float speedCoefficient = 100f;
@@ -25,8 +25,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         private Vector3 dashVector;
 
         private OverlapAttack overlapAttack;
-
-        private ChildLocator childLocator;
 
         private Transform modelTransform;
 
@@ -51,12 +49,12 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override void OnEnter()
         {
+            RefreshState();
+            if (seamstressController.blue) this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect2;
             inDash = true;
             dashDuration = 0.3f;
             base.OnEnter();
-            RefreshState();
             modelTransform = GetModelTransform();
-            childLocator = modelTransform.GetComponent<ChildLocator>();
             if (cameraTargetParams)
             {
                 aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);

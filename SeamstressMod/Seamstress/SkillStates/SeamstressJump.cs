@@ -28,34 +28,45 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         public override void FixedUpdate()
         {
-            base.FixedUpdate();
             RefreshState();
-            if (this.empowered)
+            base.FixedUpdate();
+            if (this.insatiable)
             {
-                projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                if (seamstressController.blue) projectilePrefab = SeamstressAssets.needleButcheredPrefab2;
+                else projectilePrefab = SeamstressAssets.needleButcheredPrefab;
             }
             else
             {
-                projectilePrefab = SeamstressAssets.needlePrefab;
+                if (seamstressController.blue) projectilePrefab = SeamstressAssets.needlePrefab2;
+                else projectilePrefab = SeamstressAssets.needlePrefab;
             }
-            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount || this.characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamCom.blinkCd >= SeamstressStaticValues.blinkCooldown) && this.seamCom.blinkReady == false)
+            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount || this.characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamstressController.blinkCd >= SeamstressStaticValues.blinkCooldown) && this.seamstressController.blinkReady == false)
             {
-                seamCom.blinkCd = 0f;
-                seamCom.blinkReady = true;
+                seamstressController.blinkCd = 0f;
+                seamstressController.blinkReady = true;
             }
-            if (base.inputBank.jump.justPressed && base.isGrounded && seamCom.blinkReady)
+            if (base.inputBank.jump.justPressed && base.isGrounded && seamstressController.blinkReady)
             {
-                this.seamCom.blinkReady = false;
+                this.seamstressController.blinkReady = false;
                 if (base.inputBank.moveVector != Vector3.zero) BlinkForward();
                 else BlinkUp();
                 return;
             }
-            else if (base.inputBank.jump.justPressed && !base.isGrounded && seamCom.blinkReady)
+            else if (base.inputBank.jump.justPressed && !base.isGrounded && seamstressController.blinkReady)
             {
-                seamCom.blinkReady = false;
-                if (base.characterMotor.jumpCount >= base.characterBody.maxJumpCount)
+                seamstressController.blinkReady = false;
+                if (base.characterMotor.jumpCount >= base.characterBody.maxJumpCount && this.characterBody.inventory.GetItemCount(RoR2.RoR2Content.Items.Feather) > 0 && !seamstressController.hopooHasHopped)
+                {
+                    if (!seamstressController.hopooHasHopped) seamstressController.hopooHasHopped = true;
+                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
+                }
+                else if(base.characterMotor.jumpCount >= base.characterBody.maxJumpCount)
                 {
                     base.needleCon.consumeNeedle = true;
+                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
+                }
+                else
+                {
                     Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
                 }
                 if (base.isAuthority)

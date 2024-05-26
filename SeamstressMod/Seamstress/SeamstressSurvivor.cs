@@ -52,7 +52,7 @@ namespace SeamstressMod.Seamstress
             maxHealth = 160f,
             healthRegen = 1f,
             armor = 0f,
-            damage = 10f,
+            damage = SeamstressStaticValues.baseDamage,
 
             damageGrowth = 0f,
             healthGrowth = 160f * 0.3f,
@@ -802,7 +802,7 @@ namespace SeamstressMod.Seamstress
                 temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
                 temporaryOverlay.animateShaderAlpha = true;
                 temporaryOverlay.destroyComponentOnEnd = true;
-                temporaryOverlay.originalMaterial = SeamstressAssets.insatiableOverlayMat;
+                temporaryOverlay.originalMaterial = s.blue ? SeamstressAssets.insatiableOverlayMat2 : SeamstressAssets.insatiableOverlayMat;
                 temporaryOverlay.AddToCharacerModel(self);
                 s.inInsatiableSkill = true;
             }
@@ -858,8 +858,8 @@ namespace SeamstressMod.Seamstress
                     seamstressController.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
                     float healthMissing = (healthComponent.fullCombinedHealth * self.cursePenalty) - healthComponent.health;
                     float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
-                    if (seamstressController.inInsatiableSkill && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = 10f + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
-                    else self.baseDamage = 10f + healthMissing * SeamstressStaticValues.passiveScaling;
+                    if (seamstressController.inInsatiableSkill && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = SeamstressStaticValues.baseDamage + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
+                    else self.baseDamage = SeamstressStaticValues.baseDamage + healthMissing * SeamstressStaticValues.passiveScaling;
                 }
                 if(self.HasBuff(SeamstressBuffs.instatiable))
                 {

@@ -36,9 +36,9 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             swingSoundString = "sfx_seamstress_swing";
             hitSoundString = "";
-            hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = SeamstressAssets.clawSlashEffect;
-            bonusSwingEffectPrefab = SeamstressAssets.scissorsSlashEffect;
+            hitEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsHitImpactEffect2 : SeamstressAssets.scissorsHitImpactEffect;
+            swingEffectPrefab = seamstressController.blue ? SeamstressAssets.clawSlashEffect2 : SeamstressAssets.clawSlashEffect;
+            bonusSwingEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsSlashEffect2 : SeamstressAssets.scissorsSlashEffect;
             scissorHit = true;
             switch (swingIndex)
             {
@@ -61,8 +61,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                 case 2:
                     swingSoundString = "Play_acrid_m1_bigSlash";
                     damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
-                    swingEffectPrefab = SeamstressAssets.clawSlashComboEffect;
-                    bonusSwingEffectPrefab = SeamstressAssets.scissorsComboSlashEffect;
+                    swingEffectPrefab = seamstressController.blue ? SeamstressAssets.clawSlashComboEffect2 : SeamstressAssets.clawSlashComboEffect;
+                    bonusSwingEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsSlashComboEffect2 : SeamstressAssets.scissorsSlashComboEffect;
                     muzzleString = "SwingCenterSmall";
                     earlyExitPercentTime = 0.75f;
                     attackEndPercentTime = 0.65f;

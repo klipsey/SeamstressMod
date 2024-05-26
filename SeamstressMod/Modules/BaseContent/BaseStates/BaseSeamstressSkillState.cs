@@ -17,6 +17,8 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected bool scissorLeft;
 
+        protected NeedleController needleCon;
+
         protected int needleCount;
 
         protected bool insatiable;
@@ -41,6 +43,10 @@ namespace SeamstressMod.Modules.BaseStates
             if (!seamstressController)
             {
                 seamstressController = base.GetComponent<SeamstressController>();
+            }
+            if (!needleCon)
+            {
+                needleCon = base.GetComponent<NeedleController>();
             }
             if (seamstressController)
             {

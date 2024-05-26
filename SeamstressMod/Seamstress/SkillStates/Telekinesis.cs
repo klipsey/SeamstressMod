@@ -29,6 +29,11 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
             }
         }
+        public GameObject genericImpactExplosionEffect = SeamstressAssets.genericImpactExplosionEffect;
+
+        public GameObject slamEffect = SeamstressAssets.slamEffect;
+
+        public Color mainColor = SeamstressAssets.coolRed;
         private Transform _barrelPoint;
 
         private Vector3 _pickTargetPosition;
@@ -81,6 +86,13 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override void OnEnter()
         {
+            RefreshState();
+            if(seamstressController.blue)
+            {
+                this.genericImpactExplosionEffect = SeamstressAssets.genericImpactExplosionEffect2;
+                this.slamEffect = SeamstressAssets.slamEffect2;
+                this.mainColor = Color.cyan;
+            }
             base.OnEnter();
             pullSuitabilityCurve.AddKey(0, 1);
             pullSuitabilityCurve.AddKey(2000, 0);
@@ -250,13 +262,13 @@ namespace SeamstressMod.Seamstress.SkillStates
                 else bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat), SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullHealth * 0.5f);
                 if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonateNextFrame)
                 {
-                    EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                    EffectManager.SpawnEffect(this.genericImpactExplosionEffect, new EffectData
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
-                        color = SeamstressAssets.coolRed,
+                        color = this.mainColor,
                     }, true);
-                    EffectManager.SpawnEffect(SeamstressAssets.slamEffect, new EffectData
+                    EffectManager.SpawnEffect(this.slamEffect, new EffectData
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,

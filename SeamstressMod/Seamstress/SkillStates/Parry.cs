@@ -13,8 +13,6 @@ namespace SeamstressMod.Seamstress.SkillStates
     {
         public static NetworkSoundEventDef parrySoundDef = SeamstressAssets.parrySuccessSoundEvent;
 
-        private GameObject blinkPrefab;
-
         public static string enterSoundString = "Play_bandit2_m2_impact";
 
         public static float duration = SeamstressStaticValues.parryWindow;
@@ -25,6 +23,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override void OnEnter()
         {
+            RefreshState();
             base.OnEnter();
             Util.PlaySound(enterSoundString, gameObject);
             if (NetworkServer.active)
@@ -41,7 +40,6 @@ namespace SeamstressMod.Seamstress.SkillStates
             bool success = characterBody.HasBuff(SeamstressBuffs.parrySuccess);
             if (base.isAuthority && base.fixedAge >= duration && success)
             {
-                blinkPrefab = SeamstressAssets.blinkEffect;
                 DoAttackServer();
                 outer.SetNextState(new ParryDash());
             }

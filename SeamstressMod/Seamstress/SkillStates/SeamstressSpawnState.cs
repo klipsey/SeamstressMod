@@ -6,12 +6,15 @@ using UnityEngine.Networking;
 using UnityEngine.AddressableAssets;
 using R2API;
 using SeamstressMod.Seamstress.Content;
+using SeamstressMod.Modules.BaseStates;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
-    public class SeamstressSpawnState : BaseState
+    public class SeamstressSpawnState : BaseSeamstressState
     {
         private CameraRigController cameraController;
+
+        public GameObject spawnPrefab = SeamstressAssets.spawnPrefab;
 
         public static float duration = 3f;
 
@@ -32,10 +35,12 @@ namespace SeamstressMod.Seamstress.SkillStates
             base.FixedUpdate();
             if (base.fixedAge > 1f && !check)
             {
+                RefreshState();
+                if (seamstressController.blue) spawnPrefab = SeamstressAssets.spawnPrefab2;
                 check = true;
                 EffectData effectData = new EffectData();
                 effectData.origin = transform.position;
-                EffectManager.SpawnEffect(SeamstressAssets.spawnPrefab, effectData, false);
+                EffectManager.SpawnEffect(spawnPrefab, effectData, false);
 
                 Util.PlaySound("sfx_seamstress_spawn", gameObject);
 

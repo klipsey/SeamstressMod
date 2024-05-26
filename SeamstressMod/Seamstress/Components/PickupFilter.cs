@@ -14,7 +14,7 @@ namespace SeamstressMod.Seamstress.Components
     {
         public TeamFilter myTeamFilter;
 
-        public static GameObject boomEffect = SeamstressAssets.blinkEffect;
+        public static GameObject pickupEffect = SeamstressAssets.blinkEffect;
 
         public UnityEvent triggerEvents;
 
@@ -22,7 +22,7 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool hasActivated = false;
 
-        public float pickupTimer = 7f;
+        public float pickupTimer = 6f;
 
         public void FixedUpdate()
         {

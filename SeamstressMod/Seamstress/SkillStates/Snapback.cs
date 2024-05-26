@@ -35,6 +35,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         private bool hasSnapped;
         public override void OnEnter()
         {
+            RefreshState();
             base.OnEnter();
             Util.PlaySound(exitSoundString, gameObject);
             if(NetworkServer.active) Util.CleanseBody(base.characterBody, false, false, false, true, false, false);

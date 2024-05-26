@@ -13,6 +13,7 @@ namespace SeamstressMod.Seamstress.Content
 
         public static void Init()
         {
+            /*
             if(!SeamstressConfig.forceUnlockCharacter.Value)
             {
                 characterUnlockableDef = Modules.Content.CreateAndAddUnlockableDef(
@@ -20,7 +21,7 @@ namespace SeamstressMod.Seamstress.Content
                     Modules.Tokens.GetAchievementNameToken(SeamstressUnlockAchievement.identifier),
                     SeamstressSurvivor.instance.assetBundle.LoadAsset<Sprite>("texSeamstressAchievement"));
             }
-
+            */
             masterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockableDef(
                 SeamstressMasteryAchievement.unlockableIdentifier,
                 Modules.Tokens.GetAchievementNameToken(SeamstressMasteryAchievement.identifier),
