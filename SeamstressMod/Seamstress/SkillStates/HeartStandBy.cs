@@ -36,7 +36,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            splat = false;
             ProjectileController component = GetComponent<ProjectileController>();
             if ((bool)component)
             {
@@ -48,7 +47,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             seamstressController = owner.GetComponent<SeamstressController>();
             ownerBody = owner.GetComponent<CharacterBody>();
             if (seamstressController.blue) this.chain = SeamstressAssets.chainToHeart2;
-            //i need to delete this but i have no clue if its keeping everything together or not
+            //i need to delete this but i have no clue if its keeping everything together or not (It was)
             chain.GetComponent<DestroyOnCondition>().enabled = true;
             chain.GetComponent<DestroyOnCondition>().seamstressController = seamstressController;
         }
@@ -62,18 +61,17 @@ namespace SeamstressMod.Seamstress.SkillStates
                 ChainUpdate(SeamstressStaticValues.insatiableDuration);
                 hasFired = true;
             }
-            if (!ownerIsEmpowered && base.fixedAge > 1f)
+            if (!ownerIsEmpowered)
             {
                 if (!splat)
                 {
                     splat = true;
-                    snapBackDelay = (ownerBody.corePosition - transform.position).magnitude / 10f;
-                    snapBackDelay = Mathf.Clamp(snapBackDelay, 0.2f, 1f);
+                    snapBackDelay = Util.Remap((ownerBody.corePosition - transform.position).magnitude, 0f, (ownerBody.corePosition - transform.position).magnitude, 0f, 1f);
                     chain.GetComponent<DestroyOnCondition>().enabled = false;
                     ChainUpdate(snapBackDelay);
                 }
                 snapBackDelay -= Time.fixedDeltaTime;
-                if (snapBackDelay <= 0.2f)
+                if (snapBackDelay <= 0f)
                 {
                     EntityState.Destroy(this.gameObject);
                 }
@@ -90,7 +88,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 genericFloat = num,
             };
             effectData.SetHurtBoxReference(owner);
-            EffectManager.SpawnEffect(chain, effectData, transmit: false);
+            EffectManager.SpawnEffect(chain, effectData, transmit: true);
         }
 
         public override void OnExit()

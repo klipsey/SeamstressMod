@@ -99,6 +99,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     fireString = "SwingLeftSmall";
                 }
                 if (sceptered) projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilter>().pickupTimer = 1.5f;
+                projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilter>().pickupTimer = Mathf.Max(0.5f, projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilter>().pickupTimer * base.skillLocator.special.cooldownScale - base.skillLocator.special.flatCooldownReduction);
                 if (insatiable)
                 {
                     projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
@@ -109,10 +110,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
                 float healthMissing = ((this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield) - (this.characterBody.healthComponent.health + this.characterBody.healthComponent.shield)) / (this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield);
                 projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().fractionOfDamage = healthMissing * SeamstressStaticValues.passiveHealingScaling;
-                if (base.characterBody.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) > 0)
-                {
-                    projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilter>().pickupTimer *= 0.66f;
-                }
+
                 Fire(this.aimRay, fireString);
                 hasFired = true;
             }
@@ -132,7 +130,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 effectData.rotation = Util.QuaternionSafeLookRotation(aimRay.direction);
                 effectData.origin = transform.position;
                 effectData.scale = 0.5f;
-                EffectManager.SpawnEffect(scissorFiringPrefab, effectData, transmit: false);
+                EffectManager.SpawnEffect(scissorFiringPrefab, effectData, transmit: true);
             }
             if (base.isAuthority)
             {

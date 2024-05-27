@@ -47,8 +47,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                         }
                     }
 
-                    ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
-
                     base.characterMotor.jumpCount++;
 
                     if (this.hasModelAnimator)

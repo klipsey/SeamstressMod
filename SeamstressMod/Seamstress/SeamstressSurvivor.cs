@@ -763,6 +763,7 @@ namespace SeamstressMod.Seamstress
             On.RoR2.HealthComponent.TakeDamage += new On.RoR2.HealthComponent.hook_TakeDamage(HealthComponent_TakeDamage);
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             On.RoR2.UI.LoadoutPanelController.Rebuild += LoadoutPanelController_Rebuild;
+            On.RoR2.GenericSkill.SetBonusStockFromBody += new On.RoR2.GenericSkill.hook_SetBonusStockFromBody(GenericSkill_SetBonusStockFromBody);
             if (SeamstressPlugin.emotesInstalled) Emotes();
         }
         private static void Emotes()
@@ -882,6 +883,14 @@ namespace SeamstressMod.Seamstress
                 }
             }
             return res;
+        }
+        public void GenericSkill_SetBonusStockFromBody(On.RoR2.GenericSkill.orig_SetBonusStockFromBody orig, GenericSkill self, int newBonusStockFromBody)
+        {
+            if (self.skillDef.dontAllowPastMaxStocks && self.skillDef.skillNameToken == SEAMSTRESS_PREFIX + "SPECIAL_SCEPTER_NAME" || self.skillDef.skillNameToken == SEAMSTRESS_PREFIX + "SPECIAL_FIRE_NAME")
+            {
+                return;
+            }
+            else orig.Invoke(self, newBonusStockFromBody);
         }
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
         {

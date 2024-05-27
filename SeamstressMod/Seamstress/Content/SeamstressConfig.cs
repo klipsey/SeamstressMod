@@ -8,7 +8,7 @@ namespace SeamstressMod.Seamstress.Content
         public static ConfigEntry<bool> heavyEnemy;
         public static ConfigEntry<bool> forceUnlockCharacter;
         public static ConfigEntry<bool> forceUnlockRaven;
-        public static ConfigEntry<float> someConfigFloatWithCustomRange;
+        public static ConfigEntry<float> changeGroundedBlinkVelocity;
 
         public static void Init()
         {
@@ -32,6 +32,15 @@ namespace SeamstressMod.Seamstress.Content
                 "Force Unlock Raven",
                 false,
                 "If you're not Feilong, you're a cheater.");
+
+            changeGroundedBlinkVelocity = Config.BindAndOptionsSlider(
+                section,
+                "Grounded Blink Jump Height",
+                0f,
+                "When grounded, blink will go vertically by the inputted amount from 0 - 1 (0 degrees to 90 degrees)", 
+                0, 
+                1,
+                false);
         }
     }
 }

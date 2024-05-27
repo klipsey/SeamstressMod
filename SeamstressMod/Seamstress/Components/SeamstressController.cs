@@ -165,7 +165,7 @@ namespace SeamstressMod.Seamstress.Components
                 effectData.rotation = Util.QuaternionSafeLookRotation(heldDashVector);
                 effectData.origin = origin;
                 effectData.scale = 1f;
-                EffectManager.SpawnEffect(blinkEffect, effectData, transmit: false);
+                EffectManager.SpawnEffect(blinkEffect, effectData, transmit: true);
                 hasPlayedEffect = true;
             }
         }

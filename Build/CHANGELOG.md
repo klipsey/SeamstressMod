@@ -1,3 +1,11 @@
+# 1.0.7
+
+- Added vertical movement to blink if grounded to make it feel like an omni direction wax quail (Off by Default)
+- Logbook update
+- All cdr that affects the special now reduces pickup time for weapons
+- Nerfed bleed damage from 300% (yes it was unintentionally 300% per bleed) over 3 seconds to 100% damage over 2 seconds
+- Nerfed needles from 125% damage to 75% but buffed its proc coefficient to 0.75
+
 # 1.0.6
 
 - Ancient Scepter support: Your Symbiotic weapon has a 2 second pickup time

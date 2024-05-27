@@ -81,7 +81,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             CleanBuffsServer();
             if (parrySoundDef)
             {
-                EffectManager.SimpleSoundEffect(parrySoundDef.index, characterBody.corePosition, transmit: false);
+                EffectManager.SimpleSoundEffect(parrySoundDef.index, characterBody.corePosition, transmit: true);
             }
         }
 

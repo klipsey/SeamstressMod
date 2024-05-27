@@ -18,11 +18,11 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float scissorPickupDamageCoefficient = 2f;
 
-        internal const float cutDotDamage = 0.2f;
+        internal const float bleedDotDamage = 0.1f;
 
         internal const float blinkDamageCoefficient = 4f;
 
-        internal const float cutDuration = 3f;
+        internal const float bleedDuration = 2f;
 
         internal const float blinkCooldown = 0.4f;
 
@@ -38,11 +38,11 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float parryDamageCoefficient = 4f;
 
-        internal const float needleDamageCoefficient = 0.8f;
+        internal const float needleDamageCoefficient = 0.75f;
 
-        internal const float clipDamageCoefficient = 1.25f;
+        internal const float clipDamageCoefficient = 0.75f;
 
-        internal const float needleProcCoefficient = 0.7f;
+        internal const float needleProcCoefficient = 0.75f;
 
         internal const float parryWindow = 0.4f;
 

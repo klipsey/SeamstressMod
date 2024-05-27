@@ -78,11 +78,24 @@ namespace SeamstressMod.Seamstress.SkillStates
                 request = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
             blinkVector = GetBlinkVector();
-            if (blinkVector.sqrMagnitude < Mathf.Epsilon)
+            if (characterMotor.isGrounded)
             {
-                blinkVector = inputBank.aimDirection;
+                characterMotor.velocity = Vector3.zero;
+                if(SeamstressConfig.changeGroundedBlinkVelocity.Value > 0f)
+                {
+                    Vector3 to = inputBank.aimDirection;
+                    to.y = 0f;
+                    if (inputBank.aimDirection.y < 0f && (Vector3.Angle(to, blinkVector) <= 90) || inputBank.aimDirection.y > 0f && (Vector3.Angle(to, blinkVector) >= 90))
+                    {
+                        blinkVector.y *= -1;
+                    }
+                    if (Vector3.Angle(inputBank.aimDirection, to) <= 45)
+                    {
+                        blinkVector.y = SeamstressConfig.changeGroundedBlinkVelocity.Value;
+                    }
+                }
+                blinkVector.y = Mathf.Clamp(blinkVector.y, 0.1f, 0.75f);
             }
-            if (characterMotor.isGrounded) characterMotor.velocity = Vector3.zero;
             characterDirection.moveVector = blinkVector;
 
             CreateBlinkEffect(base.characterBody.corePosition, true);
@@ -132,11 +145,11 @@ namespace SeamstressMod.Seamstress.SkillStates
                 effectData.rotation = Util.QuaternionSafeLookRotation(blinkVector);
                 effectData.origin = origin;
                 effectData.scale = 0.15f;
-                EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: false);
+                EffectManager.SpawnEffect(blinkPrefab, effectData, transmit: true);
                 effectData.scale = 3f;
                 if(!first)
                 {
-                    EffectManager.SpawnEffect(dashPrefab, effectData, transmit: false);
+                    EffectManager.SpawnEffect(dashPrefab, effectData, transmit: true);
                 }
             }
         }

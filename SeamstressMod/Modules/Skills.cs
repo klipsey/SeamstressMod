@@ -206,7 +206,7 @@ namespace SeamstressMod.Modules
 
         public bool resetCooldownTimerOnUse = false;
         public bool fullRestockOnAssign = true;
-        public bool dontAllowPastMaxStocks = false;
+        public bool dontAllowPastMaxStocks = true;
         public bool beginSkillCooldownOnSkillEnd = false;
         public bool mustKeyPress = false;
 

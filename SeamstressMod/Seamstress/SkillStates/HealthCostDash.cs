@@ -112,6 +112,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     attack.AddModdedDamageType(DamageTypes.CutDamage);
                 }
                 attack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
+
                 EffectData effectData = new EffectData()
                 {
                     origin = base.characterBody.corePosition,

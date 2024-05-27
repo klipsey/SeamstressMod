@@ -76,7 +76,7 @@ namespace SeamstressMod.Seamstress.Components
                     origin = position,
                     start = start
                 };
-                EffectManager.SpawnEffect(pullTracerPrefab, effectData, transmit: false);
+                EffectManager.SpawnEffect(pullTracerPrefab, effectData, transmit: true);
             }
         }
         private void SetPosition(Vector3 newPosition)

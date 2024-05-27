@@ -78,7 +78,7 @@ namespace SeamstressMod.Seamstress.Content
             SeamstressDot = RegisterDotDef(new DotDef
             {
                 interval = 0.2f,
-                damageCoefficient = SeamstressStaticValues.cutDotDamage,
+                damageCoefficient = SeamstressStaticValues.bleedDotDamage,
                 damageColorIndex = DamageColorIndex.SuperBleed,
                 associatedBuff = SeamstressBuffs.seamstressBleedBuff,
                 resetTimerOnAdd = false,

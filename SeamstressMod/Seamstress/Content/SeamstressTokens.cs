@@ -55,16 +55,17 @@ namespace SeamstressMod.Seamstress.Content
                 "Many take up slower hobbies like baking and sewing but not everyone is content with their lives." +
                 Environment.NewLine +
                 Environment.NewLine +
-                "A restless seamstress, with robotic vitality, despises the walls she resides in. She wants nothing to do with her nobility. It ties her down to a monotonous life. " +
-                "As darkness settles, she escapes her quarters filled with adrenaline as her <style=cIsUtility>heart</style> still beats. " +
+                "A restless seamstress, with synthetic vitality, despises the walls she resides in. She wants nothing to do with her nobility. It ties her down to a monotonous life. " +
+                "As darkness settles, she stows away in a civilian ship. Filled with adrenaline her <style=cIsUtility>heart</style> still beats. " +
                 Environment.NewLine +
                 Environment.NewLine +
                 "Many who run away are given a reality check. The galaxy outside of the high court isn't the wonderland depicted in books. It's more akin to a tragic fairytale. " +
                 Environment.NewLine +
                 Environment.NewLine +
-                "A corrupted creature, on borrowed time. How did it go so wrong? The ship she boarded -swallowed by a rift from imps who desired the same escape as her. " +
-                "The imps weren't hostile but instead filled with fear. As a wave of blood blended with the red-painted sky, every human and imp alike was cut clean. " +
+                "A corrupted creature, on borrowed time. How did it go so wrong? The ship she chose -swallowed by a rift made by imps who desired the same escape as her. " +
+                "Suddenly, a wave of blood blended with the crimson sky, every human and imp alike was cut clean. As her vision began to fade, a figure lept away as another one quietly approached. " +
                 "A whisper, a target, a new life. Her <color=#9B3737>heart</color> still beats.";
+
             string outro = "..and so she left, wanting to stitch more than just fabric.";
             string outroFailure = "..and so she vanished, with seams unsewn.";
             

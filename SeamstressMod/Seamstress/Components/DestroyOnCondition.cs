@@ -27,5 +27,3 @@ namespace SeamstressMod.Seamstress.Components
         }
     }
 }
-
-
