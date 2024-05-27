@@ -1,3 +1,13 @@
+# 1.0.8
+
+- Needles are no longer a requirement for Manipulate but now increases its base damage dealt per slam
+- Clip no longer consumes needles but has higher cooldown and lower proc coefficient
+- Lowered Needle damage again
+- Fixed scissor swing on alt primary
+- Fixed Tokens
+- Icon is blue in lobby
+- I forgor
+
 # 1.0.7
 
 - Added vertical movement to blink if grounded to make it feel like an omni direction wax quail (Off by Default)

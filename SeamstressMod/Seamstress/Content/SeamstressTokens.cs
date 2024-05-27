@@ -103,12 +103,11 @@ namespace SeamstressMod.Seamstress.Content
             #endregion
 
             #region Secondary
-
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
-            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.reachPrefix + $". Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip an additional time per <color=#9B3737>Needle</color>.");
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.reachPrefix + $". Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip an additional time per <color=#9B3737>Needle</color>.");
 
             Language.Add(prefix + "SECONDARY_PLANMAN_NAME", "Planar Manipulation");
-            Language.Add(prefix + "SECONDARY_PLANMAN_DESCRIPTION", Tokens.crushPrefix + $". Consume a <color=#9B3737>Needle</color>. Slamming enemies at high speeds deals <style=cIsDamage>{100f * SeamstressStaticValues.telekinesisDamageCoefficient}% damage</style> in an area. " +
+            Language.Add(prefix + "SECONDARY_PLANMAN_DESCRIPTION", Tokens.crushPrefix + $". Slamming enemies at high speeds deals <style=cIsDamage>{100f * SeamstressStaticValues.telekinesisDamageCoefficient} - {100f * SeamstressStaticValues.telekinesisDamageCoefficient * 5}% damage</style> in an area based on <color=#9B3737>Needles</color>. " +
                 $"<style=cIsUtility>{SeamstressStaticValues.telekinesisCooldown} second cooldown</style> on the same target.");
 
             #endregion

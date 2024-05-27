@@ -35,7 +35,7 @@ namespace SeamstressMod.Modules
             $"<style=cIsHealing>Healing</style> is converted into extra layer of <style=cIsHealth>health</style> that <style=cIsHealing>heals</style> you after <color=#9B3737>Insatiable</color> ends.");
 
         public static string detailsKeyword = KeywordText("Details", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling} base damage</style> per <style=cIsHealth>1 missing health</style>. " +
-            $"Gain up to <style=cIsHealing>{SeamstressStaticValues.passiveHealingScaling}% lifsteal</style> based on <style=cIsHealth>missing health</style>.");
+            $"Gain up to <style=cIsHealing>{100f * SeamstressStaticValues.passiveHealingScaling}% lifsteal</style> based on <style=cIsHealth>missing health</style>.");
         public static string DamageText(string text)
         {
             return $"<style=cIsDamage>{text}</style>";

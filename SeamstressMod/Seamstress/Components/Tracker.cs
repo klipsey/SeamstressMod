@@ -94,7 +94,7 @@ namespace SeamstressMod.Seamstress.Components
                 {
                     onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
                 }
-                if (onCooldown || !characterBody.HasBuff(SeamstressBuffs.needles))
+                if (onCooldown)
                 {
                     indicator2.targetTransform = trackingTarget ? trackingTarget.transform : null;
                     indicator.targetTransform = null;

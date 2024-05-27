@@ -87,7 +87,8 @@ namespace SeamstressMod.Seamstress.Components
             stopwatch += Time.fixedDeltaTime;
             if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonate && !hasFired)
             {
-                float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage, victimBody.healthComponent.fullHealth * 0.7f);
+                CharacterBody component = attacker.GetComponent<CharacterBody>();
+                float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage * component.GetBuffCount(SeamstressBuffs.needles)), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage * component.GetBuffCount(SeamstressBuffs.needles), victimBody.healthComponent.fullHealth * 0.75f);
                 EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
                 {
                     origin = victimBody.footPosition,
@@ -99,12 +100,10 @@ namespace SeamstressMod.Seamstress.Components
                     origin = victimBody.footPosition,
                     rotation = Quaternion.identity,
                 }, true);
-                CharacterBody component = attacker.GetComponent<CharacterBody>();
                 SeamstressController seamCom = attacker.GetComponent<SeamstressController>();
-                float num2 = component.damage;
                 BlastAttack blastAttack = new BlastAttack();
                 blastAttack.position = victimBody.footPosition;
-                blastAttack.baseDamage = SeamstressStaticValues.telekinesisDamageCoefficient * num2 + bonusDamage;
+                blastAttack.baseDamage = bonusDamage;
                 blastAttack.baseForce = 800f;
                 blastAttack.bonusForce = Vector3.zero;
                 blastAttack.radius = 10f;

@@ -320,7 +320,7 @@ namespace SeamstressMod.Seamstress
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 5f,
+                baseRechargeInterval = 6f,
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,
@@ -820,7 +820,7 @@ namespace SeamstressMod.Seamstress
                         {
                             victimBody.skillLocator.utility.ExecuteIfReady();
                         }
-                        return;
+                        damageInfo.rejected = true;
                     }
                 }
             }

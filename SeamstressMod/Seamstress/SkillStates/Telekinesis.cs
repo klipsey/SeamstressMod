@@ -97,7 +97,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             pullSuitabilityCurve.AddKey(0, 1);
             pullSuitabilityCurve.AddKey(2000, 0);
             tracker = GetComponent<Tracker>();
-            if (tracker && characterBody.HasBuff(SeamstressBuffs.needles))
+            if (tracker)
             {
                 victim = tracker.GetTrackingTarget();
                 if (victim)
@@ -106,7 +106,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                     if (NetworkServer.active)
                     {
                         if (!victimBody.HasBuff(SeamstressBuffs.manipulated)) victimBody.AddBuff(SeamstressBuffs.manipulated);
-                        this.characterBody.RemoveBuff(SeamstressBuffs.needles);
                     }
                     base.PlayCrossfade("Gesture, Override", "Manipulate", "Manipulate.playbackRate", (6f / this.attackSpeedStat) * 0.15f, 0.05f);
 
@@ -258,8 +257,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                     victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * (num3 * Mathf.Max(num2, 100f)) * num, alwaysApply: true, disableAirControlUntilCollision: false);
                 }
 
-                if (victimMotor != null) bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat) + victim.healthComponent.fullCombinedHealth * 0.2f, SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullCombinedHealth * 0.7f);
-                else bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat), SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullHealth * 0.5f);
+                if (victimMotor != null) bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat * needleCount) + victim.healthComponent.fullCombinedHealth * 0.2f, SeamstressStaticValues.telekinesisDamageCoefficient * damageStat * needleCount, victim.healthComponent.fullCombinedHealth * 0.7f);
+                else bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * damageStat * needleCount), SeamstressStaticValues.telekinesisDamageCoefficient * damageStat, victim.healthComponent.fullHealth * 0.5f);
                 if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonateNextFrame)
                 {
                     EffectManager.SpawnEffect(this.genericImpactExplosionEffect, new EffectData
@@ -273,8 +272,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
                     }, true);
-                    CharacterBody component = gameObject.GetComponent<CharacterBody>();
-                    float num = component.damage;
                     BlastAttack blastAttack = new BlastAttack();
                     blastAttack.position = victimBody.footPosition;
                     blastAttack.baseDamage = bonusDamage;
@@ -283,8 +280,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                     blastAttack.radius = 10f;
                     blastAttack.attacker = gameObject;
                     blastAttack.inflictor = gameObject;
-                    blastAttack.teamIndex = component.teamComponent.teamIndex;
-                    blastAttack.crit = component.RollCrit();
+                    blastAttack.teamIndex = characterBody.teamComponent.teamIndex;
+                    blastAttack.crit = characterBody.RollCrit();
                     blastAttack.procChainMask = default;
                     blastAttack.procCoefficient = 1f;
                     blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;

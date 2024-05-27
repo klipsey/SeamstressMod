@@ -28,7 +28,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         private DamageAPI.ModdedDamageType moddedDamageType3 = DamageTypes.Empty;
         private DamageAPI.ModdedDamageType moddedDamageType = DamageTypes.CutDamage;
         private float damageCoefficient = SeamstressStaticValues.clipDamageCoefficient;
-        private float procCoefficient = 1f;
+        private float procCoefficient = 0.6f;
         private float pushForce = 0f;
         private Vector3 bonusForce = Vector3.zero;
 
@@ -139,7 +139,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                 snips--;
                 snipInterval += secondSnip / 5f;
                 Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
-                if (NetworkServer.active) characterBody.RemoveBuff(SeamstressBuffs.needles);
             }
             //if only 1 snip left, fire
             if (stopwatch >= lastSnip && !hasFired2)

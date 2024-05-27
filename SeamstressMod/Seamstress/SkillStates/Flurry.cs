@@ -47,13 +47,13 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             moddedDamageTypeHolder.Add(DamageTypes.SeamstressLifesteal);
             scissorHit = true;
-            if (muzzleString == "SwingLeftSmall" && !scissorLeft)
+            if (muzzleString == "SwingLeftSmall" && !scissorRight)
             {
                 //change to remove the next states double hit instead
                 moddedDamageTypeHolder.Add(DamageTypes.NoScissors);
                 scissorHit = false;
             }
-            if (muzzleString == "SwingRightSmall" && !scissorRight)
+            if (muzzleString == "SwingRightSmall" && !scissorLeft)
             {
                 //change to remove the next states double hit instead
                 moddedDamageTypeHolder.Add(DamageTypes.NoScissors);

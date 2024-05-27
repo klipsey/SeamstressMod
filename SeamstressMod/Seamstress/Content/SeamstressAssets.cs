@@ -1009,6 +1009,7 @@ namespace SeamstressMod.Seamstress.Content
             impactAlly.lifetime = 14f;
             impactAlly.lifetimeAfterImpact = 14f;
             impactAlly.impactEffect = pickupScissorEffect;
+            impactAlly.blastRadius *= 2f;
 
             ProjectileDamage scissorDamage = scissorPrefab.GetComponent<ProjectileDamage>();
             scissorDamage.damageType = DamageType.Stun1s | DamageType.AOE;
@@ -1114,6 +1115,7 @@ namespace SeamstressMod.Seamstress.Content
             impactAlly.lifetime = 14f;
             impactAlly.lifetimeAfterImpact = 14f;
             impactAlly.impactEffect = pickupScissorEffect2;
+            impactAlly.blastRadius *= 2f;
 
             ProjectileDamage scissorDamage = scissorPrefab.GetComponent<ProjectileDamage>();
             scissorDamage.damageType = DamageType.Stun1s | DamageType.AOE;

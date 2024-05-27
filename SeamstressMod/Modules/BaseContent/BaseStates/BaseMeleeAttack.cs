@@ -264,12 +264,12 @@ namespace SeamstressMod.Modules.BaseStates
                         swingSoundString = "sfx_seamstress_swing_scissor";
                         if (muzzleString == "SwingLeftSmall")
                         {
-                            attack.hitBoxGroup = FindHitBoxGroup("Left");
+                            attack.hitBoxGroup = FindHitBoxGroup("Right");
                             muzzleString = "SwingLeft";
                         }
                         else if(muzzleString == "SwingRightSmall")
                         {
-                            attack.hitBoxGroup = FindHitBoxGroup("Right");
+                            attack.hitBoxGroup = FindHitBoxGroup("Left");
                             muzzleString = "SwingRight";
                         }
                         else if(muzzleString == "SwingCenterSmall")

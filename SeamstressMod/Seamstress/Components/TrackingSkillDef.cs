@@ -27,7 +27,7 @@ namespace SeamstressMod.Seamstress.Components
 
         private static bool HasTarget([NotNull] GenericSkill skillSlot)
         {
-            if (!(((InstanceData)skillSlot.skillInstanceData).tracker?.GetTrackingTarget()) || !((InstanceData)skillSlot.skillInstanceData).seamstressController.HasNeedles())
+            if (!(((InstanceData)skillSlot.skillInstanceData).tracker?.GetTrackingTarget()))
             {
                 return false;
             }
