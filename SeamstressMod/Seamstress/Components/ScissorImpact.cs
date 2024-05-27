@@ -200,7 +200,7 @@ namespace SeamstressMod.Seamstress.Components
                     impactAttack.baseForce = 600f;
                     impactAttack.position = transform.position;
                     impactAttack.procCoefficient = 1f;
-                    impactAttack.radius = 6f;
+                    impactAttack.radius = 4f;
                     impactAttack.damageType = DamageType.Stun1s | DamageType.AOE;
                     if (owner.GetComponent<SeamstressController>().inInsatiableSkill)
                     {
@@ -217,7 +217,7 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool TrySticking(Collider hitCollider, Vector3 impactNormal)
         {
-            if ((bool)victim)
+            if (victim)
             {
                 return false;
             }
@@ -241,7 +241,7 @@ namespace SeamstressMod.Seamstress.Components
             if (gameObject)
             {
                 stickEvent.Invoke();
-                RpcFuckYou();
+                RpcActivateTeamIndicator();
                 ParticleSystem[] array = stickParticleSystem;
                 for (int i = 0; i < array.Length; i++)
                 {
@@ -261,13 +261,15 @@ namespace SeamstressMod.Seamstress.Components
                 victim = gameObject;
                 NetworkhitHurtboxIndex = networkhitHurtboxIndex;
                 hasFired = false;
+                base.gameObject.GetComponent<ProjectileDirectionalTargetFinder>().lookCone = 360f;
+                base.gameObject.GetComponent<ProjectileDirectionalTargetFinder>().lookRange = 35f;
                 return true;
             }
             return false;
         }
 
         [ClientRpc]
-        public void RpcFuckYou()
+        public void RpcActivateTeamIndicator()
         {
             stickEvent.Invoke();
         }

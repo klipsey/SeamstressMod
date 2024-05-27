@@ -30,6 +30,7 @@ namespace SeamstressMod.Seamstress.Content
             Modules.Content.AddEntityState(typeof(ParryDash));
 
             Modules.Content.AddEntityState(typeof(FireScissor));
+            Modules.Content.AddEntityState(typeof(FireScissorScepter));
 
             Modules.Content.AddEntityState(typeof(HeartSpawnState));
             Modules.Content.AddEntityState(typeof(HeartStandBy));

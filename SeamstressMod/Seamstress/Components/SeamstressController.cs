@@ -149,7 +149,7 @@ namespace SeamstressMod.Seamstress.Components
                 if (fiendMeter > 0f)
                 {
                     fiendMeter -= drainAmount;
-                    if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 4, default, false);
+                    if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 2, default, false);
                 }
                 else if (fiendMeter <= 0f)
                 {

@@ -25,7 +25,7 @@ namespace SeamstressMod.Seamstress.Content
         public static BuffDef manipulatedCd;
         public static void Init(AssetBundle assetBundle)
         {
-            instatiable = Modules.Content.CreateAndAddBuff("ButcheredBuff", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Bandit2/texBuffSuperBleedingIcon.tif").WaitForCompletion(),
+            instatiable = Modules.Content.CreateAndAddBuff("InsatiableBuff", Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Bandit2/texBuffSuperBleedingIcon.tif").WaitForCompletion(),
                 Color.red, false, false, false);
             seamstressBleedBuff = Modules.Content.CreateAndAddBuff("CutBleed", assetBundle.LoadAsset<Sprite>("texBuffSuperBleedIcon"),
                 new Color(155f / 255f, 55f / 255f, 55f / 255f), true, false, false);

@@ -77,9 +77,9 @@ namespace SeamstressMod.Seamstress.Content
 
             #region Skins
             Language.Add(prefix + "MASTERY_SKIN_NAME", "Alternate");
-            Language.Add(prefix + "MASTERY_SKIN2_NAME", "Alternate2");
-            Language.Add(prefix + "MASTERY_SKIN3_NAME", "Raven");
-            Language.Add(prefix + "MASTERY_SKIN4_NAME", "Raven Alternate");
+            Language.Add(prefix + "MASTERY_SKIN_NAME2", "Alternate2");
+            Language.Add(prefix + "MASTERY_SKIN_NAME3", "Raven");
+            Language.Add(prefix + "MASTERY_SKIN_NAME4", "Raven Alternate");
             #endregion
 
             #region Passive
@@ -104,7 +104,7 @@ namespace SeamstressMod.Seamstress.Content
             #region Secondary
 
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
-            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.reachPrefix + $". Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip 5 additional times per <color=#9B3737>Needle</color>.");
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.reachPrefix + $". Consume all <color=#9B3737>Needles</color>. Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip an additional time per <color=#9B3737>Needle</color>.");
 
             Language.Add(prefix + "SECONDARY_PLANMAN_NAME", "Planar Manipulation");
             Language.Add(prefix + "SECONDARY_PLANMAN_DESCRIPTION", Tokens.crushPrefix + $". Consume a <color=#9B3737>Needle</color>. Slamming enemies at high speeds deals <style=cIsDamage>{100f * SeamstressStaticValues.telekinesisDamageCoefficient}% damage</style> in an area. " +
@@ -128,6 +128,11 @@ namespace SeamstressMod.Seamstress.Content
             Language.Add(prefix + "SPECIAL_FIRE_NAME", "Skewer");
             Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
                 $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style>.");
+
+            Language.Add(prefix + "SPECIAL_SCEPTER_NAME", "Rampage");
+            Language.Add(prefix + "SPECIAL_SCEPTER_DESCRIPTION", $"Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
+                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style>." + Tokens.ScepterDescription("Your " + Tokens.symbioticPrefix + $" weapon only has a <style=cIsUtility>2 second pickup time</style>."));
+
             #endregion
 
             #region Achievements

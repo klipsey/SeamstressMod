@@ -35,6 +35,8 @@ namespace SeamstressMod.Seamstress
 
         public static SkillDef snapBackSkillDef;
 
+        public static SkillDef scepterFireScissor;
+
         public override BodyInfo bodyInfo => new BodyInfo
         {
             bodyName = bodyName,
@@ -205,6 +207,7 @@ namespace SeamstressMod.Seamstress
             AddSecondarySkills();
             AddUtilitySkills();
             AddSpecialSkills();
+            if (SeamstressPlugin.scepterInstalled) InitializeScepter();
         }
 
         private void AddPassiveSkills()
@@ -492,8 +495,8 @@ namespace SeamstressMod.Seamstress
                 stockToConsume = 1,
 
                 resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = false,
-                dontAllowPastMaxStocks = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = true,
                 mustKeyPress = true,
                 beginSkillCooldownOnSkillEnd = false,
 
@@ -504,6 +507,42 @@ namespace SeamstressMod.Seamstress
             });
 
             Skills.AddSpecialSkills(bodyPrefab, fireScissor);
+        }
+
+        private void InitializeScepter()
+        {
+            scepterFireScissor = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "FireScepterSeamstress",
+                skillNameToken = SEAMSTRESS_PREFIX + "SPECIAL_SCEPTER_NAME",
+                skillDescriptionToken = SEAMSTRESS_PREFIX + "SPECIAL_SCEPTER_DESCRIPTION",
+                keywordTokens = new string[] { Tokens.symbioticKeyword },
+                skillIcon = assetBundle.LoadAsset<Sprite>("texSkewerScepterIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.FireScissorScepter)),
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+
+                baseRechargeInterval = 14f,
+                baseMaxStock = 2,
+
+                rechargeStock = 2,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = true,
+                mustKeyPress = true,
+                beginSkillCooldownOnSkillEnd = false,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = true,
+                forceSprintDuringState = false,
+            });
+
+            AncientScepter.AncientScepterItem.instance.RegisterScepterSkill(scepterFireScissor, bodyName, SkillSlot.Special, 0);
         }
         #endregion skills
         public static Material CreateMaterial(AssetBundle assetBundle, string materialName, float emission, Color emissionColor, float normalStrength)
@@ -614,7 +653,7 @@ namespace SeamstressMod.Seamstress
             };
             ////simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
             ///
-            SkinDef masterySkin2 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
+            SkinDef masterySkin2 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME2",
                 assetBundle.LoadAsset<Sprite>("texMonsoonRed"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject,
@@ -640,7 +679,7 @@ namespace SeamstressMod.Seamstress
                     shouldActivate = false,
                 }
             };
-            SkinDef masterySkin3 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
+            SkinDef masterySkin3 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME3",
                 assetBundle.LoadAsset<Sprite>("ravenIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject, SeamstressUnlockables.masteryTyphoonSkinUnlockableDef);
@@ -665,7 +704,7 @@ namespace SeamstressMod.Seamstress
                     shouldActivate = false,
                 }
             };
-            SkinDef masterySkin4 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
+            SkinDef masterySkin4 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME4",
             assetBundle.LoadAsset<Sprite>("ravenIcon"),
             defaultRendererinfos,
             prefabCharacterModel.gameObject, SeamstressUnlockables.masteryTyphoonSkinUnlockableDef);
@@ -856,7 +895,7 @@ namespace SeamstressMod.Seamstress
                 if (seamstressController && healthComponent && skillLocator)
                 {
                     seamstressController.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
-                    float healthMissing = (healthComponent.fullCombinedHealth * self.cursePenalty) - healthComponent.health;
+                    float healthMissing = (healthComponent.fullCombinedHealth * self.cursePenalty) - (healthComponent.health + healthComponent.shield / 2f);
                     float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
                     if (seamstressController.inInsatiableSkill && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = SeamstressStaticValues.baseDamage + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
                     else self.baseDamage = SeamstressStaticValues.baseDamage + healthMissing * SeamstressStaticValues.passiveScaling;

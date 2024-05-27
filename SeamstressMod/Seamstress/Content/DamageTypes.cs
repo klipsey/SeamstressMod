@@ -75,7 +75,7 @@ namespace SeamstressMod.Seamstress.Content
                 {
                     if(seamstressController)
                     {
-                        float healthMissing = ((attackerBody.healthComponent.fullHealth + attackerBody.healthComponent.fullShield) - (attackerBody.healthComponent.health + attackerBody.healthComponent.shield)) / (attackerBody.healthComponent.fullHealth + attackerBody.healthComponent.fullShield);
+                        float healthMissing = ((attackerBody.healthComponent.fullCombinedHealth) - (attackerBody.healthComponent.health + attackerBody.healthComponent.shield)) / (attackerBody.healthComponent.fullCombinedHealth);
                         attackerBody.healthComponent.Heal(damageReport.damageDealt * (healthMissing * SeamstressStaticValues.passiveHealingScaling), default, true);
                     }
                 }

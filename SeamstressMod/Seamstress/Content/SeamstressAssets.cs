@@ -305,9 +305,9 @@ namespace SeamstressMod.Seamstress.Content
 
         private static void CreateMaterials()
         {
-            insatiableOverlayMat = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
+            insatiableOverlayMat = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion());
 
-            insatiableOverlayMat2 = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion();
+            insatiableOverlayMat2 = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion());
             insatiableOverlayMat2.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampBombOrb.png").WaitForCompletion());
 
             destealthMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpBossDissolve.mat").WaitForCompletion();
@@ -798,9 +798,13 @@ namespace SeamstressMod.Seamstress.Content
 
             seamstressTeamAreaIndicator = teamArea;
 
-            teamArea.teamMaterialPairs[1].sharedMaterial = new Material(teamArea.teamMaterialPairs[1].sharedMaterial);
-            teamArea.teamMaterialPairs[1].sharedMaterial.SetColor("_TintColor", Color.cyan);
-            seamstressTeamAreaIndicator2 = teamArea;
+            GameObject impThing2 = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ImpVoidspikeProjectile");
+
+            TeamAreaIndicator teamArea2 = PrefabAPI.InstantiateClone(impThing2.transform.Find("ImpactEffect/TeamAreaIndicator, FullSphere").gameObject, "SeamstressTeamIndicator", false).GetComponent<TeamAreaIndicator>();
+
+            teamArea2.teamMaterialPairs[1].sharedMaterial = new Material(teamArea2.teamMaterialPairs[1].sharedMaterial);
+            teamArea2.teamMaterialPairs[1].sharedMaterial.SetColor("_TintColor", Color.cyan);
+            seamstressTeamAreaIndicator2 = teamArea2;
 
             //Add this to her hands during insatiable?
             GameObject obj = new GameObject();
@@ -1014,6 +1018,7 @@ namespace SeamstressMod.Seamstress.Content
 
             ProjectileSimple simple = scissorPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
+            simple.updateAfterFiring = true;
 
             //changes team filter to only team
             PickupFilter scissorPickup = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilter>();
@@ -1034,6 +1039,22 @@ namespace SeamstressMod.Seamstress.Content
 
             scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
             scissorPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
+
+            ProjectileSteerTowardTarget scissorSteer = scissorPrefab.AddComponent<ProjectileSteerTowardTarget>();
+            scissorSteer.yAxisOnly = false;
+            scissorSteer.rotationSpeed = 700f;
+            scissorSteer.enabled = true;
+
+            ProjectileDirectionalTargetFinder scissorTracking = scissorPrefab.AddComponent<ProjectileDirectionalTargetFinder>();
+            scissorTracking.lookRange = 0f;
+            scissorTracking.lookCone = 0f;
+            scissorTracking.targetSearchInterval = 0.2f;
+            scissorTracking.onlySearchIfNoTarget = true;
+            scissorTracking.allowTargetLoss = false;
+            scissorTracking.testLoS = true;
+            scissorTracking.ignoreAir = false;
+            scissorTracking.flierAltitudeTolerance = Mathf.Infinity;
+            scissorTracking.enabled = true;
 
             float die = modelName == "ScissorRightGhost" ? 3.1f : -3.1f;
             GameObject ScissorModelTransform = new GameObject();
@@ -1102,6 +1123,7 @@ namespace SeamstressMod.Seamstress.Content
 
             ProjectileSimple simple = scissorPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
+            simple.updateAfterFiring = true;
 
             //changes team filter to only team
             PickupFilter scissorPickup = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilter>();
@@ -1122,6 +1144,22 @@ namespace SeamstressMod.Seamstress.Content
 
             scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
             scissorPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
+
+            ProjectileSteerTowardTarget scissorSteer = scissorPrefab.AddComponent<ProjectileSteerTowardTarget>();
+            scissorSteer.yAxisOnly = false;
+            scissorSteer.rotationSpeed = 2000f;
+            scissorSteer.enabled = true;
+
+            ProjectileDirectionalTargetFinder scissorTracking = scissorPrefab.AddComponent<ProjectileDirectionalTargetFinder>();
+            scissorTracking.lookRange = 0f;
+            scissorTracking.lookCone = 0f;
+            scissorTracking.targetSearchInterval = 0.2f;
+            scissorTracking.onlySearchIfNoTarget = true;
+            scissorTracking.allowTargetLoss = false;
+            scissorTracking.testLoS = true;
+            scissorTracking.ignoreAir = false;
+            scissorTracking.flierAltitudeTolerance = Mathf.Infinity;
+            scissorTracking.enabled = true;
 
             float die = modelName == "ScissorRightGhost" ? 3.1f : -3.1f;
             GameObject ScissorModelTransform = new GameObject();

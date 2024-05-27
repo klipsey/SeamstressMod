@@ -1,3 +1,14 @@
+# 1.0.6
+
+- Ancient Scepter support: Your Symbiotic weapon has a 2 second pickup time
+- Fixed lysate stuff
+- Halved the effectiveness of shield counting towards missing hp
+- Weapons home after detaching
+
+# 1.0.5
+
+- Quick hofix for all skins being blue
+
 # 1.0.4
 
 - Lowered PP

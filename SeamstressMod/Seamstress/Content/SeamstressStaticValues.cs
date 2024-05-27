@@ -48,7 +48,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float scissorDamageCoefficient = 4f;
 
-        internal const float maxFiendGaugeCoefficient = 2f;
+        internal const float maxFiendGaugeCoefficient = 1f;
 
         internal const float telekinesisDamageCoefficient = 0.3f;
 

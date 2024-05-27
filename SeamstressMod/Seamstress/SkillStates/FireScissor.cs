@@ -33,6 +33,14 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private bool hasFired;
 
+        protected virtual bool sceptered
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         Ray aimRay;
 
         private string fireString;
@@ -90,6 +98,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     projectilePrefab = this.seamstressController.scissorRPrefab;
                     fireString = "SwingLeftSmall";
                 }
+                if (sceptered) projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilter>().pickupTimer = 1.5f;
                 if (insatiable)
                 {
                     projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
@@ -100,7 +109,10 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
                 float healthMissing = ((this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield) - (this.characterBody.healthComponent.health + this.characterBody.healthComponent.shield)) / (this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield);
                 projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().fractionOfDamage = healthMissing * SeamstressStaticValues.passiveHealingScaling;
-                if (base.characterBody.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) > 0) projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilter>().pickupTimer = 7f * 0.66f;
+                if (base.characterBody.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) > 0)
+                {
+                    projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilter>().pickupTimer *= 0.66f;
+                }
                 Fire(this.aimRay, fireString);
                 hasFired = true;
             }
