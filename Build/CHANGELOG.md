@@ -1,3 +1,7 @@
+# 1.0.9
+
+- Networking
+
 # 1.0.8
 
 - Needles are no longer a requirement for Manipulate but now increases its base damage dealt per slam

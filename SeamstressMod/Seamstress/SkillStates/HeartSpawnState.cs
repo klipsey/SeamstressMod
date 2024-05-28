@@ -21,7 +21,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            if(NetworkServer.active) DotController.InflictDot(base.gameObject.GetComponent<ProjectileController>().owner, base.gameObject, Dots.SeamstressSelfBleed, SeamstressStaticValues.insatiableDuration, 1, 1u);
+            if (NetworkServer.active) DotController.InflictDot(base.gameObject.GetComponent<ProjectileController>().owner, base.gameObject, Dots.SeamstressSelfBleed, SeamstressStaticValues.insatiableDuration, 1, 1u);
             Util.PlaySound(enterSoundString, gameObject);
             FindModelChild("ChargeUpFX").gameObject.SetActive(value: true);
         }
@@ -36,5 +36,3 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
     }
 }
-
-
