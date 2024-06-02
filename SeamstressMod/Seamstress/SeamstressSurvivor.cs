@@ -789,41 +789,37 @@ namespace SeamstressMod.Seamstress
         }
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            if (!NetworkServer.active)
+            if(NetworkServer.active && (self.alive || !self.godMode || self.ospTimer < 0f))
             {
-                return;
-            }
-            if (!self.alive || self.godMode || self.ospTimer > 0f)
-            {
-                return;
-            }
-            CharacterBody victimBody = self.body;
-            if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
-            {
-                if (victimBody.HasBuff(SeamstressBuffs.parryStart) && damageInfo.damage > 0)
+                CharacterBody victimBody = self.body;
+                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
                 {
-                    victimBody.RemoveBuff(SeamstressBuffs.parryStart);
-                    if (!victimBody.HasBuff(SeamstressBuffs.parrySuccess))
+                    if (victimBody.HasBuff(SeamstressBuffs.parryStart) && damageInfo.damage > 0)
                     {
-                        victimBody.AddBuff(SeamstressBuffs.parrySuccess);
-                    }
-                    victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
-                    damageInfo.rejected = true;
-                }
-                else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.SeamstressSelfBleed)
-                {
-                    SeamstressController seamCom = victimBody.gameObject.GetComponent<SeamstressController>();
-                    if (seamCom && !victimBody.HasBuff(RoR2.RoR2Content.Buffs.HiddenInvincibility))
-                    {
-                        seamCom.FillHunger(-damageInfo.damage);
-                        if (seamCom.fiendMeter - damageInfo.damage <= -1 * (victimBody.healthComponent.fullCombinedHealth * 0.1f) && victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
+                        victimBody.RemoveBuff(SeamstressBuffs.parryStart);
+                        if (!victimBody.HasBuff(SeamstressBuffs.parrySuccess))
                         {
-                            victimBody.skillLocator.utility.ExecuteIfReady();
+                            victimBody.AddBuff(SeamstressBuffs.parrySuccess);
                         }
+                        victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
                         damageInfo.rejected = true;
                     }
+                    else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.SeamstressSelfBleed)
+                    {
+                        SeamstressController seamCom = victimBody.gameObject.GetComponent<SeamstressController>();
+                        if (seamCom && !victimBody.HasBuff(RoR2.RoR2Content.Buffs.HiddenInvincibility))
+                        {
+                            seamCom.FillHunger(-damageInfo.damage);
+                            if (seamCom.fiendMeter - damageInfo.damage <= -1 * (victimBody.healthComponent.fullCombinedHealth * 0.1f) && victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
+                            {
+                                victimBody.skillLocator.utility.ExecuteIfReady();
+                            }
+                            damageInfo.rejected = true;
+                        }
+                    }
                 }
             }
+
             orig.Invoke(self, damageInfo);
             if(victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME") victimBody.RecalculateStats();
         }
