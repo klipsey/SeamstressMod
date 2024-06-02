@@ -808,7 +808,7 @@ namespace SeamstressMod.Seamstress
                         victimBody.AddBuff(SeamstressBuffs.parrySuccess);
                     }
                     victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
-                    return;
+                    damageInfo.rejected = true;
                 }
                 else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.SeamstressSelfBleed)
                 {
