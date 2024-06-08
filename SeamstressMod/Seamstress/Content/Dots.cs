@@ -12,8 +12,6 @@ namespace SeamstressMod.Seamstress.Content
 {
     internal static class Dots
     {
-        public static DotIndex SeamstressDot;
-
         public static DotIndex SeamstressSelfBleed;
 
         public static CustomDotBehaviour selfDamageBehaviour;
@@ -33,7 +31,6 @@ namespace SeamstressMod.Seamstress.Content
                 float currentShield = self.victimBody.healthComponent.shield;
                 dotStack.damage = (self.victimBody.healthComponent.fullCombinedHealth - (self.victimBody.healthComponent.fullCombinedHealth - (self.victimBody.healthComponent.health + self.victimBody.healthComponent.shield))) * 0.02f;
                 dotStack.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT;
-                self.victimBody.healthComponent.AddBarrier(currentBarrier);
                 self.victimBody.healthComponent.shield = currentShield;
             }
         }
@@ -75,15 +72,6 @@ namespace SeamstressMod.Seamstress.Content
         }
         public static void RegisterDots()
         {
-            SeamstressDot = RegisterDotDef(new DotDef
-            {
-                interval = 0.2f,
-                damageCoefficient = SeamstressStaticValues.bleedDotDamage,
-                damageColorIndex = DamageColorIndex.SuperBleed,
-                associatedBuff = SeamstressBuffs.seamstressBleedBuff,
-                resetTimerOnAdd = false,
-            }, null, visual);
-
             SeamstressSelfBleed = RegisterDotDef(new DotDef
             {
                 interval = 0.2f,

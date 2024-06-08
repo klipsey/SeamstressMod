@@ -1022,7 +1022,7 @@ namespace SeamstressMod.Seamstress.Content
             simple.updateAfterFiring = true;
 
             //changes team filter to only team
-            PickupFilter scissorPickup = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilter>();
+            PickupFilterComponent scissorPickup = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilterComponent>();
             scissorPickup.myTeamFilter = scissorPrefab.GetComponent<TeamFilter>();
             scissorPickup.triggerEvents = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
             Object.Destroy(scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());
@@ -1128,7 +1128,7 @@ namespace SeamstressMod.Seamstress.Content
             simple.updateAfterFiring = true;
 
             //changes team filter to only team
-            PickupFilter scissorPickup = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilter>();
+            PickupFilterComponent scissorPickup = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.AddComponent<PickupFilterComponent>();
             scissorPickup.myTeamFilter = scissorPrefab.GetComponent<TeamFilter>();
             scissorPickup.triggerEvents = scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>().triggerEvents;
             Object.Destroy(scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<MineProximityDetonator>());

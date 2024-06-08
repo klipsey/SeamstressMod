@@ -791,12 +791,15 @@ namespace SeamstressMod.Seamstress
         {
             if (!NetworkServer.active)
             {
+                orig.Invoke(self, damageInfo);
                 return;
             }
             if (!self.alive || self.godMode || self.ospTimer > 0f)
             {
+                orig.Invoke(self, damageInfo);
                 return;
             }
+            float currentBarrier = -1;
             CharacterBody victimBody = self.body;
             if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
             {
@@ -823,9 +826,18 @@ namespace SeamstressMod.Seamstress
                         damageInfo.rejected = true;
                     }
                 }
+                else if(victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex == Dots.SeamstressSelfBleed)
+                {
+                    currentBarrier = victimBody.healthComponent.barrier;
+                    victimBody.healthComponent.AddBarrier(-currentBarrier);
+                }
             }
             orig.Invoke(self, damageInfo);
-            if(victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME") victimBody.RecalculateStats();
+            if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            {
+                if(currentBarrier > 0) victimBody.healthComponent.AddBarrier(currentBarrier);
+                victimBody.RecalculateStats();
+            }
         }
         private void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
         {

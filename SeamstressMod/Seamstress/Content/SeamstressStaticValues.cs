@@ -8,6 +8,8 @@ namespace SeamstressMod.Seamstress.Content
     {
         internal const float baseDamage = 12f;
 
+        internal const float basePickupCooldown = 6f;
+
         internal const float trimDamageCoefficient = 1.2f;
 
         internal const float trimThirdDamageCoefficient = 1.5f;
@@ -17,8 +19,6 @@ namespace SeamstressMod.Seamstress.Content
         internal const float scissorSlashDamageCoefficient = 1.2f;
 
         internal const float scissorPickupDamageCoefficient = 2f;
-
-        internal const float bleedDotDamage = 0.1f;
 
         internal const float blinkDamageCoefficient = 4f;
 

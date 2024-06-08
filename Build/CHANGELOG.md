@@ -1,3 +1,9 @@
+# 1.1.0
+
+- Change Seamstress's bleed to count as any other bleed
+- Maybe fixed shift issue idk tbh
+- Accidently deleted old icon lmao
+
 # 1.0.9
 
 - Networking

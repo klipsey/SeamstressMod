@@ -10,7 +10,7 @@ using System;
 
 namespace SeamstressMod.Seamstress.Components
 {
-    public class PickupFilter : NetworkBehaviour
+    public class PickupFilterComponent : NetworkBehaviour
     {
         public TeamFilter myTeamFilter;
 
@@ -22,8 +22,12 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool hasActivated = false;
 
-        public float pickupTimer = 6f;
+        public float pickupTimer;
 
+        public void Start()
+        {
+            pickupTimer = SeamstressStaticValues.basePickupCooldown;
+        }
         public void FixedUpdate()
         {
             pickupTimer -= Time.fixedDeltaTime;
