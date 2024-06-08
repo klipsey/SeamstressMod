@@ -789,7 +789,7 @@ namespace SeamstressMod.Seamstress
         }
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            if (!NetworkServer.active)
+            if(NetworkServer.active && (self.alive || !self.godMode || self.ospTimer <= 0f))
             {
                 orig.Invoke(self, damageInfo);
                 return;
