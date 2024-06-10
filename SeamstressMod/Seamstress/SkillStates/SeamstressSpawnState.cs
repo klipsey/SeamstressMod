@@ -28,6 +28,18 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
 
             PlayAnimation("Body", "Spawn");
+
+            Transform modelTransform = GetModelTransform();
+            if (modelTransform)
+            {
+                TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
+                temporaryOverlay.duration = 1.5f;
+                temporaryOverlay.animateShaderAlpha = true;
+                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                temporaryOverlay.destroyComponentOnEnd = true;
+                temporaryOverlay.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDissolve.mat").WaitForCompletion();
+                temporaryOverlay.AddToCharacerModel(modelTransform.GetComponent<CharacterModel>());
+            }
         }
 
         public override void FixedUpdate()
@@ -43,18 +55,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                 EffectManager.SpawnEffect(spawnPrefab, effectData, false);
 
                 Util.PlaySound("sfx_seamstress_spawn", gameObject);
-
-                Transform modelTransform = GetModelTransform();
-                if (modelTransform)
-                {
-                    TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
-                    temporaryOverlay.duration = 0.6f;
-                    temporaryOverlay.animateShaderAlpha = true;
-                    temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                    temporaryOverlay.destroyComponentOnEnd = true;
-                    temporaryOverlay.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDissolve.mat").WaitForCompletion();
-                    temporaryOverlay.AddToCharacerModel(modelTransform.GetComponent<CharacterModel>());
-                }
             }
 
             if (!cameraController)
