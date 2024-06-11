@@ -20,8 +20,6 @@ namespace SeamstressMod
     [BepInDependency(NetworkingAPI.PluginGUID)]
     [BepInDependency("com.weliveinasociety.CustomEmotesAPI", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInIncompatibility("com.Egg.EggsUtils")]
-    [BepInIncompatibility("com.Egg.EggsSkills")]
     public class SeamstressPlugin : BaseUnityPlugin
     {
         // if you do not change this, you are giving permission to deprecate the mod-
