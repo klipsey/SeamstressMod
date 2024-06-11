@@ -1,3 +1,8 @@
+# 1.1.1
+
+- Barrier is ignored during bleed
+- Celebration as egg utils now works with searmtesesrsesss
+
 # 1.1.0
 
 - Change Seamstress's bleed to count as any other bleed

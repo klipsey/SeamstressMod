@@ -143,7 +143,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 Vector3 position = base.characterBody.corePosition;
                 GameObject obj = UnityEngine.Object.Instantiate<GameObject>(this.projectilePrefab, position, Quaternion.identity);
                 ProjectileController component = obj.GetComponent<ProjectileController>();
-                if (component)
+                if (component)  
                 {
                     component.owner = base.gameObject;
                     component.Networkowner = base.gameObject;
