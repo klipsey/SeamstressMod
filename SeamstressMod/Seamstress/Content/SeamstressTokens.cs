@@ -127,11 +127,11 @@ namespace SeamstressMod.Seamstress.Content
             #region Special
             Language.Add(prefix + "SPECIAL_FIRE_NAME", "Skewer");
             Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
-                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style>.");
+                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorPickupDamageCoefficient}% damage</style>.");
 
             Language.Add(prefix + "SPECIAL_SCEPTER_NAME", "Rampage");
             Language.Add(prefix + "SPECIAL_SCEPTER_DESCRIPTION", $"Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
-                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style>." + Tokens.ScepterDescription("Your " + Tokens.symbioticPrefix + $" weapon only has a <style=cIsUtility>2 second pickup time</style>."));
+                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorPickupDamageCoefficient}% damage</style>." + Tokens.ScepterDescription("Your " + Tokens.symbioticPrefix + $" weapon only has a <style=cIsUtility>2 second pickup time</style>."));
 
             #endregion
 
