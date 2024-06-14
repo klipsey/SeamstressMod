@@ -1,85 +1,88 @@
 # Seamstress
 
-- BETA
 - Multiplayer Compatible
-- Currently working on animations. Model not imported.
-
-## Model Previews
-
-## [![](https://i.postimg.cc/gJ7r3rwH/seamstress.png)]()
+- Emote compatible
+- Contact me on Discord: https://discord.gg/3NaMEsvYeD
 
 [![](https://i.postimg.cc/zD9FrGdh/Seamstress-MADISON.png)]()
 
 # Overview
 
-The Seamstress is a mobile imp survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. Managing her needles, weapons, and health are all apart of her complex kit.
+The Seamstress is a half-imp survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. Managing her needles, weapons, and health are all apart of her complex kit.
+
+[![tex-Seamstress-Icon.png](https://i.postimg.cc/vm0T7j2X/tex-Seamstress-Icon.png)]()
 
 # Skills
 
+https://youtu.be/vQJDFoajnA8
+[![stupidassthumbnail.png](https://i.postimg.cc/7LZS0jnY/stupidassthumbnail.png)](https://youtu.be/vQJDFoajnA8)
+
 ## Passive: **It Hungers**
 
-- Gain base damage for every 1 health missing. Fill your Hunger during Insatiable giving movespeed and an additional layer of health.
+[![Screenshot-2024-05-24-015345.png](https://i.postimg.cc/xT6TJyKv/Screenshot-2024-05-24-015345.png)]()
 
 ## Passive: **Imp Touched Heart**
 
-- The Seamstress Blinks instead of jumping. Needles can be fired to Blink in the air dealing damage.
+[![Screenshot-2024-05-24-015403.png](https://i.postimg.cc/4yBZcshf/Screenshot-2024-05-24-015403.png)]()
 
 ## Primary: **Trim**
 
-- Agile. Slash in front for damage. Every third hit deals bonus damage.
+[![Screenshot-2024-05-24-015417.png](https://i.postimg.cc/KjqSzfd4/Screenshot-2024-05-24-015417.png)]()
 
 ## Primary: **Flurry**
 
-- Agile. Slash in front for damage.
+[![Screenshot-2024-05-24-015512.png](https://i.postimg.cc/MpwNShct/Screenshot-2024-05-24-015512.png)]()
 
 ## Secondary: **Clip**
 
-- Sentient. Consume all Needles. Snip for damage. Snip up to 5 additional times based on Needles consumed. Heal for some of damage dealt.
+[![Screenshot-2024-05-24-015429.png](https://i.postimg.cc/nLt5nNC0/Screenshot-2024-05-24-015429.png)]()
 
 ## Secondary: **Planar Manipulation**
 
-- Manipulate. Slamming enemies at high speeds deals damage in an area. Seperate cooldown on the same target.
+[![Screenshot-2024-05-24-015520.png](https://i.postimg.cc/1X67xHsL/Screenshot-2024-05-24-015520.png)]()
 
-## Utility: **Glimpse of Corruption**
+## Utility: **Brutalize**
 
-- Tear out your Heart and gain Insatiable. Dash forward dealing damage that knocks enemies into the air. Recasting or taking damage that exceeds It Hungers gauge removes Insatiable and returns you to your Heart.
+[![Screenshot-2024-05-24-015442.png](https://i.postimg.cc/FzfGyxYY/Screenshot-2024-05-24-015442.png)]()
 
-## Utility: **Glimpse of Purity**
+## Utility: **Retaliate**
 
-- Parry. If successful, dash forward dealing damage after a delay. Gain Insatiable. During Insatiable, gain base damage. Missing the parry window refunds 50% of the cooldown.
+[![Screenshot-2024-05-24-015528.png](https://i.postimg.cc/rs6g9rxg/Screenshot-2024-05-24-015528.png)]()
 
 ## Special: **Skewer**
 
-- Fire your Sentient weapon dealing damage to enemies. Picking up your Sentient weapon deals damage in an area. Gain Attack Speed and Movement Speed for each weapon missing.
+[![Screenshot-2024-05-24-015452.png](https://i.postimg.cc/ydGy8SLs/Screenshot-2024-05-24-015452.png)]()
 
 # Keywords
 
-## **Needles**:
+## **Crush**
 
-- Gain Needles by picking up your Sentient weapon or when landing Sentient attacks without your weapon.
-
-## **Manipulate**
-
-- Deal bonus damage to an enemy based on their velocity and max health.
-
-## **Cut**
-
-- Apply a bleed based on enemies missing health.
+[![Screenshot-2024-05-24-015550.png](https://i.postimg.cc/GmSFQD1Y/Screenshot-2024-05-24-015550.png)]()
 
 ## **Insatiable**
 
-- Grant all skills additional lifesteal and Cut.
+[![Screenshot-2024-05-24-015611.png](https://i.postimg.cc/Vk3SvW87/Screenshot-2024-05-24-015611.png)]()
 
-## **Sentient**
+## **Symbiotic Slash**
 
-- EFFECT VARIES ON SKILL. When your Sentient weapon is available increase the range of this attack. When your Sentient weapon is available hit for an additional strike. Gain Attack Speed and Movement Speed for each Sentient weapon missing.
+[![Screenshot-2024-05-24-015541.png](https://i.postimg.cc/90tPtNWF/Screenshot-2024-05-24-015541.png)]()
 
-Please play my mod. I need to find bugs.
-Contact me on Discord: https://discord.gg/3NaMEsvYeD
+## **Symbiotic Reach**
+
+[![Screenshot-2024-05-24-015601.png](https://i.postimg.cc/J7cjFvLR/Screenshot-2024-05-24-015601.png)]()
+
+# Skins 
+
+[![asdsadsa.png](https://i.postimg.cc/htjdnP0Q/asdsadsa.png)](https://postimg.cc/56h0qJTf)
+
+## Raven
+
+[![raven.png](https://i.postimg.cc/d0yJgnDr/raven.png)](https://postimg.cc/d7JMy22V)
+[![ravendgb.png](https://i.postimg.cc/rm605G25/ravendgb.png)](https://postimg.cc/LqT8p1Xs)
 
 # Credits
 
-tsuyoikenko - Code and (eventually) the base model/animations.
+tsuyoikenko - Code, skill icons, majority of models, sound, and animations.
 
 hkryu - Icon and art https://www.instagram.com/hkryu_/ https://twitter.com/___hkryu
 
@@ -87,8 +90,8 @@ TheTimeSweeper - Incredible new Henry template and responsible for fixing like h
 
 rob - Creator of the glorious Henry template. Also, his code for other survivors helped me get started.
 
-Gemo - Eclipse/Monsoon skin model (Raven) (Will be added much later).
+Gemo - Eclipse skin model (Raven)
 
 Feilong - Seamstress skin designer (Raven) and permission to use the assets.
 
-KoalaWalls, shitter, Tino, PartyManiac - Valuable feedback that helped cleanup the gameplay and model.
+KoalaWalls, shitter, and everyone in modcord - Valuable feedback that helped cleanup the gameplay.
