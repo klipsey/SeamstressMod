@@ -98,8 +98,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                     projectilePrefab = this.seamstressController.scissorRPrefab;
                     fireString = "SwingLeftSmall";
                 }
-                if (sceptered) projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilterComponent>().pickupTimer = 1.5f;
-                projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilterComponent>().pickupTimer = Mathf.Max(0.5f, projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilterComponent>().pickupTimer * base.skillLocator.special.cooldownScale - base.skillLocator.special.flatCooldownReduction);
+                float num = sceptered ? 1.5f : SeamstressStaticValues.basePickupCooldown;
+                projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilterComponent>().pickupTimer = Mathf.Max(0.5f, num * base.skillLocator.special.cooldownScale - base.skillLocator.special.flatCooldownReduction);
                 if (insatiable)
                 {
                     projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);

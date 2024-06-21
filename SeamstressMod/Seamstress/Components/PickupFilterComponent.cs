@@ -24,10 +24,6 @@ namespace SeamstressMod.Seamstress.Components
 
         public float pickupTimer;
 
-        public void Start()
-        {
-            pickupTimer = SeamstressStaticValues.basePickupCooldown;
-        }
         public void FixedUpdate()
         {
             pickupTimer -= Time.fixedDeltaTime;
