@@ -92,9 +92,9 @@ namespace SeamstressMod.Modules
             buffDef.buffColor = buffColor;
             buffDef.canStack = canStack;
             buffDef.isDebuff = isDebuff;
-            buffDef.isCooldown = isCooldown;
             buffDef.eliteDef = null;
             buffDef.iconSprite = buffIcon;
+            buffDef.isCooldown = isCooldown;
 
             AddBuffDef(buffDef);
 
@@ -125,7 +125,7 @@ namespace SeamstressMod.Modules
             networkSoundEventDef.eventName = eventName;
 
             AddNetworkSoundEventDef(networkSoundEventDef);
-            
+
             return networkSoundEventDef;
         }
     }

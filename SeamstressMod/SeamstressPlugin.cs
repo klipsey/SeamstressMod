@@ -48,13 +48,13 @@ namespace SeamstressMod
             // used when you want to properly set up language folders
             Modules.Language.Init();
 
-            SeamstressAssets.Init(Assets.LoadAssetBundle("seamstressassets"));
-            StartCoroutine(SeamstressAssets.mainAssetBundle.UpgradeStubbedShadersAsync());
+            //SeamstressAssets.Init(Assets.LoadAssetBundle("seamstressassets"));
+            //StartCoroutine(SeamstressAssets.mainAssetBundle.UpgradeStubbedShadersAsync());
             // character initialization
-            new SeamstressMod.Seamstress.SeamstressSurvivor().Initialize();
+            new Seamstress.SeamstressSurvivor().Initialize();
 
             // make a content pack and add it. this has to be last
-            new Modules.ContentPacks().Initialize();
+            new ContentPacks().Initialize();
 
             //On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { };
         }

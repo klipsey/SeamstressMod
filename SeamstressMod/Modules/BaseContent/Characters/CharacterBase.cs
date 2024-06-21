@@ -32,7 +32,7 @@ namespace SeamstressMod.Modules.Characters
         public virtual void Initialize()
         {
             instance = this as T;
-            assetBundle = SeamstressAssets.mainAssetBundle;
+            assetBundle = Assets.LoadAssetBundle(assetBundleName);
 
             InitializeCharacter();
         }
@@ -63,6 +63,7 @@ namespace SeamstressMod.Modules.Characters
 
             if (itemDisplays != null)
             {
+                Modules.ItemDisplays.queuedDisplays++;
                 RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetItemDisplays;
             }
         }
@@ -76,7 +77,7 @@ namespace SeamstressMod.Modules.Characters
 
         public abstract void InitializeSkills();
 
-        public abstract void InitializeSkins(AssetBundle assetBundle);
+        public abstract void InitializeSkins();
 
         public abstract void InitializeCharacterMaster();
 
@@ -114,7 +115,7 @@ namespace SeamstressMod.Modules.Characters
         public int jumpCount = 1;
 
         //conventional base stats, consistent for all survivors
-        public float damage = 10f;
+        public float damage = 12f;
         public float attackSpeed = 1f;
         public float crit = 1f;
 
@@ -128,14 +129,14 @@ namespace SeamstressMod.Modules.Characters
         /// Leave this alone, and you don't need to worry about setting any of the stat growth values. They'll be set at the consistent ratio that all vanilla survivors have.
         /// <para>If You do, healthGrowth should be maxHealth * 0.3f, regenGrowth should be healthRegen * 0.2f, damageGrowth should be damage * 0.2f</para>
         /// </summary>
-        public bool autoCalculateLevelStats = false;
+        public bool autoCalculateLevelStats = true;
 
-        public float healthGrowth = 200f * 0.35f;
+        public float healthGrowth = 100f * 0.3f;
         public float regenGrowth = 1f * 0.2f;
         public float armorGrowth = 0f;
         public float shieldGrowth = 0f;
 
-        public float damageGrowth = 10f * 0;
+        public float damageGrowth = 12f * 0.2f;
         public float attackSpeedGrowth = 0f;
         public float critGrowth = 0f;
 

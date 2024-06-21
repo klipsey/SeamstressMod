@@ -164,6 +164,5 @@ namespace SeamstressMod.Modules
             Content.AddProjectilePrefab(newPrefab);
             return newPrefab;
         }
-
     }
 }

@@ -33,7 +33,7 @@ namespace SeamstressMod.Modules.Characters
         protected virtual void InitializeDisplayPrefab()
         {
             displayPrefab = Prefabs.CreateDisplayPrefab(assetBundle, displayPrefabName, bodyPrefab);
-            displayPrefab.AddComponent<SeamstressCSS>();
+            displayPrefab.AddComponent<Seamstress.Components.SeamstressCSS>();
         }
 
         protected virtual void InitializeSurvivor()

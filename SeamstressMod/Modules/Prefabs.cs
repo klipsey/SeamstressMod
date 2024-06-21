@@ -150,7 +150,6 @@ namespace SeamstressMod.Modules
             bodyComponent._defaultCrosshairPrefab = bodyInfo.crosshair;
             bodyComponent.hideCrosshair = false;
             bodyComponent.preferredPodPrefab = bodyInfo.podPrefab;
-            bodyComponent.preferredInitialStateType = bodyInfo.initialStateType;
 
             //stats
             bodyComponent.baseMaxHealth = bodyInfo.maxHealth;
@@ -419,7 +418,7 @@ namespace SeamstressMod.Modules
 
             ChildLocator childLocator = model.GetComponent<ChildLocator>();
 
-            if (!childLocator.FindChild("MainHurtbox"))
+            if (string.IsNullOrEmpty(childLocator.FindChildNameInsensitive("MainHurtbox")))
             {
                 Log.Error("Could not set up main hurtbox: make sure you have a transform pair in your prefab's ChildLocator called 'MainHurtbox'");
                 return;
@@ -428,7 +427,7 @@ namespace SeamstressMod.Modules
             HurtBoxGroup hurtBoxGroup = model.AddComponent<HurtBoxGroup>();
 
             HurtBox headHurtbox = null;
-            GameObject headHurtboxObject = childLocator.FindChildGameObject("HeadHurtbox");
+            GameObject headHurtboxObject = childLocator.FindChildGameObjectInsensitive("HeadHurtbox");
             if (headHurtboxObject)
             {
                 Log.Debug("HeadHurtboxFound. Setting up");
@@ -442,7 +441,7 @@ namespace SeamstressMod.Modules
                 headHurtbox.indexInGroup = 1;
             }
 
-            HurtBox mainHurtbox = childLocator.FindChildGameObject("MainHurtbox").AddComponent<HurtBox>();
+            HurtBox mainHurtbox = childLocator.FindChildGameObjectInsensitive("MainHurtbox").AddComponent<HurtBox>();
             mainHurtbox.gameObject.layer = LayerIndex.entityPrecise.intVal;
             mainHurtbox.healthComponent = bodyPrefab.GetComponent<HealthComponent>();
             mainHurtbox.isBullseye = true;
@@ -468,6 +467,19 @@ namespace SeamstressMod.Modules
             }
             hurtBoxGroup.mainHurtBox = mainHurtbox;
             hurtBoxGroup.bullseyeCount = 1;
+        }
+
+        private static string FindChildNameInsensitive(this ChildLocator childLocator, string child)
+        {
+            return childLocator.transformPairs.Where((pair) => pair.name.ToLowerInvariant() == child.ToLowerInvariant()).FirstOrDefault().name;
+        }
+        private static Transform FindChildInsensitive(this ChildLocator childLocator, string child)
+        {
+            return childLocator.FindChild(childLocator.FindChildNameInsensitive(child));
+        }
+        private static GameObject FindChildGameObjectInsensitive(this ChildLocator childLocator, string child)
+        {
+            return childLocator.FindChildGameObject(childLocator.FindChildNameInsensitive(child));
         }
 
         public static void SetHurtboxesHealthComponents(GameObject bodyPrefab)
@@ -713,7 +725,6 @@ namespace SeamstressMod.Modules
                 setStateOnHurt.idleStateMachine = setStateOnHurt.idleStateMachine.Append(entityStateMachine).ToArray();
             }
         }
-
         /// <summary>
         /// Sets up a hitboxgroup with passed in child transforms as hitboxes
         /// </summary>
@@ -722,6 +733,7 @@ namespace SeamstressMod.Modules
         public static void SetupHitBoxGroup(GameObject modelPrefab, string hitBoxGroupName, params string[] hitboxChildNames)
         {
             ChildLocator childLocator = modelPrefab.GetComponent<ChildLocator>();
+
             Transform[] hitboxTransforms = new Transform[hitboxChildNames.Length];
             for (int i = 0; i < hitboxChildNames.Length; i++)
             {

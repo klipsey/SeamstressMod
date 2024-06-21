@@ -139,12 +139,8 @@ namespace SeamstressMod.Seamstress.Content
         internal static Color theRed = new Color(155f / 255f, 55f / 255f, 55f / 255f);
         public static void Init(AssetBundle assetBundle)
         {
-
             mainAssetBundle = assetBundle;
-        }
 
-        public static void InitAssets()
-        {
             CreateMaterials();
 
             CreateEffects();

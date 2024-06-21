@@ -36,7 +36,7 @@ namespace SeamstressMod.Seamstress.Content
             changeGroundedBlinkVelocity = Config.BindAndOptionsSlider(
                 section,
                 "Grounded Blink Jump Height",
-                0f,
+                0.25f,
                 "When grounded, blink will go vertically by the inputted amount from 0 - 1 (0 degrees to 90 degrees)", 
                 0, 
                 1,

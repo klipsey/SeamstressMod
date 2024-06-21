@@ -22,11 +22,11 @@ namespace SeamstressMod.Seamstress
 {
     public class SeamstressSurvivor : SurvivorBase<SeamstressSurvivor>
     {
-        public override string assetBundleName => "seamstressassets";
+        public override string assetBundleName => "seamstressassets"; 
         public override string bodyName => "SeamstressBody"; 
         public override string masterName => "SeamstressMonsterMaster"; 
-        public override string modelPrefabName => "mdlSeamstress";
-        public override string displayPrefabName => "SeamstressDisplay";
+        public override string modelPrefabName => "mdlSeamstress"; 
+        public override string displayPrefabName => "SeamstressDisplay"; 
 
         public const string SEAMSTRESS_PREFIX = SeamstressPlugin.DEVELOPER_PREFIX + "_SEAMSTRESS_";
         public override string survivorTokenPrefix => SEAMSTRESS_PREFIX;
@@ -67,28 +67,22 @@ namespace SeamstressMod.Seamstress
                 new CustomRendererInfo
                 {
                     childName = "Model",
-                    dontHotpoo = true,
-
                 },
                 new CustomRendererInfo
                 {
                     childName = "ScissorLModel",
-                    dontHotpoo = true,
                 },
                 new CustomRendererInfo
                 {
                     childName = "ScissorRModel",
-                    dontHotpoo = true,
                 },
                 new CustomRendererInfo
                 {
                     childName = "CrownModel",
-                    dontHotpoo = true
                 },
                 new CustomRendererInfo
                 {
                     childName = "HeartModel",
-                    dontHotpoo = true,
                 }
 
         };
@@ -122,23 +116,23 @@ namespace SeamstressMod.Seamstress
 
             SeamstressUnlockables.Init();
 
-            SeamstressCrosshair.Init(assetBundle);
-
             base.InitializeCharacter();
+
+            SeamstressCrosshair.Init(assetBundle);
 
             DamageTypes.Init();
 
             SeamstressStates.Init();
             SeamstressTokens.Init();
 
-            SeamstressAssets.InitAssets();
+            SeamstressAssets.Init(assetBundle);
             SeamstressBuffs.Init(assetBundle);
 
             Dots.Init();
 
             InitializeEntityStateMachines();
             InitializeSkills();
-            InitializeSkins(assetBundle);
+            InitializeSkins();
             InitializeCharacterMaster();
 
             AdditionalBodySetup();
@@ -580,7 +574,7 @@ namespace SeamstressMod.Seamstress
             return CreateMaterial(assetBundle, materialName, emission, emissionColor, 0f);
         }
         #region skins
-        public override void InitializeSkins(AssetBundle assetBundle)
+        public override void InitializeSkins()
         {
             ModelSkinController skinController = prefabCharacterModel.gameObject.AddComponent<ModelSkinController>();
             ChildLocator childLocator = prefabCharacterModel.GetComponent<ChildLocator>();

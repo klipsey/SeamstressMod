@@ -38,7 +38,14 @@ namespace SeamstressMod.Modules
         {
             if (cachedMaterials.Contains(tempMat))
             {
-                Log.Debug($"{tempMat.name} has already been loaded. returning cached");
+                Log.Debug($"{tempMat.name} has already been converted. returning cached");
+                return tempMat;
+            }
+
+            string name = tempMat.shader.name.ToLowerInvariant();
+            if (!name.StartsWith("standard") && !name.StartsWith("autodesk"))
+            {
+                Log.Debug($"{tempMat.name} is not unity standard shader. aborting material conversion");
                 return tempMat;
             }
 
@@ -95,7 +102,6 @@ namespace SeamstressMod.Modules
         /// </summary>
         public static Material MakeUnique(this Material material)
         {
-
             if (cachedMaterials.Contains(material))
             {
                 return new Material(material);
