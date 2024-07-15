@@ -34,7 +34,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float passiveScaling = 0.05f;
 
-        internal const float passiveHealingScaling = 0.075f;
+        internal const float passiveHealingScaling = 0.05f;
 
         internal const float parryDamageCoefficient = 4f;
 

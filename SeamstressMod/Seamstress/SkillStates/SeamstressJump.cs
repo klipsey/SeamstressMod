@@ -73,8 +73,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     aimRay = GetAimRay();
                     aimRay.direction = Util.ApplySpread(aimRay.direction, minSpread, maxSpread, 1f, 1f, 0f, projectilePitchBonus);
-                    float healthMissing = ((this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield) - (this.characterBody.healthComponent.health + this.characterBody.healthComponent.shield)) / (this.characterBody.healthComponent.fullHealth + this.characterBody.healthComponent.fullShield);
-                    projectilePrefab.GetComponent<ProjectileHealOwnerOnDamageInflicted>().fractionOfDamage = healthMissing * SeamstressStaticValues.passiveHealingScaling;
                     if (characterBody.inventory && characterBody.inventory.GetItemCount(DLC1Content.Items.MoreMissile) > 0)
                     {
                         float damageMult = GetICBMDamageMult(characterBody);

@@ -199,7 +199,7 @@ namespace SeamstressMod.Seamstress.Components
                     impactAttack.baseDamage = SeamstressStaticValues.scissorDamageCoefficient * owner.GetComponent<CharacterBody>().damage;
                     impactAttack.baseForce = 600f;
                     impactAttack.position = transform.position;
-                    impactAttack.procCoefficient = 1f;
+                    impactAttack.procCoefficient = 0.7f;
                     impactAttack.radius = 4f;
                     impactAttack.damageType = DamageType.Stun1s | DamageType.AOE;
                     if (owner.GetComponent<SeamstressController>().inInsatiableSkill)

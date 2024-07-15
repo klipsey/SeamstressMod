@@ -909,8 +909,9 @@ namespace SeamstressMod.Seamstress.Content
             needleFinder.ignoreAir = false;
             needleFinder.flierAltitudeTolerance = Mathf.Infinity;
 
-            ProjectileHealOwnerOnDamageInflicted needleHeal = needlePrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            needleHeal.fractionOfDamage = 0.15f;
+
+            needlePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
+            needlePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.SeamstressLifesteal);
 
             ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
             needleController.procCoefficient = 1f;
@@ -999,7 +1000,7 @@ namespace SeamstressMod.Seamstress.Content
 
             ProjectileImpactExplosion impactAlly = scissorPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorPickupDamageCoefficient;
-            impactAlly.blastProcCoefficient = 1f;
+            impactAlly.blastProcCoefficient = 0.7f;
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
             impactAlly.lifetime = 14f;
@@ -1009,9 +1010,6 @@ namespace SeamstressMod.Seamstress.Content
 
             ProjectileDamage scissorDamage = scissorPrefab.GetComponent<ProjectileDamage>();
             scissorDamage.damageType = DamageType.Stun1s | DamageType.AOE;
-
-            ProjectileHealOwnerOnDamageInflicted scissorHeal = scissorPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            scissorHeal.fractionOfDamage = 0.5f;
 
             ProjectileSimple simple = scissorPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
@@ -1035,7 +1033,9 @@ namespace SeamstressMod.Seamstress.Content
             Object.Destroy(scissorPrefab.GetComponent<ProjectileStickOnImpact>());
 
             scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
+
             scissorPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
+            scissorPrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.SeamstressLifesteal);
 
             ProjectileSteerTowardTarget scissorSteer = scissorPrefab.AddComponent<ProjectileSteerTowardTarget>();
             scissorSteer.yAxisOnly = false;
@@ -1105,7 +1105,7 @@ namespace SeamstressMod.Seamstress.Content
 
             ProjectileImpactExplosion impactAlly = scissorPrefab.GetComponent<ProjectileImpactExplosion>();
             impactAlly.blastDamageCoefficient = SeamstressStaticValues.scissorPickupDamageCoefficient;
-            impactAlly.blastProcCoefficient = 1f;
+            impactAlly.blastProcCoefficient = 0.7f;
             impactAlly.destroyOnEnemy = false;
             impactAlly.blastAttackerFiltering = AttackerFiltering.NeverHitSelf;
             impactAlly.lifetime = 14f;
@@ -1115,9 +1115,6 @@ namespace SeamstressMod.Seamstress.Content
 
             ProjectileDamage scissorDamage = scissorPrefab.GetComponent<ProjectileDamage>();
             scissorDamage.damageType = DamageType.Stun1s | DamageType.AOE;
-
-            ProjectileHealOwnerOnDamageInflicted scissorHeal = scissorPrefab.AddComponent<ProjectileHealOwnerOnDamageInflicted>();
-            scissorHeal.fractionOfDamage = 0.5f;
 
             ProjectileSimple simple = scissorPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;
@@ -1142,6 +1139,7 @@ namespace SeamstressMod.Seamstress.Content
 
             scissorPrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<SphereCollider>().radius = 6f;
             scissorPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
+            scissorPrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.SeamstressLifesteal);
 
             ProjectileSteerTowardTarget scissorSteer = scissorPrefab.AddComponent<ProjectileSteerTowardTarget>();
             scissorSteer.yAxisOnly = false;
