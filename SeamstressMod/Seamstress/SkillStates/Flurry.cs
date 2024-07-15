@@ -11,7 +11,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class Flurry : BaseMeleeAttack
     {
-        GameObject destroyLater;
+        private GameObject swingInstance;
         public override void OnEnter()
         {
             RefreshState();
@@ -21,8 +21,8 @@ namespace SeamstressMod.Seamstress.SkillStates
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
-            baseDuration = 1.1f - 1.1f * (0.5f * (seamstressController.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
-            baseScissorDuration = 2f - 2f * (0.5f * (seamstressController.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
+            baseDuration = 1.1f;
+            baseScissorDuration = 2f;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             attackStartPercentTime = 0.2f;
@@ -44,19 +44,18 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (insatiable)
             {
                 moddedDamageTypeHolder.Add(DamageTypes.CutDamage);
+                moddedDamageTypeHolder.Add(DamageTypes.GainNeedles);
             }
             moddedDamageTypeHolder.Add(DamageTypes.SeamstressLifesteal);
             scissorHit = true;
             if (muzzleString == "SwingLeftSmall" && !scissorRight)
             {
                 //change to remove the next states double hit instead
-                moddedDamageTypeHolder.Add(DamageTypes.NoScissors);
                 scissorHit = false;
             }
             if (muzzleString == "SwingRightSmall" && !scissorLeft)
             {
                 //change to remove the next states double hit instead
-                moddedDamageTypeHolder.Add(DamageTypes.NoScissors);
                 scissorHit = false;
             }
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
@@ -93,7 +92,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             Transform transform = FindModelChild(muzzleString);
             if (transform)
             {
-                destroyLater = UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
+                swingInstance = UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
             }
         }
         protected override void OnHitEnemyAuthority()
@@ -103,7 +102,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnExit()
         {
             base.OnExit();
-            if (destroyLater) GameObject.Destroy(destroyLater);
+            if (swingInstance) GameObject.Destroy(swingInstance);
         }
 
     }

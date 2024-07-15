@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using UnityEngine.UI;
 using RoR2;
 using RoR2.UI;
@@ -71,3 +72,4 @@ namespace SeamstressMod.Seamstress.Components
         }
     }
 }
+*/

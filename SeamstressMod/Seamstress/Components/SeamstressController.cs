@@ -37,12 +37,6 @@ namespace SeamstressMod.Seamstress.Components
 
         public bool blue;
 
-        public float fiendMeter = 0f;
-
-        public float maxHunger;
-
-        private float drainAmount;
-
         private float dashStopwatch;
 
         private float checkStatsStopwatch;
@@ -69,8 +63,6 @@ namespace SeamstressMod.Seamstress.Components
 
         public bool hasStartedInsatiable = false;
 
-        public bool draining;
-
         public bool hopooHasHopped;
 
         public void Awake()
@@ -87,7 +79,6 @@ namespace SeamstressMod.Seamstress.Components
         }
         public void Start()
         {
-            maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
         }
 
         private void SetupSkin()
@@ -121,7 +112,6 @@ namespace SeamstressMod.Seamstress.Components
                 checkStatsStopwatch = 0f;
             }
             else checkStatsStopwatch += Time.fixedDeltaTime;
-            CheckToDrainGauge();
             CreateBlinkEffect(heldOrigin);
             InsatiableSound();
             IsInsatiable();
@@ -142,21 +132,6 @@ namespace SeamstressMod.Seamstress.Components
                 childLocator.FindChild(scissorName).gameObject.SetActive(false);
             }
         }
-        private void CheckToDrainGauge()
-        {
-            if (draining)
-            {
-                if (fiendMeter > 0f)
-                {
-                    fiendMeter -= drainAmount;
-                    if (healthComponent.health < healthComponent.fullHealth) healthComponent.Heal(drainAmount / 2, default, false);
-                }
-                else if (fiendMeter <= 0f)
-                {
-                    draining = false;
-                }
-            }
-        }
         private void CreateBlinkEffect(Vector3 origin)
         {
             if (blinkEffect && !hasPlayedEffect && dashStopwatch < 0)
@@ -173,33 +148,6 @@ namespace SeamstressMod.Seamstress.Components
         {
             dashStopwatch = 0.75f;
             hasPlayedEffect = false;
-        }
-        public void FillHunger(float healDamage)
-        {
-            maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
-
-            if (fiendMeter + healDamage < maxHunger)
-            {
-                fiendMeter += healDamage;
-            }
-            else
-            {
-                fiendMeter = maxHunger;
-            }
-
-            if (fiendMeter < 0f)
-            {
-                draining = true;
-                fiendMeter = 0f;
-            }
-
-            NetworkIdentity networkIdentity = base.gameObject.GetComponent<NetworkIdentity>();
-            if (!networkIdentity)
-            {
-                return;
-            }
-
-            new SyncHunger(networkIdentity.netId, (ulong)(this.fiendMeter * 100f)).Send(R2API.Networking.NetworkDestination.Clients);
         }
         public void PlayScissorRSwing()
         {
@@ -255,7 +203,6 @@ namespace SeamstressMod.Seamstress.Components
                 trailEffectPrefab = GameObject.Instantiate(this.blue ? SeamstressAssets.trailEffectHands2 : SeamstressAssets.trailEffectHands, handR);
                 trailEffectPrefab2 = GameObject.Instantiate(this.blue ? SeamstressAssets.trailEffectHands2 : SeamstressAssets.trailEffectHands, handL);
 
-                draining = false;
                 insatiableStopwatch = SeamstressStaticValues.insatiableDuration;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
@@ -279,8 +226,6 @@ namespace SeamstressMod.Seamstress.Components
                 if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
                 if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
 
-                drainAmount = healthComponent.fullHealth / 125;
-                draining = true;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -296,7 +241,7 @@ namespace SeamstressMod.Seamstress.Components
                 Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
                 hasStartedInsatiable = false;
             }
-            if(!inInsatiableSkill && !hasStartedInsatiable && skillLocator.utility.skillDef == SeamstressSurvivor.snapBackSkillDef)
+            if(!inInsatiableSkill && !hasStartedInsatiable && skillLocator.utility.skillDef == SeamstressSurvivor.snapBackSkillDef && insatiableStopwatch <= 11f)
             {
                 skillLocator.utility.ExecuteIfReady();
             }

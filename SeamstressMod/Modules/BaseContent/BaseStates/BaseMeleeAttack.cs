@@ -254,11 +254,12 @@ namespace SeamstressMod.Modules.BaseStates
                         attack.isCrit = RollCrit();
                         attack.impactSound = impactSound;
                         attack.damageType = damageType;
+                        attack.damageType |= DamageType.Stun1s;
                         foreach (DamageAPI.ModdedDamageType i in moddedDamageTypeHolder)
                         {
                             attack.AddModdedDamageType(i);
                         }
-                        if (attack.HasModdedDamageType(DamageTypes.NoScissors)) attack.RemoveModdedDamageType(DamageTypes.NoScissors);
+                        if (attack.HasModdedDamageType(DamageTypes.GainNeedles)) attack.RemoveModdedDamageType(DamageTypes.GainNeedles);
                         attack.pushAwayForce = 600f;
                         attackRecoil = 0.2f;
                         swingSoundString = "sfx_seamstress_swing_scissor";

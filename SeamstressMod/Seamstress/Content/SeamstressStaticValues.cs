@@ -8,7 +8,7 @@ namespace SeamstressMod.Seamstress.Content
     {
         internal const float baseDamage = 12f;
 
-        internal const float basePickupCooldown = 6f;
+        internal const float basePickupCooldown = 2.5f;
 
         internal const float trimDamageCoefficient = 1.2f;
 
@@ -16,9 +16,9 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float flurryDamageCoefficient = 1.4f;
 
-        internal const float scissorSlashDamageCoefficient = 1.2f;
+        internal const float scissorSlashDamageCoefficient = 2.8f;
 
-        internal const float scissorPickupDamageCoefficient = 4f;
+        internal const float scissorPickupDamageCoefficient = 2.8f;
 
         internal const float blinkDamageCoefficient = 4f;
 
@@ -34,21 +34,19 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float passiveScaling = 0.05f;
 
-        internal const float passiveHealingScaling = 0.15f;
+        internal const float passiveHealingScaling = 0.075f;
 
         internal const float parryDamageCoefficient = 4f;
 
-        internal const float needleDamageCoefficient = 0.6f;
+        internal const float needleDamageCoefficient = 0.4f;
 
-        internal const float clipDamageCoefficient = 0.75f;
+        internal const float clipDamageCoefficient = 0.65f;
 
-        internal const float needleProcCoefficient = 0.75f;
+        internal const float needleProcCoefficient = 0.6f;
 
         internal const float parryWindow = 0.4f;
 
         internal const float scissorDamageCoefficient = 4f;
-
-        internal const float maxFiendGaugeCoefficient = 1f;
 
         internal const float telekinesisDamageCoefficient = 0.3f;
 

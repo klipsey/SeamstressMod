@@ -8,7 +8,7 @@
 
 # Overview
 
-The Seamstress is a half-imp survivor who uses her health for damage. She doesn't gain base damage per level so stack health items to take advantage of her passive. Managing her needles, weapons, and health are all apart of her complex kit.
+The Seamstress is a half-imp survivor who uses her health for damage. Stack health items to gain more base damage. Managing her needles, weapons, and health are all apart of her complex kit.
 
 [![tex-Seamstress-Icon.png](https://i.postimg.cc/vm0T7j2X/tex-Seamstress-Icon.png)]()
 
@@ -19,57 +19,53 @@ https://youtu.be/vQJDFoajnA8
 
 ## Passive: **It Hungers**
 
-[![Screenshot-2024-05-24-015345.png](https://i.postimg.cc/xT6TJyKv/Screenshot-2024-05-24-015345.png)]()
+[![Screenshot-2024-07-04-191157.png](https://i.postimg.cc/BQx1kmnQ/Screenshot-2024-07-04-191157.png)]()
 
 ## Passive: **Imp Touched Heart**
 
-[![Screenshot-2024-05-24-015403.png](https://i.postimg.cc/4yBZcshf/Screenshot-2024-05-24-015403.png)]()
+[![Screenshot-2024-07-04-191305.png](https://i.postimg.cc/C13z68yq/Screenshot-2024-07-04-191305.png)]()
 
 ## Primary: **Trim**
 
-[![Screenshot-2024-05-24-015417.png](https://i.postimg.cc/KjqSzfd4/Screenshot-2024-05-24-015417.png)]()
+[![Screenshot-2024-07-04-191329.png](https://i.postimg.cc/DfGW4xsd/Screenshot-2024-07-04-191329.png)]()
 
 ## Primary: **Flurry**
 
-[![Screenshot-2024-05-24-015512.png](https://i.postimg.cc/MpwNShct/Screenshot-2024-05-24-015512.png)]()
+[![Screenshot-2024-07-04-191438.png](https://i.postimg.cc/8kL5zjQZ/Screenshot-2024-07-04-191438.png)]()
 
 ## Secondary: **Clip**
 
-[![Screenshot-2024-05-24-015429.png](https://i.postimg.cc/nLt5nNC0/Screenshot-2024-05-24-015429.png)]()
+[![Screenshot-2024-07-04-191347.png](https://i.postimg.cc/KY4jGfxT/Screenshot-2024-07-04-191347.png)]()
 
 ## Secondary: **Planar Manipulation**
 
-[![Screenshot-2024-05-24-015520.png](https://i.postimg.cc/1X67xHsL/Screenshot-2024-05-24-015520.png)]()
+[![Screenshot-2024-07-04-191450.png](https://i.postimg.cc/02xNMP9P/Screenshot-2024-07-04-191450.png)]()
 
 ## Utility: **Brutalize**
 
-[![Screenshot-2024-05-24-015442.png](https://i.postimg.cc/FzfGyxYY/Screenshot-2024-05-24-015442.png)]()
+[![Screenshot-2024-07-04-191412.png](https://i.postimg.cc/KzMYLYKv/Screenshot-2024-07-04-191412.png)]()
 
 ## Utility: **Retaliate**
 
-[![Screenshot-2024-05-24-015528.png](https://i.postimg.cc/rs6g9rxg/Screenshot-2024-05-24-015528.png)]()
+[![Screenshot-2024-07-04-191502.png](https://i.postimg.cc/rwZyP4xw/Screenshot-2024-07-04-191502.png)]()
 
 ## Special: **Skewer**
 
-[![Screenshot-2024-05-24-015452.png](https://i.postimg.cc/ydGy8SLs/Screenshot-2024-05-24-015452.png)]()
+[![Screenshot-2024-07-04-191423.png](https://i.postimg.cc/Gtnmj1YP/Screenshot-2024-07-04-191423.png)]()
 
 # Keywords
 
 ## **Crush**
 
-[![Screenshot-2024-05-24-015550.png](https://i.postimg.cc/GmSFQD1Y/Screenshot-2024-05-24-015550.png)]()
+[![Screenshot-2024-07-04-194005.png](https://i.postimg.cc/6QvpD39J/Screenshot-2024-07-04-194005.png)]()
 
 ## **Insatiable**
 
-[![Screenshot-2024-05-24-015611.png](https://i.postimg.cc/Vk3SvW87/Screenshot-2024-05-24-015611.png)]()
+[![Screenshot-2024-07-04-193851.png](https://i.postimg.cc/s2vh1ssw/Screenshot-2024-07-04-193851.png)]()
 
 ## **Symbiotic Slash**
 
-[![Screenshot-2024-05-24-015541.png](https://i.postimg.cc/90tPtNWF/Screenshot-2024-05-24-015541.png)]()
-
-## **Symbiotic Reach**
-
-[![Screenshot-2024-05-24-015601.png](https://i.postimg.cc/J7cjFvLR/Screenshot-2024-05-24-015601.png)]()
+[![Screenshot-2024-07-04-191603.png](https://i.postimg.cc/q77wpPNG/Screenshot-2024-07-04-191603.png)]()
 
 # Skins 
 

@@ -78,11 +78,10 @@ namespace SeamstressMod.Seamstress.SkillStates
                 wideEffectPrefab = SeamstressAssets.wideSlashEffect2;
             }
             base.OnEnter();
-            baseDuration = 0.75f - 0.5f * (0.5f * (seamstressController.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
+            baseDuration = 0.75f;
             snips = needleCount;
             if (!scissorRight || !scissorLeft)
             {
-                moddedDamageType3 = DamageTypes.NoScissors;
                 noScissors = true;
             }
             if (noScissors)

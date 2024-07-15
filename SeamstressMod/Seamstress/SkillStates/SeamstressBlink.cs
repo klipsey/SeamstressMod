@@ -89,7 +89,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     {
                         blinkVector.y *= -1;
                     }
-                    if (Vector3.Angle(inputBank.aimDirection, to) <= 45)
+                    if (Vector3.Angle(inputBank.aimDirection, to) <= 15)
                     {
                         blinkVector.y = SeamstressConfig.changeGroundedBlinkVelocity.Value;
                     }
@@ -118,11 +118,6 @@ namespace SeamstressMod.Seamstress.SkillStates
             speedCoefficient = 0.3f * characterBody.jumpPower * Mathf.Clamp((characterBody.moveSpeed * horizontalBonus) / 4f, 5f, 20f);
             gameObject.layer = LayerIndex.fakeActor.intVal;
             characterMotor.Motor.RebuildCollidableLayers();
-
-            if (NetworkServer.active)
-            {
-                characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
-            }
         }
 
         protected virtual Vector3 GetBlinkVector()
@@ -201,10 +196,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
             }
             base.OnExit();
-            if (NetworkServer.active && base.healthComponent)
-            {
-                characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
-            }
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {

@@ -19,14 +19,14 @@ namespace SeamstressMod.Seamstress.Content
     {
         public static DamageAPI.ModdedDamageType Empty;
         public static DamageAPI.ModdedDamageType CutDamage;
-        public static DamageAPI.ModdedDamageType NoScissors;
+        public static DamageAPI.ModdedDamageType GainNeedles;
         public static DamageAPI.ModdedDamageType SeamstressLifesteal;
         public static DamageAPI.ModdedDamageType PullDamage;
         internal static void Init()
         {
             Empty = DamageAPI.ReserveDamageType();
             CutDamage = DamageAPI.ReserveDamageType();
-            NoScissors = DamageAPI.ReserveDamageType();
+            GainNeedles = DamageAPI.ReserveDamageType();
             SeamstressLifesteal = DamageAPI.ReserveDamageType();
             PullDamage = DamageAPI.ReserveDamageType();
             Hook();
@@ -64,19 +64,19 @@ namespace SeamstressMod.Seamstress.Content
                 SeamstressController seamstressController = attackerBody.GetComponent<SeamstressController>();
                 if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))
                 {
-                    DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, RoR2.DotController.DotIndex.Bleed, SeamstressStaticValues.bleedDuration, damageInfo.procCoefficient * 0.5f);
+                    DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, RoR2.DotController.DotIndex.Bleed, SeamstressStaticValues.bleedDuration, damageInfo.procCoefficient * 0.25f);
                 }
-                if (damageInfo.HasModdedDamageType(NoScissors))
+                if (damageInfo.HasModdedDamageType(GainNeedles))
                 {
                     Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
                     if (attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) attackerBody.AddBuff(SeamstressBuffs.needles);
                 }
                 if (damageInfo.HasModdedDamageType(SeamstressLifesteal))
-                {
+                {   
                     if(seamstressController)
                     {
-                        float healthMissing = ((attackerBody.healthComponent.fullCombinedHealth) - (attackerBody.healthComponent.health + attackerBody.healthComponent.shield)) / (attackerBody.healthComponent.fullCombinedHealth);
-                        attackerBody.healthComponent.Heal(damageReport.damageDealt * (healthMissing * SeamstressStaticValues.passiveHealingScaling), default, true);
+                        float healthMissing = 1 - (attackerBody.healthComponent.health / attackerBody.healthComponent.fullCombinedHealth);
+                        attackerBody.healthComponent.Heal((healthMissing * SeamstressStaticValues.passiveHealingScaling) * attackerBody.healthComponent.fullCombinedHealth, default, true);
                     }
                 }
             }

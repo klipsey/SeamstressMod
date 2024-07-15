@@ -40,8 +40,6 @@ namespace SeamstressMod
         {
             instance = this;
 
-            NetworkingAPI.RegisterMessageType<Seamstress.Components.SyncHunger>();
-
             //easy to use logger
             Log.Init(Logger);
 

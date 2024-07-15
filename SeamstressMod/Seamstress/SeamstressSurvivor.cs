@@ -147,12 +147,14 @@ namespace SeamstressMod.Seamstress
             bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.manipulatedCd);
             bool tempAdd2(CharacterBody body) => body.HasBuff(SeamstressBuffs.manipulated);
             float pee(CharacterBody body) => 2f * body.radius;
+
+            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewnCdEffect, pee, tempAdd);
+            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewnEffect, pee, tempAdd2);
+
             bodyPrefab.AddComponent<SeamstressController>();
             bodyPrefab.AddComponent<ScissorController>();
             bodyPrefab.AddComponent<NeedleController>();
             bodyPrefab.AddComponent<Tracker>();
-            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewnCdEffect, pee, tempAdd);
-            TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewnEffect, pee, tempAdd2);
         }
         public void AddHitboxes()
         {
@@ -245,7 +247,7 @@ namespace SeamstressMod.Seamstress
                 skillNameToken = SEAMSTRESS_PREFIX + "NEEDLE_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "NEEDLE_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texImpTouchedIcon"),
-                keywordTokens = new string[] { },
+                keywordTokens = new string[] { Tokens.needlesKeyword },
                 activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Idle)),
                 activationStateMachineName = "",
                 baseMaxStock = 1,
@@ -305,7 +307,7 @@ namespace SeamstressMod.Seamstress
                 skillName = "Clip",
                 skillNameToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "SECONDARY_CLIP_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.reachKeyword },
+                keywordTokens = new string[] { },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texClipIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(Clip)),
@@ -332,6 +334,7 @@ namespace SeamstressMod.Seamstress
             });
 
             Skills.AddSecondarySkills(bodyPrefab, Clip);
+
             TrackingSkillDef planarManipulation = Skills.CreateSkillDef<TrackingSkillDef>(new SkillDefInfo
             {
                 skillName = "PlanarManipulation",
@@ -407,7 +410,7 @@ namespace SeamstressMod.Seamstress
                 skillName = "ParrySeamstress",
                 skillNameToken = SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME",
                 skillDescriptionToken = SEAMSTRESS_PREFIX + "UTILITY_PARRY_DESCRIPTION",
-                keywordTokens = new string[] { Tokens.reachKeyword, Tokens.insatiableKeyword },
+                keywordTokens = new string[] { Tokens.insatiableKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texGlimpseOfPurityIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Parry)),
@@ -758,8 +761,20 @@ namespace SeamstressMod.Seamstress
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             On.RoR2.UI.LoadoutPanelController.Rebuild += LoadoutPanelController_Rebuild;
             On.RoR2.GenericSkill.SetBonusStockFromBody += new On.RoR2.GenericSkill.hook_SetBonusStockFromBody(GenericSkill_SetBonusStockFromBody);
+            On.RoR2.Items.ImmuneToDebuffBehavior.OverrideDot += ImmuneToDebuffBehavior_OverrideDot;
             if (SeamstressPlugin.emotesInstalled) Emotes();
         }
+
+        private bool ImmuneToDebuffBehavior_OverrideDot(On.RoR2.Items.ImmuneToDebuffBehavior.orig_OverrideDot orig, InflictDotInfo inflictDotInfo)
+        {
+            CharacterBody characterBody = inflictDotInfo.victimObject?.GetComponent<CharacterBody>();
+            if (characterBody && characterBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && inflictDotInfo.dotIndex == Dots.SeamstressSelfBleed)
+            {
+                return false;
+            }
+            else return orig(inflictDotInfo);
+        }
+
         private static void Emotes()
         {
             On.RoR2.SurvivorCatalog.Init += (orig) =>
@@ -804,8 +819,7 @@ namespace SeamstressMod.Seamstress
                         SeamstressController seamCom = victimBody.gameObject.GetComponent<SeamstressController>();
                         if (seamCom && !victimBody.HasBuff(RoR2Content.Buffs.HiddenInvincibility))
                         {
-                            seamCom.FillHunger(-damageInfo.damage);
-                            if (seamCom.fiendMeter - damageInfo.damage <= -1 * (victimBody.healthComponent.fullCombinedHealth * 0.1f) && victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
+                            if (damageInfo.damage >= self.combinedHealth && victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
                             {
                                 victimBody.skillLocator.utility.ExecuteIfReady();
                             }
@@ -881,8 +895,8 @@ namespace SeamstressMod.Seamstress
                 SeamstressController s;
                 if (self.body.TryGetComponent(out s) && self.body.HasBuff(SeamstressBuffs.instatiable))
                 {
-                    if (self.health >= self.fullHealth) s.FillHunger(amount / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
-                    else s.FillHunger(res / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
+                    if (self.health >= self.fullHealth) self.AddBarrier(amount / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
+                    else self.AddBarrier(res / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
                 }
             }
             return res;
@@ -906,7 +920,6 @@ namespace SeamstressMod.Seamstress
                 SkillLocator skillLocator = self.GetComponent<SkillLocator>();
                 if (seamstressController && healthComponent && skillLocator)
                 {
-                    seamstressController.maxHunger = healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient;
                     float healthMissing = (healthComponent.fullCombinedHealth * self.cursePenalty) - (healthComponent.health + healthComponent.shield / 2f);
                     float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
                     if (seamstressController.inInsatiableSkill && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = SeamstressStaticValues.baseDamage + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
@@ -929,8 +942,7 @@ namespace SeamstressMod.Seamstress
                 {
                     if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
                     {
-                        self.attackSpeed += .05f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
-                        self.moveSpeed += 0.5f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
+                        self.attackSpeed += .1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
                     }
                 }
             }
@@ -941,34 +953,6 @@ namespace SeamstressMod.Seamstress
             {
                 if (!hud.targetMaster.hasAuthority) return;
 
-                Transform healthbarContainer = hud.transform.Find("MainContainer").Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster").Find("BarRoots").Find("LevelDisplayCluster");
-
-                if (!hud.transform.Find("MainContainer").Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster").Find("ImpGauge"))
-                {
-                    GameObject impGauge = UnityEngine.Object.Instantiate(healthbarContainer.gameObject, hud.transform.Find("MainContainer").Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster"));
-                    impGauge.name = "ImpGauge";
-
-                    UnityEngine.Object.DestroyImmediate(impGauge.transform.GetChild(0).gameObject);
-                    UnityEngine.Object.Destroy(impGauge.GetComponentInChildren<LevelText>());
-                    UnityEngine.Object.Destroy(impGauge.GetComponentInChildren<ExpBar>());
-
-                    ImpGauge impGaugeComponent = impGauge.AddComponent<ImpGauge>();
-                    impGaugeComponent.targetHUD = hud;
-                    impGaugeComponent.fillRectTransform = impGauge.transform.Find("ExpBarRoot").GetChild(0).GetChild(0).GetComponent<RectTransform>();
-
-                    impGauge.transform.Find("LevelDisplayRoot").Find("ValueText").gameObject.SetActive(false);
-                    impGauge.transform.Find("LevelDisplayRoot").Find("PrefixText").gameObject.SetActive(false);
-
-                    impGauge.transform.Find("ExpBarRoot").GetChild(0).GetComponent<Image>().enabled = true;
-
-                    impGauge.transform.Find("LevelDisplayRoot").GetComponent<RectTransform>().anchoredPosition = new Vector2(-12f, 0f);
-
-                    RectTransform rect = impGauge.GetComponent<RectTransform>();
-                    rect.anchorMax = new Vector2(1f, 1f);
-                    rect.sizeDelta = new Vector2(1f, 1f);
-                    rect.localPosition = new Vector2(740f, 430f);
-                    rect.localScale = new Vector2(0.5f, 0.5f);
-                }
                 if (!hud.transform.Find("MainContainer").Find("MainUIArea").Find("CrosshairCanvas").Find("SeamstressCrosshair"))
                 {
                     GameObject seamstressCrosshair = UnityEngine.Object.Instantiate(SeamstressCrosshair.seamstressCrosshair, hud.transform.Find("MainContainer").Find("MainUIArea").Find("CrosshairCanvas"));

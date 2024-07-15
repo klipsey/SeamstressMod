@@ -71,10 +71,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 temporaryOverlay.animateShaderAlpha = true;
             }
             base.characterMotor.velocity = Vector3.zero;
-            if (NetworkServer.active)
-            {
-                characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
-            }
+
             PlayAnimation("FullBody, Override", "RipHeart", "Dash.playbackRate", (baseDuration / attackSpeedStat) * 1.8f);
             Util.PlayAttackSpeedSound("Play_imp_overlord_attack2_tell", gameObject, attackSpeedStat);
         }
@@ -187,18 +184,11 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override void OnExit()
         {
-            if (NetworkServer.active && base.healthComponent)
-            {
-                seamstressController.FillHunger(this.healthComponent.fullCombinedHealth / 4f);
-                characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
-                characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f);
-            }
-
             if (!hasHit) base.characterMotor.velocity *= 0.2f;
 
-            skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
-
             base.OnExit();
+
+            skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

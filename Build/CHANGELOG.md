@@ -1,3 +1,39 @@
+# 1.2.3
+
+- Fixed attackspeed bug
+
+# 1.2.2
+
+- Changed healing to be more similar to acrid regeneration
+- Removed oneshot protection from instatiable
+
+# 1.2.1
+
+- Screwed up blink
+
+# 1.2.0
+
+- No more fiend gauge, just barrier now
+- Dying in insatiable will pull you back instead
+- Lowered scissor pickup time but lowered its damage
+- Needles can only be gain during Insatiable or by picking up scissors. This means you can gain them while holding scissors
+- Secondary hits from scissors now stun
+- Self bleed damage slightly lowered
+- Lifesteal lowered
+
+# 1.1.4 
+
+- oops
+
+# 1.1.3
+
+- Bens raincoat doesn't completely obliterate seamstress
+
+# 1.1.2
+
+- Fixed Seamstresses Emissions
+- Fixed CDR Scaling not applying to scissor pickup (oops)
+
 # 1.1.1
 
 - Barrier is ignored during bleed

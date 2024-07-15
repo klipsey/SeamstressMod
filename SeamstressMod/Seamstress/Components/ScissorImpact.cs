@@ -26,7 +26,7 @@ namespace SeamstressMod.Seamstress.Components
 
         public bool alignNormals = true;
 
-        private bool hasFired = false;
+        private bool hasFired = true;
 
         public UnityEvent stickEvent;
 

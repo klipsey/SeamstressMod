@@ -132,7 +132,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             if (NetworkServer.active && base.healthComponent)
             {
-                seamstressController.FillHunger(this.healthComponent.fullCombinedHealth / 4f);
                 characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
                 characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f);
             }

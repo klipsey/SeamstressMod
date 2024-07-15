@@ -27,10 +27,8 @@ namespace SeamstressMod.Seamstress.Content
         {
             if (dotStack.dotIndex == SeamstressSelfBleed)
             {
-                float currentShield = self.victimBody.healthComponent.shield;
                 dotStack.damage = (self.victimBody.healthComponent.fullCombinedHealth - (self.victimBody.healthComponent.fullCombinedHealth - (self.victimBody.healthComponent.health + self.victimBody.healthComponent.shield))) * 0.02f;
                 dotStack.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT;
-                self.victimBody.healthComponent.shield = currentShield;
             }
         }
         public class BleedController : MonoBehaviour

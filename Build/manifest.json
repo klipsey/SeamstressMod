@@ -1,9 +1,9 @@
 {
     "name": "Seamstress",
     "author": "tsuyoikenko",
-    "version_number": "1.1.1",
+    "version_number": "1.2.3",
     "website_url": "https://github.com/klipsey/SeamstressMod",
-    "description": "Adds the Seamstress and Raven. Full release with animations and emotes support!",
+    "description": "Adds the Seamstress and Raven. Mini rework.",
     "dependencies": [
         "bbepis-BepInExPack-5.4.1905",
         "RiskofThunder-R2API_Core-5.0.3",

@@ -21,8 +21,8 @@ namespace SeamstressMod.Seamstress.SkillStates
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
-            baseDuration = 1.1f - 1.1f * (0.5f * (seamstressController.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
-            baseScissorDuration = 1.8f - 1.8f * (0.5f * (seamstressController.fiendMeter / (healthComponent.fullHealth * SeamstressStaticValues.maxFiendGaugeCoefficient)));
+            baseDuration = 1.1f;
+            baseScissorDuration = 1.8f;
             //0-1 multiplier of= baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             attackStartPercentTime = 0.2f;
@@ -46,7 +46,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                     muzzleString = "SwingLeftSmall";
                     if (!scissorRight)
                     {
-                        moddedDamageTypeHolder.Add(DamageTypes.NoScissors);
                         scissorHit = false;
                     }
                     break;
@@ -54,7 +53,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                     muzzleString = "SwingRightSmall";
                     if (!scissorLeft)
                     {
-                        moddedDamageTypeHolder.Add(DamageTypes.NoScissors);
                         scissorHit = false;
                     }
                     break;
@@ -68,7 +66,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                     attackEndPercentTime = 0.65f;
                     if (!scissorRight || !scissorLeft)
                     {
-                        moddedDamageTypeHolder.Add(DamageTypes.NoScissors);
                         scissorHit = false;
                     }
                     break;
@@ -76,6 +73,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (insatiable)
             {
                 moddedDamageTypeHolder.Add(DamageTypes.CutDamage);
+                moddedDamageTypeHolder.Add(DamageTypes.GainNeedles);
             }
             moddedDamageTypeHolder.Add(DamageTypes.SeamstressLifesteal);
             impactSound = SeamstressAssets.scissorsHitSoundEvent.index;
