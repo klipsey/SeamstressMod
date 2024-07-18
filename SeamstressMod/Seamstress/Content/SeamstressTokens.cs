@@ -115,8 +115,7 @@ namespace SeamstressMod.Seamstress.Content
             #region Utility 
             Language.Add(prefix + "UTILITY_HEARTDASH_NAME", "Brutalize");
             Language.Add(prefix + "UTILITY_HEARTDASH_DESCRIPTION", $"Tear out your <color=#9B3737>heart</color> gaining " + Tokens.insatiablePrefix + $". Dash forward dealing " +
-                $"<style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style>. Recasting or losing your <style=cIsHealth>extra health</style> from " 
-                + Tokens.insatiablePrefix + " returns you to your <color=#9B3737>heart</color>.");
+                $"<style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style>. Recast to return to your <color=#9B3737>heart</color>.");
 
             Language.Add(prefix + "UTILITY_PARRY_NAME", "Retaliate");
             Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Prepare a <style=cIsUtility>parry</style>. If successful, dash forward dealing <style=cIsDamage>{100f * SeamstressStaticValues.parryDamageCoefficient}% damage</style> and gain " +

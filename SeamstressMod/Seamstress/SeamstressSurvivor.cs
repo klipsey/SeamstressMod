@@ -716,7 +716,7 @@ namespace SeamstressMod.Seamstress
             masterySkin4.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenAlt");
             masterySkin4.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenShadowClaws");
             masterySkin4.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenShadowClaws");
-            masterySkin4.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenAltEmission");
+            masterySkin4.rendererInfos[3].defaultMaterial = assetBundle.LoadAsset<Material>("matRavenAltEmission");
 
             masterySkin4.gameObjectActivations = new SkinDef.GameObjectActivation[]
             {
@@ -896,7 +896,7 @@ namespace SeamstressMod.Seamstress
                 if (self.body.TryGetComponent(out s) && self.body.HasBuff(SeamstressBuffs.instatiable))
                 {
                     if (self.health >= self.fullHealth) self.AddBarrier(amount / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
-                    else self.AddBarrier(res / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
+                    else self.AddBarrier((res / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion)) / 2f);
                 }
             }
             return res;

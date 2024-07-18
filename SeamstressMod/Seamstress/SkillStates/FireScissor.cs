@@ -19,7 +19,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public static float baseDuration = 0.5f;
 
-        public static float damageCoefficient = SeamstressStaticValues.scissorDamageCoefficient;
+        public static float damageCoefficient = 1f;
 
         public static float procCoefficient = 1f;
 
@@ -132,7 +132,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             if (base.isAuthority)
             {
-                ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, damageStat * damageCoefficient, 0f, Util.CheckRoll(critStat, characterBody.master), DamageColorIndex.Default, null, -1f);
+                ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, damageStat, 0f, Util.CheckRoll(critStat, characterBody.master), DamageColorIndex.Default, null, -1f);
             }
         }
         public override InterruptPriority GetMinimumInterruptPriority()

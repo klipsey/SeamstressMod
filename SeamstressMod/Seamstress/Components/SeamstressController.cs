@@ -151,11 +151,11 @@ namespace SeamstressMod.Seamstress.Components
         }
         public void PlayScissorRSwing()
         {
-            PlayCrossfade("Gesture, Override", "ScissorRSlash", "Slash.playbackRate", 1.5f, 0.05f);
+            PlayCrossfade("Scissor, Override", "ScissorRPickup", "Slash.playbackRate", 1.5f, 0.05f);
         }
         public void PlayScissorLSwing()
         {
-            PlayCrossfade("Gesture, Override", "ScissorLSlash", "Slash.playbackRate", 1.5f, 0.05f);
+            PlayCrossfade("Scissor, Override", "ScissorLPickup", "Slash.playbackRate", 1.5f, 0.05f);
         }
         protected void PlayCrossfade(string layerName, string animationStateName, string playbackRateParam, float duration, float crossfadeDuration)
         {

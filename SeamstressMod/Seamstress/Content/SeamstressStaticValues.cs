@@ -32,9 +32,9 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float insatiableDuration = 12f;
 
-        internal const float passiveScaling = 0.05f;
+        internal const float passiveScaling = 0.04f;
 
-        internal const float passiveHealingScaling = 0.05f;
+        internal const float passiveHealingScaling = 0.025f;
 
         internal const float parryDamageCoefficient = 4f;
 
@@ -46,7 +46,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float parryWindow = 0.4f;
 
-        internal const float scissorDamageCoefficient = 4f;
+        internal const float scissorDamageCoefficient = 5f;
 
         internal const float telekinesisDamageCoefficient = 0.3f;
 

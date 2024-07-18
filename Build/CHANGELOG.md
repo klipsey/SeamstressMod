@@ -1,3 +1,13 @@
+# 1.2.5
+
+- Fixed texturing
+
+- Fixed Special dealing 4x the damage it was supposed to (Slight compensation added to damage 400% -> 500%, base scaling 0.03 -> 0.04)
+
+# 1.2.4
+
+- Enjoy!
+
 # 1.2.3
 
 - Fixed attackspeed bug
