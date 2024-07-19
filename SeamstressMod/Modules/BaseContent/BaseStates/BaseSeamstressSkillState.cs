@@ -5,6 +5,7 @@ using SeamstressMod.Seamstress.Content;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace SeamstressMod.Modules.BaseStates
@@ -28,6 +29,7 @@ namespace SeamstressMod.Modules.BaseStates
         public override void OnEnter()
         {
             RefreshState();
+            GetModelAnimator().SetLayerWeight(GetModelAnimator().GetLayerIndex("Scissor, Override"), 0f);
             base.OnEnter();
         }
         public override void FixedUpdate()

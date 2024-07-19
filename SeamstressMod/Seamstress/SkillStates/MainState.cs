@@ -100,39 +100,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                             rotation = Util.QuaternionSafeLookRotation(characterMotor.velocity)
                         }, false);
                     }
-                    #region For later? thank you rob
-                    /*
-                    if (this.animator)
-                    {
-                        float x = this.animatorWalkParamCalculator.animatorWalkSpeed.y;
-                        float y = this.animatorWalkParamCalculator.animatorWalkSpeed.x;
-
-                        if (Mathf.Abs(x) <= 0.45f && Mathf.Abs(y) <= 0.45f || this.inputBank.moveVector == Vector3.zero)
-                        {
-                            x = 0f;
-                            y = 0f;
-                        }
-
-                        if (Mathf.Abs(x) > Mathf.Abs(y))
-                        {
-                            // side flip
-                            if (x > 0f) x = 1f;
-                            else x = -1f;
-                            y = 0f;
-                        }
-                        else if (Mathf.Abs(x) < Mathf.Abs(y))
-                        {
-                            // forward/backflips
-                            if (y > 0f) y = 1f;
-                            else y = -1f;
-                            x = 0f;
-                        }
-
-                        this.animator.SetFloat("forwardSpeedCached", y);
-                        this.animator.SetFloat("rightSpeedCached", x);
-
-                    } */
-                    #endregion
                 }
             }
         }

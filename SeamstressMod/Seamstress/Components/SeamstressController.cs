@@ -49,6 +49,8 @@ namespace SeamstressMod.Seamstress.Components
 
         private bool hasPlayedEffect = true;
 
+        private float animOverrideTimer = 0f;
+
         public bool isDashing;
 
         public Vector3 heldDashVector;
@@ -112,6 +114,16 @@ namespace SeamstressMod.Seamstress.Components
                 checkStatsStopwatch = 0f;
             }
             else checkStatsStopwatch += Time.fixedDeltaTime;
+
+            if(animOverrideTimer > 0)
+            {
+                animOverrideTimer -= Time.fixedDeltaTime;
+            }
+            else if (animOverrideTimer < 0)
+            {
+                animOverrideTimer = 0;
+            }
+
             CreateBlinkEffect(heldOrigin);
             InsatiableSound();
             IsInsatiable();
@@ -151,10 +163,14 @@ namespace SeamstressMod.Seamstress.Components
         }
         public void PlayScissorRSwing()
         {
+            animator.SetLayerWeight(this.animator.GetLayerIndex("Scissor, Override"), 1f);
+            this.animOverrideTimer = 1.5f;
             PlayCrossfade("Scissor, Override", "ScissorRPickup", "Slash.playbackRate", 1.5f, 0.05f);
         }
         public void PlayScissorLSwing()
         {
+            animator.SetLayerWeight(this.animator.GetLayerIndex("Scissor, Override"), 1f);
+            this.animOverrideTimer = 1.5f;
             PlayCrossfade("Scissor, Override", "ScissorLPickup", "Slash.playbackRate", 1.5f, 0.05f);
         }
         protected void PlayCrossfade(string layerName, string animationStateName, string playbackRateParam, float duration, float crossfadeDuration)

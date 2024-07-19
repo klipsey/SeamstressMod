@@ -70,6 +70,8 @@ namespace SeamstressMod.Modules.BaseStates
             animator = GetModelAnimator();
             StartAimMode(0.5f + duration, false);
 
+            animator.SetLayerWeight(this.animator.GetLayerIndex("Scissor, Override"), 0f);
+
             PlayAttackAnimation();
 
             attack = new OverlapAttack();

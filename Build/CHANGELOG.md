@@ -1,3 +1,7 @@
+# 1.2.6
+
+- Fixed scissor animations
+
 # 1.2.5
 
 - Fixed texturing
