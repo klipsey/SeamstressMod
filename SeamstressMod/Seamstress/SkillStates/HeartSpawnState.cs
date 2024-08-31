@@ -9,6 +9,7 @@ using UnityEngine.Networking.Match;
 using RoR2;
 using SeamstressMod.Seamstress.Content;
 using RoR2.Projectile;
+using SeamstressMod.Seamstress.Components;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
@@ -18,10 +19,10 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public static string enterSoundString = "Play_bleedOnCritAndExplode_impact";
 
+        public float fixedAgeFixed;
         public override void OnEnter()
         {
             base.OnEnter();
-            if (NetworkServer.active) DotController.InflictDot(base.gameObject.GetComponent<ProjectileController>().owner, base.gameObject, Dots.SeamstressSelfBleed, SeamstressStaticValues.insatiableDuration, 1, 1u);
             Util.PlaySound(enterSoundString, gameObject);
             FindModelChild("ChargeUpFX").gameObject.SetActive(value: true);
         }
@@ -29,7 +30,8 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (fixedAge >= duration)
+            fixedAgeFixed += Time.fixedDeltaTime;
+            if (fixedAgeFixed >= duration)
             {
                 outer.SetNextState(new HeartStandBy());
             }

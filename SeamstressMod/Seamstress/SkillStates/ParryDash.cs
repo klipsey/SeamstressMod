@@ -139,7 +139,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             seamstressController.StartDashEffectTimer();
             gameObject.layer = LayerIndex.defaultLayer.intVal;
             characterMotor.Motor.RebuildCollidableLayers();
-            if (!insatiable) Util.PlaySound("Play_item_proc_whip", gameObject);
+            if (!isInsatiable) Util.PlaySound("Play_item_proc_whip", gameObject);
             if (isAuthority)
             {
                 characterMotor.disableAirControlUntilCollision = false;

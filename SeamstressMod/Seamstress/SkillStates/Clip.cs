@@ -276,7 +276,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             overlapAttack = new OverlapAttack();
             overlapAttack.damageType = damageType;
-            if (insatiable)
+            if (isInsatiable)
             {
                 overlapAttack.AddModdedDamageType(moddedDamageType);
             }

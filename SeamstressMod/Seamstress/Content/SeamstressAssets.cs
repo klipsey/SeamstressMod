@@ -10,9 +10,9 @@ using UnityEngine.Rendering.PostProcessing;
 using TMPro;
 using ThreeEyedGames;
 using SeamstressMod.Seamstress.Components;
-using static UnityEngine.ParticleSystem.PlaybackState;
-using HG;
 using UnityEngine.UIElements;
+using System.IO;
+using System.Reflection;
 
 namespace SeamstressMod.Seamstress.Content
 {
@@ -106,7 +106,7 @@ namespace SeamstressMod.Seamstress.Content
         internal static GameObject chainToHeart2;
         internal static GameObject heartPrefab2;
         //Overlay Effects
-        internal static GameObject stitchEffect;
+        internal static GameObject bleedEffect;
 
         //Materials
         internal static Material destealthMaterial;
@@ -388,9 +388,9 @@ namespace SeamstressMod.Seamstress.Content
             bloodSpurtEffect2.transform.Find("Trails").GetComponent<ParticleSystemRenderer>().trailMaterial = bloodMat4;
             bloodSpurtEffect2.transform.Find("Trails").GetComponent<ParticleSystemRenderer>().trailMaterial.SetColor("_TintColor", Color.cyan);
 
-            stitchEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
-            stitchEffect.AddComponent<NetworkIdentity>();
-            stitchEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", coolRed);
+            bleedEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BleedEffect.prefab").WaitForCompletion().InstantiateClone("StitchEffect");
+            bleedEffect.AddComponent<NetworkIdentity>();
+            bleedEffect.transform.GetChild(1).gameObject.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", coolRed);
 
             sewnCdEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Nullifier/NullifyStack3Effect.prefab").WaitForCompletion().InstantiateClone("SewnNo", false);
             sewnCdEffect.AddComponent<NetworkIdentity>();
@@ -428,14 +428,14 @@ namespace SeamstressMod.Seamstress.Content
             Material component = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/UI/matUIOverbrighten2x.mat").WaitForCompletion());
             Object.DestroyImmediate(telekinesisTracker.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
             SpriteRenderer balls = telekinesisTracker.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
-            balls.SetMaterial(component);
+            balls.material = component;
             balls.sprite = mainAssetBundle.LoadAsset<Sprite>("Grab");
             telekinesisTracker.transform.GetChild(1).gameObject.SetActive(false);
             Sprite sprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/UI/texCrosshair2.png").WaitForCompletion();
             Material component2 = telekinesisTracker.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().material;
             Object.DestroyImmediate(telekinesisTracker.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>());
             SpriteRenderer balls2 = telekinesisTracker.transform.GetChild(2).gameObject.AddComponent<SpriteRenderer>();
-            balls2.SetMaterial(component2);
+            balls2.material = component2;
             balls2.sprite = sprite;
             balls2.color = coolRed;
 
@@ -443,14 +443,14 @@ namespace SeamstressMod.Seamstress.Content
             component = Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/UI/matUIOverbrighten2x.mat").WaitForCompletion());
             Object.DestroyImmediate(telekinesisCdTracker.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
             balls = telekinesisCdTracker.transform.GetChild(0).gameObject.AddComponent<SpriteRenderer>();
-            balls.SetMaterial(component);
+            balls.material = component;
             balls.sprite = mainAssetBundle.LoadAsset<Sprite>("NoGrab");
             telekinesisCdTracker.transform.GetChild(1).gameObject.SetActive(false);
             sprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/UI/texCrosshair2.png").WaitForCompletion();
             component2 = telekinesisCdTracker.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().material;
             Object.DestroyImmediate(telekinesisCdTracker.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>());
             balls2 = telekinesisCdTracker.transform.GetChild(2).gameObject.AddComponent<SpriteRenderer>();
-            balls2.SetMaterial(component2);
+            balls2.material = component2;
             balls2.sprite = sprite;
             balls2.color = coolRed;
 
@@ -913,8 +913,8 @@ namespace SeamstressMod.Seamstress.Content
             needlePrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>();
             needlePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.SeamstressLifesteal);
 
-            ProjectileController needleController = needlePrefab.GetComponent<ProjectileController>();
-            needleController.procCoefficient = 1f;
+            ProjectileController needleProjectileController = needlePrefab.GetComponent<ProjectileController>();
+            needleProjectileController.procCoefficient = 1f;
             GameObject needleGhost = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.InstantiateClone("NeedleGhost", false);
             needleGhost.transform.GetChild(0).gameObject.SetActive(false);
             needleGhost.transform.GetChild(1).gameObject.SetActive(false);
@@ -929,19 +929,21 @@ namespace SeamstressMod.Seamstress.Content
             needleGhost = needleGhost.InstantiateClone("NeedleGhost");
             Object.Destroy(needleGhost.GetComponent<EffectComponent>());
             if (needleGhost)
-                needleController.ghostPrefab = needleGhost;
-            if (!needleController.ghostPrefab.GetComponent<NetworkIdentity>())
-                needleController.ghostPrefab.AddComponent<NetworkIdentity>();
-            if (!needleController.ghostPrefab.GetComponent<ProjectileGhostController>())
-                needleController.ghostPrefab.AddComponent<ProjectileGhostController>();
-            needleController.startSound = "";
+                needleProjectileController.ghostPrefab = needleGhost;
+            if (!needleProjectileController.ghostPrefab.GetComponent<NetworkIdentity>())
+                needleProjectileController.ghostPrefab.AddComponent<NetworkIdentity>();
+            if (!needleProjectileController.ghostPrefab.GetComponent<ProjectileGhostController>())
+                needleProjectileController.ghostPrefab.AddComponent<ProjectileGhostController>();
+            needleProjectileController.startSound = "";
+
+            needleProjectileController.ghostPrefab.GetComponent<VFXAttributes>().DoNotPool = true;
 
             Modules.Content.AddProjectilePrefab(needlePrefab);
         }
         private static void CreateNeedle2()
         {
             needlePrefab2 = needlePrefab.InstantiateClone("Needle2");
-            ProjectileController needleController = needlePrefab2.GetComponent<ProjectileController>();
+            ProjectileController needleProjectilerController = needlePrefab2.GetComponent<ProjectileController>();
             GameObject needleGhost = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/MageIceBombProjectile").GetComponent<ProjectileController>().ghostPrefab.InstantiateClone("NeedleGhost2", false);
             needleGhost.transform.GetChild(0).gameObject.SetActive(false);
             needleGhost.transform.GetChild(1).gameObject.SetActive(false);
@@ -952,12 +954,14 @@ namespace SeamstressMod.Seamstress.Content
             needleGhost = needleGhost.InstantiateClone("NeedleGhost2");
             Object.Destroy(needleGhost.GetComponent<EffectComponent>());
             if (needleGhost)
-                needleController.ghostPrefab = needleGhost;
-            if (!needleController.ghostPrefab.GetComponent<NetworkIdentity>())
-                needleController.ghostPrefab.AddComponent<NetworkIdentity>();
-            if (!needleController.ghostPrefab.GetComponent<ProjectileGhostController>())
-                needleController.ghostPrefab.AddComponent<ProjectileGhostController>();
-            needleController.startSound = "";
+                needleProjectilerController.ghostPrefab = needleGhost;
+            if (!needleProjectilerController.ghostPrefab.GetComponent<NetworkIdentity>())
+                needleProjectilerController.ghostPrefab.AddComponent<NetworkIdentity>();
+            if (!needleProjectilerController.ghostPrefab.GetComponent<ProjectileGhostController>())
+                needleProjectilerController.ghostPrefab.AddComponent<ProjectileGhostController>();
+            needleProjectilerController.startSound = "";
+
+            needleProjectilerController.ghostPrefab.GetComponent<VFXAttributes>().DoNotPool = true;
 
             Modules.Content.AddProjectilePrefab(needlePrefab2);
         }
@@ -1060,16 +1064,18 @@ namespace SeamstressMod.Seamstress.Content
             ScissorModelTransform.transform.localPosition = new Vector3(0, die, -1);
             ScissorModelTransform.transform.rotation = Quaternion.AngleAxis(270f, Vector3.forward);
             ScissorModelTransform.transform.SetParent(scissorPrefab.transform, false);
-            ProjectileController scissorController = scissorPrefab.GetComponent<ProjectileController>();
-            scissorController.procCoefficient = 1f;
-            if (mainAssetBundle.LoadAsset<GameObject>(modelName) != null) scissorController.ghostPrefab = mainAssetBundle.CreateProjectileGhostPrefab(modelName);
-            scissorController.ghostTransformAnchor = scissorPrefab.transform.Find(modelName + "Transform");
-            if (!scissorController.ghostPrefab.GetComponent<NetworkIdentity>()) scissorController.ghostPrefab.AddComponent<NetworkIdentity>();
-            if (!scissorController.ghostPrefab.GetComponent<VFXAttributes>()) scissorController.ghostPrefab.AddComponent<VFXAttributes>();
-            scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
-            scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Low;
+            ProjectileController scissorProjectileController = scissorPrefab.GetComponent<ProjectileController>();
+            scissorProjectileController.procCoefficient = 1f;
+            if (mainAssetBundle.LoadAsset<GameObject>(modelName) != null) scissorProjectileController.ghostPrefab = mainAssetBundle.CreateProjectileGhostPrefab(modelName);
+            scissorProjectileController.ghostTransformAnchor = scissorPrefab.transform.Find(modelName + "Transform");
+            if (!scissorProjectileController.ghostPrefab.GetComponent<NetworkIdentity>()) scissorProjectileController.ghostPrefab.AddComponent<NetworkIdentity>();
+            if (!scissorProjectileController.ghostPrefab.GetComponent<VFXAttributes>()) scissorProjectileController.ghostPrefab.AddComponent<VFXAttributes>();
+            scissorProjectileController.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
+            scissorProjectileController.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Low;
 
-            SeamstressMod.Modules.Content.AddProjectilePrefab(scissorPrefab);
+            scissorProjectileController.ghostPrefab.GetComponent<VFXAttributes>().DoNotPool = true;
+
+            Modules.Content.AddProjectilePrefab(scissorPrefab);
 
             return scissorPrefab;
         }
@@ -1164,16 +1170,18 @@ namespace SeamstressMod.Seamstress.Content
             ScissorModelTransform.transform.localPosition = new Vector3(0, die, -1);
             ScissorModelTransform.transform.rotation = Quaternion.AngleAxis(270f, Vector3.forward);
             ScissorModelTransform.transform.SetParent(scissorPrefab.transform, false);
-            ProjectileController scissorController = scissorPrefab.GetComponent<ProjectileController>();
-            scissorController.procCoefficient = 1f;
-            if (mainAssetBundle.LoadAsset<GameObject>(modelName) != null) scissorController.ghostPrefab = mainAssetBundle.CreateProjectileGhostPrefab(modelName);
-            scissorController.ghostTransformAnchor = scissorPrefab.transform.Find(modelName + "Transform");
-            if (!scissorController.ghostPrefab.GetComponent<NetworkIdentity>()) scissorController.ghostPrefab.AddComponent<NetworkIdentity>();
-            if (!scissorController.ghostPrefab.GetComponent<VFXAttributes>()) scissorController.ghostPrefab.AddComponent<VFXAttributes>();
-            scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
-            scissorController.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Low;
+            ProjectileController scissorProjectileController = scissorPrefab.GetComponent<ProjectileController>();
+            scissorProjectileController.procCoefficient = 1f;
+            if (mainAssetBundle.LoadAsset<GameObject>(modelName) != null) scissorProjectileController.ghostPrefab = mainAssetBundle.CreateProjectileGhostPrefab(modelName);
+            scissorProjectileController.ghostTransformAnchor = scissorPrefab.transform.Find(modelName + "Transform");
+            if (!scissorProjectileController.ghostPrefab.GetComponent<NetworkIdentity>()) scissorProjectileController.ghostPrefab.AddComponent<NetworkIdentity>();
+            if (!scissorProjectileController.ghostPrefab.GetComponent<VFXAttributes>()) scissorProjectileController.ghostPrefab.AddComponent<VFXAttributes>();
+            scissorProjectileController.ghostPrefab.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
+            scissorProjectileController.ghostPrefab.GetComponent<VFXAttributes>().vfxIntensity = VFXAttributes.VFXIntensity.Low;
 
-            SeamstressMod.Modules.Content.AddProjectilePrefab(scissorPrefab);
+            scissorProjectileController.ghostPrefab.GetComponent<VFXAttributes>().DoNotPool = true;
+
+            Modules.Content.AddProjectilePrefab(scissorPrefab);
 
             return scissorPrefab;
         }
@@ -1182,9 +1190,21 @@ namespace SeamstressMod.Seamstress.Content
         #region sounds
         private static void CreateSounds()
         {
+            LoadSoundbank();
+
             scissorsHitSoundEvent = SeamstressMod.Modules.Content.CreateAndAddNetworkSoundEventDef("Play_merc_sword_impact");
 
             parrySuccessSoundEvent = SeamstressMod.Modules.Content.CreateAndAddNetworkSoundEventDef("Play_voidman_m2_explode");
+        }
+
+        internal static void LoadSoundbank()
+        {
+            using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream("SeamstressMod.seam_bank.bnk"))
+            {
+                byte[] array = new byte[manifestResourceStream2.Length];
+                manifestResourceStream2.Read(array, 0, array.Length);
+                SoundAPI.SoundBanks.Add(array);
+            }
         }
         #endregion
 

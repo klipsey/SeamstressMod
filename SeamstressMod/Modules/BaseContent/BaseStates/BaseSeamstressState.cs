@@ -5,6 +5,7 @@ using SeamstressMod.Seamstress.Content;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace SeamstressMod.Modules.BaseStates
@@ -21,19 +22,20 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected bool insatiable;
 
+        protected float fixedAge { get; set; }
         public override void OnEnter()
         {
             base.OnEnter();
         }
         public override void FixedUpdate()
         {
-            base.FixedUpdate();
+            fixedAge += Time.fixedDeltaTime;
             RefreshState();
         }
         protected void RefreshState()
         {
-            scissorRight = characterBody.HasBuff(SeamstressBuffs.scissorRightBuff);
-            scissorLeft = characterBody.HasBuff(SeamstressBuffs.scissorLeftBuff);
+            scissorRight = characterBody.HasBuff(SeamstressBuffs.ScissorRightBuff);
+            scissorLeft = characterBody.HasBuff(SeamstressBuffs.ScissorLeftBuff);
             if (!seamstressController)
             {
                 seamstressController = base.GetComponent<SeamstressController>();
@@ -44,7 +46,7 @@ namespace SeamstressMod.Modules.BaseStates
             }
             if (seamstressController)
             {
-                insatiable = characterBody.HasBuff(SeamstressBuffs.instatiable);
+                insatiable = characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff);
             }
         }
     }

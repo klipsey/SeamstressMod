@@ -70,7 +70,7 @@ namespace SeamstressMod.Seamstress.Components
                     }
                     triggerEvents?.Invoke();
                     Util.PlaySound("sfx_seamstress_swing_scissor", gameObject);
-                    if (healthComponent.body.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) healthComponent.body.AddBuff(SeamstressBuffs.needles);
+                    if (healthComponent.body.GetBuffCount(SeamstressBuffs.Needles) < SeamstressStaticValues.maxNeedleAmount) healthComponent.body.AddBuff(SeamstressBuffs.Needles);
                     healthComponent.body.GetComponent<ScissorController>().RpcAddSpecialStock();
                     hasFired = true;
                 }

@@ -92,7 +92,7 @@ namespace SeamstressMod.Seamstress.Components
                 SearchForTarget(aimRay);
                 if (trackingTarget != null)
                 {
-                    onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.manipulatedCd);
+                    onCooldown = trackingTarget.healthComponent.body.HasBuff(SeamstressBuffs.ManipulatedCd);
                 }
                 if (onCooldown)
                 {

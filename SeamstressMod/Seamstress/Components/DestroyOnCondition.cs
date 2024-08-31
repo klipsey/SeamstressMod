@@ -4,12 +4,13 @@ using RoR2;
 using RoR2.UI;
 using TMPro;
 using UnityEngine.Networking;
+using SeamstressMod.Seamstress.Content;
 
 namespace SeamstressMod.Seamstress.Components
 {
     public class DestroyOnCondition : MonoBehaviour
     {
-        public SeamstressController seamstressController;
+        public CharacterBody ownerBody;
 
         private void Awake()
         {
@@ -20,7 +21,7 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void FixedUpdate()
         {
-            if (!seamstressController.inInsatiableSkill)
+            if (ownerBody && !ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
             {
                 Destroy(this.gameObject);
             }

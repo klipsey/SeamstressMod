@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using EntityStates;
 using static R2API.DamageAPI;
 using SeamstressMod.Seamstress.Content;
+using SeamstressMod.Seamstress.Components;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
@@ -38,7 +39,14 @@ namespace SeamstressMod.Seamstress.SkillStates
             RefreshState();
             base.OnEnter();
             Util.PlaySound(exitSoundString, gameObject);
-            if(NetworkServer.active) Util.CleanseBody(base.characterBody, false, false, false, true, false, false);
+            if (NetworkServer.active)
+            {
+                if (characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
+                {
+                    characterBody.RemoveBuff(SeamstressBuffs.SeamstressInsatiableBuff);
+                }
+                Util.CleanseBody(base.characterBody, false, false, false, true, false, false);
+            }
             CalculateSnapDestination();
             modelTransform = GetModelTransform();
             if (modelTransform)
@@ -57,7 +65,13 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
+
             skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+
+            if(base.gameObject.TryGetComponent<SeamstressBleedVisualController>(out var visualBleed))
+            {
+                visualBleed.DestroyVisual();
+            }
 
             PlayAnimation("Body", "Idle");
         }

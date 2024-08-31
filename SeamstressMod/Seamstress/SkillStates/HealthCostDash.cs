@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System;
 using RoR2.Projectile;
 using SeamstressMod.Seamstress.Content;
+using SeamstressMod.Seamstress.Components;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
@@ -62,13 +63,13 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             if (modelTransform && this.destealthMaterial)
             {
-                TemporaryOverlay temporaryOverlay = animator.gameObject.AddComponent<TemporaryOverlay>();
-                temporaryOverlay.duration = 1.2f;
-                temporaryOverlay.destroyComponentOnEnd = true;
-                temporaryOverlay.originalMaterial = this.destealthMaterial;
-                temporaryOverlay.inspectorCharacterModel = animator.gameObject.GetComponent<CharacterModel>();
-                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                temporaryOverlay.animateShaderAlpha = true;
+                TemporaryOverlayInstance temporaryOverlayInstance = TemporaryOverlayManager.AddOverlay(base.gameObject);
+                temporaryOverlayInstance.duration = 1.2f;
+                temporaryOverlayInstance.destroyComponentOnEnd = true;
+                temporaryOverlayInstance.originalMaterial = this.destealthMaterial;
+                temporaryOverlayInstance.inspectorCharacterModel = animator.gameObject.GetComponent<CharacterModel>();
+                temporaryOverlayInstance.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                temporaryOverlayInstance.animateShaderAlpha = true;
             }
             base.characterMotor.velocity = Vector3.zero;
 
@@ -104,7 +105,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     scale = 0.5f
                 }, false);
 
-                if (insatiable)
+                if (isInsatiable)
                 {
                     attack.AddModdedDamageType(DamageTypes.CutDamage);
                 }
@@ -138,7 +139,15 @@ namespace SeamstressMod.Seamstress.SkillStates
                 seamstressController.snapBackPosition = base.characterBody.corePosition;
 
                 Vector3 position = base.characterBody.corePosition;
+
+                if (NetworkServer.active)
+                {
+                    base.characterBody.AddTimedBuff(SeamstressBuffs.SeamstressInsatiableBuff, SeamstressStaticValues.insatiableDuration);
+                    base.gameObject.AddComponent<SeamstressBleedVisualController>();
+                }
+
                 GameObject obj = UnityEngine.Object.Instantiate<GameObject>(this.projectilePrefab, position, Quaternion.identity);
+
                 ProjectileController component = obj.GetComponent<ProjectileController>();
                 if (component)  
                 {
@@ -147,7 +156,10 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
                 obj.GetComponent<TeamFilter>().teamIndex = base.GetComponent<TeamComponent>().teamIndex;
 
-                NetworkServer.Spawn(obj);
+                if (NetworkServer.active)
+                {
+                    NetworkServer.Spawn(obj);
+                }
             }
             if (base.isAuthority && hasDelayed)
             {
@@ -168,7 +180,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     outer.SetNextStateToMain();
                 }
 
-                if (fixedAge >= baseDuration && hasDelayed)
+                if (base.fixedAge >= baseDuration && hasDelayed)
                 {
                     EffectData effectData = new EffectData()
                     {

@@ -24,45 +24,49 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private GameObject owner;
 
-        private TeamIndex teamIndex = TeamIndex.None;
-
         private float snapBackDelay;
 
         private bool hasFired;
 
         private bool splat;
 
-        private bool ownerIsEmpowered;
+        private static float bleedInterval = 0.2f;
+
+        private float bleedTimer;
+
+        private float fixedAge;
         public override void OnEnter()
         {
             base.OnEnter();
             splat = false;
             ProjectileController component = GetComponent<ProjectileController>();
-            if ((bool)component)
+            if (component)
             {
                 owner = component.owner;
-                teamIndex = component.teamFilter.teamIndex;
             }
             PlayAnimation("Base", "SpawnToIdle");
             Util.PlaySound("Play_treeBot_R_yank", owner);
             seamstressController = owner.GetComponent<SeamstressController>();
             ownerBody = owner.GetComponent<CharacterBody>();
             if (seamstressController.blue) this.chain = SeamstressAssets.chainToHeart2;
-            //i need to delete this but i have no clue if its keeping everything together or not
             chain.GetComponent<DestroyOnCondition>().enabled = true;
-            chain.GetComponent<DestroyOnCondition>().seamstressController = seamstressController;
+            chain.GetComponent<DestroyOnCondition>().ownerBody = ownerBody;
         }
 
         public override void FixedUpdate()
         {
-            base.FixedUpdate();
-            ownerIsEmpowered = ownerBody.HasBuff(SeamstressBuffs.instatiable);
-            if (ownerIsEmpowered && !hasFired)
+            this.fixedAge += Time.fixedDeltaTime;
+            
+            if(ownerBody && ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
             {
-                ChainUpdate(SeamstressStaticValues.insatiableDuration);
-                hasFired = true;
+                HandleBleed();
+                if (!hasFired)
+                {
+                    ChainUpdate(SeamstressStaticValues.insatiableDuration);
+                    hasFired = true;
+                }
             }
-            if (!ownerIsEmpowered && base.fixedAge > 1f)
+            else if (ownerBody && !ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && this.fixedAge > 1f)
             {
                 if (!splat)
                 {
@@ -72,14 +76,41 @@ namespace SeamstressMod.Seamstress.SkillStates
                     chain.GetComponent<DestroyOnCondition>().enabled = false;
                     ChainUpdate(snapBackDelay);
                 }
+
                 snapBackDelay -= Time.fixedDeltaTime;
+
                 if (snapBackDelay <= 0.2f)
                 {
-                    EntityState.Destroy(this.gameObject);
+                    outer.SetNextStateToMain();
                 }
             }
         }
+        private void HandleBleed()
+        {
+            bleedTimer += Time.fixedDeltaTime;
 
+            if (bleedTimer >= bleedInterval)
+            {
+                bleedTimer = 0f;
+
+                if (NetworkServer.active)
+                {
+                    DamageInfo damageInfo = new DamageInfo
+                    {
+                        damage = (ownerBody.healthComponent.fullCombinedHealth - (ownerBody.healthComponent.fullCombinedHealth - (ownerBody.healthComponent.health + ownerBody.healthComponent.shield))) * 0.02f,
+                        damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT,
+                        dotIndex = DotController.DotIndex.Bleed,
+                        position = ownerBody.corePosition,
+                        attacker = base.gameObject,
+                        procCoefficient = 0f,
+                        crit = false,
+                        damageColorIndex = DamageColorIndex.Bleed,
+                    };
+
+                    ownerBody.healthComponent.TakeDamage(damageInfo);
+                }
+            }
+        }
         private void ChainUpdate(float num)
         {
             Vector3 position = transform.position;
@@ -90,7 +121,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                 genericFloat = num,
             };
             effectData.SetHurtBoxReference(owner);
-            EffectManager.SpawnEffect(chain, effectData, transmit: false);
+
+            EffectManager.SpawnEffect(chain, effectData, transmit: true);
         }
 
         public override void OnExit()
@@ -99,6 +131,9 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 ownerBody = null;
             }
+
+            EntityState.Destroy(this.gameObject);
+
             base.OnExit();
         }
     }

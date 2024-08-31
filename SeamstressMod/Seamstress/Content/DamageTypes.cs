@@ -69,7 +69,7 @@ namespace SeamstressMod.Seamstress.Content
                 if (damageInfo.HasModdedDamageType(GainNeedles))
                 {
                     Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
-                    if (attackerBody.GetBuffCount(SeamstressBuffs.needles) < SeamstressStaticValues.maxNeedleAmount) attackerBody.AddBuff(SeamstressBuffs.needles);
+                    if (attackerBody.GetBuffCount(SeamstressBuffs.Needles) < SeamstressStaticValues.maxNeedleAmount) attackerBody.AddBuff(SeamstressBuffs.Needles);
                 }
                 if (damageInfo.HasModdedDamageType(SeamstressLifesteal))
                 {   

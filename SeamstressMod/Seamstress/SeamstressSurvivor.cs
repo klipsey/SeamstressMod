@@ -47,7 +47,7 @@ namespace SeamstressMod.Seamstress
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
-            crosshair = Modules.Assets.LoadCrosshair("SimpleDot"),
+            crosshair = Modules.HelperAssets.LoadCrosshair("SimpleDot"),
             podPrefab = null,
             initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressSpawnState)),
 
@@ -128,7 +128,7 @@ namespace SeamstressMod.Seamstress
             SeamstressAssets.Init(assetBundle);
             SeamstressBuffs.Init(assetBundle);
 
-            Dots.Init();
+            //Dots.Init();
 
             InitializeEntityStateMachines();
             InitializeSkills();
@@ -144,8 +144,9 @@ namespace SeamstressMod.Seamstress
         private void AdditionalBodySetup()
         {
             AddHitboxes();
-            bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.manipulatedCd);
-            bool tempAdd2(CharacterBody body) => body.HasBuff(SeamstressBuffs.manipulated);
+
+            bool tempAdd(CharacterBody body) => body.HasBuff(SeamstressBuffs.ManipulatedCd);
+            bool tempAdd2(CharacterBody body) => body.HasBuff(SeamstressBuffs.Manipulated);
             float pee(CharacterBody body) => 2f * body.radius;
 
             TempVisualEffectAPI.AddTemporaryVisualEffect(SeamstressAssets.sewnCdEffect, pee, tempAdd);
@@ -588,7 +589,7 @@ namespace SeamstressMod.Seamstress
 
             #region DefaultSkin
             //this creates a SkinDef with all default fields
-            SkinDef defaultSkin = Skins.CreateSkinDef("DEFAULT_SKIN",
+            SkinDef defaultSkin = SeamstressSkins.CreateSkinDef("DEFAULT_SKIN",
                 assetBundle.LoadAsset<Sprite>("texMainSkin"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
@@ -597,7 +598,7 @@ namespace SeamstressMod.Seamstress
             //pass in meshes as they are named in your assetbundle
             //currently not needed as with only 1 skin they will simply take the default meshes
             //uncomment this when you have another skin
-            defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+            defaultSkin.meshReplacements = Modules.SeamstressSkins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshSeamstress",
                 "meshScissorL",
                 "meshScissorR",
@@ -616,7 +617,7 @@ namespace SeamstressMod.Seamstress
             #region MasterySkin
             
             ////creating a new skindef as we did before
-            SkinDef masterySkin = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
+            SkinDef masterySkin = Modules.SeamstressSkins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME",
                 assetBundle.LoadAsset<Sprite>("texMonsoonBlue"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject
@@ -624,7 +625,7 @@ namespace SeamstressMod.Seamstress
 
             ////adding the mesh replacements as above. 
             ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
-            masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+            masterySkin.meshReplacements = Modules.SeamstressSkins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshPrincess",
                 "meshPrincessSwordL",
                 "meshPrincessSwordR",
@@ -650,13 +651,13 @@ namespace SeamstressMod.Seamstress
             };
             ////simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
             ///
-            SkinDef masterySkin2 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME2",
+            SkinDef masterySkin2 = Modules.SeamstressSkins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME2",
                 assetBundle.LoadAsset<Sprite>("texMonsoonRed"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject,
                 SeamstressUnlockables.masterySkinUnlockableDef);
 
-            masterySkin2.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+            masterySkin2.meshReplacements = Modules.SeamstressSkins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshPrincess",
                 "meshPrincessSwordL",
                 "meshPrincessSwordR",
@@ -676,12 +677,12 @@ namespace SeamstressMod.Seamstress
                     shouldActivate = false,
                 }
             };
-            SkinDef masterySkin3 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME3",
+            SkinDef masterySkin3 = Modules.SeamstressSkins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME3",
                 assetBundle.LoadAsset<Sprite>("ravenIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject, SeamstressUnlockables.masteryTyphoonSkinUnlockableDef);
 
-            masterySkin3.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+            masterySkin3.meshReplacements = Modules.SeamstressSkins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshRaven",
                 "meshShadowClawsL",
                 "meshShadowClawsR",
@@ -701,12 +702,12 @@ namespace SeamstressMod.Seamstress
                     shouldActivate = false,
                 }
             };
-            SkinDef masterySkin4 = Modules.Skins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME4",
+            SkinDef masterySkin4 = Modules.SeamstressSkins.CreateSkinDef(SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME4",
             assetBundle.LoadAsset<Sprite>("ravenIcon"),
             defaultRendererinfos,
             prefabCharacterModel.gameObject, SeamstressUnlockables.masteryTyphoonSkinUnlockableDef);
 
-            masterySkin4.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+            masterySkin4.meshReplacements = Modules.SeamstressSkins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshRavenAlt",
                 "meshShadowClawsL",
                 "meshShadowClawsR",
@@ -755,14 +756,82 @@ namespace SeamstressMod.Seamstress
         private void AddHooks()
         {
             HUD.onHudTargetChangedGlobal += HUDSetup;
-            On.RoR2.HealthComponent.Heal += new On.RoR2.HealthComponent.hook_Heal(HealthComponent_Heal);
-            On.RoR2.CharacterModel.UpdateOverlays += new On.RoR2.CharacterModel.hook_UpdateOverlays(CharacterModel_UpdateOverlays);
-            On.RoR2.HealthComponent.TakeDamage += new On.RoR2.HealthComponent.hook_TakeDamage(HealthComponent_TakeDamage);
-            On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
+            On.RoR2.HealthComponent.Heal += HealthComponent_Heal;
+            On.RoR2.CharacterModel.UpdateOverlays += CharacterModel_UpdateOverlays;
+            On.RoR2.CharacterModel.UpdateOverlayStates += CharacterModel_UpdateOverlayStates;
+            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
             On.RoR2.UI.LoadoutPanelController.Rebuild += LoadoutPanelController_Rebuild;
-            On.RoR2.GenericSkill.SetBonusStockFromBody += new On.RoR2.GenericSkill.hook_SetBonusStockFromBody(GenericSkill_SetBonusStockFromBody);
+            On.RoR2.GenericSkill.SetBonusStockFromBody += GenericSkill_SetBonusStockFromBody;
             On.RoR2.Items.ImmuneToDebuffBehavior.OverrideDot += ImmuneToDebuffBehavior_OverrideDot;
+
+            R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+
             if (SeamstressPlugin.emotesInstalled) Emotes();
+        }
+        private void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
+        {
+            orig.Invoke(self);
+
+            if (!self || !self.body || self.body.baseNameToken != "KENKO_SEAMSTRESS_NAME")
+            {
+                return;
+            }
+
+            SeamstressController s = self.body.GetComponent<SeamstressController>();
+
+            AddOverlay(s.blue ? SeamstressAssets.insatiableOverlayMat2 : SeamstressAssets.insatiableOverlayMat, self.body.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && s.hasStartedInsatiable == false);
+
+            if (self.body.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && s.hasStartedInsatiable == false)
+            {
+                TemporaryOverlayInstance temporaryOverlayInstance = TemporaryOverlayManager.AddOverlay(self.gameObject);
+                temporaryOverlayInstance.duration = 0.6f;
+                temporaryOverlayInstance.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
+                temporaryOverlayInstance.animateShaderAlpha = true;
+                temporaryOverlayInstance.destroyComponentOnEnd = true;
+                temporaryOverlayInstance.originalMaterial = s.blue ? SeamstressAssets.insatiableOverlayMat2 : SeamstressAssets.insatiableOverlayMat;
+            }
+
+            if (self.body.HasBuff(SeamstressBuffs.ParryStart))
+            {
+                TemporaryOverlayInstance temporaryOverlayInstance = TemporaryOverlayManager.AddOverlay(self.gameObject);
+                temporaryOverlayInstance.duration = 0.4f;
+                temporaryOverlayInstance.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                temporaryOverlayInstance.animateShaderAlpha = true;
+                temporaryOverlayInstance.destroyComponentOnEnd = true;
+                temporaryOverlayInstance.originalMaterial = SeamstressAssets.parryMat;
+            }
+
+            void AddOverlay(Material overlayMaterial, bool condition)
+            {
+                if (self.activeOverlayCount < CharacterModel.maxOverlays && condition)
+                {
+                    self.currentOverlays[self.activeOverlayCount++] = overlayMaterial;
+                }
+            }
+        }
+
+        private bool CharacterModel_UpdateOverlayStates(On.RoR2.CharacterModel.orig_UpdateOverlayStates orig, CharacterModel self)
+        {
+            var flag = orig.Invoke(self);
+
+            if (!self || !self.body || self.body.baseNameToken != "KENKO_SEAMSTRESS_NAME")
+            {
+                return flag;
+            }
+
+            SeamstressController s = self.body.GetComponent<SeamstressController>();
+
+            SetOverlayFlag(self.baseRendererInfos.Length, self.body.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && s.hasStartedInsatiable == false);
+
+            return self.oldOverlays != self.activeOverlays || flag;
+
+            void SetOverlayFlag(int index, bool condition)
+            {
+                if (condition)
+                {
+                    self.activeOverlays |= 1 << index;
+                }
+            }
         }
 
         private bool ImmuneToDebuffBehavior_OverrideDot(On.RoR2.Items.ImmuneToDebuffBehavior.orig_OverrideDot orig, InflictDotInfo inflictDotInfo)
@@ -802,19 +871,19 @@ namespace SeamstressMod.Seamstress
             {
                 float currentBarrier = 0;
                 CharacterBody victimBody = self.body;
-                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+                if (victimBody && victimBody.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
                 {
-                    if (victimBody.HasBuff(SeamstressBuffs.parryStart) && damageInfo.damage > 0)
+                    if (victimBody.HasBuff(SeamstressBuffs.ParryStart) && damageInfo.damage > 0)
                     {
-                        victimBody.RemoveBuff(SeamstressBuffs.parryStart);
-                        if (!victimBody.HasBuff(SeamstressBuffs.parrySuccess))
+                        victimBody.RemoveBuff(SeamstressBuffs.ParryStart);
+                        if (!victimBody.HasBuff(SeamstressBuffs.ParrySuccess))
                         {
-                            victimBody.AddBuff(SeamstressBuffs.parrySuccess);
+                            victimBody.AddBuff(SeamstressBuffs.ParrySuccess);
                         }
                         victimBody.AddTimedBuff(RoR2Content.Buffs.Immune, SeamstressStaticValues.parryWindow + 0.5f);
                         damageInfo.rejected = true;
                     }
-                    else if (victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex != Dots.SeamstressSelfBleed)
+                    else if (victimBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && damageInfo.dotIndex != Dots.SeamstressSelfBleed)
                     {
                         SeamstressController seamCom = victimBody.gameObject.GetComponent<SeamstressController>();
                         if (seamCom && !victimBody.HasBuff(RoR2Content.Buffs.HiddenInvincibility))
@@ -826,14 +895,15 @@ namespace SeamstressMod.Seamstress
                             damageInfo.rejected = true;
                         }
                     }
-                    else if(victimBody.HasBuff(SeamstressBuffs.instatiable) && damageInfo.dotIndex == Dots.SeamstressSelfBleed)
+                    else if(victimBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
                     {
                         currentBarrier = victimBody.healthComponent.barrier;
-                        victimBody.healthComponent.AddBarrier(-currentBarrier);
+                        if(currentBarrier > 0f) victimBody.healthComponent.AddBarrier(-currentBarrier);
                     }
                 }
                 orig.Invoke(self, damageInfo);
-                if (victimBody && victimBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+
+                if (victimBody && victimBody.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
                 {
                     if(currentBarrier > 0) victimBody.healthComponent.AddBarrier(currentBarrier);
                     victimBody.RecalculateStats();
@@ -844,56 +914,16 @@ namespace SeamstressMod.Seamstress
                 orig.Invoke(self, damageInfo);
             }
         }
-        private void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
-        {
-            orig.Invoke(self);
-            if (!self || !self.body || self.body.baseNameToken != "KENKO_SEAMSTRESS_NAME")
-            {
-                return;
-            }
-            SeamstressController s = self.body.GetComponent<SeamstressController>();
-            if (self.body.HasBuff(SeamstressBuffs.instatiable) && s.hasStartedInsatiable == false)
-            {
-                TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
-                temporaryOverlay.duration = SeamstressStaticValues.insatiableDuration;
-                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0.4f);
-                temporaryOverlay.animateShaderAlpha = true;
-                temporaryOverlay.destroyComponentOnEnd = true;
-                temporaryOverlay.originalMaterial = s.blue ? SeamstressAssets.insatiableOverlayMat2 : SeamstressAssets.insatiableOverlayMat;
-                temporaryOverlay.AddToCharacerModel(self);
-                s.inInsatiableSkill = true;
-            }
-            else if (!self.body.HasBuff(SeamstressBuffs.instatiable) && s.hasStartedInsatiable == true)
-            {
-                s.inInsatiableSkill = false;
-                if (self.gameObject.GetComponent<TemporaryOverlay>() != null)
-                {
-                    UnityEngine.Object.Destroy(self.gameObject.GetComponent<TemporaryOverlay>());
-                }
-            }
-            if (self.body.HasBuff(SeamstressBuffs.parryStart))
-            {
-                TemporaryOverlay temporaryOverlay = self.gameObject.AddComponent<TemporaryOverlay>();
-                temporaryOverlay.duration = 0.4f;
-                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                temporaryOverlay.animateShaderAlpha = true;
-                temporaryOverlay.destroyComponentOnEnd = true;
-                temporaryOverlay.originalMaterial = SeamstressAssets.parryMat;
-                temporaryOverlay.AddToCharacerModel(self);
-            }
-        }
-
         private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen = true)
         {
-            if (self && self.body.HasBuff(SeamstressBuffs.instatiable) && self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if (self && self.body.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && self.body.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
             {
                 amount *= SeamstressStaticValues.healConversion;
             }
             var res = orig(self, amount, procChainMask, nonRegen);
-            if (self.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if (self.body.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
             {
-                SeamstressController s;
-                if (self.body.TryGetComponent(out s) && self.body.HasBuff(SeamstressBuffs.instatiable))
+                if (self.body.GetComponent<SeamstressController>() && self.body.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
                 {
                     if (self.health >= self.fullHealth) self.AddBarrier(amount / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
                     else self.AddBarrier((res / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion)) / 2f);
@@ -909,40 +939,40 @@ namespace SeamstressMod.Seamstress
             }
             else orig.Invoke(self, newBonusStockFromBody);
         }
-        private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
-        {
-            orig(self);
 
-            if (self && self.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
+        {
+            if (sender.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
             {
-                SeamstressController seamstressController = self.GetComponent<SeamstressController>();
-                HealthComponent healthComponent = self.GetComponent<HealthComponent>();
-                SkillLocator skillLocator = self.GetComponent<SkillLocator>();
+                SeamstressController seamstressController = sender.GetComponent<SeamstressController>();
+                HealthComponent healthComponent = sender.GetComponent<HealthComponent>();
+                SkillLocator skillLocator = sender.GetComponent<SkillLocator>();
                 if (seamstressController && healthComponent && skillLocator)
                 {
-                    float healthMissing = (healthComponent.fullCombinedHealth * self.cursePenalty) - (healthComponent.health + healthComponent.shield / 2f);
+                    float healthMissing = (healthComponent.fullCombinedHealth * sender.cursePenalty) - (healthComponent.health + healthComponent.shield / 2f);
                     float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
-                    if (seamstressController.inInsatiableSkill && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") self.baseDamage = SeamstressStaticValues.baseDamage + fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
-                    else self.baseDamage = SeamstressStaticValues.baseDamage + healthMissing * SeamstressStaticValues.passiveScaling;
+                    if (sender.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") args.baseDamageAdd += fakeHealthMissing * SeamstressStaticValues.passiveScaling + healthMissing * SeamstressStaticValues.passiveScaling;
+                    else args.baseDamageAdd += healthMissing * SeamstressStaticValues.passiveScaling;
                 }
-                if(self.HasBuff(SeamstressBuffs.instatiable))
+                if (sender.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
                 {
-                    self.attackSpeed += .2f;
-                    self.moveSpeed += 2f;
+                    args.attackSpeedMultAdd += .2f;
+                    args.baseMoveSpeedAdd += 2f;
                 }
-                if (!self.HasBuff(SeamstressBuffs.scissorLeftBuff))
+                if (!sender.HasBuff(SeamstressBuffs.ScissorLeftBuff))
                 {
-                    self.attackSpeed += .1f;
+                    args.attackSpeedMultAdd += .1f;
                 }
-                if (!self.HasBuff(SeamstressBuffs.scissorRightBuff))
+                if (!sender.HasBuff(SeamstressBuffs.ScissorRightBuff))
                 {
-                    self.attackSpeed += .1f;
+                    args.attackSpeedMultAdd += .1f;
                 }
-                if (self.inventory)
+                if (sender.inventory)
                 {
-                    if (self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
+                    if (sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)
                     {
-                        self.attackSpeed += .1f * self.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
+                        args.attackSpeedMultAdd += .1f * sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid);
                     }
                 }
             }

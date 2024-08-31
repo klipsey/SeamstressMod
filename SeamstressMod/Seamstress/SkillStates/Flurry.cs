@@ -41,7 +41,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             bonusSwingEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsSlashEffect2 : SeamstressAssets.scissorsSlashEffect;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeftSmall" : "SwingRightSmall";
             buffer = false;
-            if (insatiable)
+            if (isInsatiable)
             {
                 moddedDamageTypeHolder.Add(DamageTypes.CutDamage);
                 moddedDamageTypeHolder.Add(DamageTypes.GainNeedles);

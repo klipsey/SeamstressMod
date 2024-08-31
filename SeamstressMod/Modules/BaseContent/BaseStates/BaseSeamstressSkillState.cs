@@ -22,9 +22,11 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected int needleCount;
 
-        protected bool insatiable;
+        protected bool isInsatiable;
 
         protected bool inDash;
+
+        protected float fixedAge { get; set; }
 
         public override void OnEnter()
         {
@@ -34,13 +36,14 @@ namespace SeamstressMod.Modules.BaseStates
         }
         public override void FixedUpdate()
         {
-            base.FixedUpdate();
+            fixedAge += Time.fixedDeltaTime;
+            RefreshState();
         }
         protected void RefreshState()
         {
-            needleCount = characterBody.GetBuffCount(SeamstressBuffs.needles);
-            scissorRight = characterBody.HasBuff(SeamstressBuffs.scissorRightBuff);
-            scissorLeft = characterBody.HasBuff(SeamstressBuffs.scissorLeftBuff);
+            needleCount = characterBody.GetBuffCount(SeamstressBuffs.Needles);
+            scissorRight = characterBody.HasBuff(SeamstressBuffs.ScissorRightBuff);
+            scissorLeft = characterBody.HasBuff(SeamstressBuffs.ScissorLeftBuff);
 
             if (!seamstressController)
             {
@@ -52,7 +55,7 @@ namespace SeamstressMod.Modules.BaseStates
             }
             if (seamstressController)
             {
-                insatiable = seamstressController.inInsatiableSkill;
+                isInsatiable = characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff);
             }
         }
     }

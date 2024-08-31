@@ -28,7 +28,7 @@ namespace SeamstressMod.Seamstress.Components
         {
             if(hasAuthority)
             {
-                if (characterMotor.jumpCount >= characterBody.maxJumpCount && consumeNeedle && characterBody.HasBuff(SeamstressBuffs.needles))
+                if (characterMotor.jumpCount >= characterBody.maxJumpCount && consumeNeedle && characterBody.HasBuff(SeamstressBuffs.Needles))
                 {
                     CmdUpdateNeedles();
                     consumeNeedle = false;
@@ -44,7 +44,7 @@ namespace SeamstressMod.Seamstress.Components
                 Log.Error("Network Server Not Active");
                 return;
             }
-            characterBody.RemoveBuff(SeamstressBuffs.needles);
+            characterBody.RemoveBuff(SeamstressBuffs.Needles);
         }
     }
 }

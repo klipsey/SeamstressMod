@@ -172,13 +172,13 @@ namespace SeamstressMod.Seamstress.SkillStates
                 modelTransform = GetModelTransform();
                 if (modelTransform && this.destealthMaterial)
                 {
-                    TemporaryOverlay temporaryOverlay = animator.gameObject.AddComponent<TemporaryOverlay>();
-                    temporaryOverlay.duration = 1f;
-                    temporaryOverlay.destroyComponentOnEnd = true;
-                    temporaryOverlay.originalMaterial = this.destealthMaterial;
-                    temporaryOverlay.inspectorCharacterModel = animator.gameObject.GetComponent<CharacterModel>();
-                    temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                    temporaryOverlay.animateShaderAlpha = true;
+                    TemporaryOverlayInstance temporaryOverlayInstance = TemporaryOverlayManager.AddOverlay(base.gameObject);
+                    temporaryOverlayInstance.duration = 1f;
+                    temporaryOverlayInstance.destroyComponentOnEnd = true;
+                    temporaryOverlayInstance.originalMaterial = this.destealthMaterial;
+                    temporaryOverlayInstance.inspectorCharacterModel = animator.gameObject.GetComponent<CharacterModel>();
+                    temporaryOverlayInstance.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                    temporaryOverlayInstance.animateShaderAlpha = true;
                 }
                 if (characterModel)
                 {

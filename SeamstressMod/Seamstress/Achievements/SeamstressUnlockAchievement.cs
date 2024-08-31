@@ -8,7 +8,7 @@ using System.Text;
 
 namespace SeamstressMod.Seamstress.Achievements
 {
-    [RegisterAchievement(identifier, unlockableIdentifier, null, null)]
+    [RegisterAchievement(identifier, unlockableIdentifier, null, 0)]
     public class SeamstressUnlockAchievement : BaseAchievement
     {
         public const string identifier = SeamstressSurvivor.SEAMSTRESS_PREFIX + "UNLOCK_ACHIEVEMENT";

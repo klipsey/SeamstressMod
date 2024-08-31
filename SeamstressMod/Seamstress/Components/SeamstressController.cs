@@ -8,15 +8,16 @@ using SeamstressMod.Seamstress.Content;
 using R2API.Networking.Interfaces;
 using RoR2.Projectile;
 using EntityStates;
+using RoR2.Skills;
+using TMPro;
 
 namespace SeamstressMod.Seamstress.Components
 {
-    public class SeamstressController : MonoBehaviour
+    public class SeamstressController : NetworkBehaviour
     {
         private CharacterBody characterBody;
         private ChildLocator childLocator;
         private CharacterMotor characterMotor;
-        private HealthComponent healthComponent;
         private SkillLocator skillLocator;
         private Animator animator;
         private ModelSkinController skinController;
@@ -61,8 +62,6 @@ namespace SeamstressMod.Seamstress.Components
 
         private float insatiableStopwatch = 0f;
 
-        public bool inInsatiableSkill = false;
-
         public bool hasStartedInsatiable = false;
 
         public bool hopooHasHopped;
@@ -71,7 +70,6 @@ namespace SeamstressMod.Seamstress.Components
         {
             characterBody = GetComponent<CharacterBody>();
             characterMotor = GetComponent<CharacterMotor>();
-            healthComponent = GetComponent<HealthComponent>();
             skillLocator = GetComponent<SkillLocator>();
             ModelLocator modelLocator = this.GetComponent<ModelLocator>();
             childLocator = modelLocator.modelBaseTransform.GetComponentInChildren<ChildLocator>();
@@ -129,9 +127,10 @@ namespace SeamstressMod.Seamstress.Components
             IsInsatiable();
         }
 
+
         public bool HasNeedles()
         {
-            return this.characterBody.HasBuff(SeamstressBuffs.needles);
+            return this.characterBody.HasBuff(SeamstressBuffs.Needles);
         }
         public void ReactivateScissor(string scissorName, bool activate)
         {
@@ -209,7 +208,7 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void IsInsatiable()
         {
-            if (inInsatiableSkill && !hasStartedInsatiable)
+            if (characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && !hasStartedInsatiable)
             {
                 EnableInstatiableLayer();
                 if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
@@ -224,48 +223,61 @@ namespace SeamstressMod.Seamstress.Components
                 if (modelTransform)
                 {
                     #region overlay
-                    TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
-                    temporaryOverlay.duration = 1f;
-                    temporaryOverlay.destroyComponentOnEnd = true;
-                    temporaryOverlay.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/matOnFire.mat").WaitForCompletion();
-                    temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
-                    temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                    temporaryOverlay.animateShaderAlpha = true;
+                    TemporaryOverlayInstance temporaryOverlayInstance = TemporaryOverlayManager.AddOverlay(base.gameObject);
+                    temporaryOverlayInstance.duration = 1f;
+                    temporaryOverlayInstance.destroyComponentOnEnd = true;
+                    temporaryOverlayInstance.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/matOnFire.mat").WaitForCompletion();
+                    temporaryOverlayInstance.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
+                    temporaryOverlayInstance.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                    temporaryOverlayInstance.animateShaderAlpha = true;
                     #endregion
                 }
 
                 hasStartedInsatiable = true;
             }
-            else if (!inInsatiableSkill && hasStartedInsatiable)
+            else if (!characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && hasStartedInsatiable)
             {
-                DisableInstatiableLayer();
-                if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
-                if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
-
-                Transform modelTransform = characterBody.modelLocator.modelTransform;
-                if (modelTransform)
+                if (skillLocator.utility.skillDef.skillIndex == SeamstressSurvivor.snapBackSkillDef.skillIndex && insatiableStopwatch <= SeamstressStaticValues.insatiableDuration - 1f)
                 {
-                    TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
-                    temporaryOverlay.duration = 1f;
-                    temporaryOverlay.destroyComponentOnEnd = true;
-                    temporaryOverlay.originalMaterial = this.destealthMaterial;
-                    temporaryOverlay.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
-                    temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                    temporaryOverlay.animateShaderAlpha = true;
+                    EndInsatiableManually();
+
+                    skillLocator.utility.ExecuteIfReady();
+
+                    hasStartedInsatiable = false;
                 }
-                Instantiate(insatiableEndPrefab, characterBody.modelLocator.transform);
-                Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
-                hasStartedInsatiable = false;
+                else
+                {
+                    EndInsatiableManually();
+
+                    hasStartedInsatiable = false;
+                }
             }
-            if(!inInsatiableSkill && !hasStartedInsatiable && skillLocator.utility.skillDef == SeamstressSurvivor.snapBackSkillDef && insatiableStopwatch <= 11f)
+        }
+
+        public void EndInsatiableManually()
+        {
+            DisableInstatiableLayer();
+            if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
+            if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
+
+            Transform modelTransform = characterBody.modelLocator.modelTransform;
+            if (modelTransform)
             {
-                skillLocator.utility.ExecuteIfReady();
+                TemporaryOverlayInstance temporaryOverlayInstance = TemporaryOverlayManager.AddOverlay(base.gameObject);
+                temporaryOverlayInstance.duration = 1f;
+                temporaryOverlayInstance.destroyComponentOnEnd = true;
+                temporaryOverlayInstance.originalMaterial = this.destealthMaterial;
+                temporaryOverlayInstance.inspectorCharacterModel = modelTransform.GetComponent<CharacterModel>();
+                temporaryOverlayInstance.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                temporaryOverlayInstance.animateShaderAlpha = true;
             }
+            Instantiate(insatiableEndPrefab, characterBody.modelLocator.transform);
+            Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
         }
         //end sound
         private void InsatiableSound()
         {
-            if (inInsatiableSkill)
+            if (characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
             {
                 if (insatiableStopwatch < 2f && !hasPlayed)
                 {

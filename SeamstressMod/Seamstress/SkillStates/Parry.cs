@@ -29,7 +29,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (NetworkServer.active)
             {
                 CleanBuffsServer();
-                characterBody.AddBuff(SeamstressBuffs.parryStart);
+                characterBody.AddBuff(SeamstressBuffs.ParryStart);
             }
             PlayAnimation("FullBody, Override", "Parry", "Slash.playbackRate", duration * 1.5f);
         }
@@ -37,7 +37,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            bool success = characterBody.HasBuff(SeamstressBuffs.parrySuccess);
+            bool success = characterBody.HasBuff(SeamstressBuffs.ParrySuccess);
             if (base.isAuthority && base.fixedAge >= duration && success)
             {
                 DoAttackServer();
@@ -60,13 +60,13 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             if (NetworkServer.active)
             {
-                if (characterBody.HasBuff(SeamstressBuffs.parryStart))
+                if (characterBody.HasBuff(SeamstressBuffs.ParryStart))
                 {
-                    characterBody.RemoveBuff(SeamstressBuffs.parryStart);
+                    characterBody.RemoveBuff(SeamstressBuffs.ParryStart);
                 }
-                if (characterBody.HasBuff(SeamstressBuffs.parrySuccess))
+                if (characterBody.HasBuff(SeamstressBuffs.ParrySuccess))
                 {
-                    characterBody.RemoveBuff(SeamstressBuffs.parrySuccess);
+                    characterBody.RemoveBuff(SeamstressBuffs.ParrySuccess);
                 }
             }
         }
@@ -77,7 +77,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 return;
             }
-            characterBody.AddTimedBuff(SeamstressBuffs.instatiable, SeamstressStaticValues.insatiableDuration / 1.5f, 1);
+            characterBody.AddTimedBuff(SeamstressBuffs.SeamstressInsatiableBuff, SeamstressStaticValues.insatiableDuration / 1.5f, 1);
             CleanBuffsServer();
             if (parrySoundDef)
             {

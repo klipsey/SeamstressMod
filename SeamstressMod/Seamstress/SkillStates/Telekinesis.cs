@@ -8,8 +8,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements.UIR;
 using static RoR2.CharacterMotor;
-using static UnityEngine.ParticleSystem.PlaybackState;
-
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
@@ -105,7 +103,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     DefaultVictim();
                     if (NetworkServer.active)
                     {
-                        if (!victimBody.HasBuff(SeamstressBuffs.manipulated)) victimBody.AddBuff(SeamstressBuffs.manipulated);
+                        if (!victimBody.HasBuff(SeamstressBuffs.Manipulated)) victimBody.AddBuff(SeamstressBuffs.Manipulated);
                     }
                     base.PlayCrossfade("Gesture, Override", "Manipulate", "Manipulate.playbackRate", (6f / this.attackSpeedStat) * 0.15f, 0.05f);
 
@@ -193,10 +191,10 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 if (NetworkServer.active)
                 {
-                    if (victimBody.HasBuff(SeamstressBuffs.manipulated))
+                    if (victimBody.HasBuff(SeamstressBuffs.Manipulated))
                     {
-                        victimBody.RemoveBuff(SeamstressBuffs.manipulated);
-                        victimBody.AddTimedBuff(SeamstressBuffs.manipulatedCd, Mathf.Min(SeamstressStaticValues.telekinesisCooldown, Mathf.Max(0.5f, SeamstressStaticValues.telekinesisCooldown * characterBody.skillLocator.secondary.cooldownScale - characterBody.skillLocator.secondary.flatCooldownReduction)));
+                        victimBody.RemoveBuff(SeamstressBuffs.Manipulated);
+                        victimBody.AddTimedBuff(SeamstressBuffs.ManipulatedCd, Mathf.Min(SeamstressStaticValues.telekinesisCooldown, Mathf.Max(0.5f, SeamstressStaticValues.telekinesisCooldown * characterBody.skillLocator.secondary.cooldownScale - characterBody.skillLocator.secondary.flatCooldownReduction)));
                     }
                 }
                 if (victimBody.gameObject.GetComponent<DetonateOnImpact>())
@@ -287,7 +285,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                     blastAttack.damageColorIndex = DamageColorIndex.Default;
                     blastAttack.damageType = DamageType.Stun1s | DamageType.AOE;
-                    if (insatiable)
+                    if (isInsatiable)
                     {
                         blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
                     }

@@ -40,7 +40,7 @@ namespace SeamstressMod.Seamstress.Components
             {
                 bool active = false;
                 NeedleSpriteDisplay needleSpriteDisplay = needleSpriteDisplays[i];
-                int skill = hudElement.targetCharacterBody.GetBuffCount(SeamstressBuffs.needles);
+                int skill = hudElement.targetCharacterBody.GetBuffCount(SeamstressBuffs.Needles);
                 if (skill > 0 && skill >= needleSpriteDisplay.minimumStockCountToBeValid && (skill <= needleSpriteDisplay.maximumStockCountToBeValid || needleSpriteDisplay.maximumStockCountToBeValid < 0))
                 {
                     active = true;

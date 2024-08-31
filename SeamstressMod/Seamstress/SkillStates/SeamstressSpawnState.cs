@@ -32,13 +32,12 @@ namespace SeamstressMod.Seamstress.SkillStates
             Transform modelTransform = GetModelTransform();
             if (modelTransform)
             {
-                TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
-                temporaryOverlay.duration = 1.5f;
-                temporaryOverlay.animateShaderAlpha = true;
-                temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                temporaryOverlay.destroyComponentOnEnd = true;
-                temporaryOverlay.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDissolve.mat").WaitForCompletion();
-                temporaryOverlay.AddToCharacerModel(modelTransform.GetComponent<CharacterModel>());
+                TemporaryOverlayInstance temporaryInstance = TemporaryOverlayManager.AddOverlay(base.gameObject);
+                temporaryInstance.duration = 1.5f;
+                temporaryInstance.animateShaderAlpha = true;
+                temporaryInstance.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+                temporaryInstance.destroyComponentOnEnd = true;
+                temporaryInstance.originalMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDissolve.mat").WaitForCompletion();
             }
         }
 

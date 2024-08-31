@@ -84,8 +84,6 @@ hkryu - Icon and art https://www.instagram.com/hkryu_/ https://twitter.com/___hk
 
 TheTimeSweeper - Incredible new Henry template and responsible for fixing like half my bugs.
 
-rob - Creator of the glorious Henry template. Also, his code for other survivors helped me get started.
-
 Gemo - Eclipse skin model (Raven)
 
 Feilong - Seamstress skin designer (Raven) and permission to use the assets.

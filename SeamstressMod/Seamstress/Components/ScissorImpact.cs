@@ -4,7 +4,6 @@ using UnityEngine.Events;
 using UnityEngine.Networking;
 using RoR2.Projectile;
 using RoR2;
-using static UnityEngine.SendMouseEvents;
 using R2API;
 using SeamstressMod.Seamstress.Content;
 
@@ -202,7 +201,7 @@ namespace SeamstressMod.Seamstress.Components
                     impactAttack.procCoefficient = 0.7f;
                     impactAttack.radius = 4f;
                     impactAttack.damageType = DamageType.Stun1s | DamageType.AOE;
-                    if (owner.GetComponent<SeamstressController>().inInsatiableSkill)
+                    if (owner.GetComponent<CharacterBody>().HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
                     {
                         impactAttack.AddModdedDamageType(DamageTypes.CutDamage);
                     }

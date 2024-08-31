@@ -65,6 +65,7 @@ namespace SeamstressMod.Modules.BaseStates
         {
             base.OnEnter();
             duration = baseDuration / attackSpeedStat;
+            Log.Debug(duration + " and  base " + baseDuration);
             scissorDuration = baseScissorDuration / attackSpeedStat;
 
             animator = GetModelAnimator();

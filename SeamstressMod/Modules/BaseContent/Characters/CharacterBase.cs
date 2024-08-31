@@ -32,7 +32,7 @@ namespace SeamstressMod.Modules.Characters
         public virtual void Initialize()
         {
             instance = this as T;
-            assetBundle = Assets.LoadAssetBundle(assetBundleName);
+            assetBundle = HelperAssets.LoadAssetBundle(assetBundleName);
 
             InitializeCharacter();
         }

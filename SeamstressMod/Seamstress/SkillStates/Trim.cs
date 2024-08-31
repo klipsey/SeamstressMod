@@ -70,7 +70,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     }
                     break;
             }
-            if (insatiable)
+            if (isInsatiable)
             {
                 moddedDamageTypeHolder.Add(DamageTypes.CutDamage);
                 moddedDamageTypeHolder.Add(DamageTypes.GainNeedles);

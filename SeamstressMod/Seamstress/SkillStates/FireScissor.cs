@@ -100,7 +100,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
                 float num = sceptered ? 1.5f : SeamstressStaticValues.basePickupCooldown;
                 projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilterComponent>().pickupTimer = Mathf.Max(0.5f, num * base.skillLocator.special.cooldownScale - base.skillLocator.special.flatCooldownReduction);
-                if (insatiable)
+                if (isInsatiable)
                 {
                     projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
                 }

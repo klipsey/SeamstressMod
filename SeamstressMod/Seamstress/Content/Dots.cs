@@ -46,11 +46,11 @@ namespace SeamstressMod.Seamstress.Content
             private void FixedUpdate()
             {
                 if (!NetworkServer.active) return;
-                if (characterBody.HasBuff(SeamstressBuffs.instatiable) || characterBody.HasBuff(SeamstressBuffs.seamstressBleedBuff))
+                if (characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) || characterBody.HasBuff(SeamstressBuffs.SeamstressBleedBuff))
                 {
-                    if (!stitchDot) stitchDot = Instantiate(SeamstressAssets.stitchEffect, bleedPosition);
+                    if (!stitchDot) stitchDot = Instantiate(SeamstressAssets.bleedEffect, bleedPosition);
                 }
-                else if (!characterBody.HasBuff(SeamstressBuffs.instatiable) || !characterBody.HasBuff(SeamstressBuffs.seamstressBleedBuff))
+                else if (!characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) || !characterBody.HasBuff(SeamstressBuffs.SeamstressBleedBuff))
                 {
                     Destroy(stitchDot);
                     stitchDot = null;
@@ -74,7 +74,7 @@ namespace SeamstressMod.Seamstress.Content
                 interval = 0.2f,
                 damageCoefficient = 0f,
                 damageColorIndex = DamageColorIndex.SuperBleed,
-                associatedBuff = SeamstressBuffs.instatiable,
+                associatedBuff = SeamstressBuffs.SeamstressInsatiableBuff,
                 resetTimerOnAdd = true,
             }, selfDamageBehaviour, visual);
         }

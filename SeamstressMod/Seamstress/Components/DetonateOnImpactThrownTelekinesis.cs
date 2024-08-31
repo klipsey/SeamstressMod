@@ -88,7 +88,7 @@ namespace SeamstressMod.Seamstress.Components
             if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonate && !hasFired)
             {
                 CharacterBody component = attacker.GetComponent<CharacterBody>();
-                float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage * component.GetBuffCount(SeamstressBuffs.needles)), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage * component.GetBuffCount(SeamstressBuffs.needles), victimBody.healthComponent.fullHealth * 0.75f);
+                float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage * component.GetBuffCount(SeamstressBuffs.Needles)), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage * component.GetBuffCount(SeamstressBuffs.Needles), victimBody.healthComponent.fullHealth * 0.75f);
                 EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
                 {
                     origin = victimBody.footPosition,
@@ -100,7 +100,7 @@ namespace SeamstressMod.Seamstress.Components
                     origin = victimBody.footPosition,
                     rotation = Quaternion.identity,
                 }, true);
-                SeamstressController seamCom = attacker.GetComponent<SeamstressController>();
+                SeamstressController seamstressController = attacker.GetComponent<SeamstressController>();
                 BlastAttack blastAttack = new BlastAttack();
                 blastAttack.position = victimBody.footPosition;
                 blastAttack.baseDamage = bonusDamage;
@@ -116,7 +116,7 @@ namespace SeamstressMod.Seamstress.Components
                 blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                 blastAttack.damageColorIndex = DamageColorIndex.Default;
                 blastAttack.damageType = DamageType.Stun1s | DamageType.AOE;
-                if (seamCom.inInsatiableSkill)
+                if (attacker.GetComponent<CharacterBody>().HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
                 {
                     blastAttack.AddModdedDamageType(DamageTypes.CutDamage);
                 }

@@ -5,7 +5,7 @@ using SeamstressMod.Seamstress;
 namespace SeamstressMod.Seamstress.Achievements
 {
     //automatically creates language tokens "ACHIEVMENT_{identifier.ToUpper()}_NAME" and "ACHIEVMENT_{identifier.ToUpper()}_DESCRIPTION" 
-    [RegisterAchievement(identifier, unlockableIdentifier, null, null)]
+    [RegisterAchievement(identifier, unlockableIdentifier, null, 0)]
     public class SeamstressMasteryAchievement : BaseMasteryAchievement
     {
         public const string identifier = SeamstressSurvivor.SEAMSTRESS_PREFIX + "masteryAchievement";

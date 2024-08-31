@@ -1,3 +1,9 @@
+# 1.3.6
+
+- Playable in SOTS
+- Many known framerate bugs cause inconsistent vfx duration or skill durations so ignore it until Gearbox fixes their crap
+- Largest current bugs are the vfx tether disappearing quickly and enemies clipping into the ground w alt secondary
+
 # 1.2.6
 
 - Fixed scissor animations

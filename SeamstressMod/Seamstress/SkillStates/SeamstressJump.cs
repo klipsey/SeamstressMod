@@ -40,7 +40,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (seamstressController.blue) projectilePrefab = SeamstressAssets.needlePrefab2;
                 else projectilePrefab = SeamstressAssets.needlePrefab;
             }
-            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount || this.characterBody.GetBuffCount(SeamstressBuffs.needles) > 0) && this.seamstressController.blinkCd >= SeamstressStaticValues.blinkCooldown) && this.seamstressController.blinkReady == false)
+            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount || this.characterBody.GetBuffCount(SeamstressBuffs.Needles) > 0) && this.seamstressController.blinkCd >= SeamstressStaticValues.blinkCooldown) && this.seamstressController.blinkReady == false)
             {
                 seamstressController.blinkCd = 0f;
                 seamstressController.blinkReady = true;
