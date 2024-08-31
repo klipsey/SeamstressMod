@@ -47,7 +47,7 @@ namespace SeamstressMod.Seamstress
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
             sortPosition = 100,
 
-            crosshair = Modules.HelperAssets.LoadCrosshair("SimpleDot"),
+            crosshair = Modules.CharacterAssets.LoadCrosshair("SimpleDot"),
             podPrefab = null,
             initialStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SeamstressSpawnState)),
 

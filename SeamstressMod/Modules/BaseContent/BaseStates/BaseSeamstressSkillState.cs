@@ -26,8 +26,6 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected bool inDash;
 
-        protected float fixedAge { get; set; }
-
         public override void OnEnter()
         {
             RefreshState();
@@ -36,7 +34,7 @@ namespace SeamstressMod.Modules.BaseStates
         }
         public override void FixedUpdate()
         {
-            fixedAge += Time.fixedDeltaTime;
+            base.FixedUpdate();
             RefreshState();
         }
         protected void RefreshState()

@@ -102,7 +102,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            hitPauseTimer -= Time.fixedDeltaTime;
+            hitPauseTimer -= Time.deltaTime;
 
             if (hitPauseTimer <= 0f && inHitPause)
             {
@@ -111,7 +111,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             if (!inHitPause)
             {
-                stopwatch += Time.fixedDeltaTime;
+                stopwatch += Time.deltaTime;
                 if (inAir && isAuthority)
                 {
                     Vector3 velocity = characterDirection.forward * moveSpeedStat * Mathf.Lerp(3f, 1f, age / duration);

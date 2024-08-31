@@ -83,7 +83,7 @@ namespace SeamstressMod.Seamstress.Components
             {
                 enabled = false;
             }
-            trackerUpdateStopwatch += Time.fixedDeltaTime;
+            trackerUpdateStopwatch += Time.deltaTime;
             if (trackerUpdateStopwatch >= 1f / trackerUpdateFrequency)
             {
                 trackerUpdateStopwatch -= 1f / trackerUpdateFrequency;

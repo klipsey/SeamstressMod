@@ -98,10 +98,10 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void FixedUpdate()
         {
-            stopwatch += Time.fixedDeltaTime;
+            stopwatch += Time.deltaTime;
             if (stopwatch > delay)
             {
-                dashStopwatch += Time.fixedDeltaTime;
+                dashStopwatch += Time.deltaTime;
                 if (!hasFired)
                 {
                     Pull();

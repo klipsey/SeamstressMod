@@ -21,15 +21,14 @@ namespace SeamstressMod.Modules.BaseStates
         protected bool scissorLeft;
 
         protected bool insatiable;
-
-        protected float fixedAge { get; set; }
         public override void OnEnter()
         {
             base.OnEnter();
         }
         public override void FixedUpdate()
         {
-            fixedAge += Time.fixedDeltaTime;
+            base.FixedUpdate();
+
             RefreshState();
         }
         protected void RefreshState()

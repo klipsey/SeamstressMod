@@ -93,14 +93,14 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             if (!isDashing)
             {
-                stopwatch += Time.fixedDeltaTime;
+                stopwatch += Time.deltaTime;
             }
             else if (isAuthority)
             {
                 if (!inHitPause)
                 {
                     bool num = overlapAttack.Fire();
-                    stopwatch += Time.fixedDeltaTime;
+                    stopwatch += Time.deltaTime;
                     if (num)
                     {
                         if (!hasHit)
@@ -112,11 +112,11 @@ namespace SeamstressMod.Seamstress.SkillStates
                         inHitPause = true;
                         hitPauseTimer = hitPauseDuration / attackSpeedStat;
                     }
-                    characterMotor.rootMotion += dashVector * speedCoefficient * Time.fixedDeltaTime;
+                    characterMotor.rootMotion += dashVector * speedCoefficient * Time.deltaTime;
                 }
                 else
                 {
-                    hitPauseTimer -= Time.fixedDeltaTime;
+                    hitPauseTimer -= Time.deltaTime;
                     if (hitPauseTimer < 0f)
                     {
                         inHitPause = false;

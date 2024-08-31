@@ -26,7 +26,7 @@ namespace SeamstressMod.Seamstress.Components
 
         public void FixedUpdate()
         {
-            pickupTimer -= Time.fixedDeltaTime;
+            pickupTimer -= Time.deltaTime;
             if (pickupTimer <= 0 && !hasActivated)
             {
                 this.transform.root.Find("SeamstressTeamIndicator(Clone)").gameObject.SetActive(true);

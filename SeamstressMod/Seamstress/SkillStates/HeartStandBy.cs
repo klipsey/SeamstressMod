@@ -34,7 +34,6 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private float bleedTimer;
 
-        private float fixedAge;
         public override void OnEnter()
         {
             base.OnEnter();
@@ -55,9 +54,9 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public override void FixedUpdate()
         {
-            this.fixedAge += Time.fixedDeltaTime;
-            
-            if(ownerBody && ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
+            base.FixedUpdate();
+
+            if (ownerBody && ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
             {
                 HandleBleed();
                 if (!hasFired)
@@ -77,7 +76,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     ChainUpdate(snapBackDelay);
                 }
 
-                snapBackDelay -= Time.fixedDeltaTime;
+                snapBackDelay -= Time.deltaTime;
 
                 if (snapBackDelay <= 0.2f)
                 {
@@ -87,7 +86,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         private void HandleBleed()
         {
-            bleedTimer += Time.fixedDeltaTime;
+            bleedTimer += Time.deltaTime;
 
             if (bleedTimer >= bleedInterval)
             {

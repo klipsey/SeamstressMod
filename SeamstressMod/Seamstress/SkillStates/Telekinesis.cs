@@ -249,7 +249,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                         vector2 = victimRigid.velocity;
                         num2 = victimRigid.mass;
                     }
-                    else vector2.y += Physics.gravity.y * Time.fixedDeltaTime;
+                    else vector2.y += Physics.gravity.y * Time.deltaTime;
                     if(num2 < 1000f) num2 = Util.Remap(num2, 60f, 1500f, 60f, 125f);
                     float num3 = pullSuitabilityCurve.Evaluate(num2);
                     victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * (num3 * Mathf.Max(num2, 100f)) * num, alwaysApply: true, disableAirControlUntilCollision: false);

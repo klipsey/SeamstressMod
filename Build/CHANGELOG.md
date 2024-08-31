@@ -1,4 +1,12 @@
-# 1.3.6
+# 1.3.2
+
+- Fixed an animation
+
+# 1.3.1
+
+- un(fixed)deltaTime
+
+# 1.3.0
 
 - Playable in SOTS
 - Many known framerate bugs cause inconsistent vfx duration or skill durations so ignore it until Gearbox fixes their crap

@@ -84,7 +84,7 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void FixedUpdate()
         {
-            stopwatch += Time.fixedDeltaTime;
+            stopwatch += Time.deltaTime;
             if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonate && !hasFired)
             {
                 CharacterBody component = attacker.GetComponent<CharacterBody>();

@@ -103,19 +103,19 @@ namespace SeamstressMod.Seamstress.Components
         public void FixedUpdate()
         {
             if(this.characterMotor.isGrounded) hopooHasHopped = false;
-            blinkCd += Time.fixedDeltaTime;
-            if (insatiableStopwatch > 0f) insatiableStopwatch -= Time.fixedDeltaTime;
-            if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
+            blinkCd += Time.deltaTime;
+            if (insatiableStopwatch > 0f) insatiableStopwatch -= Time.deltaTime;
+            if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.deltaTime;
             if (checkStatsStopwatch >= 0.5)
             {
                 characterBody.MarkAllStatsDirty();
                 checkStatsStopwatch = 0f;
             }
-            else checkStatsStopwatch += Time.fixedDeltaTime;
+            else checkStatsStopwatch += Time.deltaTime;
 
             if(animOverrideTimer > 0)
             {
-                animOverrideTimer -= Time.fixedDeltaTime;
+                animOverrideTimer -= Time.deltaTime;
             }
             else if (animOverrideTimer < 0)
             {

@@ -36,7 +36,7 @@ namespace SeamstressMod.Modules
             }
             characterModel.baseRendererInfos = prefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
 
-            Modules.HelperAssets.ConvertAllRenderersToHopooShader(display);
+            Modules.CharacterAssets.ConvertAllRenderersToHopooShader(display);
 
             return display;
         }
