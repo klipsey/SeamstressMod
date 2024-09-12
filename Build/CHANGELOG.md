@@ -1,3 +1,7 @@
+# 1.3.6
+
+- Fixed Weaver for multiplayer
+
 # 1.3.5
 
 - Accidently left in debug logs
