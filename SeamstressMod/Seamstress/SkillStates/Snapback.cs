@@ -43,7 +43,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 if (characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
                 {
-                    characterBody.RemoveBuff(SeamstressBuffs.SeamstressInsatiableBuff);
+                    characterBody.ClearTimedBuffs(SeamstressBuffs.SeamstressInsatiableBuff);
                 }
                 Util.CleanseBody(base.characterBody, false, false, false, true, false, false);
             }

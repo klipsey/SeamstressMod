@@ -31,7 +31,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 CleanBuffsServer();
                 characterBody.AddBuff(SeamstressBuffs.ParryStart);
             }
-            PlayAnimation("FullBody, Override", "Parry", "Slash.playbackRate", duration * 1.5f);
+            PlayCrossfade("FullBody, Override", "Parry", "Slash.playbackRate", duration * 1.5f, duration * 0.05f);
         }
 
         public override void FixedUpdate()

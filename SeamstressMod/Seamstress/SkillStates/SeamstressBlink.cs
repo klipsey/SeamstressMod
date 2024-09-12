@@ -152,12 +152,12 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (characterMotor && characterDirection && base.isAuthority)
+            if (base.isAuthority && characterMotor && characterDirection)
             {
                 characterMotor.Motor.ForceUnground();
                 characterMotor.velocity = blinkVector * speedCoefficient;
             }
-            if (fixedAge >= duration && base.isAuthority)
+            if (base.isAuthority && fixedAge >= duration)
             {
                 outer.SetNextStateToMain();
             }

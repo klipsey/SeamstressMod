@@ -109,10 +109,6 @@ namespace SeamstressMod.Seamstress.SkillStates
 
                     this.playId = Util.PlaySound("sfx_ravager_charge_beam_loop", base.gameObject);
                 }
-                else
-                {
-                    Log.Debug("NO VICTIM");
-                }
             }
             else
             {
@@ -186,7 +182,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             AkSoundEngine.StopPlayingID(this.playId);
 
-            PlayAnimation("Gesture, Override", "BufferEmpty");
+            PlayCrossfade("Gesture, Override", "BufferEmpty", 0.05f);
             if (victimBody)
             {
                 if (NetworkServer.active)
@@ -221,7 +217,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             base.FixedUpdate();
             StartAimMode();
-            hitStopwatch += Time.deltaTime;
+            hitStopwatch += Time.fixedDeltaTime;
 
             if (victimRigid != null || victimMotor != null)
             {
@@ -249,7 +245,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                         vector2 = victimRigid.velocity;
                         num2 = victimRigid.mass;
                     }
-                    else vector2.y += Physics.gravity.y * Time.deltaTime;
+                    else vector2.y += Physics.gravity.y * Time.fixedDeltaTime;
                     if(num2 < 1000f) num2 = Util.Remap(num2, 60f, 1500f, 60f, 125f);
                     float num3 = pullSuitabilityCurve.Evaluate(num2);
                     victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * (num3 * Mathf.Max(num2, 100f)) * num, alwaysApply: true, disableAirControlUntilCollision: false);

@@ -30,7 +30,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            fixedAgeFixed += Time.deltaTime;
+            fixedAgeFixed += Time.fixedDeltaTime;
             if (fixedAgeFixed >= duration)
             {
                 outer.SetNextState(new HeartStandBy());

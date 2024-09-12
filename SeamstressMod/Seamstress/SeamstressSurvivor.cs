@@ -1,18 +1,12 @@
-﻿using BepInEx.Configuration;
-using SeamstressMod.Modules;
+﻿using SeamstressMod.Modules;
 using SeamstressMod.Modules.Characters;
 using RoR2;
 using RoR2.Skills;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 using RoR2.UI;
 using R2API;
-using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
-using UnityEngine.UI;
-using R2API.Networking;
 using SeamstressMod.Seamstress.Components;
 using SeamstressMod.Seamstress.Content;
 using SeamstressMod.Seamstress.SkillStates;
@@ -45,7 +39,7 @@ namespace SeamstressMod.Seamstress
 
             characterPortrait = assetBundle.LoadAsset<Texture>("texSeamstressIcon"),
             bodyColor = new Color(155f / 255f, 55f / 255f, 55f / 255f),
-            sortPosition = 100,
+            sortPosition = 7f,
 
             crosshair = Modules.CharacterAssets.LoadCrosshair("SimpleDot"),
             podPrefab = null,
@@ -759,7 +753,7 @@ namespace SeamstressMod.Seamstress
             On.RoR2.HealthComponent.Heal += HealthComponent_Heal;
             On.RoR2.CharacterModel.UpdateOverlays += CharacterModel_UpdateOverlays;
             On.RoR2.CharacterModel.UpdateOverlayStates += CharacterModel_UpdateOverlayStates;
-            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
+            On.RoR2.HealthComponent.TakeDamageProcess += HealthComponent_TakeDamageProcess;
             On.RoR2.UI.LoadoutPanelController.Rebuild += LoadoutPanelController_Rebuild;
             On.RoR2.GenericSkill.SetBonusStockFromBody += GenericSkill_SetBonusStockFromBody;
             On.RoR2.Items.ImmuneToDebuffBehavior.OverrideDot += ImmuneToDebuffBehavior_OverrideDot;
@@ -772,7 +766,7 @@ namespace SeamstressMod.Seamstress
         {
             orig.Invoke(self);
 
-            if (!self || !self.body || self.body.baseNameToken != "KENKO_SEAMSTRESS_NAME")
+            if (!self || !self.body || self.body.bodyIndex != BodyCatalog.FindBodyIndex("SeamstressBody"))
             {
                 return;
             }
@@ -814,7 +808,7 @@ namespace SeamstressMod.Seamstress
         {
             var flag = orig.Invoke(self);
 
-            if (!self || !self.body || self.body.baseNameToken != "KENKO_SEAMSTRESS_NAME")
+            if (!self || !self.body || self.body.bodyIndex != BodyCatalog.FindBodyIndex("SeamstressBody"))
             {
                 return flag;
             }
@@ -837,7 +831,7 @@ namespace SeamstressMod.Seamstress
         private bool ImmuneToDebuffBehavior_OverrideDot(On.RoR2.Items.ImmuneToDebuffBehavior.orig_OverrideDot orig, InflictDotInfo inflictDotInfo)
         {
             CharacterBody characterBody = inflictDotInfo.victimObject?.GetComponent<CharacterBody>();
-            if (characterBody && characterBody.baseNameToken == "KENKO_SEAMSTRESS_NAME" && inflictDotInfo.dotIndex == Dots.SeamstressSelfBleed)
+            if (characterBody && characterBody.bodyIndex != BodyCatalog.FindBodyIndex("SeamstressBody") && inflictDotInfo.dotIndex == Dots.SeamstressSelfBleed)
             {
                 return false;
             }
@@ -865,11 +859,11 @@ namespace SeamstressMod.Seamstress
                 }
             }
         }
-        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
+        private void HealthComponent_TakeDamageProcess(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, HealthComponent self, DamageInfo damageInfo)
         {
-            if(NetworkServer.active && self.alive || !self.godMode || self.ospTimer <= 0f)
+            float currentBarrier = 0;
+            if (NetworkServer.active && self.alive || !self.godMode || self.ospTimer <= 0f)
             {
-                float currentBarrier = 0;
                 CharacterBody victimBody = self.body;
                 if (victimBody && victimBody.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
                 {
@@ -901,17 +895,17 @@ namespace SeamstressMod.Seamstress
                         if(currentBarrier > 0f) victimBody.healthComponent.AddBarrier(-currentBarrier);
                     }
                 }
-                orig.Invoke(self, damageInfo);
-
-                if (victimBody && victimBody.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
-                {
-                    if(currentBarrier > 0) victimBody.healthComponent.AddBarrier(currentBarrier);
-                    victimBody.RecalculateStats();
-                }
             }
-            else
+
+            orig.Invoke(self, damageInfo);
+
+            if(NetworkServer.active)
             {
-                orig.Invoke(self, damageInfo);
+                if (self.body && self.body.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
+                {
+                    if (currentBarrier > 0) self.body.healthComponent.AddBarrier(currentBarrier);
+                    self.body.RecalculateStats();
+                }
             }
         }
         private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen = true)

@@ -70,7 +70,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             overlapAttack.damageType = DamageType.Stun1s;
             Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
             hitSound = "Play_imp_overlord_impact";
-            PlayAnimation("FullBody, Override", "ParrySlash", "Dash.playbackRate", dashDuration * 1.5f);
+            PlayCrossfade("FullBody, Override", "ParrySlash", "Dash.playbackRate", dashDuration * 1.5f, dashDuration * 0.05f);
 
             if (NetworkServer.active)
             {
@@ -93,14 +93,14 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             if (!isDashing)
             {
-                stopwatch += Time.deltaTime;
+                stopwatch += Time.fixedDeltaTime;
             }
             else if (isAuthority)
             {
                 if (!inHitPause)
                 {
                     bool num = overlapAttack.Fire();
-                    stopwatch += Time.deltaTime;
+                    stopwatch += Time.fixedDeltaTime;
                     if (num)
                     {
                         if (!hasHit)
@@ -112,11 +112,11 @@ namespace SeamstressMod.Seamstress.SkillStates
                         inHitPause = true;
                         hitPauseTimer = hitPauseDuration / attackSpeedStat;
                     }
-                    characterMotor.rootMotion += dashVector * speedCoefficient * Time.deltaTime;
+                    characterMotor.rootMotion += dashVector * speedCoefficient * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    hitPauseTimer -= Time.deltaTime;
+                    hitPauseTimer -= Time.fixedDeltaTime;
                     if (hitPauseTimer < 0f)
                     {
                         inHitPause = false;

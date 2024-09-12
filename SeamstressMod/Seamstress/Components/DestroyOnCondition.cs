@@ -12,6 +12,8 @@ namespace SeamstressMod.Seamstress.Components
     {
         public CharacterBody ownerBody;
 
+        private bool hasHadBuff;
+
         private void Awake()
         {
         }
@@ -21,7 +23,11 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void FixedUpdate()
         {
-            if (ownerBody && !ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
+            if(ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
+            {
+                hasHadBuff = true;
+            }
+            else if (!ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && hasHadBuff)
             {
                 Destroy(this.gameObject);
             }

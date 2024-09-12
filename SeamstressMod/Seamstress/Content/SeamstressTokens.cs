@@ -141,8 +141,8 @@ namespace SeamstressMod.Seamstress.Content
             Language.Add(Tokens.GetAchievementNameToken(SeamstressRavenUnlockAchievement.identifier), "Raven: Unlocked");
             Language.Add(Tokens.GetAchievementDescriptionToken(SeamstressRavenUnlockAchievement.identifier), "As Seamstress, beat the game or obliterate on Eclipse or higher.");
 
-            Language.Add(Tokens.GetAchievementNameToken(SeamstressUnlockAchievement.identifier), "Just A Trim");
-            Language.Add(Tokens.GetAchievementDescriptionToken(SeamstressUnlockAchievement.identifier), "Defeat a teleporter boss with bleed.");
+            //Language.Add(Tokens.GetAchievementNameToken(SeamstressUnlockAchievement.identifier), "Just A Trim");
+            //Language.Add(Tokens.GetAchievementDescriptionToken(SeamstressUnlockAchievement.identifier), "Defeat a teleporter boss with bleed.");
 
             #endregion
 

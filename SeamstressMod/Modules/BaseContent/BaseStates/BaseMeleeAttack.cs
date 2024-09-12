@@ -65,7 +65,6 @@ namespace SeamstressMod.Modules.BaseStates
         {
             base.OnEnter();
             duration = baseDuration / attackSpeedStat;
-            Log.Debug(duration + " and  base " + baseDuration);
             scissorDuration = baseScissorDuration / attackSpeedStat;
 
             animator = GetModelAnimator();
@@ -180,7 +179,7 @@ namespace SeamstressMod.Modules.BaseStates
         {
             base.FixedUpdate();
 
-            hitPauseTimer -= Time.deltaTime;
+            hitPauseTimer -= Time.fixedDeltaTime;
 
             if (hitPauseTimer <= 0f && inHitPause)
             {
@@ -189,7 +188,7 @@ namespace SeamstressMod.Modules.BaseStates
 
             if (!inHitPause)
             {
-                stopwatch += Time.deltaTime;
+                stopwatch += Time.fixedDeltaTime;
             }
             else
             {

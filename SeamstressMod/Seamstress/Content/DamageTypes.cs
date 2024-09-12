@@ -39,7 +39,6 @@ namespace SeamstressMod.Seamstress.Content
         private static void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
             orig.Invoke(self, damageInfo, victim);
-            CharacterBody victimBody = victim.GetComponent<CharacterBody>();
             if (damageInfo.HasModdedDamageType(PullDamage))
             {
                 PullComponent victimPull = victim.AddComponent<PullComponent>();
@@ -59,7 +58,7 @@ namespace SeamstressMod.Seamstress.Content
             CharacterBody victimBody = damageReport.victimBody;
             CharacterBody attackerBody = damageReport.attackerBody;
             GameObject attackerObject = damageReport.attacker.gameObject;
-            if (NetworkServer.active && attackerBody && attackerBody.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+            if (NetworkServer.active && attackerBody && attackerBody.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
             {
                 SeamstressController seamstressController = attackerBody.GetComponent<SeamstressController>();
                 if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))

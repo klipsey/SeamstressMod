@@ -61,11 +61,11 @@ namespace SeamstressMod.Seamstress.SkillStates
                 HandleBleed();
                 if (!hasFired)
                 {
-                    ChainUpdate(SeamstressStaticValues.insatiableDuration);
                     hasFired = true;
+                    ChainUpdate(SeamstressStaticValues.insatiableDuration);
                 }
             }
-            else if (ownerBody && !ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && this.fixedAge > 1f)
+            else if (ownerBody && !ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && hasFired)
             {
                 if (!splat)
                 {
@@ -76,7 +76,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     ChainUpdate(snapBackDelay);
                 }
 
-                snapBackDelay -= Time.deltaTime;
+                snapBackDelay -= Time.fixedDeltaTime;
 
                 if (snapBackDelay <= 0.2f)
                 {
@@ -86,7 +86,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         private void HandleBleed()
         {
-            bleedTimer += Time.deltaTime;
+            bleedTimer += Time.fixedDeltaTime;
 
             if (bleedTimer >= bleedInterval)
             {

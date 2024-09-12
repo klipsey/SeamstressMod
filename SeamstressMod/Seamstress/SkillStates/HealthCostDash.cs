@@ -73,7 +73,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             base.characterMotor.velocity = Vector3.zero;
 
-            PlayAnimation("FullBody, Override", "RipHeart", "Dash.playbackRate", (baseDuration / attackSpeedStat) * 1.8f);
+            PlayCrossfade("FullBody, Override", "RipHeart", "Dash.playbackRate", (baseDuration / attackSpeedStat) * 1.8f, (baseDuration / attackSpeedStat) * 0.05f);
             Util.PlayAttackSpeedSound("Play_imp_overlord_attack2_tell", gameObject, attackSpeedStat);
         }
 

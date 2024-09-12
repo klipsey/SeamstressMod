@@ -31,7 +31,7 @@ namespace SeamstressMod
         //   this shouldn't even have to be said
         public const string MODUID = "com.kenko.Seamstress";
         public const string MODNAME = "Seamstress";
-        public const string MODVERSION = "1.3.0";
+        public const string MODVERSION = "1.0.0";
 
         // a prefix for name tokens to prevent conflicts- please capitalize all name tokens for convention
         public const string DEVELOPER_PREFIX = "KENKO";

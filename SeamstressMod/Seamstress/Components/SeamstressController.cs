@@ -103,19 +103,20 @@ namespace SeamstressMod.Seamstress.Components
         public void FixedUpdate()
         {
             if(this.characterMotor.isGrounded) hopooHasHopped = false;
-            blinkCd += Time.deltaTime;
-            if (insatiableStopwatch > 0f) insatiableStopwatch -= Time.deltaTime;
-            if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.deltaTime;
+            blinkCd += Time.fixedDeltaTime;
+            if (insatiableStopwatch > 0f) insatiableStopwatch -= Time.fixedDeltaTime;
+            if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
             if (checkStatsStopwatch >= 0.5)
             {
                 characterBody.MarkAllStatsDirty();
                 checkStatsStopwatch = 0f;
             }
-            else checkStatsStopwatch += Time.deltaTime;
+            else checkStatsStopwatch += Time.fixedDeltaTime;
 
             if(animOverrideTimer > 0)
             {
-                animOverrideTimer -= Time.deltaTime;
+                animOverrideTimer -= Time.fixedDeltaTime;
+                animator.SetLayerWeight(animator.GetLayerIndex("Scissor, Override"), animOverrideTimer);
             }
             else if (animOverrideTimer < 0)
             {

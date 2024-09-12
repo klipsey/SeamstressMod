@@ -1,3 +1,15 @@
+# 1.3.5
+
+- Accidently left in debug logs
+
+# 1.3.4
+
+- Reverted deltaTime crap
+
+# 1.3.3
+
+- Smaller fixes
+
 # 1.3.2
 
 - Fixed an animation
