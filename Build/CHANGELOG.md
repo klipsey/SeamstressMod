@@ -1,3 +1,7 @@
+# 1.3.7
+
+- Fixed ragdoll
+
 # 1.3.6
 
 - Fixed Weaver for multiplayer
