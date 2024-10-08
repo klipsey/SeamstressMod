@@ -10,7 +10,7 @@
 
 The Seamstress is a half-imp survivor who uses her health for damage. Stack health items to gain more base damage. Managing her needles, weapons, and health are all apart of her complex kit.
 
-[![tex-Seamstress-Icon.png](https://i.postimg.cc/vm0T7j2X/tex-Seamstress-Icon.png)]()
+[![tex-Seamstress-Icon.png](https://i.postimg.cc/JnHv2QWr/tex-Seamstress-Icon.png)]()
 
 # Skills
 

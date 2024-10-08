@@ -600,9 +600,10 @@ namespace SeamstressMod.Seamstress
                 "meshHeart");
 
             defaultSkin.rendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("matSeamstress");
-            defaultSkin.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matSeamstressEmission");
-            defaultSkin.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matSeamstressEmission");
-            defaultSkin.rendererInfos[3].defaultMaterial = assetBundle.LoadAsset<Material>("matSeamstressEmission");
+            defaultSkin.rendererInfos[1].defaultMaterial = assetBundle.LoadAsset<Material>("matScissors");
+            defaultSkin.rendererInfos[2].defaultMaterial = assetBundle.LoadAsset<Material>("matScissors");
+            defaultSkin.rendererInfos[3].defaultMaterial = assetBundle.LoadAsset<Material>("matSeamstress");
+            defaultSkin.rendererInfos[4].defaultMaterial = assetBundle.LoadAsset<Material>("matSeamstress");
 
             //add new skindef to our list of skindefs. this is what we'll be passing to the SkinController
             skins.Add(defaultSkin);

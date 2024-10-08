@@ -17,8 +17,72 @@ AvatarMask:
     m_Weight: 0
   - m_Path: Armature/ROOT/base
     m_Weight: 0
+  - m_Path: Armature/ROOT/base/Dressback1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/Dressback1/Dressback2
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/Dressback1/Dressback2/Dressback3
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/Dressback1/Dressback2/Dressback3/Dressback4
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressbackL1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressbackL1/DressbackL2
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressbackL1/DressbackL2/DressbackL3
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressbackL1/DressbackL2/DressbackL3/DressbackL4
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressbackR1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressbackR1/DressbackR2
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressbackR1/DressbackR2/DressbackR3
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressbackR1/DressbackR2/DressbackR3/DressbackR4
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/Dressfront1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/Dressfront1/Dressfront2
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/Dressfront1/Dressfront2/Dressfront3
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/Dressfront1/Dressfront2/Dressfront3/Dressfront4
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressfrontL1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressfrontL1/DressfrontL2
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressfrontL1/DressfrontL2/DressfrontL3
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressfrontL1/DressfrontL2/DressfrontL3/DressfrontL4
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressfrontR1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressfrontR1/DressfrontR2
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressfrontR1/DressfrontR2/DressfrontR3
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DressfrontR1/DressfrontR2/DressfrontR3/DressfrontR4
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DresssideL1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DresssideL1/DresssideL2
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DresssideL1/DresssideL2/DresssideL3
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DresssideL1/DresssideL2/DresssideL3/DresssideL4
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DresssideR1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DresssideR1/DresssideR2
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DresssideR1/DresssideR2/DresssideR3
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/DresssideR1/DresssideR2/DresssideR3/DresssideR4
+    m_Weight: 0
   - m_Path: Armature/ROOT/base/ik.head
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/ROOT/base/pelvis
     m_Weight: 0
   - m_Path: Armature/ROOT/base/pelvis/BackRobe
@@ -68,67 +132,89 @@ AvatarMask:
   - m_Path: Armature/ROOT/base/pelvis/thigh.r/calf.r/foot.r/toe.r
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest
-    m_Weight: 1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakInner.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakInner.L/BackCloakInner.L.001
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakInner.L/BackCloakInner.L.001/BackCloakInner.L.002
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakInner.L/BackCloakInner.L.001/BackCloakInner.L.002/BackCloakInner.L.003
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakInner.R
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakInner.R/BackCloakInner.R.001
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakInner.R/BackCloakInner.R.001/BackCloakInner.R.002
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakInner.R/BackCloakInner.R.001/BackCloakInner.R.002/BackCloakInner.R.003
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.L/BackCloakOuter.L.001
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.L/BackCloakOuter.L.001/BackCloakOuter.L.002
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.L.003
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.L.003/BackCloakOuter.L.004
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.L.003/BackCloakOuter.L.004/BackCloakOuter.L.005
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.R
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.R/BackCloakOuter.R.001
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.R/BackCloakOuter.R.001/BackCloakOuter.R.002
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.R.003
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.R.003/BackCloakOuter.R.004
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloakOuter.R.003/BackCloakOuter.R.004/BackCloakOuter.R.005
+    m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/BackCloth1
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/BackCloth1/BackCloth2
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/BackCloth1/BackCloth2/BackCloth3
     m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/BackCloth1/BackCloth2/BackCloth3/BackCloth3.001
+    m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/BackCloth1/BackCloth2/BackCloth3/BackClothPole
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloak.L
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L/cloak_1_L.001
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloak.L/FrontCloak.L.001
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L/cloak_1_L.001/cloak_1_L.002
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloak.L/FrontCloak.L.001/FrontCloak.L.002
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L/cloak_1_L.001/cloak_1_L.002/cloak_1_L.011
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloak.L/FrontCloak.L.001/FrontCloak.L.002/FrontCloak.L.003
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L.003
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloak.R
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L.003/cloak_1_L.004
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloak.R/FrontCloak.R.001
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L.003/cloak_1_L.004/cloak_1_L.005
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloak.R/FrontCloak.R.001/FrontCloak.R.002
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L.003/cloak_1_L.004/cloak_1_L.005/cloak_1_L.006
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloak.R/FrontCloak.R.001/FrontCloak.R.002/FrontCloak.R.003
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L.003/cloak_1_L.004/cloak_1_L.005/cloak_1_L.006/cloak_1_L.007
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloakOuter.L
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L.016
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloakOuter.L/FrontCloakOuter.L.001
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L.016/cloak_1_L.017
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloakOuter.L/FrontCloakOuter.L.001/FrontCloakOuter.L.002
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_L.016/cloak_1_L.017/cloak_1_L.018
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloakOuter.R
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloakOuter.R/FrontCloakOuter.R.001
     m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R/cloak_1_R.001
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R/cloak_1_R.001/cloak_1_R.002
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R/cloak_1_R.001/cloak_1_R.002/cloak_1_R.011
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R.003
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R.003/cloak_1_R.004
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R.003/cloak_1_R.004/cloak_1_R.005
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R.003/cloak_1_R.004/cloak_1_R.005/cloak_1_R.006
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R.003/cloak_1_R.004/cloak_1_R.005/cloak_1_R.006/cloak_1_R.007
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R.016
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R.016/cloak_1_R.017
-    m_Weight: 0
-  - m_Path: Armature/ROOT/base/stomach/chest/cloak_1_R.016/cloak_1_R.017/cloak_1_R.018
+  - m_Path: Armature/ROOT/base/stomach/chest/FrontCloakOuter.R/FrontCloakOuter.R.001/FrontCloakOuter.R.002
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/head
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/head/HoodEnd1
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/head/HoodEnd1/HoodEnd2
@@ -152,10 +238,16 @@ AvatarMask:
   - m_Path: Armature/ROOT/base/stomach/chest/head/RibbonRight/RibbonRight.001/RibbonRight.002
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/heart
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/plate
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/shoulder.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/shoulder.l/Cloak.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/shoulder.l/Cloak.L/Cloak.L.001
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/shoulder.l/Cloak.L/Cloak.L.001/Cloak.L.002
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/shoulder.l/upperarm.l
     m_Weight: 0
@@ -192,6 +284,12 @@ AvatarMask:
   - m_Path: Armature/ROOT/base/stomach/chest/shoulder.l/upperarm.l/lowerarm.l/hand.l/thumb.l.01/thumb.l.02
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/shoulder.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/shoulder.r/Cloak.R
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/shoulder.r/Cloak.R/Cloak.R.001
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/shoulder.r/Cloak.R/Cloak.R.001/Cloak.R.002
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/shoulder.r/upperarm.r
     m_Weight: 0

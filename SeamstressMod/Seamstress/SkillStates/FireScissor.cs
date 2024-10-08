@@ -73,7 +73,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     chosenAnim = "FireScissorL";
                 }
-                PlayCrossfade("Gesture, Override", chosenAnim, "Slash.playbackRate", duration, 0.05f);
+                PlayCrossfade("Gesture, Additive", chosenAnim, "Slash.playbackRate", duration, 0.05f);
             }
         }
 

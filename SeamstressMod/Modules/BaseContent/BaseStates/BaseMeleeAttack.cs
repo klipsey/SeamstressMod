@@ -98,13 +98,13 @@ namespace SeamstressMod.Modules.BaseStates
         {
             if(!hasPlayed)
             {
-                PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, duration, 0.05f);
+                PlayCrossfade("Gesture, Additive", "Slash" + (1 + swingIndex), playbackRateParam, duration, 0.05f);
                 hasPlayed = true;
             }
         }
         protected virtual void PlayTrueAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration * (attackEndPercentTime - attackStartPercentTime), 0.1f * duration);
+            PlayCrossfade("Gesture, Additive", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration * (attackEndPercentTime - attackStartPercentTime), 0.1f * duration);
         }
         public override void OnExit()
         {

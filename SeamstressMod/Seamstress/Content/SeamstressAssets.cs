@@ -1057,7 +1057,7 @@ namespace SeamstressMod.Seamstress.Content
             scissorTracking.flierAltitudeTolerance = Mathf.Infinity;
             scissorTracking.enabled = true;
 
-            float die = modelName == "ScissorRightGhost" ? 3.1f : -3.1f;
+            float die = 3.1f;
             GameObject ScissorModelTransform = new GameObject();
             ScissorModelTransform.name = modelName + "Transform";
             ScissorModelTransform.transform.localScale = Vector3.one * 2f;

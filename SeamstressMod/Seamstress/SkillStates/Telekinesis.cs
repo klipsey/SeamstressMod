@@ -105,7 +105,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     {
                         if (!victimBody.HasBuff(SeamstressBuffs.Manipulated)) victimBody.AddBuff(SeamstressBuffs.Manipulated);
                     }
-                    base.PlayCrossfade("Gesture, Override", "Manipulate", "Manipulate.playbackRate", (6f / this.attackSpeedStat) * 0.15f, 0.05f);
+                    base.PlayCrossfade("Gesture, Additive", "Manipulate", "Manipulate.playbackRate", (6f / this.attackSpeedStat) * 0.15f, 0.05f);
 
                     this.playId = Util.PlaySound("sfx_ravager_charge_beam_loop", base.gameObject);
                 }
@@ -182,7 +182,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             AkSoundEngine.StopPlayingID(this.playId);
 
-            PlayCrossfade("Gesture, Override", "BufferEmpty", 0.05f);
+            PlayCrossfade("Gesture, Additive", "BufferEmpty", 0.05f);
             if (victimBody)
             {
                 if (NetworkServer.active)

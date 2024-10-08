@@ -314,7 +314,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         private void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", "Clip", "Slash.playbackRate", duration * 1.7f, 0.1f * duration);
+            PlayCrossfade("Gesture, Additive", "Clip", "Slash.playbackRate", duration * 1.7f, 0.1f * duration);
         }
         public override void OnExit()
         {

@@ -81,7 +81,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         protected override void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
+            PlayCrossfade("Gesture, Additive", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
         }
         protected override void PlaySwingEffect()
         {

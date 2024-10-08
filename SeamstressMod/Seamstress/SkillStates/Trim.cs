@@ -99,13 +99,13 @@ namespace SeamstressMod.Seamstress.SkillStates
             switch (swingIndex)
             {
                 case 0:
-                    PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", duration, 0.1f * duration);
+                    PlayCrossfade("Gesture, Additive", "Slash1", "Slash.playbackRate", duration, 0.1f * duration);
                     break;
                 case 1:
-                    PlayCrossfade("Gesture, Override", "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
+                    PlayCrossfade("Gesture, Additive", "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
                     break;
                 case 2:
-                    PlayCrossfade("Gesture, Override", "Slash3", "Slash.playbackRate", duration * 1.5f, 0.1f * duration);
+                    PlayCrossfade("Gesture, Additive", "Slash3", "Slash.playbackRate", duration * 1.5f, 0.1f * duration);
                     break;
             }
         }
