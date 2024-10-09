@@ -16,9 +16,9 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float flurryDamageCoefficient = 1.4f;
 
-        internal const float scissorSlashDamageCoefficient = 2.8f;
+        internal const float scissorSlashDamageCoefficient = 2f;
 
-        internal const float scissorPickupDamageCoefficient = 2.8f;
+        internal const float scissorPickupDamageCoefficient = 2f;
 
         internal const float blinkDamageCoefficient = 4f;
 

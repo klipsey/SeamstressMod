@@ -1,3 +1,8 @@
+# 1.4.1 
+
+- Lowered emission saturation
+- Fixed mending elite orbs being invincible
+
 # 1.4.0
 
 - Full Remodel

@@ -1,9 +1,9 @@
 {
     "name": "Seamstress",
     "author": "tsuyoikenko",
-    "version_number": "1.4.0",
+    "version_number": "1.4.1",
     "website_url": "https://github.com/klipsey/SeamstressMod",
-    "description": "Adds the Seamstress, a fast paced health management survivor. Full Remodel",
+    "description": "Adds the Seamstress, a fast paced health management survivor. Full base remodel update.",
     "dependencies": [
         "bbepis-BepInExPack-5.4.2117",
 	"RiskofThunder-R2API_TempVisualEffect-1.0.2",

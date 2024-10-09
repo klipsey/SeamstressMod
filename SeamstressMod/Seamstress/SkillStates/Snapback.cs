@@ -73,7 +73,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 visualBleed.DestroyVisual();
             }
 
-            PlayCrossfade("Body", "Idle", "Dash.playbackRate", 0.25f, 0.05f);
+            PlayAnimation("Fullbody, Override", "BufferEmpty");
         }
         private void SetPosition(Vector3 newPosition)
         {
