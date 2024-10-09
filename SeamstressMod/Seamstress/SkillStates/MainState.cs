@@ -23,8 +23,6 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             if (this.isGrounded) this.animator.SetFloat("airBlend", 0f);
             else this.animator.SetFloat("airBlend", 1f);
-
-
         }
         public override void ProcessJump()
         {
