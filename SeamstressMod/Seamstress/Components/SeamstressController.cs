@@ -60,6 +60,10 @@ namespace SeamstressMod.Seamstress.Components
 
         public Vector3 snapBackPosition;
 
+        private static float bleedInterval = 0.2f;
+
+        private float bleedTimer;
+
         private float insatiableStopwatch = 0f;
 
         public bool hasStartedInsatiable = false;
@@ -126,12 +130,6 @@ namespace SeamstressMod.Seamstress.Components
             CreateBlinkEffect(heldOrigin);
             InsatiableSound();
             IsInsatiable();
-        }
-
-
-        public bool HasNeedles()
-        {
-            return this.characterBody.HasBuff(SeamstressBuffs.Needles);
         }
         public void ReactivateScissor(string scissorName, bool activate)
         {
@@ -238,7 +236,7 @@ namespace SeamstressMod.Seamstress.Components
             }
             else if (!characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && hasStartedInsatiable)
             {
-                if (skillLocator.utility.skillDef.skillIndex == SeamstressSurvivor.snapBackSkillDef.skillIndex && insatiableStopwatch <= SeamstressStaticValues.insatiableDuration - 1f)
+                if (skillLocator.utility.skillDef.skillIndex == SeamstressSurvivor.explodeSkillDef.skillIndex && insatiableStopwatch <= SeamstressStaticValues.insatiableDuration - 1f)
                 {
                     EndInsatiableManually();
 
@@ -253,8 +251,38 @@ namespace SeamstressMod.Seamstress.Components
                     hasStartedInsatiable = false;
                 }
             }
-        }
 
+            if(characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
+            {
+                HandleBleed();
+            }
+        }
+        private void HandleBleed()
+        {
+            bleedTimer += Time.fixedDeltaTime;
+
+            if (bleedTimer >= bleedInterval)
+            {
+                bleedTimer = 0f;
+
+                if (NetworkServer.active)
+                {
+                    DamageInfo damageInfo = new DamageInfo
+                    {
+                        damage = (characterBody.healthComponent.fullCombinedHealth - (characterBody.healthComponent.fullCombinedHealth - (characterBody.healthComponent.health + characterBody.healthComponent.shield))) * 0.05f,
+                        damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT,
+                        dotIndex = DotController.DotIndex.Bleed,
+                        position = characterBody.corePosition,
+                        attacker = null,
+                        procCoefficient = 0f,
+                        crit = false,
+                        damageColorIndex = DamageColorIndex.Bleed,
+                    };
+
+                    characterBody.healthComponent.TakeDamage(damageInfo);
+                }
+            }
+        }
         public void EndInsatiableManually()
         {
             DisableInstatiableLayer();

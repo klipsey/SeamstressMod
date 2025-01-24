@@ -291,6 +291,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             overlapAttack.pushAwayForce = pushForce;
             overlapAttack.hitBoxGroup = FindHitBoxGroup(hitBoxString);
             overlapAttack.isCrit = RollCrit();
+            overlapAttack.damageType.damageSource = DamageSource.Secondary;
 
             if (isAuthority)
             {

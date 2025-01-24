@@ -17,6 +17,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             RefreshState();
             hitboxGroupName = "Sword";
             damageType = DamageType.Generic;
+            damageSource = DamageSource.Secondary;
             damageTotal = SeamstressStaticValues.flurryDamageCoefficient;
             procCoefficient = 1f;
             pushForce = 300f;

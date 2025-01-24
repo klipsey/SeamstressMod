@@ -27,7 +27,7 @@ namespace SeamstressMod.Seamstress
 
         internal static GameObject characterPrefab;
 
-        public static SkillDef snapBackSkillDef;
+        public static SkillDef explodeSkillDef;
 
         public static SkillDef scepterFireScissor;
 
@@ -378,7 +378,7 @@ namespace SeamstressMod.Seamstress
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
-                baseRechargeInterval = 6f,
+                baseRechargeInterval = 8f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -433,16 +433,16 @@ namespace SeamstressMod.Seamstress
 
             Skills.AddUtilitySkills(bodyPrefab, parrySeamstressSkillDef);
 
-            snapBackSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            explodeSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = "SnapBack",
-                skillNameToken = "SnapBack",
-                skillDescriptionToken = "Snapback to core",
+                skillName = "Expunge",
+                skillNameToken = "Expunge",
+                skillDescriptionToken = "Expunge your core.",
                 keywordTokens = new string[] { },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texImpTouchedIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Snapback)),
-                activationStateMachineName = "Body",
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Explode)),
+                activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Pain,
 
                 baseRechargeInterval = 0f,
@@ -883,7 +883,7 @@ namespace SeamstressMod.Seamstress
                         SeamstressController seamCom = victimBody.gameObject.GetComponent<SeamstressController>();
                         if (seamCom && !victimBody.HasBuff(RoR2Content.Buffs.HiddenInvincibility))
                         {
-                            if (damageInfo.damage >= self.combinedHealth && victimBody.skillLocator.utility.skillDef == snapBackSkillDef)
+                            if (damageInfo.damage >= self.combinedHealth && victimBody.skillLocator.utility.skillDef == explodeSkillDef)
                             {
                                 victimBody.skillLocator.utility.ExecuteIfReady();
                             }
@@ -920,8 +920,8 @@ namespace SeamstressMod.Seamstress
             {
                 if (self.body.GetComponent<SeamstressController>() && self.body.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
                 {
-                    if (self.health >= self.fullHealth) self.AddBarrier(amount / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
-                    else self.AddBarrier((res / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion)) / 2f);
+                    if (self.health >= self.fullHealth) self.AddBarrier(res / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion));
+                    else self.AddBarrier((res / SeamstressStaticValues.healConversion * (1 - SeamstressStaticValues.healConversion)));
                 }
             }
             return res;

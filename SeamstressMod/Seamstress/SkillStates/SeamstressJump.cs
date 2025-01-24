@@ -48,8 +48,27 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (base.inputBank.jump.justPressed && base.isGrounded && seamstressController.blinkReady)
             {
                 this.seamstressController.blinkReady = false;
-                if (base.inputBank.moveVector != Vector3.zero) BlinkForward();
-                else BlinkUp();
+                int waxQuailCount = base.characterBody.inventory.GetItemCount(RoR2Content.Items.JumpBoost);
+                float horizontalBonus = 1f;
+                float verticalBonus = 1f;
+
+                if (characterMotor.jumpCount > base.characterBody.baseJumpCount)
+                {
+                    horizontalBonus = 1.5f;
+                    verticalBonus = 1.5f;
+                }
+                else if (waxQuailCount > 0 && base.characterBody.isSprinting)
+                {
+                    float v = base.characterBody.acceleration * characterMotor.airControl;
+
+                    if (base.characterBody.moveSpeed > 0f && v > 0f)
+                    {
+                        float num2 = Mathf.Sqrt(10f * waxQuailCount / v);
+                        float num3 = characterBody.moveSpeed / v;
+                        horizontalBonus = (num2 + num3) / num3;
+                    }
+                }
+                GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
                 return;
             }
             else if (base.inputBank.jump.justPressed && !base.isGrounded && seamstressController.blinkReady)

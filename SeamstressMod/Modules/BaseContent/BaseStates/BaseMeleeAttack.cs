@@ -18,6 +18,7 @@ namespace SeamstressMod.Modules.BaseStates
         protected string hitboxGroupName = "Sword";
 
         protected DamageType damageType = DamageType.Generic;
+        protected DamageSource damageSource = DamageSource.Primary;
         protected List<DamageAPI.ModdedDamageType> moddedDamageTypeHolder = new List<DamageAPI.ModdedDamageType>();
         protected bool isFlatDamage = false;
         protected float damageTotal = 3.5f;
@@ -92,6 +93,7 @@ namespace SeamstressMod.Modules.BaseStates
             attack.hitBoxGroup = FindHitBoxGroup(hitboxGroupName);
             attack.isCrit = RollCrit();
             attack.impactSound = impactSound;
+            attack.damageType.damageSource = damageSource;
         }
 
         protected virtual void PlayAttackAnimation()

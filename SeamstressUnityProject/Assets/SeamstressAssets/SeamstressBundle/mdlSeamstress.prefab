@@ -3048,6 +3048,76 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2783052245129378537}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2031511234618973849 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4228321437374997616, guid: 71ea1ce4c264b994cbe02e837681dddb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2783052245129378537}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8522811292760993858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031511234618973849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a68da65c907acb4eb4dbcd042f172e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Root: {fileID: 7764141786348597954}
+  m_UpdateRate: 60
+  m_UpdateMode: 0
+  m_Damping: 0.5
+  m_DampingDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Elasticity: 0
+  m_ElasticityDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Stiffness: 0
+  m_StiffnessDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Inert: 0
+  m_InertDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Radius: 0.03
+  m_RadiusDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_EndLength: 0
+  m_EndOffset: {x: 0, y: 0, z: 0}
+  m_Gravity: {x: 0, y: 0, z: 0}
+  m_Force: {x: 0, y: -0.01, z: 0}
+  m_Colliders:
+  - {fileID: 359006819}
+  - {fileID: 359006818}
+  - {fileID: 359006817}
+  - {fileID: 359006800}
+  m_Exclusions: []
+  m_FreezeAxis: 0
+  m_DistantDisable: 0
+  m_ReferenceObject: {fileID: 0}
+  m_DistanceToObject: 20
 --- !u!4 &2147829858238626224 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4948896726346874023, guid: 71ea1ce4c264b994cbe02e837681dddb,
@@ -4702,6 +4772,12 @@ Transform:
 --- !u!4 &7644183289849465884 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5515497178350384885, guid: 71ea1ce4c264b994cbe02e837681dddb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2783052245129378537}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7764141786348597954 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5557625094883837995, guid: 71ea1ce4c264b994cbe02e837681dddb,
     type: 3}
   m_PrefabInstance: {fileID: 2783052245129378537}
   m_PrefabAsset: {fileID: 0}

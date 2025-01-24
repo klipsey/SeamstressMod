@@ -55,8 +55,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                         }
                     }
 
-                    base.characterMotor.jumpCount++;
-
                     if (this.hasModelAnimator)
                     {
                         int layerIndex = modelAnimator.GetLayerIndex("Body");

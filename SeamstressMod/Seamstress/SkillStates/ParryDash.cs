@@ -68,6 +68,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             overlapAttack = InitMeleeOverlap(0, hitEffectPrefab, modelTransform, hitBox);
             overlapAttack.AddModdedDamageType(DamageTypes.PullDamage);
             overlapAttack.damageType = DamageType.Stun1s;
+            overlapAttack.damageType.damageSource = DamageSource.Utility;
             Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);
             hitSound = "Play_imp_overlord_impact";
             PlayCrossfade("FullBody, Override", "ParrySlash", "Dash.playbackRate", dashDuration * 1.5f, dashDuration * 0.05f);

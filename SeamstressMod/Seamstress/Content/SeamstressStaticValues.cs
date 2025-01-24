@@ -8,7 +8,7 @@ namespace SeamstressMod.Seamstress.Content
     {
         internal const float baseDamage = 12f;
 
-        internal const float basePickupCooldown = 2.5f;
+        internal const float basePickupCooldown = 3f;
 
         internal const float trimDamageCoefficient = 1.2f;
 
@@ -20,7 +20,7 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const float scissorPickupDamageCoefficient = 2f;
 
-        internal const float blinkDamageCoefficient = 4f;
+        internal const float blinkDamageCoefficient = 2.5f;
 
         internal const float bleedDuration = 2f;
 
@@ -30,26 +30,28 @@ namespace SeamstressMod.Seamstress.Content
 
         internal const int maxNeedleAmount = 5;
 
-        internal const float insatiableDuration = 12f;
+        internal const float insatiableDuration = 7f;
 
         internal const float passiveScaling = 0.04f;
 
-        internal const float passiveHealingScaling = 0.025f;
+        internal const float passiveHealingScaling = 0.03f;
 
         internal const float parryDamageCoefficient = 4f;
 
         internal const float needleDamageCoefficient = 0.4f;
 
-        internal const float clipDamageCoefficient = 0.65f;
+        internal const float clipDamageCoefficient = 0.7f;
 
         internal const float needleProcCoefficient = 0.6f;
 
-        internal const float parryWindow = 0.4f;
+        internal const float parryWindow = 1f;
 
-        internal const float scissorDamageCoefficient = 5f;
+        internal const float scissorDamageCoefficient = 4f;
 
-        internal const float telekinesisDamageCoefficient = 0.3f;
+        internal const float telekinesisDamageCoefficient = 0.6f;
 
         internal const float telekinesisCooldown = 6f;
+
+        internal const float explodeDamageCoefficient = 4f;
     }
 }

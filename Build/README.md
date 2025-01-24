@@ -2,7 +2,7 @@
 
 - Multiplayer Compatible
 - Emote compatible
-- Contact me on Discord: https://discord.gg/3NaMEsvYeD
+- Don't contact me on Discord
 
 [![](https://i.postimg.cc/zD9FrGdh/Seamstress-MADISON.png)]()
 

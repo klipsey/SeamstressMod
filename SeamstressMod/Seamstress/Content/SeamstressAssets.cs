@@ -968,13 +968,13 @@ namespace SeamstressMod.Seamstress.Content
         private static void CreateEmpoweredNeedle()
         {
             needleButcheredPrefab = needlePrefab.InstantiateClone("NeedleButchered");
-            needleButcheredPrefab.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
+            needleButcheredPrefab.AddComponent<ProjectileDamage>().damageType.AddModdedDamageType(DamageTypes.CutDamage);
             Modules.Content.AddProjectilePrefab(needleButcheredPrefab);
         }
         private static void CreateEmpoweredNeedle2()
         {
             needleButcheredPrefab2 = needlePrefab2.InstantiateClone("NeedleButchered2");
-            needleButcheredPrefab2.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
+            needleButcheredPrefab2.AddComponent<ProjectileDamage>().damageType.AddModdedDamageType(DamageTypes.CutDamage);
             Modules.Content.AddProjectilePrefab(needleButcheredPrefab2);
         }
 
@@ -1014,6 +1014,7 @@ namespace SeamstressMod.Seamstress.Content
 
             ProjectileDamage scissorDamage = scissorPrefab.GetComponent<ProjectileDamage>();
             scissorDamage.damageType = DamageType.Stun1s | DamageType.AOE;
+            scissorDamage.damageType.damageSource = DamageSource.Special;
 
             ProjectileSimple simple = scissorPrefab.GetComponent<ProjectileSimple>();
             simple.desiredForwardSpeed = 120f;

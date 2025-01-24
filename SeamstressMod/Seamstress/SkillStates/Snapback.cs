@@ -14,7 +14,6 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class Snapback : BaseSeamstressSkillState
     {
-
         public static string exitSoundString = "Play_item_proc_bounceChain";
 
         private CameraTargetParams.AimRequest aimRequest;
@@ -66,7 +65,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
             }
 
-            skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressSurvivor.explodeSkillDef, GenericSkill.SkillOverridePriority.Contextual);
 
             if(base.gameObject.TryGetComponent<SeamstressBleedVisualController>(out var visualBleed))
             {

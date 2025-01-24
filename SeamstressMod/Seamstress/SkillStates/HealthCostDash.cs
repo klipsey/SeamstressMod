@@ -90,6 +90,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 attack.attacker = base.gameObject;
                 attack.inflictor = base.gameObject;
                 attack.damageType = DamageType.Stun1s;
+                attack.damageType.damageSource = DamageSource.Utility;
                 attack.procCoefficient = 1f;
                 attack.teamIndex = base.GetTeam();
                 attack.isCrit = base.RollCrit();
@@ -136,7 +137,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     color = mainColor,
                 }, false);
 
-                seamstressController.snapBackPosition = base.characterBody.corePosition;
+                //seamstressController.snapBackPosition = base.characterBody.corePosition;
 
                 Vector3 position = base.characterBody.corePosition;
 
@@ -145,7 +146,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     base.characterBody.AddTimedBuff(SeamstressBuffs.SeamstressInsatiableBuff, SeamstressStaticValues.insatiableDuration);
                     base.gameObject.AddComponent<SeamstressBleedVisualController>();
                 }
-
+                /* rot
                 GameObject obj = UnityEngine.Object.Instantiate<GameObject>(this.projectilePrefab, position, Quaternion.identity);
 
                 ProjectileController component = obj.GetComponent<ProjectileController>();
@@ -160,6 +161,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     NetworkServer.Spawn(obj);
                 }
+                */
             }
             if (base.isAuthority && hasDelayed)
             {
@@ -180,7 +182,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     outer.SetNextStateToMain();
                 }
 
-                if (base.fixedAge >= baseDuration && hasDelayed)
+                if (base.fixedAge >= baseDuration / attackSpeedStat)
                 {
                     EffectData effectData = new EffectData()
                     {
@@ -200,7 +202,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             base.OnExit();
 
-            skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressSurvivor.snapBackSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+            skillLocator.utility.SetSkillOverride(base.gameObject, SeamstressSurvivor.explodeSkillDef, GenericSkill.SkillOverridePriority.Contextual);
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

@@ -24,7 +24,7 @@ namespace SeamstressMod.Seamstress.Content
             Modules.Content.AddEntityState(typeof(Telekinesis));
 
             Modules.Content.AddEntityState(typeof(HealthCostDash));
-            Modules.Content.AddEntityState(typeof(Snapback));
+            //Modules.Content.AddEntityState(typeof(Snapback));
 
             Modules.Content.AddEntityState(typeof(Parry));
             Modules.Content.AddEntityState(typeof(ParryDash));

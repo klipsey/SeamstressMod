@@ -23,12 +23,12 @@ namespace SeamstressMod.Seamstress.Content
             #region Seamstress
             string prefix = SeamstressSurvivor.SEAMSTRESS_PREFIX;
 
-            string desc = "The Seamstress is a mobile survivor that uses her health for damage. She gains less base damage per level so stack health items to take advantage of Imp Touched Heart's health to damage conversion.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
+            string desc = "The Seamstress is a mobile survivor that uses her health for damage. She gains less base damage per level so stack health items to take advantage her health to damage conversion.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Needles are a great source of extra damage. Use them wisely for damage and mobility." + Environment.NewLine + Environment.NewLine
-             + "< ! > Make sure not to use Clip in a sticky situation. Having backup Needles might just save you." + Environment.NewLine + Environment.NewLine
-             + "< ! > Heal as much as you can during Insatiable. The health it provides can halt a quick death." + Environment.NewLine + Environment.NewLine
-             + "< ! > Brutalize is a great way to boost your damage but be wary of where you leave your Heart." + Environment.NewLine + Environment.NewLine
-             + "< ! > Use and retrieve your Symbiotic weapon often to keep up a balance of damage and mobility." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Make sure to use Clip with as many needles as you can. It can rapidly apply bleed during Insatiable." + Environment.NewLine + Environment.NewLine
+             + "< ! > Heal as much as you can during Insatiable. The barrier it provides could be life or death." + Environment.NewLine + Environment.NewLine
+             + "< ! > Brutalize is a great way to boost your damage but be wary of your health." + Environment.NewLine + Environment.NewLine
+             + "< ! > Use and retrieve your Symbiotic weapons to gain needles outside of Insatiable." + Environment.NewLine + Environment.NewLine;
 
             /*
              * its not really shown yet in the anims but the panel on the top of the robe/heart area opens up to her artificial heart. 
@@ -114,8 +114,8 @@ namespace SeamstressMod.Seamstress.Content
 
             #region Utility 
             Language.Add(prefix + "UTILITY_HEARTDASH_NAME", "Brutalize");
-            Language.Add(prefix + "UTILITY_HEARTDASH_DESCRIPTION", $"Tear out your <color=#9B3737>heart</color> gaining " + Tokens.insatiablePrefix + $". Dash forward dealing " +
-                $"<style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style>. Recast to return to your <color=#9B3737>heart</color>.");
+            Language.Add(prefix + "UTILITY_HEARTDASH_DESCRIPTION", $"Tear out your <color=#9B3737>heart</color> and become " + Tokens.insatiablePrefix + $". Dash forward dealing " +
+                $"<style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style>. Recast to explode for <style=cIsDamage>{100f * SeamstressStaticValues.explodeDamageCoefficient}% damage</style>.");
 
             Language.Add(prefix + "UTILITY_PARRY_NAME", "Retaliate");
             Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Prepare a <style=cIsUtility>parry</style>. If successful, dash forward dealing <style=cIsDamage>{100f * SeamstressStaticValues.parryDamageCoefficient}% damage</style> and gain " +
@@ -125,12 +125,12 @@ namespace SeamstressMod.Seamstress.Content
 
             #region Special
             Language.Add(prefix + "SPECIAL_FIRE_NAME", "Skewer");
-            Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
+            Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"<style=cIsHealth>15% HP.</style>. Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
                 $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorPickupDamageCoefficient}% damage</style>.");
 
             Language.Add(prefix + "SPECIAL_SCEPTER_NAME", "Rampage");
-            Language.Add(prefix + "SPECIAL_SCEPTER_DESCRIPTION", $"Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
-                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorPickupDamageCoefficient}% damage</style>." + Tokens.ScepterDescription("Your " + Tokens.symbioticPrefix + $" weapon only has a <style=cIsUtility>2 second pickup time</style>."));
+            Language.Add(prefix + "SPECIAL_SCEPTER_DESCRIPTION", $"<style=cIsHealth>15% HP.</style>. Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
+                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorPickupDamageCoefficient}% damage</style>." + Tokens.ScepterDescription("Your " + Tokens.symbioticPrefix + $" weapon only has a <style=cIsUtility>1.5 second pickup time</style>."));
 
             #endregion
 

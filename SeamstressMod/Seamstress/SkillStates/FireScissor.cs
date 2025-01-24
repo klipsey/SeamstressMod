@@ -75,6 +75,22 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
                 PlayCrossfade("Gesture, Additive", chosenAnim, "Slash.playbackRate", duration, 0.05f);
             }
+
+            if (NetworkServer.active)
+            {
+                DamageInfo damageInfo = new DamageInfo
+                {
+                    damage = characterBody.healthComponent.fullCombinedHealth * 0.15f,
+                    damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock,
+                    position = characterBody.corePosition,
+                    attacker = null,
+                    procCoefficient = 0f,
+                    crit = false,
+                    damageColorIndex = DamageColorIndex.Bleed,
+                };
+
+                characterBody.healthComponent.TakeDamage(damageInfo);
+            }
         }
 
         public override void OnExit()
@@ -102,11 +118,11 @@ namespace SeamstressMod.Seamstress.SkillStates
                 projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilterComponent>().pickupTimer = Mathf.Max(0.5f, num * base.skillLocator.special.cooldownScale - base.skillLocator.special.flatCooldownReduction);
                 if (isInsatiable)
                 {
-                    projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(DamageTypes.CutDamage);
+                    projectilePrefab.GetComponent<ProjectileDamage>().damageType.AddModdedDamageType(DamageTypes.CutDamage);
                 }
                 else
                 {
-                    projectilePrefab.GetComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Remove(DamageTypes.CutDamage);
+                    projectilePrefab.GetComponent<ProjectileDamage>().damageType.AddModdedDamageType(DamageTypes.CutDamage);
                 }
 
                 Fire(this.aimRay, fireString);
