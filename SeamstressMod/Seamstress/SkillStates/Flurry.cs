@@ -18,7 +18,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             hitboxGroupName = "Sword";
             damageType = DamageType.Generic;
             damageSource = DamageSource.Secondary;
-            damageTotal = SeamstressStaticValues.flurryDamageCoefficient;
+            damageTotal = SeamstressConfig.flurryDamageCoefficient.Value;
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
@@ -37,9 +37,9 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             swingSoundString = "sfx_seamstress_swing";
             hitSoundString = "";
-            hitEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsHitImpactEffect2 : SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = seamstressController.blue ? SeamstressAssets.clawSlashEffect2 : SeamstressAssets.clawSlashEffect;
-            bonusSwingEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsSlashEffect2 : SeamstressAssets.scissorsSlashEffect;
+            hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+            swingEffectPrefab = SeamstressAssets.clawSlashEffect;
+            bonusSwingEffectPrefab = SeamstressAssets.scissorsSlashEffect;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeftSmall" : "SwingRightSmall";
             buffer = false;
             if (isInsatiable)

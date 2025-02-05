@@ -63,19 +63,20 @@ namespace SeamstressMod.Seamstress.Content
                 SeamstressController seamstressController = attackerBody.GetComponent<SeamstressController>();
                 if (damageInfo.HasModdedDamageType(DamageTypes.CutDamage))
                 {
-                    DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, RoR2.DotController.DotIndex.Bleed, SeamstressStaticValues.bleedDuration, damageInfo.procCoefficient * 0.2f);
+                    DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, RoR2.DotController.DotIndex.Bleed, 
+                        SeamstressConfig.bleedDuration.Value, damageInfo.procCoefficient * 0.2f);
                 }
                 if (damageInfo.HasModdedDamageType(GainNeedles))
                 {
                     Util.PlaySound("Play_bandit2_m2_alt_throw", attackerObject);
-                    if (attackerBody.GetBuffCount(SeamstressBuffs.Needles) < SeamstressStaticValues.maxNeedleAmount) attackerBody.AddBuff(SeamstressBuffs.Needles);
+                    if (attackerBody.GetBuffCount(SeamstressBuffs.Needles) < SeamstressConfig.maxNeedleAmount.Value) attackerBody.AddBuff(SeamstressBuffs.Needles);
                 }
                 if (damageInfo.HasModdedDamageType(SeamstressLifesteal))
                 {   
                     if(seamstressController)
                     {
                         float healthMissing = 1 - (attackerBody.healthComponent.combinedHealth / attackerBody.healthComponent.fullCombinedHealth);
-                        attackerBody.healthComponent.Heal(((healthMissing * SeamstressStaticValues.passiveHealingScaling) * attackerBody.healthComponent.fullCombinedHealth) * damageInfo.procCoefficient, default, true);
+                        attackerBody.healthComponent.Heal(healthMissing * SeamstressConfig.passiveHealingScaling.Value * attackerBody.healthComponent.fullCombinedHealth * damageInfo.procCoefficient, default, true);
                     }
                 }
             }

@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<None Remove=".gitignore" />
+		<None Remove="Modules\t1py3z05.eiq~" />
 		<None Remove="nuget.config" />
 	</ItemGroup>
 
@@ -47,6 +48,7 @@
 		<PackageReference Include="R2API.Dot" Version="*" />
 		<PackageReference Include="R2API.Networking" Version="*" />
 		<PackageReference Include="R2API.Sound" Version="*" />
+		<PackageReference Include="R2API.Skins" Version="*" />
 	</ItemGroup>
 
 	<ItemGroup>

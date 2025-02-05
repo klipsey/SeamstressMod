@@ -17,7 +17,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public GameObject dashPrefab = SeamstressAssets.impDashEffect;
         public GameObject blinkPrefab = SeamstressAssets.smallBlinkEffect;
-        public Material destealthMaterial = SeamstressAssets.destealthMaterial;
+        public Material destealthMaterial;
 
         protected CameraTargetParams.AimRequest request;
 
@@ -48,12 +48,9 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             RefreshState();
-            if (seamstressController.blue)
-            {
-                dashPrefab = SeamstressAssets.impDashEffect2;
-                blinkPrefab = SeamstressAssets.smallBlinkEffect2;
-                destealthMaterial = SeamstressAssets.destealthMaterial2;
-            }
+
+            destealthMaterial = seamstressController.destealthMaterial;
+
             base.OnEnter();
             Util.PlaySound(beginSoundString, gameObject);
             modelTransform = GetModelTransform();

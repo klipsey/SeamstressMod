@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 
 namespace SeamstressMod.Seamstress.Content
 {
-    internal static class Dots
+    internal static class SeamstressDots
     {
         public static DotIndex SeamstressSelfBleed;
 
@@ -27,7 +27,8 @@ namespace SeamstressMod.Seamstress.Content
         {
             if (dotStack.dotIndex == SeamstressSelfBleed)
             {
-                dotStack.damage = (self.victimBody.healthComponent.fullCombinedHealth - (self.victimBody.healthComponent.fullCombinedHealth - (self.victimBody.healthComponent.health + self.victimBody.healthComponent.shield))) * 0.02f;
+                dotStack.damage = (self.victimBody.healthComponent.fullCombinedHealth - (self.victimBody.healthComponent.fullCombinedHealth -
+                    (self.victimBody.healthComponent.health + self.victimBody.healthComponent.shield))) * 0.05f;
                 dotStack.damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT;
             }
         }
@@ -73,7 +74,7 @@ namespace SeamstressMod.Seamstress.Content
             {
                 interval = 0.2f,
                 damageCoefficient = 0f,
-                damageColorIndex = DamageColorIndex.SuperBleed,
+                damageColorIndex = DamageColorIndex.Bleed,
                 associatedBuff = SeamstressBuffs.SeamstressInsatiableBuff,
                 resetTimerOnAdd = true,
             }, selfDamageBehaviour, visual);

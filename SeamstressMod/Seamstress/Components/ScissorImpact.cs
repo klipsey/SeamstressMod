@@ -195,7 +195,7 @@ namespace SeamstressMod.Seamstress.Components
                     impactAttack.attacker = owner;
                     impactAttack.inflictor = owner;
                     impactAttack.teamIndex = TeamComponent.GetObjectTeam(owner);
-                    impactAttack.baseDamage = SeamstressStaticValues.scissorDamageCoefficient * owner.GetComponent<CharacterBody>().damage;
+                    impactAttack.baseDamage = SeamstressConfig.scissorDamageCoefficient.Value * owner.GetComponent<CharacterBody>().damage;
                     impactAttack.baseForce = 600f;
                     impactAttack.position = transform.position;
                     impactAttack.procCoefficient = 0.7f;

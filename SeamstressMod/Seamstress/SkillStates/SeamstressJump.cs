@@ -8,6 +8,7 @@ using UnityEngine.AddressableAssets;
 using SeamstressMod.Seamstress;
 using SeamstressMod.Seamstress.Content;
 using SeamstressMod.Seamstress.Components;
+using R2API;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
@@ -24,102 +25,116 @@ namespace SeamstressMod.Seamstress.SkillStates
         private GameObject projectilePrefab;
         public override void OnEnter()
         {
+            projectilePrefab = SeamstressAssets.needlePrefab;
+
             base.OnEnter();
         }
         public override void FixedUpdate()
         {
             RefreshState();
             base.FixedUpdate();
-            if (this.insatiable)
+
+            if (isInsatiable)
             {
-                if (seamstressController.blue) projectilePrefab = SeamstressAssets.needleButcheredPrefab2;
-                else projectilePrefab = SeamstressAssets.needleButcheredPrefab;
+                projectilePrefab.GetComponent<ProjectileDamage>().damageType.AddModdedDamageType(DamageTypes.CutDamage);
             }
-            else
+            else if (projectilePrefab.GetComponent<ProjectileDamage>().damageType.HasModdedDamageType(DamageTypes.CutDamage))
             {
-                if (seamstressController.blue) projectilePrefab = SeamstressAssets.needlePrefab2;
-                else projectilePrefab = SeamstressAssets.needlePrefab;
+                projectilePrefab.GetComponent<ProjectileDamage>().damageType.RemoveModdedDamageType(DamageTypes.CutDamage);
             }
-            if (((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount || this.characterBody.GetBuffCount(SeamstressBuffs.Needles) > 0) && this.seamstressController.blinkCd >= SeamstressStaticValues.blinkCooldown) && this.seamstressController.blinkReady == false)
+
+            if ((this.characterBody.characterMotor.jumpCount < this.characterBody.maxJumpCount + 
+                this.characterBody.GetBuffCount(SeamstressBuffs.Needles)) && 
+                this.seamstressController.blinkCd >= SeamstressConfig.blinkCooldown.Value && this.seamstressController.blinkReady == false)
             {
                 seamstressController.blinkCd = 0f;
                 seamstressController.blinkReady = true;
             }
-            if (base.inputBank.jump.justPressed && base.isGrounded && seamstressController.blinkReady)
+            if (base.inputBank.jump.justPressed)
             {
-                this.seamstressController.blinkReady = false;
-                int waxQuailCount = base.characterBody.inventory.GetItemCount(RoR2Content.Items.JumpBoost);
-                float horizontalBonus = 1f;
-                float verticalBonus = 1f;
-
-                if (characterMotor.jumpCount > base.characterBody.baseJumpCount)
+                if (base.isGrounded)
                 {
-                    horizontalBonus = 1.5f;
-                    verticalBonus = 1.5f;
-                }
-                else if (waxQuailCount > 0 && base.characterBody.isSprinting)
-                {
-                    float v = base.characterBody.acceleration * characterMotor.airControl;
+                    this.seamstressController.blinkReady = false;
+                    int waxQuailCount = base.characterBody.inventory.GetItemCount(RoR2Content.Items.JumpBoost);
+                    float horizontalBonus = 1f;
+                    float verticalBonus = 1f;
 
-                    if (base.characterBody.moveSpeed > 0f && v > 0f)
+                    if (characterMotor.jumpCount > base.characterBody.baseJumpCount)
                     {
-                        float num2 = Mathf.Sqrt(10f * waxQuailCount / v);
-                        float num3 = characterBody.moveSpeed / v;
-                        horizontalBonus = (num2 + num3) / num3;
+                        horizontalBonus = 1.5f;
+                        verticalBonus = 1.5f;
                     }
-                }
-                GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
-                return;
-            }
-            else if (base.inputBank.jump.justPressed && !base.isGrounded && seamstressController.blinkReady)
-            {
-                seamstressController.blinkReady = false;
-                if (base.characterMotor.jumpCount >= base.characterBody.maxJumpCount && this.characterBody.inventory.GetItemCount(RoR2.RoR2Content.Items.Feather) > 0 && !seamstressController.hopooHasHopped)
-                {
-                    if (!seamstressController.hopooHasHopped) seamstressController.hopooHasHopped = true;
-                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
-                }
-                else if(base.characterMotor.jumpCount >= base.characterBody.maxJumpCount)
-                {
-                    base.needleCon.consumeNeedle = true;
-                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
-                }
-                else
-                {
-                    Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
-                }
-                if (base.isAuthority)
-                {
-                    aimRay = GetAimRay();
-                    aimRay.direction = Util.ApplySpread(aimRay.direction, minSpread, maxSpread, 1f, 1f, 0f, projectilePitchBonus);
-                    if (characterBody.inventory && characterBody.inventory.GetItemCount(DLC1Content.Items.MoreMissile) > 0)
+                    else if (waxQuailCount > 0 && base.characterBody.isSprinting)
                     {
-                        float damageMult = GetICBMDamageMult(characterBody);
+                        float v = base.characterBody.acceleration * characterMotor.airControl;
 
-                        Vector3 rhs = Vector3.Cross(Vector3.up, aimRay.direction);
-                        Vector3 axis = Vector3.Cross(aimRay.direction, rhs);
-
-                        float currentSpread = 20f;
-                        float angle = 0f;
-                        float num2 = 0f;
-                        num2 = Random.Range(1f + currentSpread, 1f + currentSpread) * 3f;   //Bandit is x2
-                        angle = num2 / 2f;  //3 - 1 rockets
-
-                        Vector3 direction = Quaternion.AngleAxis(-num2 * 0.5f, axis) * aimRay.direction;
-                        Quaternion rotation = Quaternion.AngleAxis(angle, axis);
-                        Ray aimRay2 = new Ray(aimRay.origin, direction);
-                        for (int i = 0; i < 3; i++)
+                        if (base.characterBody.moveSpeed > 0f && v > 0f)
                         {
-                            ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay2.origin, Util.QuaternionSafeLookRotation(aimRay2.direction), gameObject, damageMult * damageStat * SeamstressStaticValues.needleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
-                            aimRay2.direction = rotation * aimRay2.direction;
+                            float num2 = Mathf.Sqrt(10f * waxQuailCount / v);
+                            float num3 = characterBody.moveSpeed / v;
+                            horizontalBonus = (num2 + num3) / num3;
                         }
+                    }
+                    GenericCharacterMain.ApplyJumpVelocity(base.characterMotor, base.characterBody, horizontalBonus, verticalBonus, false);
+                    base.characterMotor.jumpCount++;
+                    return;
+                }
+                else if (!base.isGrounded && seamstressController.blinkReady)
+                {
+                    seamstressController.blinkReady = false;
+                    if (base.characterMotor.jumpCount >= base.characterBody.maxJumpCount && this.characterBody.inventory.GetItemCount(RoR2.RoR2Content.Items.Feather) > 0 && !seamstressController.hopooHasHopped)
+                    {
+                        if (!seamstressController.hopooHasHopped) seamstressController.hopooHasHopped = true;
+                        Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
+                    }
+                    else if (base.characterMotor.jumpCount >= base.characterBody.maxJumpCount)
+                    {
+                        base.needleCon.consumeNeedle = true;
+                        Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
                     }
                     else
                     {
-                        ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, damageStat * SeamstressStaticValues.needleDamageCoefficient, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
+                        Util.PlaySound("Play_bandit2_m2_alt_throw", gameObject);
                     }
-                    if (inputBank.moveVector != Vector3.zero) BlinkForward();
-                    else BlinkUp();
+
+                    if (base.isAuthority)
+                    {
+                        aimRay = GetAimRay();
+                        aimRay.direction = Util.ApplySpread(aimRay.direction, minSpread, maxSpread, 1f, 1f, 0f, projectilePitchBonus);
+                        if (characterBody.inventory && characterBody.inventory.GetItemCount(DLC1Content.Items.MoreMissile) > 0)
+                        {
+                            float damageMult = GetICBMDamageMult(characterBody);
+
+                            Vector3 rhs = Vector3.Cross(Vector3.up, aimRay.direction);
+                            Vector3 axis = Vector3.Cross(aimRay.direction, rhs);
+
+                            float currentSpread = 20f;
+                            float angle = 0f;
+                            float num2 = 0f;
+                            num2 = Random.Range(1f + currentSpread, 1f + currentSpread) * 3f;   //Bandit is x2
+                            angle = num2 / 2f;  //3 - 1 rockets
+
+                            Vector3 direction = Quaternion.AngleAxis(-num2 * 0.5f, axis) * aimRay.direction;
+                            Quaternion rotation = Quaternion.AngleAxis(angle, axis);
+                            Ray aimRay2 = new Ray(aimRay.origin, direction);
+                            for (int i = 0; i < 3; i++)
+                            {
+                                ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay2.origin, 
+                                    Util.QuaternionSafeLookRotation(aimRay2.direction), gameObject, 
+                                    damageMult * damageStat * SeamstressConfig.needleDamageCoefficient.Value, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
+                                aimRay2.direction = rotation * aimRay2.direction;
+                            }
+                        }
+                        else
+                        {
+                            ProjectileManager.instance.FireProjectile(projectilePrefab, aimRay.origin, 
+                                Util.QuaternionSafeLookRotation(aimRay.direction), gameObject, 
+                                damageStat * SeamstressConfig.needleDamageCoefficient.Value, 0f, RollCrit(), DamageColorIndex.Default, null, -1f);
+                        }
+                        if (inputBank.moveVector != Vector3.zero) BlinkForward();
+                        else BlinkUp();
+                        base.characterMotor.jumpCount++;
+                    }
                 }
             }
         }

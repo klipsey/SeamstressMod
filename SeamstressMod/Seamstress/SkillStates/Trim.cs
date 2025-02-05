@@ -18,7 +18,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             hitboxGroupName = "Sword";
             damageType = DamageType.Generic;
 
-            damageTotal = SeamstressStaticValues.trimDamageCoefficient;
+            damageTotal = SeamstressConfig.trimDamageCoefficient.Value;
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
@@ -37,9 +37,9 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             swingSoundString = "sfx_seamstress_swing";
             hitSoundString = "";
-            hitEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsHitImpactEffect2 : SeamstressAssets.scissorsHitImpactEffect;
-            swingEffectPrefab = seamstressController.blue ? SeamstressAssets.clawSlashEffect2 : SeamstressAssets.clawSlashEffect;
-            bonusSwingEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsSlashEffect2 : SeamstressAssets.scissorsSlashEffect;
+            hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect;
+            swingEffectPrefab = SeamstressAssets.clawSlashEffect;
+            bonusSwingEffectPrefab = SeamstressAssets.scissorsSlashEffect;
             scissorHit = true;
             switch (swingIndex)
             {
@@ -59,9 +59,9 @@ namespace SeamstressMod.Seamstress.SkillStates
                     break;
                 case 2:
                     swingSoundString = "Play_acrid_m1_bigSlash";
-                    damageTotal = SeamstressStaticValues.trimThirdDamageCoefficient;
-                    swingEffectPrefab = seamstressController.blue ? SeamstressAssets.clawSlashComboEffect2 : SeamstressAssets.clawSlashComboEffect;
-                    bonusSwingEffectPrefab = seamstressController.blue ? SeamstressAssets.scissorsSlashComboEffect2 : SeamstressAssets.scissorsSlashComboEffect;
+                    damageTotal = SeamstressConfig.trimThirdDamageCoefficient.Value;
+                    swingEffectPrefab = SeamstressAssets.clawSlashComboEffect;
+                    bonusSwingEffectPrefab = SeamstressAssets.scissorsSlashComboEffect;
                     muzzleString = "SwingCenterSmall";
                     earlyExitPercentTime = 0.75f;
                     attackEndPercentTime = 0.65f;

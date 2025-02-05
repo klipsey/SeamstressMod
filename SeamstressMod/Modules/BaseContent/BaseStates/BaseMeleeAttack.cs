@@ -248,7 +248,7 @@ namespace SeamstressMod.Modules.BaseStates
                         attack.attacker = gameObject;
                         attack.inflictor = gameObject;
                         attack.teamIndex = GetTeam();
-                        if (!isFlatDamage) attack.damage = SeamstressStaticValues.scissorSlashDamageCoefficient * base.damageStat;
+                        if (!isFlatDamage) attack.damage = SeamstressConfig.scissorSlashDamageCoefficient.Value * base.damageStat;
                         else attack.damage = damageTotal;
                         attack.procCoefficient = procCoefficient;
                         attack.hitEffectPrefab = hitEffectPrefab;

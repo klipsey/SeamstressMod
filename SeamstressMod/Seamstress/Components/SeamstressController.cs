@@ -24,19 +24,21 @@ namespace SeamstressMod.Seamstress.Components
 
         private GameObject insatiableEndPrefab = SeamstressAssets.insatiableEndEffect;
 
-        public GameObject blinkEffect = SeamstressAssets.blinkEffect;
+        public GameObject blinkEffect = SeamstressAssets.blinkEffectDefault;
 
         public GameObject scissorLPrefab = SeamstressAssets.scissorLPrefab;
 
         public GameObject scissorRPrefab = SeamstressAssets.scissorRPrefab;
 
-        public GameObject trailEffectPrefab;
+        private GameObject trailEffectPrefab;
 
-        public GameObject trailEffectPrefab2;
+        public GameObject trailEffectPrefabR;
+
+        public GameObject trailEffectPrefabL;
 
         public Material destealthMaterial = SeamstressAssets.destealthMaterial;
 
-        public bool blue;
+        public Material insatiableOverlayMaterial = SeamstressAssets.insatiableOverlayMat;
 
         private float dashStopwatch;
 
@@ -60,10 +62,6 @@ namespace SeamstressMod.Seamstress.Components
 
         public Vector3 snapBackPosition;
 
-        private static float bleedInterval = 0.2f;
-
-        private float bleedTimer;
-
         private float insatiableStopwatch = 0f;
 
         public bool hasStartedInsatiable = false;
@@ -78,8 +76,8 @@ namespace SeamstressMod.Seamstress.Components
             ModelLocator modelLocator = this.GetComponent<ModelLocator>();
             childLocator = modelLocator.modelBaseTransform.GetComponentInChildren<ChildLocator>();
             animator = modelLocator.modelTransform.GetComponent<Animator>();
-            skinController = this.GetComponentInChildren<ModelSkinController>();
-            Invoke("SetupSkin", 0.5f);
+
+            SetupSkin();
         }
         public void Start()
         {
@@ -87,26 +85,24 @@ namespace SeamstressMod.Seamstress.Components
 
         private void SetupSkin()
         {
-            if (childLocator.FindChild("ScissorLModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh && childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh != null)
+            skinController = this.GetComponentInChildren<ModelSkinController>();
+
+            if (this.skinController.skins[this.skinController.currentSkinIndex].nameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME")
             {
-                if (this.skinController.skins[this.skinController.currentSkinIndex].nameToken == Seamstress.SeamstressSurvivor.SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME")
-                {
-                    blue = true;
-                    insatiableEndPrefab = SeamstressAssets.insatiableEndEffect2;
-                    blinkEffect = SeamstressAssets.blinkEffect2;
-                    scissorLPrefab = SeamstressAssets.scissorLPrefab2;
-                    scissorRPrefab = SeamstressAssets.scissorRPrefab2;
-                    destealthMaterial = SeamstressAssets.destealthMaterial2;
-                }
-                scissorLPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshFilter>().mesh = childLocator.FindChild("ScissorLModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh;
-                scissorLPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshRenderer>().material = childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().material;
-                scissorRPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshFilter>().mesh = childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh;
-                scissorRPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshRenderer>().material = childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().material;
+                destealthMaterial = SeamstressAssets.destealthMaterialBlue;
+                insatiableOverlayMaterial = SeamstressAssets.insatiableOverlayMatBlue;
+                trailEffectPrefab = SeamstressAssets.trailEffectHandsBlue;
+            }
+            else
+            {
+                destealthMaterial = SeamstressAssets.destealthMaterial;
+                insatiableOverlayMaterial = SeamstressAssets.insatiableOverlayMat;
+                trailEffectPrefab = SeamstressAssets.trailEffectHandsDefault;
             }
         }
         public void FixedUpdate()
         {
-            if(this.characterMotor.isGrounded) hopooHasHopped = false;
+            if (this.characterMotor.isGrounded) hopooHasHopped = false;
             blinkCd += Time.fixedDeltaTime;
             if (insatiableStopwatch > 0f) insatiableStopwatch -= Time.fixedDeltaTime;
             if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
@@ -117,7 +113,7 @@ namespace SeamstressMod.Seamstress.Components
             }
             else checkStatsStopwatch += Time.fixedDeltaTime;
 
-            if(animOverrideTimer > 0)
+            if (animOverrideTimer > 0)
             {
                 animOverrideTimer -= Time.fixedDeltaTime;
                 animator.SetLayerWeight(animator.GetLayerIndex("Scissor, Override"), animOverrideTimer);
@@ -198,7 +194,7 @@ namespace SeamstressMod.Seamstress.Components
             this.childLocator.FindChild("HeartModel").gameObject.SetActive(false);
             this.animator.SetLayerWeight(this.animator.GetLayerIndex("Body, Butchered"), 1f);
         }
-        public void DisableInstatiableLayer() 
+        public void DisableInstatiableLayer()
         {
             if (!this.animator || !this.childLocator) return;
 
@@ -210,14 +206,14 @@ namespace SeamstressMod.Seamstress.Components
             if (characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && !hasStartedInsatiable)
             {
                 EnableInstatiableLayer();
-                if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
-                if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
+                if (trailEffectPrefabR) GameObject.Destroy(trailEffectPrefabR.gameObject);
+                if (trailEffectPrefabL) GameObject.Destroy(trailEffectPrefabL.gameObject);
                 Transform handR = this.childLocator.FindChild("HandR");
                 Transform handL = this.childLocator.FindChild("HandL");
-                trailEffectPrefab = GameObject.Instantiate(this.blue ? SeamstressAssets.trailEffectHands2 : SeamstressAssets.trailEffectHands, handR);
-                trailEffectPrefab2 = GameObject.Instantiate(this.blue ? SeamstressAssets.trailEffectHands2 : SeamstressAssets.trailEffectHands, handL);
+                trailEffectPrefabR = GameObject.Instantiate(trailEffectPrefab, handR);
+                trailEffectPrefabL = GameObject.Instantiate(trailEffectPrefab, handL);
 
-                insatiableStopwatch = SeamstressStaticValues.insatiableDuration;
+                insatiableStopwatch = SeamstressConfig.insatiableDuration.Value;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -236,7 +232,8 @@ namespace SeamstressMod.Seamstress.Components
             }
             else if (!characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && hasStartedInsatiable)
             {
-                if (skillLocator.utility.skillDef.skillIndex == SeamstressSurvivor.explodeSkillDef.skillIndex && insatiableStopwatch <= SeamstressStaticValues.insatiableDuration - 1f)
+                if (skillLocator.utility.skillDef.skillIndex == SeamstressSurvivor.explodeSkillDef.skillIndex && 
+                    insatiableStopwatch <= SeamstressConfig.insatiableDuration.Value - 1f)
                 {
                     EndInsatiableManually();
 
@@ -251,43 +248,12 @@ namespace SeamstressMod.Seamstress.Components
                     hasStartedInsatiable = false;
                 }
             }
-
-            if(characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
-            {
-                HandleBleed();
-            }
-        }
-        private void HandleBleed()
-        {
-            bleedTimer += Time.fixedDeltaTime;
-
-            if (bleedTimer >= bleedInterval)
-            {
-                bleedTimer = 0f;
-
-                if (NetworkServer.active)
-                {
-                    DamageInfo damageInfo = new DamageInfo
-                    {
-                        damage = (characterBody.healthComponent.fullCombinedHealth - (characterBody.healthComponent.fullCombinedHealth - (characterBody.healthComponent.health + characterBody.healthComponent.shield))) * 0.05f,
-                        damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT,
-                        dotIndex = DotController.DotIndex.Bleed,
-                        position = characterBody.corePosition,
-                        attacker = null,
-                        procCoefficient = 0f,
-                        crit = false,
-                        damageColorIndex = DamageColorIndex.Bleed,
-                    };
-
-                    characterBody.healthComponent.TakeDamage(damageInfo);
-                }
-            }
         }
         public void EndInsatiableManually()
         {
             DisableInstatiableLayer();
-            if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
-            if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
+            if (trailEffectPrefabR) GameObject.Destroy(trailEffectPrefabR.gameObject);
+            if (trailEffectPrefabL) GameObject.Destroy(trailEffectPrefabL.gameObject);
 
             Transform modelTransform = characterBody.modelLocator.modelTransform;
             if (modelTransform)
@@ -313,7 +279,7 @@ namespace SeamstressMod.Seamstress.Components
                     Util.PlaySound("Play_nullifier_impact", characterBody.gameObject);
                     hasPlayed = true;
                 }
-                else if(insatiableStopwatch > 2f || insatiableStopwatch < 0f)
+                else if (insatiableStopwatch > 2f || insatiableStopwatch < 0f)
                 {
                     hasPlayed = false;
                 }
