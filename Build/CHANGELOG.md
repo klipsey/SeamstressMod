@@ -1,3 +1,8 @@
+# 1.4.6
+
+- Added R2api skin support
+- Fixed tokens to reflect changes made to needles and utility
+
 # 1.4.5
 
 - Clearly you've never had an omelette

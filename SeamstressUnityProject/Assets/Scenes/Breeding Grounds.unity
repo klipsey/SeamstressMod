@@ -461,6 +461,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 359006799, guid: 3db6e62511859ee46af08595ab72a2df, type: 3}
+      propertyPath: m_Stiffness
+      value: 0.622
+      objectReference: {fileID: 0}
+    - target: {fileID: 359006820, guid: 3db6e62511859ee46af08595ab72a2df, type: 3}
+      propertyPath: m_Inert
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 359006820, guid: 3db6e62511859ee46af08595ab72a2df, type: 3}
+      propertyPath: m_Stiffness
+      value: 0.622
+      objectReference: {fileID: 0}
+    - target: {fileID: 359006820, guid: 3db6e62511859ee46af08595ab72a2df, type: 3}
+      propertyPath: m_Elasticity
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 359006821, guid: 3db6e62511859ee46af08595ab72a2df, type: 3}
+      propertyPath: m_Inert
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 359006821, guid: 3db6e62511859ee46af08595ab72a2df, type: 3}
+      propertyPath: m_Stiffness
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 2384051515858312450, guid: 3db6e62511859ee46af08595ab72a2df,
         type: 3}
       propertyPath: m_RootOrder
@@ -516,12 +540,48 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2980447431879499966, guid: 3db6e62511859ee46af08595ab72a2df,
+        type: 3}
+      propertyPath: m_Stiffness
+      value: 0.622
+      objectReference: {fileID: 0}
     - target: {fileID: 3052889229958252472, guid: 3db6e62511859ee46af08595ab72a2df,
         type: 3}
       propertyPath: m_Name
       value: mdlSeamstress
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 3304159664688907832, guid: 3db6e62511859ee46af08595ab72a2df,
+        type: 3}
+      propertyPath: m_Stiffness
+      value: 0.622
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442443757142329090, guid: 3db6e62511859ee46af08595ab72a2df,
+        type: 3}
+      propertyPath: m_Stiffness
+      value: 0.622
+      objectReference: {fileID: 0}
+    - target: {fileID: 8103744948806537479, guid: 3db6e62511859ee46af08595ab72a2df,
+        type: 3}
+      propertyPath: m_Stiffness
+      value: 0.622
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522811292760993858, guid: 3db6e62511859ee46af08595ab72a2df,
+        type: 3}
+      propertyPath: m_Inert
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522811292760993858, guid: 3db6e62511859ee46af08595ab72a2df,
+        type: 3}
+      propertyPath: m_Stiffness
+      value: 0.622
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522811292760993858, guid: 3db6e62511859ee46af08595ab72a2df,
+        type: 3}
+      propertyPath: m_Elasticity
+      value: 0.1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 359006799, guid: 3db6e62511859ee46af08595ab72a2df, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3db6e62511859ee46af08595ab72a2df, type: 3}
 --- !u!1 &1513977440
 GameObject:

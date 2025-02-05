@@ -76,11 +76,10 @@ namespace SeamstressMod.Seamstress.Components
             ModelLocator modelLocator = this.GetComponent<ModelLocator>();
             childLocator = modelLocator.modelBaseTransform.GetComponentInChildren<ChildLocator>();
             animator = modelLocator.modelTransform.GetComponent<Animator>();
-
-            SetupSkin();
         }
         public void Start()
         {
+            SetupSkin();
         }
 
         private void SetupSkin()

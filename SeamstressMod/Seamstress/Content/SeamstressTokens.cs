@@ -28,7 +28,7 @@ namespace SeamstressMod.Seamstress.Content
              + "< ! > Make sure to use Clip with as many needles as you can. It can rapidly apply bleed during Insatiable." + Environment.NewLine + Environment.NewLine
              + "< ! > Heal as much as you can during Insatiable. The barrier it provides could be life or death." + Environment.NewLine + Environment.NewLine
              + "< ! > Brutalize is a great way to boost your damage but be wary of your health." + Environment.NewLine + Environment.NewLine
-             + "< ! > Use and retrieve your Symbiotic weapons to gain needles outside of Insatiable." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Use and retrieve your Symbiotic scissors to gain needles outside of Insatiable." + Environment.NewLine + Environment.NewLine;
 
             /*
              * its not really shown yet in the anims but the panel on the top of the robe/heart area opens up to her artificial heart. 
@@ -131,11 +131,11 @@ namespace SeamstressMod.Seamstress.Content
             #region Special
             Language.Add(prefix + "SPECIAL_FIRE_NAME", "Skewer");
             Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"<style=cIsHealth>15% HP.</style>. Fire a " + Tokens.symbioticPrefix + $" scissor dealing <style=cIsDamage>{100f * SeamstressConfig.scissorDamageCoefficient.Value}% damage</style>. " +
-                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressConfig.scissorPickupDamageCoefficient.Value}% damage</style>.");
+                $"Pick up " + Tokens.symbioticPrefix + $" scissors to slash for <style=cIsDamage>{100f * SeamstressConfig.scissorPickupDamageCoefficient.Value}% damage</style>.");
 
             Language.Add(prefix + "SPECIAL_SCEPTER_NAME", "Rampage");
             Language.Add(prefix + "SPECIAL_SCEPTER_DESCRIPTION", $"<style=cIsHealth>15% HP.</style>. Fire a " + Tokens.symbioticPrefix + $" scissor dealing <style=cIsDamage>{100f * SeamstressConfig.scissorDamageCoefficient.Value}% damage</style>. " +
-                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressConfig.scissorPickupDamageCoefficient.Value}% damage</style>." + Tokens.ScepterDescription("Your " + Tokens.symbioticPrefix + $" weapon only has a <style=cIsUtility>1.5 second pickup time</style>."));
+                $"Pick up " + Tokens.symbioticPrefix + $" scissors to slash for <style=cIsDamage>{100f * SeamstressConfig.scissorPickupDamageCoefficient.Value}% damage</style>." + Tokens.ScepterDescription("Your " + Tokens.symbioticPrefix + $" weapon only has a <style=cIsUtility>1.5 second pickup time</style>."));
 
             #endregion
 
