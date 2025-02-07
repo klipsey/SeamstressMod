@@ -133,6 +133,7 @@ namespace SeamstressMod.Seamstress.Content
 
         //Projectiles
         internal static GameObject needlePrefab;
+        internal static GameObject needlePrefabBlue;
         internal static GameObject needleGhostDefault;
 
         internal static GameObject needleGhostBlue;
@@ -466,7 +467,7 @@ namespace SeamstressMod.Seamstress.Content
             var sex = wideSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             sex.startLifetimeMultiplier = 0.6f;
             sex.startRotation3D = false;
-            Object.Destroy(wideSlashEffect.GetComponent<EffectComponent>());
+            Modules.Content.CreateAndAddEffectDef(wideSlashEffect);
 
             wideSlashEffectBlue = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressWideSwordSwing");
             wideSlashEffectBlue.AddComponent<NetworkIdentity>();
@@ -474,7 +475,8 @@ namespace SeamstressMod.Seamstress.Content
             sex = wideSlashEffectBlue.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             sex.startLifetimeMultiplier = 0.6f;
             sex.startRotation3D = false;
-            Object.Destroy(wideSlashEffectBlue.GetComponent<EffectComponent>());
+
+            Modules.Content.CreateAndAddEffectDef(wideSlashEffectBlue);
 
             uppercutEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressUppercut");
             uppercutEffect.AddComponent<NetworkIdentity>();
@@ -482,14 +484,14 @@ namespace SeamstressMod.Seamstress.Content
             sex = uppercutEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             sex.startLifetimeMultiplier = 0.6f;
             sex.startRotation3D = false;
-            Object.Destroy(uppercutEffect.GetComponent<EffectComponent>());
+            Modules.Content.CreateAndAddEffectDef(uppercutEffect);
 
             uppercutEffectBlue = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressUppercut2");
             uppercutEffectBlue.AddComponent<NetworkIdentity>();
             sex = uppercutEffectBlue.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             sex.startLifetimeMultiplier = 0.6f;
             sex.startRotation3D = false;
-            Object.Destroy(uppercutEffectBlue.GetComponent<EffectComponent>());
+            Modules.Content.CreateAndAddEffectDef(uppercutEffectBlue);
 
 
             scissorsHitImpactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMerc.prefab").WaitForCompletion().InstantiateClone("ScissorImpact", false);
@@ -568,7 +570,7 @@ namespace SeamstressMod.Seamstress.Content
             material.SetColor("_TintColor", Color.red);
             insatiableEndEffect.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             insatiableEndEffect.transform.GetChild(6).gameObject.SetActive(false);
-            Object.Destroy(insatiableEndEffect.GetComponent<EffectComponent>());
+            SeamstressMod.Modules.Content.CreateAndAddEffectDef(insatiableEndEffect);
 
             insatiableEndEffectBlue = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarDetonatorConsume.prefab").WaitForCompletion().InstantiateClone("InsatiableEndEffect2");
             insatiableEndEffectBlue.AddComponent<NetworkIdentity>();
@@ -583,7 +585,7 @@ namespace SeamstressMod.Seamstress.Content
             material.SetColor("_TintColor", Color.cyan);
             insatiableEndEffectBlue.transform.GetChild(5).gameObject.GetComponent<ParticleSystemRenderer>().material = material;
             insatiableEndEffectBlue.transform.GetChild(6).gameObject.SetActive(false);
-            Object.Destroy(insatiableEndEffectBlue.GetComponent<EffectComponent>());
+            SeamstressMod.Modules.Content.CreateAndAddEffectDef(insatiableEndEffectBlue);
 
             impactExplosionEffectDefault = CreateImpactExplosionEffect("SeamstressScissorImpact", Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matBloodGeneric.mat").WaitForCompletion(), 
                 Addressables.LoadAssetAsync<Material>("RoR2/Base/Imp/matImpDecal.mat").WaitForCompletion(), false, 2);
@@ -728,18 +730,18 @@ namespace SeamstressMod.Seamstress.Content
 
             flashRed = impSpike.transform.Find("ImpactEffect").Find("Flash, Red").gameObject;
 
-            flashBlue = impSpike.transform.Find("ImpactEffect").Find("Flash, Red").gameObject.InstantiateClone("Flash, Blue");
+            flashBlue = impSpike.transform.Find("ImpactEffect").Find("Flash, Red").gameObject.InstantiateClone("Flash, Blue", false);
             var mainb = flashBlue.gameObject.GetComponent<ParticleSystem>().main;
             mainb.startColor = Color.cyan;
 
-            longLifeTrails = impSpike.transform.Find("ImpactEffect").Find("LongLifeNoiseTrails").gameObject.InstantiateClone("LongLifeNoiseTrails");
+            longLifeTrails = impSpike.transform.Find("ImpactEffect").Find("LongLifeNoiseTrails").gameObject.InstantiateClone("LongLifeNoiseTrails", false);
             
-            longLifeTrailsBlue = impSpike.transform.Find("ImpactEffect").Find("LongLifeNoiseTrails").gameObject.InstantiateClone("LongLifeNoiseTrailsBlue");
+            longLifeTrailsBlue = impSpike.transform.Find("ImpactEffect").Find("LongLifeNoiseTrails").gameObject.InstantiateClone("LongLifeNoiseTrailsBlue", false);
             longLifeTrailsBlue.GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampLightning.png").WaitForCompletion());
 
-            spikeDash = impSpike.transform.Find("ImpactEffect").Find("Dash").gameObject.InstantiateClone("Dash");
+            spikeDash = impSpike.transform.Find("ImpactEffect").Find("Dash").gameObject.InstantiateClone("Dash", false);
 
-            spikeDashBlue = impSpike.transform.Find("ImpactEffect").Find("Dash").gameObject.InstantiateClone("DashBlue");
+            spikeDashBlue = impSpike.transform.Find("ImpactEffect").Find("Dash").gameObject.InstantiateClone("DashBlue", false);
             spikeDashBlue.GetComponent<ParticleSystemRenderer>().material = mercMat;
         }
 

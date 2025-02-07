@@ -22,14 +22,6 @@ namespace SeamstressMod.Seamstress.Components
         private Animator animator;
         private ModelSkinController skinController;
 
-        private GameObject insatiableEndPrefab = SeamstressAssets.insatiableEndEffect;
-
-        public GameObject blinkEffect = SeamstressAssets.blinkEffectDefault;
-
-        public GameObject scissorLPrefab = SeamstressAssets.scissorLPrefab;
-
-        public GameObject scissorRPrefab = SeamstressAssets.scissorRPrefab;
-
         private GameObject trailEffectPrefab;
 
         public GameObject trailEffectPrefabR;
@@ -76,15 +68,20 @@ namespace SeamstressMod.Seamstress.Components
             ModelLocator modelLocator = this.GetComponent<ModelLocator>();
             childLocator = modelLocator.modelBaseTransform.GetComponentInChildren<ChildLocator>();
             animator = modelLocator.modelTransform.GetComponent<Animator>();
+            skinController = this.GetComponentInChildren<ModelSkinController>();
+            Invoke("SetupSkin", 0.5f);
         }
         public void Start()
         {
-            SetupSkin();
+            
         }
 
         private void SetupSkin()
         {
-            skinController = this.GetComponentInChildren<ModelSkinController>();
+            if(!skinController)
+            {
+                Debug.LogError("No Skin Controller Found!");
+            }
 
             if (this.skinController.skins[this.skinController.currentSkinIndex].nameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME")
             {
@@ -139,13 +136,13 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void CreateBlinkEffect(Vector3 origin)
         {
-            if (blinkEffect && !hasPlayedEffect && dashStopwatch < 0)
+            if (SeamstressAssets.blinkEffectDefault && !hasPlayedEffect && dashStopwatch < 0)
             {
                 EffectData effectData = new EffectData();
                 effectData.rotation = Util.QuaternionSafeLookRotation(heldDashVector);
                 effectData.origin = origin;
                 effectData.scale = 1f;
-                EffectManager.SpawnEffect(blinkEffect, effectData, transmit: true);
+                EffectManager.SpawnEffect(SeamstressAssets.blinkEffectDefault, effectData, transmit: true);
                 hasPlayedEffect = true;
             }
         }
@@ -265,7 +262,7 @@ namespace SeamstressMod.Seamstress.Components
                 temporaryOverlayInstance.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                 temporaryOverlayInstance.animateShaderAlpha = true;
             }
-            Instantiate(insatiableEndPrefab, characterBody.modelLocator.transform);
+            Instantiate(SeamstressAssets.insatiableEndEffect, characterBody.modelLocator.transform);
             Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
         }
         //end sound

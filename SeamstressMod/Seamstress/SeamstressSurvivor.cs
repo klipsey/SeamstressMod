@@ -726,6 +726,7 @@ namespace SeamstressMod.Seamstress
 
             SkinDef masterySkinDef = Skins.CreateNewSkinDef(masterySkin);
             
+            /*
             SkinVFX.AddSkinVFX(masterySkinDef, SeamstressAssets.spawnPrefab, SeamstressAssets.spawnPrefabBlue);
             SkinVFX.AddSkinVFX(masterySkinDef, SeamstressAssets.parrySlashEffect, SeamstressAssets.parrySlashEffectBlue);
             SkinVFX.AddSkinVFX(masterySkinDef, SeamstressAssets.wideSlashEffect, SeamstressAssets.wideSlashEffectBlue);
@@ -752,7 +753,8 @@ namespace SeamstressMod.Seamstress
             SkinVFX.AddSkinVFX(masterySkinDef, SeamstressAssets.flashRed, SeamstressAssets.flashBlue);
             SkinVFX.AddSkinVFX(masterySkinDef, SeamstressAssets.longLifeTrails, SeamstressAssets.longLifeTrailsBlue);
             SkinVFX.AddSkinVFX(masterySkinDef, SeamstressAssets.spikeDash, SeamstressAssets.spikeDashBlue);
-            
+            */
+
             SkinDef.ProjectileGhostReplacement[] redProjectileGhosts = new SkinDef.ProjectileGhostReplacement[]
             {
                 new SkinDef.ProjectileGhostReplacement
