@@ -13,7 +13,7 @@ namespace SeamstressMod.Seamstress.Content
 
             ////uncomment this to spit out a lanuage file with all the above tokens that people can translate
             ////make sure you set Language.usingLanguageFolder and printingEnabled to true
-            //Language.PrintOutput("Seamstress.txt");
+            Language.PrintOutput("Seamstress.txt");
             //todo guide
             ////refer to guide on how to build and distribute your mod with the proper folders
         }
@@ -28,7 +28,7 @@ namespace SeamstressMod.Seamstress.Content
              + "< ! > Make sure to use Clip with as many needles as you can. It can rapidly apply bleed during Insatiable." + Environment.NewLine + Environment.NewLine
              + "< ! > Heal as much as you can during Insatiable. The barrier it provides could be life or death." + Environment.NewLine + Environment.NewLine
              + "< ! > Brutalize is a great way to boost your damage but be wary of your health." + Environment.NewLine + Environment.NewLine
-             + "< ! > Use and retrieve your Symbiotic weapons to gain needles outside of Insatiable." + Environment.NewLine + Environment.NewLine;
+             + "< ! > Use and retrieve your Symbiotic scissors to gain needles outside of Insatiable." + Environment.NewLine + Environment.NewLine;
 
             /*
              * its not really shown yet in the anims but the panel on the top of the robe/heart area opens up to her artificial heart. 
@@ -88,49 +88,54 @@ namespace SeamstressMod.Seamstress.Content
             Language.Add(prefix + "PASSIVE_DESCRIPTION", $"Gain <style=cIsDamage>base damage</style> and <style=cIsHealing>healing</style> based on <style=cIsHealth>missing health</style>.");
 
             Language.Add(prefix + "NEEDLE_NAME", "Imp Touched Heart");
-            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"<color=#9B3737>Blink</color> instead of jumping. <color=#9B3737>Needles</color> let you <color=#9B3737>Blink</color> mid air firing out and dealing " +
-                $"<style=cIsDamage>{100f * SeamstressStaticValues.needleDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "NEEDLE_DESCRIPTION", $"Gain <color=#9B3737>Needles</color> from picking up " + Tokens.symbioticPrefix + $" scissors or attacking with your primary skill while " + 
+                Tokens.insatiablePrefix + $". <color=#9B3737>Needles</color> let you <color=#9B3737>Blink</color> mid air and will fire out dealing " +
+                $"<style=cIsDamage>{100f * SeamstressConfig.needleDamageCoefficient.Value}% damage</style>.");
             #endregion
 
             #region Primary
             Language.Add(prefix + "PRIMARY_TRIM_NAME", "Trim");
-            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.symbioticSlashPrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.trimDamageCoefficient}% damage</style>." +
-              $" Every 3rd hit deals <style=cIsDamage>{100f * SeamstressStaticValues.trimThirdDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "PRIMARY_TRIM_DESCRIPTION", Tokens.bonusStrike + $". Slash in front for <style=cIsDamage>" +
+                $"{100f * SeamstressConfig.trimDamageCoefficient.Value}% + {100f * SeamstressConfig.scissorSlashDamageCoefficient.Value}% damage</style>." +
+              $" Every 3rd hit deals <style=cIsDamage>{100f * SeamstressConfig.trimThirdDamageCoefficient.Value}% + " +
+              $"{100f * SeamstressConfig.scissorSlashDamageCoefficient.Value}% damage</style>.");
 
             Language.Add(prefix + "PRIMARY_FLURRY_NAME", "Flurry");
-            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.symbioticSlashPrefix + $". Slash in front for <style=cIsDamage>{100f * SeamstressStaticValues.flurryDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "PRIMARY_FLURRY_DESCRIPTION", Tokens.bonusStrike + $". Slash in front for <style=cIsDamage>" +
+                $"{100f * SeamstressConfig.flurryDamageCoefficient.Value}% + {100f * SeamstressConfig.scissorSlashDamageCoefficient.Value}% damage</style>.");
             #endregion
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_CLIP_NAME", "Clip");
-            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", Tokens.reachPrefix + $". Snip for <style=cIsDamage>2x{100f * SeamstressStaticValues.clipDamageCoefficient}% damage</style>. Snip an additional time per <color=#9B3737>Needle</color>.");
+            Language.Add(prefix + "SECONDARY_CLIP_DESCRIPTION", $"Snip for <style=cIsDamage>2x{100f * SeamstressConfig.clipDamageCoefficient.Value}% damage</style>. " +
+                $"Snip an additional time per <color=#9B3737>Needle</color>.");
 
             Language.Add(prefix + "SECONDARY_PLANMAN_NAME", "Planar Manipulation");
-            Language.Add(prefix + "SECONDARY_PLANMAN_DESCRIPTION", Tokens.crushPrefix + $". Hold to grab enemies. Slamming the enemy deals <style=cIsDamage>{100f * SeamstressStaticValues.telekinesisDamageCoefficient} - {100f * SeamstressStaticValues.telekinesisDamageCoefficient * 5}% damage</style> " +
+            Language.Add(prefix + "SECONDARY_PLANMAN_DESCRIPTION", Tokens.crushPrefix + $". Hold to grab enemies. Slamming the enemy deals <style=cIsDamage>{100f * SeamstressConfig.telekinesisDamageCoefficient.Value} - {100f * SeamstressConfig.telekinesisDamageCoefficient.Value * 5}% damage</style> " +
                 $"in an area based on <color=#9B3737>Needle</color> count. " +
-                $"<style=cIsUtility>{SeamstressStaticValues.telekinesisCooldown} second cooldown</style> on the same target.");
+                $"<style=cIsUtility>{SeamstressConfig.telekinesisCooldown} second cooldown</style> on the same target.");
 
             #endregion
 
             #region Utility 
             Language.Add(prefix + "UTILITY_HEARTDASH_NAME", "Brutalize");
             Language.Add(prefix + "UTILITY_HEARTDASH_DESCRIPTION", $"Tear out your <color=#9B3737>heart</color> and become " + Tokens.insatiablePrefix + $". Dash forward dealing " +
-                $"<style=cIsDamage>{100f * SeamstressStaticValues.blinkDamageCoefficient}% damage</style>. Recast to explode for <style=cIsDamage>{100f * SeamstressStaticValues.explodeDamageCoefficient}% damage</style>.");
+                $"<style=cIsDamage>{100f * SeamstressConfig.blinkDamageCoefficient.Value}% damage</style>. Recast to explode for <style=cIsDamage>{100f * SeamstressConfig.explodeDamageCoefficient.Value}% damage</style>.");
 
             Language.Add(prefix + "UTILITY_PARRY_NAME", "Retaliate");
-            Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Prepare a <style=cIsUtility>parry</style>. If successful, dash forward dealing <style=cIsDamage>{100f * SeamstressStaticValues.parryDamageCoefficient}% damage</style> and gain " +
+            Language.Add(prefix + "UTILITY_PARRY_DESCRIPTION", $"Prepare a <style=cIsUtility>parry</style>. If successful, dash forward dealing <style=cIsDamage>{100f * SeamstressConfig.parryDamageCoefficient.Value}% damage</style> and gain " +
                Tokens.insatiablePrefix + ".");
 
             #endregion
 
             #region Special
             Language.Add(prefix + "SPECIAL_FIRE_NAME", "Skewer");
-            Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"<style=cIsHealth>15% HP.</style>. Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
-                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorPickupDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "SPECIAL_FIRE_DESCRIPTION", $"<style=cIsHealth>15% HP.</style>. Fire a " + Tokens.symbioticPrefix + $" scissor dealing <style=cIsDamage>{100f * SeamstressConfig.scissorDamageCoefficient.Value}% damage</style>. " +
+                $"Pick up " + Tokens.symbioticPrefix + $" scissors to slash for <style=cIsDamage>{100f * SeamstressConfig.scissorPickupDamageCoefficient.Value}% damage</style>.");
 
             Language.Add(prefix + "SPECIAL_SCEPTER_NAME", "Rampage");
-            Language.Add(prefix + "SPECIAL_SCEPTER_DESCRIPTION", $"<style=cIsHealth>15% HP.</style>. Fire a " + Tokens.symbioticPrefix + $" weapon dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorDamageCoefficient}% damage</style>. " +
-                $"Pick up " + Tokens.symbioticPrefix + $" weapons to slash for <style=cIsDamage>{100f * SeamstressStaticValues.scissorPickupDamageCoefficient}% damage</style>." + Tokens.ScepterDescription("Your " + Tokens.symbioticPrefix + $" weapon only has a <style=cIsUtility>1.5 second pickup time</style>."));
+            Language.Add(prefix + "SPECIAL_SCEPTER_DESCRIPTION", $"<style=cIsHealth>15% HP.</style>. Fire a " + Tokens.symbioticPrefix + $" scissor dealing <style=cIsDamage>{100f * SeamstressConfig.scissorDamageCoefficient.Value}% damage</style>. " +
+                $"Pick up " + Tokens.symbioticPrefix + $" scissors to slash for <style=cIsDamage>{100f * SeamstressConfig.scissorPickupDamageCoefficient.Value}% damage</style>." + Tokens.ScepterDescription("Your " + Tokens.symbioticPrefix + $" weapon only has a <style=cIsUtility>1.5 second pickup time</style>."));
 
             #endregion
 

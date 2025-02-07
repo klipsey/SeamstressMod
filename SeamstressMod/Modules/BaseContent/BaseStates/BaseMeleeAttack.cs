@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+using Object = UnityEngine.Object;
+
 namespace SeamstressMod.Modules.BaseStates
 {
     public abstract class BaseMeleeAttack : BaseSeamstressSkillState, SteppedSkillDef.IStepSetter
@@ -41,6 +43,7 @@ namespace SeamstressMod.Modules.BaseStates
         protected string hitSoundString = "";
         protected string muzzleString = "SwingCenter";
         protected string playbackRateParam = "Slash.playbackRate";
+        private GameObject swingEffectInstance;
         protected GameObject swingEffectPrefab;
         protected GameObject bonusSwingEffectPrefab;
         protected GameObject hitEffectPrefab;
@@ -62,6 +65,8 @@ namespace SeamstressMod.Modules.BaseStates
         protected Animator animator;
         private BaseState.HitStopCachedState hitStopCachedState;
         private Vector3 storedVelocity;
+        protected EffectManagerHelper _emh_swingEffectInstance;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -115,12 +120,47 @@ namespace SeamstressMod.Modules.BaseStates
                 RemoveHitstop();
             }
             moddedDamageTypeHolder.Clear();
+
+            if (base.isAuthority)
+            {
+                if (_emh_swingEffectInstance != null && _emh_swingEffectInstance.OwningPool != null)
+                {
+                    _emh_swingEffectInstance.OwningPool.ReturnObject(_emh_swingEffectInstance);
+                }
+                else if ((bool)swingEffectInstance)
+                {
+                    EntityState.Destroy(swingEffectInstance);
+                }
+                swingEffectInstance = null;
+                _emh_swingEffectInstance = null;
+            }
             base.OnExit();
         }
 
         protected virtual void PlaySwingEffect()
         {
-            EffectManager.SimpleMuzzleFlash(swingEffectPrefab, gameObject, muzzleString, false);
+            if (!swingEffectPrefab)
+            {
+                return;
+            }
+            Transform transform = FindModelChild(muzzleString);
+            if (transform)
+            {
+                if (!EffectManager.ShouldUsePooledEffect(swingEffectPrefab))
+                {
+                    swingEffectInstance = Object.Instantiate(swingEffectPrefab, transform);
+                }
+                else
+                {
+                    _emh_swingEffectInstance = EffectManager.GetAndActivatePooledEffect(swingEffectPrefab, transform, inResetLocal: true);
+                    swingEffectInstance = _emh_swingEffectInstance.gameObject;
+                }
+                ScaleParticleSystemDuration component = swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
+                if ((bool)component)
+                {
+                    component.newDuration = component.initialDuration;
+                }
+            }
         }
 
         protected virtual void OnHitEnemyAuthority()
@@ -248,7 +288,7 @@ namespace SeamstressMod.Modules.BaseStates
                         attack.attacker = gameObject;
                         attack.inflictor = gameObject;
                         attack.teamIndex = GetTeam();
-                        if (!isFlatDamage) attack.damage = SeamstressStaticValues.scissorSlashDamageCoefficient * base.damageStat;
+                        if (!isFlatDamage) attack.damage = SeamstressConfig.scissorSlashDamageCoefficient.Value * base.damageStat;
                         else attack.damage = damageTotal;
                         attack.procCoefficient = procCoefficient;
                         attack.hitEffectPrefab = hitEffectPrefab;

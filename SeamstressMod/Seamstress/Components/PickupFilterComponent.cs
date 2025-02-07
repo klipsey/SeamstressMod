@@ -14,7 +14,7 @@ namespace SeamstressMod.Seamstress.Components
     {
         public TeamFilter myTeamFilter;
 
-        public static GameObject pickupEffect = SeamstressAssets.blinkEffect;
+        public static GameObject pickupEffect = SeamstressAssets.blinkEffectDefault;
 
         public UnityEvent triggerEvents;
 
@@ -70,7 +70,8 @@ namespace SeamstressMod.Seamstress.Components
                     }
                     triggerEvents?.Invoke();
                     Util.PlaySound("sfx_seamstress_swing_scissor", gameObject);
-                    if (healthComponent.body.GetBuffCount(SeamstressBuffs.Needles) < SeamstressStaticValues.maxNeedleAmount) healthComponent.body.AddBuff(SeamstressBuffs.Needles);
+                    if (healthComponent.body.GetBuffCount(SeamstressBuffs.Needles) < SeamstressConfig.maxNeedleAmount.Value) 
+                        healthComponent.body.AddBuff(SeamstressBuffs.Needles);
                     healthComponent.body.GetComponent<ScissorController>().RpcAddSpecialStock();
                     hasFired = true;
                 }

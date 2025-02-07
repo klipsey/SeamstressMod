@@ -88,8 +88,12 @@ namespace SeamstressMod.Seamstress.Components
             if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonate && !hasFired)
             {
                 CharacterBody component = attacker.GetComponent<CharacterBody>();
-                float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage * component.GetBuffCount(SeamstressBuffs.Needles)), SeamstressStaticValues.telekinesisDamageCoefficient * attacker.GetComponent<CharacterBody>().damage * component.GetBuffCount(SeamstressBuffs.Needles), victimBody.healthComponent.fullHealth * 0.75f);
-                EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                float bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * 
+                    (SeamstressConfig.telekinesisDamageCoefficient.Value * attacker.GetComponent<CharacterBody>().damage * 
+                    component.GetBuffCount(SeamstressBuffs.Needles)), 
+                    SeamstressConfig.telekinesisDamageCoefficient.Value * 
+                    attacker.GetComponent<CharacterBody>().damage * component.GetBuffCount(SeamstressBuffs.Needles), victimBody.healthComponent.fullHealth * 0.75f);
+                EffectManager.SpawnEffect(SeamstressAssets.impactExplosionEffectDefault, new EffectData
                 {
                     origin = victimBody.footPosition,
                     rotation = Quaternion.identity,

@@ -22,7 +22,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
             BlastAttack = new BlastAttack();
             BlastAttack.position = this.transform.position;
-            BlastAttack.baseDamage = SeamstressStaticValues.explodeDamageCoefficient * damageStat;
+            BlastAttack.baseDamage = SeamstressConfig.explodeDamageCoefficient.Value * damageStat;
             BlastAttack.baseForce = 800f;
             BlastAttack.bonusForce = Vector3.zero;
             BlastAttack.radius = 25f;
@@ -59,7 +59,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     Util.PlaySound("Play_imp_overlord_teleport_end", this.gameObject);
                     BlastAttack.Fire();
-                    EffectManager.SpawnEffect(SeamstressAssets.genericImpactExplosionEffect, new EffectData
+                    EffectManager.SpawnEffect(SeamstressAssets.impactExplosionEffectDefault, new EffectData
                     {
                         origin = characterBody.corePosition,
                         rotation = Quaternion.identity,

@@ -47,7 +47,6 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (base.fixedAge > 1f && !check)
             {
                 RefreshState();
-                if (seamstressController.blue) spawnPrefab = SeamstressAssets.spawnPrefab2;
                 check = true;
                 EffectData effectData = new EffectData();
                 effectData.origin = transform.position;

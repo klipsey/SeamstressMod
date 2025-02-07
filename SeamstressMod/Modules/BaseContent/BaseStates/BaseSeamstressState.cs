@@ -20,7 +20,7 @@ namespace SeamstressMod.Modules.BaseStates
 
         protected bool scissorLeft;
 
-        protected bool insatiable;
+        protected bool isInsatiable;
         public override void OnEnter()
         {
             base.OnEnter();
@@ -45,7 +45,7 @@ namespace SeamstressMod.Modules.BaseStates
             }
             if (seamstressController)
             {
-                insatiable = characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff);
+                isInsatiable = characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff);
             }
         }
     }

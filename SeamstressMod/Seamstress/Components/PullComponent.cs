@@ -55,7 +55,7 @@ namespace SeamstressMod.Seamstress.Components
             CalculateSnapDestination();
             DamageInfo damage = new DamageInfo
             {
-                damage = attackerBody.damage * SeamstressStaticValues.parryDamageCoefficient,
+                damage = attackerBody.damage * SeamstressConfig.parryDamageCoefficient.Value,
                 damageColorIndex = DamageColorIndex.Default,
                 damageType = DamageType.Stun1s,
                 attacker = attackerBody.gameObject,

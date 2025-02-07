@@ -15,11 +15,11 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public static string enterSoundString = "Play_bandit2_m2_impact";
 
-        public static float duration = SeamstressStaticValues.parryWindow;
+        public static float duration = SeamstressConfig.parryWindow.Value;
 
-        public static float attackDelay = SeamstressStaticValues.parryWindow;
+        public static float attackDelay = SeamstressConfig.parryWindow.Value;
 
-        public static float invulnDuration = SeamstressStaticValues.parryWindow * 1.25f;
+        public static float invulnDuration = SeamstressConfig.parryWindow.Value * 1.25f;
 
         public override void OnEnter()
         {
@@ -77,7 +77,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 return;
             }
-            characterBody.AddTimedBuff(SeamstressBuffs.SeamstressInsatiableBuff, SeamstressStaticValues.insatiableDuration / 1.5f, 1);
+            characterBody.AddTimedBuff(SeamstressBuffs.SeamstressInsatiableBuff, SeamstressConfig.insatiableDuration.Value / 1.5f, 1);
             CleanBuffsServer();
             if (parrySoundDef)
             {

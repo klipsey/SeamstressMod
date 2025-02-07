@@ -6,11 +6,9 @@ namespace SeamstressMod.Modules
     {
         public const string agilePrefix = "<style=cIsUtility>Agile</style>";
 
-        public const string reachPrefix = "<color=#9B3737>Symbiotic Reach</color>";
-
         public const string symbioticPrefix = "<color=#9B3737>Symbiotic</color>";
 
-        public const string symbioticSlashPrefix = "<color=#9B3737>Symbiotic Slash</color>";
+        public const string bonusStrike = "<color=#9B3737>Double Hit</color>";
 
         public const string needlePrefix = "<color=#9B3737>Needle</color>";
 
@@ -25,14 +23,14 @@ namespace SeamstressMod.Modules
         public static string symbioticKeyword = KeywordText("Symbiotic", "Gain <style=cIsDamage>attack speed</style> and " +
             "<style=cIsUtility>move speed</style> for each stock missing. Additional stocks are converted into missing stock.");
 
-        public static string symbioticSlashKeyword = KeywordText("Symbiotic Slash", "<style=cIsUtility>Stunning</style>" + $". When your " + symbioticPrefix + $" weapon is available hit for an additional strike " +
-            $"dealing <style=cIsDamage>{100f * SeamstressStaticValues.scissorSlashDamageCoefficient}% damage</style>.");
+        public static string symbioticSlashKeyword = KeywordText("Double Hit", "<style=cIsUtility>Stunning</style>" + $". When your " + 
+            symbioticPrefix + $" scissor is available hit for an additional strike.");
 
         public static string insatiableKeyword = KeywordText("Insatiable", $"Attacks <style=cIsHealth>bleed</style> and grant <color=#9B3737>Needles</color>. " +
             $"<style=cIsHealing>Healing</style> is converted into <style=cIsHealing>Barrier</style>.");
 
-        public static string detailsKeyword = KeywordText("Details", $"Gain <style=cIsDamage>{SeamstressStaticValues.passiveScaling} base damage</style> per <style=cIsHealth>1 missing health</style>. " +
-            $"Heal up to <style=cIsHealing>{100f * SeamstressStaticValues.passiveHealingScaling}%</style> of your <style=cIsHealth>missing health</style> on hit.");
+        public static string detailsKeyword = KeywordText("Details", $"Gain <style=cIsDamage>{SeamstressConfig.passiveScaling} base damage</style> per <style=cIsHealth>1 missing health</style>. " +
+            $"Heal up to <style=cIsHealing>{100f * SeamstressConfig.passiveHealingScaling.Value}%</style> of your <style=cIsHealth>missing health</style> on hit.");
         
         public static string needlesKeyword = KeywordText("Needles", $"Gain <color=#9B3737>Needles</color> by picking up your <color=#9B3737>Symbiotic</color> weapons " +
             $"or hitting enemies during <color=#9B3737>Insatiable</color>.");

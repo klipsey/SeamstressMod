@@ -18,7 +18,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         public static float speedCoefficient = 100f;
 
-        public static float damageCoefficient = SeamstressStaticValues.parryDamageCoefficient;
+        public static float damageCoefficient = SeamstressConfig.parryDamageCoefficient.Value;
 
         public static float hitPauseDuration = 0.075f;
 
@@ -46,11 +46,10 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private string hitBox;
 
-
         public override void OnEnter()
         {
             RefreshState();
-            if (seamstressController.blue) this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect2;
+
             inDash = true;
             dashDuration = 0.3f;
             base.OnEnter();

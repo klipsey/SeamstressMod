@@ -22,21 +22,15 @@ namespace SeamstressMod.Seamstress.Components
         private Animator animator;
         private ModelSkinController skinController;
 
-        private GameObject insatiableEndPrefab = SeamstressAssets.insatiableEndEffect;
+        private GameObject trailEffectPrefab;
 
-        public GameObject blinkEffect = SeamstressAssets.blinkEffect;
+        public GameObject trailEffectPrefabR;
 
-        public GameObject scissorLPrefab = SeamstressAssets.scissorLPrefab;
-
-        public GameObject scissorRPrefab = SeamstressAssets.scissorRPrefab;
-
-        public GameObject trailEffectPrefab;
-
-        public GameObject trailEffectPrefab2;
+        public GameObject trailEffectPrefabL;
 
         public Material destealthMaterial = SeamstressAssets.destealthMaterial;
 
-        public bool blue;
+        public Material insatiableOverlayMaterial = SeamstressAssets.insatiableOverlayMat;
 
         private float dashStopwatch;
 
@@ -60,10 +54,6 @@ namespace SeamstressMod.Seamstress.Components
 
         public Vector3 snapBackPosition;
 
-        private static float bleedInterval = 0.2f;
-
-        private float bleedTimer;
-
         private float insatiableStopwatch = 0f;
 
         public bool hasStartedInsatiable = false;
@@ -83,30 +73,32 @@ namespace SeamstressMod.Seamstress.Components
         }
         public void Start()
         {
+            
         }
 
         private void SetupSkin()
         {
-            if (childLocator.FindChild("ScissorLModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh && childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh != null)
+            if(!skinController)
             {
-                if (this.skinController.skins[this.skinController.currentSkinIndex].nameToken == Seamstress.SeamstressSurvivor.SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME")
-                {
-                    blue = true;
-                    insatiableEndPrefab = SeamstressAssets.insatiableEndEffect2;
-                    blinkEffect = SeamstressAssets.blinkEffect2;
-                    scissorLPrefab = SeamstressAssets.scissorLPrefab2;
-                    scissorRPrefab = SeamstressAssets.scissorRPrefab2;
-                    destealthMaterial = SeamstressAssets.destealthMaterial2;
-                }
-                scissorLPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshFilter>().mesh = childLocator.FindChild("ScissorLModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh;
-                scissorLPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshRenderer>().material = childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().material;
-                scissorRPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshFilter>().mesh = childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh;
-                scissorRPrefab.GetComponent<ProjectileController>().ghostPrefab.GetComponent<MeshRenderer>().material = childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().material;
+                Debug.LogError("No Skin Controller Found!");
+            }
+
+            if (this.skinController.skins[this.skinController.currentSkinIndex].nameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME")
+            {
+                destealthMaterial = SeamstressAssets.destealthMaterialBlue;
+                insatiableOverlayMaterial = SeamstressAssets.insatiableOverlayMatBlue;
+                trailEffectPrefab = SeamstressAssets.trailEffectHandsBlue;
+            }
+            else
+            {
+                destealthMaterial = SeamstressAssets.destealthMaterial;
+                insatiableOverlayMaterial = SeamstressAssets.insatiableOverlayMat;
+                trailEffectPrefab = SeamstressAssets.trailEffectHandsDefault;
             }
         }
         public void FixedUpdate()
         {
-            if(this.characterMotor.isGrounded) hopooHasHopped = false;
+            if (this.characterMotor.isGrounded) hopooHasHopped = false;
             blinkCd += Time.fixedDeltaTime;
             if (insatiableStopwatch > 0f) insatiableStopwatch -= Time.fixedDeltaTime;
             if (dashStopwatch > 0 && !hasPlayedEffect) dashStopwatch -= Time.fixedDeltaTime;
@@ -117,7 +109,7 @@ namespace SeamstressMod.Seamstress.Components
             }
             else checkStatsStopwatch += Time.fixedDeltaTime;
 
-            if(animOverrideTimer > 0)
+            if (animOverrideTimer > 0)
             {
                 animOverrideTimer -= Time.fixedDeltaTime;
                 animator.SetLayerWeight(animator.GetLayerIndex("Scissor, Override"), animOverrideTimer);
@@ -144,13 +136,13 @@ namespace SeamstressMod.Seamstress.Components
         }
         private void CreateBlinkEffect(Vector3 origin)
         {
-            if (blinkEffect && !hasPlayedEffect && dashStopwatch < 0)
+            if (SeamstressAssets.blinkEffectDefault && !hasPlayedEffect && dashStopwatch < 0)
             {
                 EffectData effectData = new EffectData();
                 effectData.rotation = Util.QuaternionSafeLookRotation(heldDashVector);
                 effectData.origin = origin;
                 effectData.scale = 1f;
-                EffectManager.SpawnEffect(blinkEffect, effectData, transmit: true);
+                EffectManager.SpawnEffect(SeamstressAssets.blinkEffectDefault, effectData, transmit: true);
                 hasPlayedEffect = true;
             }
         }
@@ -198,7 +190,7 @@ namespace SeamstressMod.Seamstress.Components
             this.childLocator.FindChild("HeartModel").gameObject.SetActive(false);
             this.animator.SetLayerWeight(this.animator.GetLayerIndex("Body, Butchered"), 1f);
         }
-        public void DisableInstatiableLayer() 
+        public void DisableInstatiableLayer()
         {
             if (!this.animator || !this.childLocator) return;
 
@@ -210,14 +202,14 @@ namespace SeamstressMod.Seamstress.Components
             if (characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && !hasStartedInsatiable)
             {
                 EnableInstatiableLayer();
-                if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
-                if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
+                if (trailEffectPrefabR) GameObject.Destroy(trailEffectPrefabR.gameObject);
+                if (trailEffectPrefabL) GameObject.Destroy(trailEffectPrefabL.gameObject);
                 Transform handR = this.childLocator.FindChild("HandR");
                 Transform handL = this.childLocator.FindChild("HandL");
-                trailEffectPrefab = GameObject.Instantiate(this.blue ? SeamstressAssets.trailEffectHands2 : SeamstressAssets.trailEffectHands, handR);
-                trailEffectPrefab2 = GameObject.Instantiate(this.blue ? SeamstressAssets.trailEffectHands2 : SeamstressAssets.trailEffectHands, handL);
+                trailEffectPrefabR = GameObject.Instantiate(trailEffectPrefab, handR);
+                trailEffectPrefabL = GameObject.Instantiate(trailEffectPrefab, handL);
 
-                insatiableStopwatch = SeamstressStaticValues.insatiableDuration;
+                insatiableStopwatch = SeamstressConfig.insatiableDuration.Value;
                 Transform modelTransform = characterBody.modelLocator.modelTransform;
                 if (modelTransform)
                 {
@@ -236,7 +228,8 @@ namespace SeamstressMod.Seamstress.Components
             }
             else if (!characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && hasStartedInsatiable)
             {
-                if (skillLocator.utility.skillDef.skillIndex == SeamstressSurvivor.explodeSkillDef.skillIndex && insatiableStopwatch <= SeamstressStaticValues.insatiableDuration - 1f)
+                if (skillLocator.utility.skillDef.skillIndex == SeamstressSurvivor.explodeSkillDef.skillIndex && 
+                    insatiableStopwatch <= SeamstressConfig.insatiableDuration.Value - 1f)
                 {
                     EndInsatiableManually();
 
@@ -251,43 +244,12 @@ namespace SeamstressMod.Seamstress.Components
                     hasStartedInsatiable = false;
                 }
             }
-
-            if(characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
-            {
-                HandleBleed();
-            }
-        }
-        private void HandleBleed()
-        {
-            bleedTimer += Time.fixedDeltaTime;
-
-            if (bleedTimer >= bleedInterval)
-            {
-                bleedTimer = 0f;
-
-                if (NetworkServer.active)
-                {
-                    DamageInfo damageInfo = new DamageInfo
-                    {
-                        damage = (characterBody.healthComponent.fullCombinedHealth - (characterBody.healthComponent.fullCombinedHealth - (characterBody.healthComponent.health + characterBody.healthComponent.shield))) * 0.05f,
-                        damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT,
-                        dotIndex = DotController.DotIndex.Bleed,
-                        position = characterBody.corePosition,
-                        attacker = null,
-                        procCoefficient = 0f,
-                        crit = false,
-                        damageColorIndex = DamageColorIndex.Bleed,
-                    };
-
-                    characterBody.healthComponent.TakeDamage(damageInfo);
-                }
-            }
         }
         public void EndInsatiableManually()
         {
             DisableInstatiableLayer();
-            if (trailEffectPrefab) GameObject.Destroy(trailEffectPrefab.gameObject);
-            if (trailEffectPrefab2) GameObject.Destroy(trailEffectPrefab2.gameObject);
+            if (trailEffectPrefabR) GameObject.Destroy(trailEffectPrefabR.gameObject);
+            if (trailEffectPrefabL) GameObject.Destroy(trailEffectPrefabL.gameObject);
 
             Transform modelTransform = characterBody.modelLocator.modelTransform;
             if (modelTransform)
@@ -300,7 +262,7 @@ namespace SeamstressMod.Seamstress.Components
                 temporaryOverlayInstance.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                 temporaryOverlayInstance.animateShaderAlpha = true;
             }
-            Instantiate(insatiableEndPrefab, characterBody.modelLocator.transform);
+            Instantiate(SeamstressAssets.insatiableEndEffect, characterBody.modelLocator.transform);
             Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
         }
         //end sound
@@ -313,7 +275,7 @@ namespace SeamstressMod.Seamstress.Components
                     Util.PlaySound("Play_nullifier_impact", characterBody.gameObject);
                     hasPlayed = true;
                 }
-                else if(insatiableStopwatch > 2f || insatiableStopwatch < 0f)
+                else if (insatiableStopwatch > 2f || insatiableStopwatch < 0f)
                 {
                     hasPlayed = false;
                 }

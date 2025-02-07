@@ -47,7 +47,6 @@ namespace SeamstressMod.Seamstress.SkillStates
             Util.PlaySound("Play_treeBot_R_yank", owner);
             seamstressController = owner.GetComponent<SeamstressController>();
             ownerBody = owner.GetComponent<CharacterBody>();
-            if (seamstressController.blue) this.chain = SeamstressAssets.chainToHeart2;
             chain.GetComponent<DestroyOnCondition>().enabled = true;
             chain.GetComponent<DestroyOnCondition>().ownerBody = ownerBody;
         }
@@ -62,7 +61,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (!hasFired)
                 {
                     hasFired = true;
-                    ChainUpdate(SeamstressStaticValues.insatiableDuration);
+                    ChainUpdate(SeamstressConfig.insatiableDuration.Value);
                 }
             }
             else if (ownerBody && !ownerBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && hasFired)

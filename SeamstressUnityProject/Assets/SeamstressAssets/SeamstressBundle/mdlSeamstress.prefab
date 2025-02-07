@@ -2839,14 +2839,14 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Stiffness: 0
+  m_Stiffness: 0.6
   m_StiffnessDistrib:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Inert: 0
+  m_Inert: 0.1
   m_InertDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -3076,21 +3076,21 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Elasticity: 0
+  m_Elasticity: 0.1
   m_ElasticityDistrib:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Stiffness: 0
+  m_Stiffness: 0.622
   m_StiffnessDistrib:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Inert: 0
+  m_Inert: 0.1
   m_InertDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -3241,7 +3241,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Stiffness: 0.1
+  m_Stiffness: 0.622
   m_StiffnessDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -3458,7 +3458,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Stiffness: 0.1
+  m_Stiffness: 0.622
   m_StiffnessDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -3772,12 +3772,6 @@ Transform:
 --- !u!4 &3401306788959677578 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8526231338593102237, guid: 71ea1ce4c264b994cbe02e837681dddb,
-    type: 3}
-  m_PrefabInstance: {fileID: 2783052245129378537}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3769684664119753196 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1355582934699098885, guid: 71ea1ce4c264b994cbe02e837681dddb,
     type: 3}
   m_PrefabInstance: {fileID: 2783052245129378537}
   m_PrefabAsset: {fileID: 0}
@@ -4249,7 +4243,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Stiffness: 0.1
+  m_Stiffness: 0.622
   m_StiffnessDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -4793,73 +4787,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2783052245129378537}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8131622895360818634 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6216709890168063779, guid: 71ea1ce4c264b994cbe02e837681dddb,
-    type: 3}
-  m_PrefabInstance: {fileID: 2783052245129378537}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &359006799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8131622895360818634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a68da65c907acb4eb4dbcd042f172e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Root: {fileID: 3769684664119753196}
-  m_UpdateRate: 60
-  m_UpdateMode: 0
-  m_Damping: 0.5
-  m_DampingDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_Elasticity: 0.1
-  m_ElasticityDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_Stiffness: 0.1
-  m_StiffnessDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_Inert: 0.9
-  m_InertDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_Radius: 0.03
-  m_RadiusDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_EndLength: 0
-  m_EndOffset: {x: 0, y: 0, z: 0}
-  m_Gravity: {x: 0, y: 0, z: 0}
-  m_Force: {x: 0, y: -0.01, z: 0}
-  m_Colliders:
-  - {fileID: 359006800}
-  m_Exclusions: []
-  m_FreezeAxis: 0
-  m_DistantDisable: 0
-  m_ReferenceObject: {fileID: 0}
-  m_DistanceToObject: 20
 --- !u!4 &8191891386813286734 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2940830121824832601, guid: 71ea1ce4c264b994cbe02e837681dddb,
@@ -5005,21 +4932,21 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Elasticity: 0
+  m_Elasticity: 0.1
   m_ElasticityDistrib:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Stiffness: 0
+  m_Stiffness: 0.622
   m_StiffnessDistrib:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Inert: 0
+  m_Inert: 0.1
   m_InertDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -5274,7 +5201,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Stiffness: 0.1
+  m_Stiffness: 0.622
   m_StiffnessDistrib:
     serializedVersion: 2
     m_Curve: []
