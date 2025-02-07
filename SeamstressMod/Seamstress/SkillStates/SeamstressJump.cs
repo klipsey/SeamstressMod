@@ -25,14 +25,17 @@ namespace SeamstressMod.Seamstress.SkillStates
         private GameObject projectilePrefab;
         public override void OnEnter()
         {
-            projectilePrefab = SeamstressAssets.needlePrefab;
-
             base.OnEnter();
         }
         public override void FixedUpdate()
         {
             RefreshState();
             base.FixedUpdate();
+
+            if(!projectilePrefab)
+            {
+                projectilePrefab = seamstressController.blue ? SeamstressAssets.needlePrefab2 : SeamstressAssets.needlePrefab;
+            }
 
             if (isInsatiable)
             {

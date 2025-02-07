@@ -13,6 +13,8 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class FireScissor : BaseSeamstressSkillState
     {
+        public GameObject scissorFiringPrefab = SeamstressAssets.impDashEffect;
+
         private GameObject projectilePrefab;
 
         public static float baseDuration = 0.5f;
@@ -45,7 +47,7 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             RefreshState();
-
+            if (seamstressController.blue) scissorFiringPrefab = SeamstressAssets.impDashEffect2;
             base.OnEnter();
             Util.PlaySound("Play_item_lunar_specialReplace_explode", gameObject);
             characterBody.GetComponent<ScissorController>().isRight = true;
@@ -53,7 +55,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             aimRay = GetAimRay();
             StartAimMode(aimRay, 2f);
             modelAnimator = GetModelAnimator();
-            if(modelAnimator)
+            if (modelAnimator)
             {
                 if (scissorRight && scissorLeft)
                 {
@@ -104,18 +106,16 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 if (chosenAnim == "FireScissorL")
                 {
-                    projectilePrefab = SeamstressAssets.scissorRPrefab;
+                    projectilePrefab = this.seamstressController.scissorLPrefab;
                     fireString = "SwingRightSmall";
                 }
                 else
                 {
-                    projectilePrefab = SeamstressAssets.scissorLPrefab;
+                    projectilePrefab = this.seamstressController.scissorRPrefab;
                     fireString = "SwingLeftSmall";
                 }
-
                 float num = sceptered ? 1.5f : SeamstressConfig.basePickupCooldown.Value;
                 projectilePrefab.transform.GetChild(0).GetChild(5).gameObject.GetComponent<PickupFilterComponent>().pickupTimer = Mathf.Max(0.5f, num * base.skillLocator.special.cooldownScale - base.skillLocator.special.flatCooldownReduction);
-                
                 if (isInsatiable)
                 {
                     projectilePrefab.GetComponent<ProjectileDamage>().damageType.AddModdedDamageType(DamageTypes.CutDamage);
@@ -144,7 +144,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 effectData.rotation = Util.QuaternionSafeLookRotation(aimRay.direction);
                 effectData.origin = transform.position;
                 effectData.scale = 0.5f;
-                EffectManager.SpawnEffect(SeamstressAssets.impDashEffect, effectData, transmit: true);
+                EffectManager.SpawnEffect(scissorFiringPrefab, effectData, transmit: true);
             }
             if (base.isAuthority)
             {

@@ -84,7 +84,7 @@ namespace SeamstressMod.Modules.BaseStates
             attack.damageType = damageType;
             foreach(DamageAPI.ModdedDamageType i in moddedDamageTypeHolder)
             {
-                attack.AddModdedDamageType(i);
+                attack.damageType.AddModdedDamageType(i);
             }
             attack.attacker = gameObject;
             attack.inflictor = gameObject;

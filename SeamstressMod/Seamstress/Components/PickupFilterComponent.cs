@@ -14,7 +14,7 @@ namespace SeamstressMod.Seamstress.Components
     {
         public TeamFilter myTeamFilter;
 
-        public static GameObject pickupEffect = SeamstressAssets.blinkEffectDefault;
+        public static GameObject pickupEffect = SeamstressAssets.blinkEffect;
 
         public UnityEvent triggerEvents;
 
@@ -49,13 +49,14 @@ namespace SeamstressMod.Seamstress.Components
             if (healthComponent)
             {
                 TeamComponent component2 = healthComponent.GetComponent<TeamComponent>();
-                if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer <= 0f && healthComponent.body.baseNameToken == "KENKO_SEAMSTRESS_NAME")
+                if ((!component2 || component2.teamIndex == myTeamFilter.teamIndex) && !hasFired && pickupTimer <= 0f &&
+                    healthComponent.body.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
                 {
                     string scissorName = gameObject.transform.root.name;
                     if (scissorName == "ScissorR(Clone)")
                     {
                         healthComponent.body.GetComponent<ScissorController>().isRight = true;
-                        if(healthComponent.body.TryGetComponent<SeamstressController>(out var seamstressController))
+                        if (healthComponent.body.TryGetComponent<SeamstressController>(out var seamstressController))
                         {
                             seamstressController.PlayScissorRSwing();
                         }
@@ -70,8 +71,7 @@ namespace SeamstressMod.Seamstress.Components
                     }
                     triggerEvents?.Invoke();
                     Util.PlaySound("sfx_seamstress_swing_scissor", gameObject);
-                    if (healthComponent.body.GetBuffCount(SeamstressBuffs.Needles) < SeamstressConfig.maxNeedleAmount.Value) 
-                        healthComponent.body.AddBuff(SeamstressBuffs.Needles);
+                    if (healthComponent.body.GetBuffCount(SeamstressBuffs.Needles) < SeamstressConfig.maxNeedleAmount.Value) healthComponent.body.AddBuff(SeamstressBuffs.Needles);
                     healthComponent.body.GetComponent<ScissorController>().RpcAddSpecialStock();
                     hasFired = true;
                 }

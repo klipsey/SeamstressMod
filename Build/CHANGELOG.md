@@ -1,7 +1,8 @@
 # 1.4.6
 
-- Added R2api skin support
 - Fixed tokens to reflect changes made to needles and utility
+- Added configs (Delete your old config!)
+- More bugfixes
 
 # 1.4.5
 

@@ -76,7 +76,13 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             RefreshState();
-
+            if (seamstressController.blue)
+            {
+                clawSlash = SeamstressAssets.clawSlashEffect2;
+                hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect2;
+                swingEffectPrefab = SeamstressAssets.scissorsSlashComboEffect2;
+                wideEffectPrefab = SeamstressAssets.wideSlashEffect2;
+            }
             base.OnEnter();
             baseDuration = 0.75f;
             snips = needleCount;
@@ -314,9 +320,9 @@ namespace SeamstressMod.Seamstress.SkillStates
             overlapAttack.damageType = damageType;
             if (isInsatiable)
             {
-                overlapAttack.AddModdedDamageType(moddedDamageType);
+                overlapAttack.damageType.AddModdedDamageType(moddedDamageType);
             }
-            overlapAttack.AddModdedDamageType(moddedDamageType2);
+            overlapAttack.damageType.AddModdedDamageType(moddedDamageType2);
             overlapAttack.attacker = gameObject;
             overlapAttack.inflictor = gameObject;
             overlapAttack.teamIndex = GetTeam();

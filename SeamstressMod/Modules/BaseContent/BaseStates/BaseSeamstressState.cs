@@ -1,4 +1,4 @@
-﻿using EntityStates;
+﻿﻿using EntityStates;
 using RoR2;
 using SeamstressMod.Seamstress.Components;
 using SeamstressMod.Seamstress.Content;

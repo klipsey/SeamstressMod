@@ -46,10 +46,11 @@ namespace SeamstressMod.Seamstress.SkillStates
 
         private string hitBox;
 
+
         public override void OnEnter()
         {
             RefreshState();
-
+            if (seamstressController.blue) this.hitEffectPrefab = SeamstressAssets.scissorsHitImpactEffect2;
             inDash = true;
             dashDuration = 0.3f;
             base.OnEnter();
@@ -65,7 +66,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (noScissors) hitBox = "Weave";
             else hitBox = "WeaveBig";
             overlapAttack = InitMeleeOverlap(0, hitEffectPrefab, modelTransform, hitBox);
-            overlapAttack.AddModdedDamageType(DamageTypes.PullDamage);
+            overlapAttack.damageType.AddModdedDamageType(DamageTypes.PullDamage);
             overlapAttack.damageType = DamageType.Stun1s;
             overlapAttack.damageType.damageSource = DamageSource.Utility;
             Util.PlaySound("Play_imp_overlord_attack2_tell", gameObject);

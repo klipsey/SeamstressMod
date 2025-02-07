@@ -47,6 +47,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (base.fixedAge > 1f && !check)
             {
                 RefreshState();
+                if (seamstressController.blue) spawnPrefab = SeamstressAssets.spawnPrefab2;
                 check = true;
                 EffectData effectData = new EffectData();
                 effectData.origin = transform.position;
@@ -73,7 +74,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (!initCamera)
                 {
                     initCamera = true;
-                    ((RoR2.CameraModes.CameraModePlayerBasic.InstanceData)cameraController.cameraMode.camToRawInstanceData[cameraController]).SetPitchYawFromLookVector(-characterDirection.forward);
+                    ((RoR2.CameraModes.CameraModePlayerBasic.InstanceData) cameraController.cameraMode.camToRawInstanceData[cameraController]).SetPitchYawFromLookVector(-characterDirection.forward);
                 }
             }
 
@@ -95,4 +96,3 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
     }
 }
-

@@ -13,7 +13,6 @@ using System;
 using RoR2.Projectile;
 using SeamstressMod.Seamstress.Content;
 using SeamstressMod.Seamstress.Components;
-using R2API.Networking;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
@@ -29,7 +28,8 @@ namespace SeamstressMod.Seamstress.SkillStates
         public GameObject impDashEffect = SeamstressAssets.impDashEffect;
         public GameObject bloodSplatterEffect = SeamstressAssets.bloodSplatterEffect;
         public GameObject smallBlinkEffect = SeamstressAssets.smallBlinkEffect;
-        public Material destealthMaterial;
+        public Color mainColor = SeamstressAssets.coolRed;
+        public Material destealthMaterial = SeamstressAssets.destealthMaterial;
         private Vector3 dashVector;
         private OverlapAttack attack;
         private List<HurtBox> victimsStruck = new List<HurtBox>();
@@ -40,7 +40,18 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             RefreshState();
-            destealthMaterial = seamstressController.destealthMaterial;
+            if (seamstressController.blue)
+            {
+                uppercutEffect = SeamstressAssets.uppercutEffect2;
+                projectilePrefab = SeamstressAssets.heartPrefab2;
+                scissorHitImpactEffect = SeamstressAssets.scissorsHitImpactEffect2;
+                bloodExplosionEffect = SeamstressAssets.bloodExplosionEffect2;
+                impDashEffect = SeamstressAssets.impDashEffect2;
+                bloodSplatterEffect = SeamstressAssets.bloodSplatterEffect2;
+                smallBlinkEffect = SeamstressAssets.smallBlinkEffect2;
+                mainColor = Color.cyan;
+                destealthMaterial = SeamstressAssets.destealthMaterial2;
+            }
             base.OnEnter();
 
             dashVector = base.inputBank.aimDirection;
@@ -72,7 +83,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             if (!hasDelayed) base.characterMotor.velocity.y = 0f;
             if (base.fixedAge > (0.5f / attackSpeedStat) && !hasDelayed)
             {
-                Util.PlaySound("sfx_seamstress_dash",base.gameObject);
+                Util.PlaySound("sfx_seamstress_dash", base.gameObject);
                 Util.PlaySound("sfx_seamstress_chains", base.gameObject);
                 hasDelayed = true;
                 this.attack = new OverlapAttack();
@@ -97,9 +108,9 @@ namespace SeamstressMod.Seamstress.SkillStates
 
                 if (isInsatiable)
                 {
-                    attack.AddModdedDamageType(DamageTypes.CutDamage);
+                    attack.damageType.AddModdedDamageType(DamageTypes.CutDamage);
                 }
-                attack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
+                attack.damageType.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
 
                 EffectData effectData = new EffectData()
                 {
@@ -123,6 +134,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 {
                     origin = effectPos,
                     rotation = Quaternion.identity,
+                    color = mainColor,
                 }, false);
 
                 //seamstressController.snapBackPosition = base.characterBody.corePosition;
@@ -131,7 +143,7 @@ namespace SeamstressMod.Seamstress.SkillStates
 
                 if (NetworkServer.active)
                 {
-                    base.characterBody.healthComponent.ApplyDot(null, SeamstressDots.SeamstressSelfBleed, SeamstressConfig.insatiableDuration.Value);
+                    base.characterBody.AddTimedBuff(SeamstressBuffs.SeamstressInsatiableBuff, SeamstressConfig.insatiableDuration.Value);
                     base.gameObject.AddComponent<SeamstressBleedVisualController>();
                 }
                 /* rot

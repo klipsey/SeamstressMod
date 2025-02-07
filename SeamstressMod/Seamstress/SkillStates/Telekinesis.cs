@@ -27,10 +27,11 @@ namespace SeamstressMod.Seamstress.SkillStates
                 }
             }
         }
-        public GameObject genericImpactExplosionEffect = SeamstressAssets.impactExplosionEffectDefault;
+        public GameObject genericImpactExplosionEffect = SeamstressAssets.genericImpactExplosionEffect;
 
         public GameObject slamEffect = SeamstressAssets.slamEffect;
 
+        public Color mainColor = SeamstressAssets.coolRed;
         private Transform _barrelPoint;
 
         private Vector3 _pickTargetPosition;
@@ -84,7 +85,12 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnEnter()
         {
             RefreshState();
-
+            if (seamstressController.blue)
+            {
+                this.genericImpactExplosionEffect = SeamstressAssets.genericImpactExplosionEffect2;
+                this.slamEffect = SeamstressAssets.slamEffect2;
+                this.mainColor = Color.cyan;
+            }
             base.OnEnter();
             pullSuitabilityCurve.AddKey(0, 1);
             pullSuitabilityCurve.AddKey(2000, 0);
@@ -106,7 +112,7 @@ namespace SeamstressMod.Seamstress.SkillStates
             }
             else
             {
-                if(base.isAuthority)
+                if (base.isAuthority)
                 {
                     outer.SetNextStateToMain();
                 }
@@ -184,8 +190,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     if (victimBody.HasBuff(SeamstressBuffs.Manipulated))
                     {
                         victimBody.RemoveBuff(SeamstressBuffs.Manipulated);
-                        victimBody.AddTimedBuff(SeamstressBuffs.ManipulatedCd, 
-                            Mathf.Min(SeamstressConfig.telekinesisCooldown.Value, 
+                        victimBody.AddTimedBuff(SeamstressBuffs.ManipulatedCd, Mathf.Min(SeamstressConfig.telekinesisCooldown.Value, 
                             Mathf.Max(0.5f, SeamstressConfig.telekinesisCooldown.Value * 
                             characterBody.skillLocator.secondary.cooldownScale - characterBody.skillLocator.secondary.flatCooldownReduction)));
                     }
@@ -243,7 +248,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                         num2 = victimRigid.mass;
                     }
                     else vector2.y += Physics.gravity.y * Time.fixedDeltaTime;
-                    if(num2 < 1000f) num2 = Util.Remap(num2, 60f, 1500f, 60f, 125f);
+                    if (num2 < 1000f) num2 = Util.Remap(num2, 60f, 1500f, 60f, 125f);
                     float num3 = pullSuitabilityCurve.Evaluate(num2);
                     victim.healthComponent.TakeDamageForce(forceDir - vector2 * damping * (num3 * Mathf.Max(num2, 100f)) * num, alwaysApply: true, disableAirControlUntilCollision: false);
                 }
@@ -251,17 +256,17 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (victimMotor != null) bonusDamage = Mathf.Clamp(victimMotor.velocity.magnitude * 
                     (SeamstressConfig.telekinesisDamageCoefficient.Value * damageStat * needleCount) + 
                     victim.healthComponent.fullCombinedHealth * 0.2f, 
-                    SeamstressConfig.telekinesisDamageCoefficient.Value * damageStat * needleCount, 
-                    victim.healthComponent.fullCombinedHealth * 0.7f);
-                else bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * 
-                    (SeamstressConfig.telekinesisDamageCoefficient.Value * damageStat * needleCount), 
+                    SeamstressConfig.telekinesisDamageCoefficient.Value * damageStat * needleCount, victim.healthComponent.fullCombinedHealth * 0.7f);
+                else bonusDamage = Mathf.Clamp(victimRigid.velocity.magnitude * (SeamstressConfig.telekinesisDamageCoefficient.Value * damageStat * needleCount), 
                     SeamstressConfig.telekinesisDamageCoefficient.Value * damageStat, victim.healthComponent.fullHealth * 0.5f);
+
                 if (Util.HasEffectiveAuthority(victimBody.gameObject) && detonateNextFrame)
                 {
                     EffectManager.SpawnEffect(this.genericImpactExplosionEffect, new EffectData
                     {
                         origin = victimBody.footPosition,
                         rotation = Quaternion.identity,
+                        color = this.mainColor,
                     }, true);
                     EffectManager.SpawnEffect(this.slamEffect, new EffectData
                     {
@@ -283,6 +288,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                     blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
                     blastAttack.damageColorIndex = DamageColorIndex.Default;
                     blastAttack.damageType = DamageType.Stun1s | DamageType.AOE;
+                    blastAttack.damageType.damageSource = DamageSource.Secondary;
                     if (isInsatiable)
                     {
                         blastAttack.AddModdedDamageType(DamageTypes.CutDamage);

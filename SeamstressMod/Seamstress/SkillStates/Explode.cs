@@ -14,28 +14,32 @@ namespace SeamstressMod.Seamstress.SkillStates
     public class Explode : BaseSeamstressSkillState
     {
         public float BaseDuration = 0.8f;
-        public BlastAttack BlastAttack;
+        public BlastAttack blastAttack;
         private bool _hasDelayed;
+        private GameObject explosionEffect = SeamstressAssets.genericImpactExplosionEffect;
+        private GameObject slamEffect = SeamstressAssets.slamEffect;
         public override void OnEnter()
         {
             base.OnEnter();
 
-            BlastAttack = new BlastAttack();
-            BlastAttack.position = this.transform.position;
-            BlastAttack.baseDamage = SeamstressConfig.explodeDamageCoefficient.Value * damageStat;
-            BlastAttack.baseForce = 800f;
-            BlastAttack.bonusForce = Vector3.zero;
-            BlastAttack.radius = 25f;
-            BlastAttack.attacker = this.gameObject;
-            BlastAttack.inflictor = this.gameObject;
-            BlastAttack.teamIndex = this.teamComponent.teamIndex;
-            BlastAttack.crit = RollCrit();
-            BlastAttack.procChainMask = default;
-            BlastAttack.procCoefficient = 1f;
-            BlastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
-            BlastAttack.damageColorIndex = DamageColorIndex.Default;
-            BlastAttack.damageType = DamageType.Stun1s | DamageType.AOE;
-            BlastAttack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
+            explosionEffect = seamstressController.blue ? SeamstressAssets.genericImpactExplosionEffect2 : SeamstressAssets.genericImpactExplosionEffect;
+            slamEffect = seamstressController.blue ? SeamstressAssets.slamEffect2 : SeamstressAssets.slamEffect;
+            blastAttack = new BlastAttack();
+            blastAttack.position = this.transform.position;
+            blastAttack.baseDamage = SeamstressConfig.explodeDamageCoefficient.Value * damageStat;
+            blastAttack.baseForce = 800f;
+            blastAttack.bonusForce = Vector3.zero;
+            blastAttack.radius = 25f;
+            blastAttack.attacker = this.gameObject;
+            blastAttack.inflictor = this.gameObject;
+            blastAttack.teamIndex = this.teamComponent.teamIndex;
+            blastAttack.crit = RollCrit();
+            blastAttack.procChainMask = default;
+            blastAttack.procCoefficient = 1f;
+            blastAttack.falloffModel = BlastAttack.FalloffModel.Linear;
+            blastAttack.damageColorIndex = DamageColorIndex.Default;
+            blastAttack.damageType = DamageType.Stun1s | DamageType.AOE;
+            blastAttack.damageType.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
 
             skillLocator.utility.UnsetSkillOverride(gameObject, SeamstressSurvivor.explodeSkillDef, GenericSkill.SkillOverridePriority.Contextual);
 
@@ -58,14 +62,13 @@ namespace SeamstressMod.Seamstress.SkillStates
                 if (base.fixedAge > (0.5f / attackSpeedStat) && !_hasDelayed)
                 {
                     Util.PlaySound("Play_imp_overlord_teleport_end", this.gameObject);
-                    BlastAttack.Fire();
-                    EffectManager.SpawnEffect(SeamstressAssets.impactExplosionEffectDefault, new EffectData
+                    blastAttack.Fire();
+                    EffectManager.SpawnEffect(explosionEffect, new EffectData
                     {
                         origin = characterBody.corePosition,
                         rotation = Quaternion.identity,
-                        color = SeamstressAssets.coolRed,
                     }, true);
-                    EffectManager.SpawnEffect(SeamstressAssets.slamEffect, new EffectData
+                    EffectManager.SpawnEffect(slamEffect, new EffectData
                     {
                         origin = characterBody.corePosition,
                         rotation = Quaternion.identity,
