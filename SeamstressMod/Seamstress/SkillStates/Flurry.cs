@@ -6,12 +6,13 @@ using System;
 using System.ComponentModel;
 using SeamstressMod.Seamstress.Content;
 
+using Object = UnityEngine.Object;
+
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
     public class Flurry : BaseMeleeAttack
     {
-        private GameObject swingInstance;
         public override void OnEnter()
         {
             RefreshState();
@@ -84,18 +85,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         {
             PlayCrossfade("Gesture, Additive", swingIndex % 2 == 0 ? "Slash1" : "Slash2", "Slash.playbackRate", duration, 0.1f * duration);
         }
-        protected override void PlaySwingEffect()
-        {
-            if (!swingEffectPrefab)
-            {
-                return;
-            }
-            Transform transform = FindModelChild(muzzleString);
-            if (transform)
-            {
-                swingInstance = UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
-            }
-        }
         protected override void OnHitEnemyAuthority()
         {
             base.OnHitEnemyAuthority();
@@ -103,7 +92,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnExit()
         {
             base.OnExit();
-            if (swingInstance) GameObject.Destroy(swingInstance);
         }
 
     }

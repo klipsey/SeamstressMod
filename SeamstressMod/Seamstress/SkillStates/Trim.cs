@@ -11,7 +11,6 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class Trim : BaseMeleeAttack
     {
-        GameObject destroyLater;
         public override void OnEnter()
         {
             RefreshState();
@@ -110,18 +109,6 @@ namespace SeamstressMod.Seamstress.SkillStates
                     break;
             }
         }
-        protected override void PlaySwingEffect()
-        {
-            if (!swingEffectPrefab)
-            {
-                return;
-            }
-            Transform transform = FindModelChild(muzzleString);
-            if (transform)
-            {
-                destroyLater = UnityEngine.Object.Instantiate(swingEffectPrefab, transform);
-            }
-        }
         protected override void OnHitEnemyAuthority()
         {
             base.OnHitEnemyAuthority();
@@ -129,7 +116,6 @@ namespace SeamstressMod.Seamstress.SkillStates
         public override void OnExit()
         {
             base.OnExit();
-            if(destroyLater) GameObject.Destroy(destroyLater);
         }
     }
 }

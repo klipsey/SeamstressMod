@@ -8,6 +8,7 @@ using EntityStates;
 using UnityEngine.Networking;
 using SeamstressMod.Seamstress.Content;
 
+using Object = UnityEngine.Object;
 
 namespace SeamstressMod.Seamstress.SkillStates
 {
@@ -20,6 +21,11 @@ namespace SeamstressMod.Seamstress.SkillStates
         public GameObject swingEffectPrefab = SeamstressAssets.scissorsSlashComboEffect;
 
         public GameObject wideEffectPrefab = SeamstressAssets.wideSlashEffect;
+
+        private GameObject swingEffectInstance;
+        protected EffectManagerHelper _emh_swingEffectInstance;
+        private GameObject swingEffectInstance2;
+        protected EffectManagerHelper _emh_swingEffectInstance2;
 
         protected Animator animator;
 
@@ -186,84 +192,120 @@ namespace SeamstressMod.Seamstress.SkillStates
                 Util.PlayAttackSpeedSound("Play_bandit2_m2_impact", gameObject, attackSpeedStat);
             }
         }
-        protected virtual void PlaySwingEffect()
+        protected virtual void DetermineSwing()
         {
-            if (!clawSlash)
+            Transform transform = FindModelChild("SwingCenter");
+            GameObject chosenEffect = clawSlash;
+
+            PlaySwingEffect(transform, chosenEffect);
+
+            if (noScissors)
             {
-                Log.Error("Error, no effect?");
-                return;
-            }
-            Transform bigSnip = FindModelChild("SwingCenter");
-            Transform smallSlash = FindModelChild("SwingLeftSmall");
-            Transform smallSlash2 = FindModelChild("SwingRightSmall");
-            Transform bigSnipAir = FindModelChild("SwingCharAirCenter");
-            Transform bigSnipAir2 = FindModelChild("SwingCharAirCenter2");
-            if (bigSnip && smallSlash && smallSlash2 && bigSnip && bigSnipAir && bigSnipAir2) //lol
-            {
-                if (noScissors)
+                chosenEffect = clawSlash;
+                if (hasFired && !hasFired2)
                 {
-                    if (hasFired && !hasFired2)
+                    if (alternateSwings == 0)
                     {
-                        if (alternateSwings == 0)
-                        {
-                            UnityEngine.Object.Instantiate(clawSlash, smallSlash);
-                            alternateSwings = 1;
-                        }
-                        else if (alternateSwings == 1)
-                        {
-                            UnityEngine.Object.Instantiate(clawSlash, smallSlash2);
-                            alternateSwings = 0;
-                        }
+                        transform = FindModelChild("SwingLeftSmall");
+                        alternateSwings = 1;
                     }
-                    else if (hasFired2)
+                    else if (alternateSwings == 1)
                     {
-                        UnityEngine.Object.Instantiate(clawSlash, smallSlash2);
+                        transform = FindModelChild("SwingRightSmall");
+                        alternateSwings = 0;
                     }
                 }
-                else if (inAir)
+                else if (hasFired2)
                 {
-                    if (hasFired && !hasFired2)
+                    transform = FindModelChild("SwingRightSmall");
+                }
+            }
+            else if (inAir)
+            {
+                chosenEffect = wideEffectPrefab;
+
+                if (hasFired && !hasFired2)
+                {
+                    if (alternateSwings == 0)
                     {
-                        if (alternateSwings == 0)
-                        {
-                            UnityEngine.Object.Instantiate(wideEffectPrefab, bigSnipAir2);
-                            alternateSwings = 1;
-                        }
-                        else if (alternateSwings == 1)
-                        {
-                            UnityEngine.Object.Instantiate(wideEffectPrefab, bigSnipAir);
-                            alternateSwings = 0;
-                        }
+                        transform = FindModelChild("SwingCharAirCenter2");
+                        alternateSwings = 1;
                     }
-                    else if (hasFired2)
+                    else if (alternateSwings == 1)
                     {
-                        UnityEngine.Object.Instantiate(wideEffectPrefab, bigSnipAir);
+                        transform = FindModelChild("SwingCharAirCenter");
+                        alternateSwings = 0;
                     }
+                }
+                else if (hasFired2)
+                {
+                    transform = FindModelChild("SwingCharAirCenter");
+                }
+            }
+            else
+            {
+                if (hasFired && !hasFired2)
+                {
+                    if (alternateSwings == 0)
+                    {
+                        transform = FindModelChild("SwingLeftSmall");
+                        alternateSwings = 1;
+                    }
+                    else if (alternateSwings == 1)
+                    {
+                        transform = FindModelChild("SwingRightSmall");
+                        alternateSwings = 0;
+                    }
+                }
+                else if (hasFired2)
+                {
+                    transform = FindModelChild("SwingRightSmall");
+                }
+
+                PlaySwingEffect(FindModelChild("SwingCenter"), swingEffectPrefab);
+            }
+
+            PlaySwingEffect(transform, chosenEffect);
+        }
+        protected virtual void PlaySwingEffect(Transform attachedTransform, GameObject Effect)
+        {
+            if (!EffectManager.ShouldUsePooledEffect(Effect))
+            {
+                swingEffectInstance = Object.Instantiate(Effect, attachedTransform);
+            }
+            else
+            {
+                _emh_swingEffectInstance = EffectManager.GetAndActivatePooledEffect(Effect, attachedTransform, inResetLocal: true);
+                swingEffectInstance = _emh_swingEffectInstance.gameObject;
+            }
+            ScaleParticleSystemDuration component = swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
+            if ((bool)component)
+            {
+                component.newDuration = component.initialDuration;
+            }
+        }
+
+        protected virtual void PlaySwingEffect2(Transform attachedTransform, GameObject Effect)
+        {
+            if (attachedTransform)
+            {
+                if (!EffectManager.ShouldUsePooledEffect(Effect))
+                {
+                    swingEffectInstance2 = Object.Instantiate(Effect, attachedTransform);
                 }
                 else
                 {
-                    if (hasFired && !hasFired2)
-                    {
-                        if (alternateSwings == 0)
-                        {
-                            UnityEngine.Object.Instantiate(clawSlash, smallSlash);
-                            alternateSwings = 1;
-                        }
-                        else if (alternateSwings == 1)
-                        {
-                            UnityEngine.Object.Instantiate(clawSlash, smallSlash2);
-                            alternateSwings = 0;
-                        }
-                    }
-                    else if (hasFired2)
-                    {
-                        UnityEngine.Object.Instantiate(clawSlash, smallSlash2);
-                    }
-
-                    UnityEngine.Object.Instantiate(swingEffectPrefab, bigSnip);
+                    _emh_swingEffectInstance2 = EffectManager.GetAndActivatePooledEffect(Effect, attachedTransform, inResetLocal: true);
+                    swingEffectInstance2 = _emh_swingEffectInstance2.gameObject;
+                }
+                ScaleParticleSystemDuration component = swingEffectInstance2.GetComponent<ScaleParticleSystemDuration>();
+                if ((bool)component)
+                {
+                    component.newDuration = component.initialDuration;
                 }
             }
         }
+
         protected virtual void FireAttack()
         {
             hasHopped = false;
@@ -297,7 +339,8 @@ namespace SeamstressMod.Seamstress.SkillStates
                     OnHitEnemyAuthority();
                 }
             }
-            PlaySwingEffect();
+
+            DetermineSwing();
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {
@@ -313,6 +356,30 @@ namespace SeamstressMod.Seamstress.SkillStates
         }
         public override void OnExit()
         {
+            if (base.isAuthority)
+            {
+                if (_emh_swingEffectInstance != null && _emh_swingEffectInstance.OwningPool != null)
+                {
+                    _emh_swingEffectInstance.OwningPool.ReturnObject(_emh_swingEffectInstance);
+                }
+                else if ((bool)swingEffectInstance)
+                {
+                    EntityState.Destroy(swingEffectInstance);
+                }
+                swingEffectInstance = null;
+                _emh_swingEffectInstance = null;
+
+                if (_emh_swingEffectInstance2 != null && _emh_swingEffectInstance2.OwningPool != null)
+                {
+                    _emh_swingEffectInstance2.OwningPool.ReturnObject(_emh_swingEffectInstance2);
+                }
+                else if ((bool)swingEffectInstance2)
+                {
+                    EntityState.Destroy(swingEffectInstance2);
+                }
+                swingEffectInstance2 = null;
+                _emh_swingEffectInstance2 = null;
+            }
             base.OnExit();
         }
 

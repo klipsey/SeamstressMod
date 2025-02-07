@@ -13,8 +13,6 @@ namespace SeamstressMod.Seamstress.SkillStates
 {
     public class FireScissor : BaseSeamstressSkillState
     {
-        public GameObject scissorFiringPrefab = SeamstressAssets.impDashEffect;
-
         private GameObject projectilePrefab;
 
         public static float baseDuration = 0.5f;
@@ -106,12 +104,12 @@ namespace SeamstressMod.Seamstress.SkillStates
             {
                 if (chosenAnim == "FireScissorL")
                 {
-                    projectilePrefab = this.seamstressController.scissorLPrefab;
+                    projectilePrefab = SeamstressAssets.scissorRPrefab;
                     fireString = "SwingRightSmall";
                 }
                 else
                 {
-                    projectilePrefab = this.seamstressController.scissorRPrefab;
+                    projectilePrefab = SeamstressAssets.scissorLPrefab;
                     fireString = "SwingLeftSmall";
                 }
 
@@ -146,7 +144,7 @@ namespace SeamstressMod.Seamstress.SkillStates
                 effectData.rotation = Util.QuaternionSafeLookRotation(aimRay.direction);
                 effectData.origin = transform.position;
                 effectData.scale = 0.5f;
-                EffectManager.SpawnEffect(scissorFiringPrefab, effectData, transmit: true);
+                EffectManager.SpawnEffect(SeamstressAssets.impDashEffect, effectData, transmit: true);
             }
             if (base.isAuthority)
             {
