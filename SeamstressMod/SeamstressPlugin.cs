@@ -17,6 +17,7 @@ namespace SeamstressMod
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
     [BepInDependency("com.weliveinasociety.CustomEmotesAPI", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("pseudopulse.EnemyImportance", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api.prefab", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api.language", BepInDependency.DependencyFlags.HardDependency)]
@@ -40,6 +41,7 @@ namespace SeamstressMod
 
         public static bool emotesInstalled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.weliveinasociety.CustomEmotesAPI");
         public static bool scepterInstalled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter");
+        public static bool importanceInstalled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("pseudopulse.EnemyImportance");
         void Awake()
         {
             instance = this;

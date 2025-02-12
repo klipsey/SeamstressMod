@@ -592,6 +592,7 @@ namespace SeamstressMod.Seamstress.Content
             var sex = wideSlashEffect.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             sex.startLifetimeMultiplier = 0.6f;
             sex.startRotation3D = false;
+            wideSlashEffect.GetComponent<EffectComponent>().AttemptToUpgradeSfxSetup();
             Modules.Content.CreateAndAddEffectDef(wideSlashEffect);
 
             wideSlashEffect2 = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressWideSwordSwing");
@@ -600,6 +601,7 @@ namespace SeamstressMod.Seamstress.Content
             sex = wideSlashEffect2.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
             sex.startLifetimeMultiplier = 0.6f;
             sex.startRotation3D = false;
+            wideSlashEffect2.GetComponent<EffectComponent>().AttemptToUpgradeSfxSetup();
             Modules.Content.CreateAndAddEffectDef(wideSlashEffect2);
 
             uppercutEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercSwordSlashWhirlwind.prefab").WaitForCompletion().InstantiateClone("SeamstressUppercut");

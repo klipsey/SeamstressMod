@@ -38,7 +38,7 @@ namespace SeamstressMod.Seamstress.Content
 
         public static ConfigEntry<float> passiveScaling;
 
-        public static ConfigEntry<float> passiveHealingScaling;
+        public static ConfigEntry<float> passiveLifeSteal;
 
         public static ConfigEntry<float> parryDamageCoefficient;
 
@@ -84,15 +84,15 @@ namespace SeamstressMod.Seamstress.Content
 
             blinkCooldown = Config.BindAndOptions(section, "Change Blink Cooldown", 0.4f);
 
-            healConversion = Config.BindAndOptions(section, "Change Heal Conversion", 0.001f);
+            healConversion = Config.BindAndOptionsSlider(section, "Change Heal Conversion", 0.001f, "Changes the amount of healing converted to barrier during Insatiable. (0.001 == 99.999% of healing is converted)", 0.001f);
 
             maxNeedleAmount = Config.BindAndOptions(section, "Change Max Needle Amount", 5);
 
             insatiableDuration = Config.BindAndOptions(section, "Change Insatiable Duration", 7f);
 
-            passiveScaling = Config.BindAndOptions(section, "Change Passive Scaling", 0.04f);
+            passiveScaling = Config.BindAndOptions(section, "Change Passive Scaling", 0.04f, "0.04 extra base damage per 1 missing health. EX: 0.04 * 200 missing health = 8 extra base damage.");
 
-            passiveHealingScaling = Config.BindAndOptions(section, "Change Passive Healing Scaling", 0.03f);
+            passiveLifeSteal = Config.BindAndOptions(section, "Change Passive Lifesteal Scaling", 0.03f, "0.03 == up to 30% lifesteal based on missing health.");
 
             parryDamageCoefficient = Config.BindAndOptions(section, "Change Parry Damage Coefficient", 4f);
 
@@ -102,7 +102,7 @@ namespace SeamstressMod.Seamstress.Content
 
             needleProcCoefficient = Config.BindAndOptions(section, "Change Needle Proc Coefficient", 0.6f);
 
-            parryWindow = Config.BindAndOptions(section, "Change Parry Window", 1f);
+            parryWindow = Config.BindAndOptions(section, "Change Parry Window Duration", 1f);
 
             scissorDamageCoefficient = Config.BindAndOptions(section, "Change Scissor Damage Coefficient", 4f);
 

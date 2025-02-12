@@ -108,9 +108,9 @@ namespace SeamstressMod.Seamstress.SkillStates
 
                 if (isInsatiable)
                 {
-                    attack.damageType.AddModdedDamageType(DamageTypes.CutDamage);
+                    attack.AddModdedDamageType(DamageTypes.CutDamage);
                 }
-                attack.damageType.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
+                attack.AddModdedDamageType(DamageTypes.SeamstressLifesteal);
 
                 EffectData effectData = new EffectData()
                 {

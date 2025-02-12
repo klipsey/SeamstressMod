@@ -11,16 +11,17 @@ using SeamstressMod.Seamstress.Components;
 using SeamstressMod.Seamstress.Content;
 using SeamstressMod.Seamstress.SkillStates;
 using EmotesAPI;
+using KinematicCharacterController;
 
 namespace SeamstressMod.Seamstress
 {
     public class SeamstressSurvivor : SurvivorBase<SeamstressSurvivor>
     {
-        public override string assetBundleName => "seamstressassets"; 
-        public override string bodyName => "SeamstressBody"; 
-        public override string masterName => "SeamstressMonsterMaster"; 
-        public override string modelPrefabName => "mdlSeamstress"; 
-        public override string displayPrefabName => "SeamstressDisplay"; 
+        public override string assetBundleName => "seamstressassets";
+        public override string bodyName => "SeamstressBody";
+        public override string masterName => "SeamstressMonsterMaster";
+        public override string modelPrefabName => "mdlSeamstress";
+        public override string displayPrefabName => "SeamstressDisplay";
 
         public const string SEAMSTRESS_PREFIX = SeamstressPlugin.DEVELOPER_PREFIX + "_SEAMSTRESS_";
         public override string survivorTokenPrefix => SEAMSTRESS_PREFIX;
@@ -122,7 +123,7 @@ namespace SeamstressMod.Seamstress
             SeamstressAssets.Init(assetBundle);
             SeamstressBuffs.Init(assetBundle);
 
-            SeamstressDots.Init();
+            //Dots.Init();
 
             InitializeEntityStateMachines();
             InitializeSkills();
@@ -758,11 +759,27 @@ namespace SeamstressMod.Seamstress
             On.RoR2.UI.LoadoutPanelController.Rebuild += LoadoutPanelController_Rebuild;
             On.RoR2.GenericSkill.SetBonusStockFromBody += GenericSkill_SetBonusStockFromBody;
             On.RoR2.Items.ImmuneToDebuffBehavior.OverrideDot += ImmuneToDebuffBehavior_OverrideDot;
+            //Just in case
+            if(!SeamstressPlugin.importanceInstalled) On.RoR2.BodyCatalog.Init += BodyCatalog_Init;
 
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
 
             if (SeamstressPlugin.emotesInstalled) Emotes();
         }
+
+        private System.Collections.IEnumerator BodyCatalog_Init(On.RoR2.BodyCatalog.orig_Init orig)
+        {
+            yield return orig.Invoke();
+            foreach (GameObject body in BodyCatalog.allBodyPrefabs)
+            {
+                KinematicCharacterMotor motor = body.GetComponent<KinematicCharacterMotor>();
+                if (motor)
+                {
+                    motor.playerCharacter = true;
+                }
+            }
+        }
+
         private void CharacterModel_UpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
         {
             orig.Invoke(self);
@@ -774,8 +791,7 @@ namespace SeamstressMod.Seamstress
 
             SeamstressController s = self.body.GetComponent<SeamstressController>();
 
-            AddOverlay(s.blue ? SeamstressAssets.insatiableOverlayMat2 : SeamstressAssets.insatiableOverlayMat, 
-                self.body.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && s.hasStartedInsatiable == false);
+            AddOverlay(s.blue ? SeamstressAssets.insatiableOverlayMat2 : SeamstressAssets.insatiableOverlayMat, self.body.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && s.hasStartedInsatiable == false);
 
             if (self.body.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && s.hasStartedInsatiable == false)
             {
@@ -891,17 +907,17 @@ namespace SeamstressMod.Seamstress
                             damageInfo.rejected = true;
                         }
                     }
-                    else if(victimBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
+                    else if (victimBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
                     {
                         currentBarrier = victimBody.healthComponent.barrier;
-                        if(currentBarrier > 0f) victimBody.healthComponent.AddBarrier(-currentBarrier);
+                        if (currentBarrier > 0f) victimBody.healthComponent.AddBarrier(-currentBarrier);
                     }
                 }
             }
 
             orig.Invoke(self, damageInfo);
 
-            if(NetworkServer.active)
+            if (NetworkServer.active)
             {
                 if (self.body && self.body.bodyIndex == BodyCatalog.FindBodyIndex("SeamstressBody"))
                 {
@@ -929,11 +945,15 @@ namespace SeamstressMod.Seamstress
         }
         public void GenericSkill_SetBonusStockFromBody(On.RoR2.GenericSkill.orig_SetBonusStockFromBody orig, GenericSkill self, int newBonusStockFromBody)
         {
-            if (self.skillDef.dontAllowPastMaxStocks && self.skillDef.skillNameToken == SEAMSTRESS_PREFIX + "SPECIAL_SCEPTER_NAME" || self.skillDef.skillNameToken == SEAMSTRESS_PREFIX + "SPECIAL_FIRE_NAME")
+            if(self)
             {
-                return;
+                if (self.skillDef.dontAllowPastMaxStocks && self.skillDef.skillNameToken == SEAMSTRESS_PREFIX + "SPECIAL_SCEPTER_NAME" || self.skillDef.skillNameToken == SEAMSTRESS_PREFIX + "SPECIAL_FIRE_NAME")
+                {
+                    return;
+                }
             }
-            else orig.Invoke(self, newBonusStockFromBody);
+
+            orig.Invoke(self, newBonusStockFromBody);
         }
 
 
@@ -943,13 +963,14 @@ namespace SeamstressMod.Seamstress
             {
                 SeamstressController seamstressController = sender.GetComponent<SeamstressController>();
                 HealthComponent healthComponent = sender.GetComponent<HealthComponent>();
+                KinematicCharacterMotor motor = sender.characterMotor.Motor;
                 SkillLocator skillLocator = sender.GetComponent<SkillLocator>();
                 if (seamstressController && healthComponent && skillLocator)
                 {
                     float healthMissing = (healthComponent.fullCombinedHealth * sender.cursePenalty) - (healthComponent.health + healthComponent.shield / 2f);
                     float fakeHealthMissing = healthComponent.fullHealth * 0.66f;
                     if (sender.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && 
-                        SkillCatalog.FindSkillIndexByName(skillLocator.utility.skillNameToken) == SkillCatalog.FindSkillIndexByName(SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME")) 
+                        skillLocator.utility.skillNameToken == SEAMSTRESS_PREFIX + "UTILITY_PARRY_NAME") 
                         args.baseDamageAdd += fakeHealthMissing * SeamstressConfig.passiveScaling.Value + healthMissing * SeamstressConfig.passiveScaling.Value;
                     else args.baseDamageAdd += healthMissing * SeamstressConfig.passiveScaling.Value;
                 }
@@ -966,6 +987,7 @@ namespace SeamstressMod.Seamstress
                 {
                     args.attackSpeedMultAdd += .1f;
                 }
+
                 if (sender.inventory)
                 {
                     if (sender.inventory.GetItemCount(DLC1Content.Items.EquipmentMagazineVoid) != 0)

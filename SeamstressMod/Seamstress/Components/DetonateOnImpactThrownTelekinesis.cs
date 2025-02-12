@@ -196,6 +196,7 @@ namespace SeamstressMod.Seamstress.Components
                     victimRigid.mass = Mathf.Clamp(victimRigid.mass, 60f, 120f);
                 }
             }
+
             Destroy(this);
         }
     }

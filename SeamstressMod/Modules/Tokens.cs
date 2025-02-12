@@ -30,7 +30,7 @@ namespace SeamstressMod.Modules
             $"<style=cIsHealing>Healing</style> is converted into <style=cIsHealing>Barrier</style>.");
 
         public static string detailsKeyword = KeywordText("Details", $"Gain <style=cIsDamage>{SeamstressConfig.passiveScaling} base damage</style> per <style=cIsHealth>1 missing health</style>. " +
-            $"Heal up to <style=cIsHealing>{100f * SeamstressConfig.passiveHealingScaling.Value}%</style> of your <style=cIsHealth>missing health</style> on hit.");
+            $"Heal up to <style=cIsHealing>{100f * SeamstressConfig.passiveLifeSteal.Value}%</style> of your <style=cIsHealth>missing health</style> on hit.");
         
         public static string needlesKeyword = KeywordText("Needles", $"Gain <color=#9B3737>Needles</color> by picking up your <color=#9B3737>Symbiotic</color> weapons " +
             $"or hitting enemies during <color=#9B3737>Insatiable</color>.");

@@ -1,8 +1,9 @@
 # 1.4.6
 
 - Fixed tokens to reflect changes made to needles and utility
-- Added configs (Delete your old config!)
-- More bugfixes
+- Added configs for nearly every damage value (Delete your old config!)
+- Maden alt secondary slam more consistent
+- Bugfixes 
 
 # 1.4.5
 

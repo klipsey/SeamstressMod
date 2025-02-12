@@ -60,6 +60,10 @@ namespace SeamstressMod.Seamstress.Components
 
         public Vector3 snapBackPosition;
 
+        private static float bleedInterval = 0.2f;
+
+        private float bleedTimer;
+
         private float insatiableStopwatch = 0f;
 
         public bool hasStartedInsatiable = false;
@@ -79,14 +83,13 @@ namespace SeamstressMod.Seamstress.Components
         }
         public void Start()
         {
-            
         }
 
         private void SetupSkin()
         {
             if (childLocator.FindChild("ScissorLModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh && childLocator.FindChild("ScissorRModel").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh != null)
             {
-                if (this.skinController.skins[this.skinController.currentSkinIndex].nameToken == SeamstressSurvivor.SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME")
+                if (this.skinController.skins[this.skinController.currentSkinIndex].nameToken == Seamstress.SeamstressSurvivor.SEAMSTRESS_PREFIX + "MASTERY_SKIN_NAME")
                 {
                     blue = true;
                     insatiableEndPrefab = SeamstressAssets.insatiableEndEffect2;
@@ -233,8 +236,8 @@ namespace SeamstressMod.Seamstress.Components
             }
             else if (!characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff) && hasStartedInsatiable)
             {
-                if (skillLocator.utility.skillDef.skillIndex == SeamstressSurvivor.explodeSkillDef.skillIndex && 
-                    insatiableStopwatch <= SeamstressConfig.insatiableDuration.Value - 1f)
+                if (skillLocator.utility.skillDef.skillIndex == SeamstressSurvivor.explodeSkillDef.skillIndex && insatiableStopwatch <= 
+                    SeamstressConfig.insatiableDuration.Value - 1f)
                 {
                     EndInsatiableManually();
 
@@ -247,6 +250,37 @@ namespace SeamstressMod.Seamstress.Components
                     EndInsatiableManually();
 
                     hasStartedInsatiable = false;
+                }
+            }
+
+            if (characterBody.HasBuff(SeamstressBuffs.SeamstressInsatiableBuff))
+            {
+                HandleBleed();
+            }
+        }
+        private void HandleBleed()
+        {
+            bleedTimer += Time.fixedDeltaTime;
+
+            if (bleedTimer >= bleedInterval)
+            {
+                bleedTimer = 0f;
+
+                if (NetworkServer.active)
+                {
+                    DamageInfo damageInfo = new DamageInfo
+                    {
+                        damage = (characterBody.healthComponent.fullCombinedHealth - (characterBody.healthComponent.fullCombinedHealth - (characterBody.healthComponent.health + characterBody.healthComponent.shield))) * 0.05f,
+                        damageType = DamageType.NonLethal | DamageType.BypassArmor | DamageType.BypassBlock | DamageType.DoT,
+                        dotIndex = DotController.DotIndex.Bleed,
+                        position = characterBody.corePosition,
+                        attacker = null,
+                        procCoefficient = 0f,
+                        crit = false,
+                        damageColorIndex = DamageColorIndex.Bleed,
+                    };
+
+                    characterBody.healthComponent.TakeDamage(damageInfo);
                 }
             }
         }
@@ -268,12 +302,13 @@ namespace SeamstressMod.Seamstress.Components
                 temporaryOverlayInstance.animateShaderAlpha = true;
             }
 
-            EffectManager.SpawnEffect(insatiableEndPrefab, new EffectData
+            EffectData effectData = new EffectData
             {
-                origin = characterBody.corePosition,
-                rotation = Quaternion.identity,
-            }, true);
+                origin = characterBody.modelLocator.transform.position,
+                rootObject = characterBody.gameObject
+            };
 
+            EffectManager.SpawnEffect(insatiableEndPrefab, effectData, true);
             Util.PlaySound("Play_voidman_transform_return", characterBody.gameObject);
         }
         //end sound
